@@ -1,7 +1,7 @@
-import { TranslationsProvider } from '@/contexts/TranslationContext'
-import '@/styles/globals.css'
-import type { AppProps } from 'next/app'
+import '@/pages/globals.css'
 import { Quicksand } from 'next/font/google'
+import { TranslationsProvider } from '@/contexts/TranslationContext'
+import type { AppProps } from 'next/app'
 
 // TODO: add cookies script
 // TODO: add session manager

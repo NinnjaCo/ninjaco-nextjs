@@ -1,5 +1,5 @@
 import { MemoryRouterProvider } from 'next-router-mock/MemoryRouterProvider'
-import { TranslationsProvider } from '@/contexts/translationContext'
+import { TranslationsProvider } from '@/contexts/TranslationContext'
 import { render } from '@testing-library/react'
 
 // Add in any providers here if necessary:
