@@ -1,6 +1,14 @@
+import Courses from '../public/images/courses.svg'
 import Head from 'next/head'
 import HeroImage from '@/components/heroImage'
+import Image from 'next/image'
+import Lego1 from '../public/images/Lego1.svg'
+import Lego2 from '../public/images/lego2.svg'
 import Menu from '@/components/menu'
+import Vector from '../public/images/Vector.svg'
+import logo_rev from '../public/images/logo_rev.svg'
+import twemoji_trophy from '../public/images/twemoji_trophy.svg'
+import twemoji_video from '../public/images/twemoji_video-game.svg'
 import useTranslation from '@/hooks/useTranslation'
 
 export default function Home() {
@@ -76,6 +84,73 @@ export default function Home() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
               </svg>
             </div>
+          </div>
+        </div>
+
+        <div className="flex flex-row justify-center" />
+        {/* grey background */}
+        <div className="mt-[140px] ml-64 absolute w-[859px] h-[410px] bg-indigo-100 rounded-3xl shadow-xl z-0" />
+        {/* align first 4 elements using flex */}
+        <div className="flex flex-col mt-44 ml-[464px] justify-center">
+          <div className="absolute left-72 mt-6">
+            <Image src={Lego1} alt="--" />
+          </div>
+          <p className="text-3xl font-semibold text-blue-700 z-20">Why choose our platform?</p>
+          <div className="absolute right-[490px] ">
+            <Image src={Vector} alt="--" />
+          </div>
+          <div className="absolute pl-[500px]">
+            <Image src={logo_rev} alt="--" />
+          </div>
+        </div>
+
+        <div className="absolute left-64 mt-12">
+          <Image src={Lego2} alt="--" />
+        </div>
+
+        <div className="flex flex-row items-center mt-32 pl-[450px]">
+          <div className="absolute">
+            <Image src={Courses} alt="--" width="90" height="45" />
+          </div>
+          <div className="absolute pl-48">
+            <Image src={twemoji_video} alt="--" width="80" height="40" />
+          </div>
+          <div className="absolute pl-[410px]">
+            <Image src={twemoji_trophy} alt="--" width="70" height="35" />
+          </div>
+        </div>
+
+        <div className="flex flex-row gap-24 mt-10 pl-[450px]">
+          <div className=" text-xl font-semibold text-black z-20 pl-1">
+            <p> Courses</p>
+          </div>
+          <div className=" text-xl font-semibold text-black z-20 ">
+            <p> Playful forms</p>
+          </div>
+          <div className=" text-xl font-semibold text-black z-20">
+            <p> Points System</p>
+          </div>
+        </div>
+
+        <div className="flex flex-row gap-20  mt-3 pl-[445px]">
+          <div className=" text-xs font-semibold text-black z-20">
+            All kind of courses
+            <br />
+            tailored by experts
+          </div>
+          <div className="text-xs font-semibold text-black z-20 ">
+            We motivate children to
+            <br />
+            study using visual
+            <br />
+            programming blocks
+          </div>
+          <div className=" text-xs font-semibold text-black z-20 pl-3">
+            Keep track of your
+            <br />
+            points and compete with
+            <br />
+            others
           </div>
         </div>
       </main>
