@@ -18,6 +18,14 @@ export interface WebsiteTranslations {
     title: translationElement
     goBackHome: translationElement
   }
+  LandingPage: {
+    headTitle: translationElement
+    Hero: {
+      title: translationElement
+      description: translationElement
+      getStarted: translationElement
+    }
+  }
 }
 
 // Create locale type support en | fr

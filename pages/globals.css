@@ -20,3 +20,121 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center px-6 py-[0.65rem] text-sm rounded cursor-pointer border focus:outline-none font-semibold;
+  }
+
+  .btn-brand {
+    /* apply btn */
+    @apply text-white rounded-xl bg-brand-700 border-2 border-brand-700 font-semibold;
+  }
+
+  .btn-secondary {
+    @apply text-brand-800 font-semibold rounded-xl border-2 border-brand-700 bg-transparent;
+  }
+}
+
+.hover-underline-animation {
+  display: inline-block;
+  position: relative;
+}
+
+.hover-underline-animation::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #fcd95b;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.hover-underline-animation:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+/* Scroll bar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #212c49;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #192137;
+}
+
+/* Animate hero image */
+
+/* Animate spinner_left to rotate when hovered then rotate back */
+#spinner_left {
+  transform-origin: 40.795% 43.7%;
+  animation: spin 7s linear infinite;
+  transition: all 0.5s ease-in-out;
+}
+
+#spinner_right {
+  transform-origin: 88% 53%;
+  animation: spin 10s linear infinite;
+  animation-direction: reverse;
+  transition: all 0.5s ease-in-out;
+}
+
+#spinner_mid {
+  transform-origin: 72.45% 34.25%;
+  animation: spin 10s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    rotate: 0deg;
+  }
+  100% {
+    rotate: 360deg;
+  }
+}
+
+/* Animate drawing line */
+
+#animated_line_left {
+  stroke-dasharray: 1000;
+
+  animation: fade_line_in_and_out 5s linear forwards infinite;
+}
+
+#animated_line_right {
+  stroke-dasharray: 1000;
+
+  animation: fade_line_in_and_out 5s linear forwards infinite;
+  animation-delay: 2s;
+}
+
+@keyframes fade_line_in_and_out {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  50% {
+    stroke-dashoffset: 800;
+  }
+  70% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -200;
+  }
+}
