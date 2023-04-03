@@ -1,4 +1,4 @@
-import { TranslationsContext } from '@/contexts/translationContext'
+import { TranslationsContext } from '@/contexts/TranslationContext'
 import { WebsiteTranslations } from '@/locales'
 import { useContext } from 'react'
 
