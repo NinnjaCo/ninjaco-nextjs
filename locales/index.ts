@@ -4,7 +4,20 @@ import frenchTranslations from '@/locales/fr'
 export type translationElement = JSX.Element | string
 
 export interface WebsiteTranslations {
-  
+  Menu: {
+    about: translationElement
+    aboutDescription: translationElement
+    courses: translationElement
+    coursesDescription: translationElement
+    startCoding: translationElement
+    signIn: translationElement
+    register: translationElement
+  }
+  fourOhFour: {
+    headTitle: translationElement
+    title: translationElement
+    goBackHome: translationElement
+  }
 }
 
 // Create locale type support en | fr
