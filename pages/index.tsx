@@ -114,19 +114,19 @@ export default function Home() {
               {' Sarah'}
             </div>
             <div className="absolute bottom-24 left-12">
-              <Image src={stary} alt={'rating'} />
+            <Star color="#6480A7"></Star>
             </div>
             <div className="absolute bottom-24 left-20">
-              <Image src={stary} alt={'rating'} />
+            <Star color="#6480A7"></Star>
             </div>
             <div className="absolute bottom-24 left-28">
-              <Image src={stary} alt={'rating'} />
+            <Star color="#6480A7"></Star>
             </div>
             <div className="absolute bottom-24 left-36">
-              <Image src={stary} alt={'rating'} />
+            <Star color="#6480A7"></Star>
             </div>
             <div className="absolute bottom-24 left-44">
-              <Image src={stary} alt={'rating'} />
+            <Star color="#6480A7"></Star>
             </div>
           </div>
           <div className="relative ">
@@ -144,7 +144,7 @@ export default function Home() {
             </div>
 
             <div className="absolute bottom-64 left-12">
-              <Image src={starb} alt={'rating'} />
+            <Star color="#6480A7"></Star>
               <Star color="#6480A7"></Star>
             </div>
             <div className="absolute bottom-64 left-20">
@@ -175,19 +175,19 @@ export default function Home() {
               {' Charbel'}
             </div>
             <div className="absolute bottom-64 left-12">
-              <Image src={stary} alt={'rating'} />
+            <Star color="#6480A7"></Star>
             </div>
             <div className="absolute bottom-64 left-20">
-              <Image src={stary} alt={'rating'} />
+            <Star color="#6480A7"></Star>
             </div>
             <div className="absolute bottom-64 left-28">
-              <Image src={stary} alt={'rating'} />
+            <Star color="#6480A7"></Star>
             </div>
             <div className="absolute bottom-64 left-36">
-              <Image src={stary} alt={'rating'} />
+            <Star color="#6480A7"></Star>
             </div>
             <div className="absolute bottom-64 left-44">
-              <Image src={stary} alt={'rating'} />
+            <Star color="#6480A7"></Star>
             </div>
           </div>
         </div>
