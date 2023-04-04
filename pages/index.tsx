@@ -78,6 +78,118 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+         {/* testimonials sections */}
+         <div className="flex  pl-10 mt-20 flex-col">
+          <div className="pl-96">
+            <Image src={quotes} alt="quotes" width={111} height={111} />
+          </div>
+          <div className="text-5xl text-brand-700 font-semibold flex  ">What others say</div>
+        </div>
+        <div className=" pl-12 pt-20">
+          <div>
+            <Image src={Vector6} alt="~" />
+          </div>
+          <div>
+            <Image src={Vector7} alt="~" />
+          </div>
+          <div>
+            <Image src={Vector8} alt="~" />
+          </div>
+        </div>
+        <div className="flex  items-center  justify-evenly">
+          <div className="relative ">
+            <div className=" max-w-full h-auto">
+              <Image src={Vector52} alt={'TESTIMONIAL'} width={500} height={500} />
+            </div>
+            <div className="text-lg font-semibold absolute top-1/3 left-1/6 pl-10">
+              My son has always been interested in robots,
+              <br /> but we don&apos;t live near any of the Ninja Co branches.
+              <br /> Thanks to their new online platform, he can finally <br />
+              take classes and learn about robotics from the <br />
+              comfort of our own home.{' '}
+            </div>
+            <div className="text-3xl font-semibold text-brand-800 absolute bottom-1/4 left-12">
+              {' Sarah'}
+            </div>
+            <div className="absolute bottom-24 left-12">
+              <Image src={stary} alt={'rating'} />
+            </div>
+            <div className="absolute bottom-24 left-20">
+              <Image src={stary} alt={'rating'} />
+            </div>
+            <div className="absolute bottom-24 left-28">
+              <Image src={stary} alt={'rating'} />
+            </div>
+            <div className="absolute bottom-24 left-36">
+              <Image src={stary} alt={'rating'} />
+            </div>
+            <div className="absolute bottom-24 left-44">
+              <Image src={stary} alt={'rating'} />
+            </div>
+          </div>
+          <div className="relative ">
+            <div className=" max-w-full h-auto pb-40">
+              <Image src={Vector51} alt={'TESTIMONIAL'} width={500} height={500} />
+            </div>
+            <div className="text-lg font-semibold absolute top-1/4 left-1/6 pl-10">
+              I&apos;ve been an instructor at Ninja Co for two years,
+              <br /> and I was initially skeptical about the move to an
+              <br /> online platform. However, I&apos;ve been blown away
+              <br /> by the capabilities of the new software.
+            </div>
+            <div className="text-3xl font-semibold text-brand-800 absolute bottom-72 left-12">
+              {' Ali'}
+            </div>
+
+            <div className="absolute bottom-64 left-12">
+              <Image src={starb} alt={'rating'} />
+              <Star color="#6480A7"></Star>
+            </div>
+            <div className="absolute bottom-64 left-20">
+              <Image src={starb} alt={'rating'} />
+            </div>
+            <div className="absolute bottom-64 left-28">
+              <Image src={starb} alt={'rating'} />
+            </div>
+            <div className="absolute bottom-64 left-36">
+              <Image src={starb} alt={'rating'} />
+            </div>
+            <div className="absolute bottom-64 left-44">
+              <Image src={starb} alt={'rating'} />
+            </div>
+          </div>
+          <div className="relative ">
+            <div className=" max-w-full h-auto pb-40">
+              <Image src={Vector52} alt={'TESTIMONIAL'} width={500} height={500} />
+            </div>
+            <div className="text-lg font-semibold absolute top-1/4 left-1/6 pl-10">
+              I&apos;ve always been fascinated by robots, but I never thought I could build one
+              myself.
+              <br /> Thanks to Ninja Co&apos;s online platform, I&apos;m now able
+              <br /> to take classes and learn how to create
+              <br /> my own robot step-by-step!
+            </div>
+            <div className="text-3xl font-semibold text-brand-800 absolute bottom-72 left-12">
+              {' Charbel'}
+            </div>
+            <div className="absolute bottom-64 left-12">
+              <Image src={stary} alt={'rating'} />
+            </div>
+            <div className="absolute bottom-64 left-20">
+              <Image src={stary} alt={'rating'} />
+            </div>
+            <div className="absolute bottom-64 left-28">
+              <Image src={stary} alt={'rating'} />
+            </div>
+            <div className="absolute bottom-64 left-36">
+              <Image src={stary} alt={'rating'} />
+            </div>
+            <div className="absolute bottom-64 left-44">
+              <Image src={stary} alt={'rating'} />
+            </div>
+          </div>
+        </div>
       </main>
     </>
   )
