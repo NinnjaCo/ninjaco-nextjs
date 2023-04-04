@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Menu from '@/components/menu'
 import Testimonial from '@/components/testimonial'
 
+import clsx from 'clsx'
 import quotes from '@/images/quotes.svg'
 import testimonialsTilda1 from '@/images/testimonialsTilda1.svg'
 import testimonialsTilda2 from '@/images/testimonialsTilda2.svg'
