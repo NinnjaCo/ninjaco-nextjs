@@ -14,6 +14,26 @@ import useTranslation from '@/hooks/useTranslation'
 export default function Home() {
   const t = useTranslation()
 
+  const whyChooseUs = [
+    {
+      title: 'Courses',
+      description: 'All kind of courses tailored to your needs',
+      image: Courses,
+      alt: 'Courses',
+    },
+    {
+      title: 'Playful forms',
+      description: 'We motivate children to study using visual programming',
+      image: twemoji_video,
+      alt: 'Playful forms',
+    },
+    {
+      title: 'Trophy',
+      description: 'We reward children for their achievements',
+      image: twemoji_trophy,
+      alt: 'Trophy',
+    },
+  ]
   return (
     <>
       <Head>
@@ -87,98 +107,74 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex flex-row justify-center" />
-        {/* grey background */}
-        <div className="mt-[400px] md:mt-[140px] lg:mt-[140px] ml-56 md:ml-52 lg:ml-64 relative w-[250px] md:w-[600px] lg:w-[865px] h-[850px] md:h-[450px] lg:h-[450px] bg-indigo-100 rounded-[65px] shadow-xl z-0">
-          {/* align first 4 elements using flex */}
-          <div className="flex flex-row">
-            <div className=" hidden lg:flex absolute top-10 left-10">
-              <Image src={Lego1} alt="--" />
-            </div>
-            <p className="absolute hidden md:flex lg:flex md:top-12 lg:top-12 md:left-32 lg:left-52 text-3xl font-semibold text-brand-700 h-fit w-fit ">
-              Why choose our platform?
-            </p>
-            <div className="absolute hidden md:flex lg:flex top-3 md:left-[305px] lg:left-96">
-              <Image src={Vector} alt="--" />
-            </div>
-            <div className="hidden lg:flex absolute left-[675px]">
-              <Image src={logo_rev} alt="--" />
-            </div>
-          </div>
-
-          <div className="hidden lg:flex absolute top-32 left-3">
-            <Image src={Lego2} alt="--" />
-          </div>
-
-          {/* here i am gonna do flex row, and 3 flex col in it */}
-          <div className="flex flex-wrap gap-14 items-center mt-40 justify-center">
-            {/* first flex col */}
-            <div className="flex flex-col items-center gap-1">
-              {/* space intentialy */}
-              <div>
-                <Image src={Courses} alt="--" width="90" height="45" />
+        {/* About section */}
+        <div className="w-full grid grid-cols-8 my-16">
+          <div className="bg-brand-100 rounded-none md:rounded-3xl lg:rounded-[56px] shadow-lg shadow-brand-300 col-start-1 md:col-start-2 col-span-8 md:col-span-6 relative pb-12 px-6 flex flex-col gap-6 w-full z-0">
+            <div className="flex flex-row w-full justify-between items-start relative">
+              <div className="relative mt-4">
+                <Image src={Lego1} alt="Lego Brick Yellow" className="w-32 md:w-40" />
+                <Image src={Lego2} alt="Lego Brick Blue" className="absolute top-full -z-10 w-36" />
               </div>
-              <div className=" text-xl font-semibold text-brand z-20">
-                <p> Courses</p>
-              </div>
-              <div className=" text-xs font-semibold text-brand z-20">
-                All kind of courses
-                <br />
-                tailored by experts
-              </div>
+              <p className="hidden md:block text-xl lg:text-2xl xl:text-3xl font-bold text-brand-700 h-fit w-fit relative mt-12 whitespace-nowrap">
+                Why choose our platform?
+                <Image
+                  src={Vector}
+                  alt="Circle Platform"
+                  className="absolute -bottom-[75%] -right-[1.8%] md:w-36 lg:w-44 xl:w-52"
+                />
+              </p>
+              <Image src={logo_rev} alt="Brand Logo Pointing" className="w-28" />
+            </div>
+            <div className="w-full flex justify-center">
+              <p className="block md:hidden text-xl sm:text-2xl font-bold text-brand-700 h-fit w-fit relative mt-4 whitespace-nowrap">
+                Why choose our platform?
+                <Image
+                  src={Vector}
+                  alt="Circle Platform"
+                  className="absolute -bottom-[75%] -right-[2%] w-36"
+                />
+              </p>
             </div>
 
-            {/* second flex col */}
-            <div className="flex flex-col items-center gap-1">
-              {/* space intentialy */}
-              <div>
-                <Image src={twemoji_video} alt="--" width="80" height="40" />
-              </div>
-
-              <div className=" text-xl font-semibold text-brand z-20 ">
-                <p> Playful forms</p>
-              </div>
-
-              <div className="text-xs font-semibold text-brand z-20 ">
-                We motivate children to
-                <br />
-                study using visual
-                <br />
-                programming blocks
-              </div>
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-0 lg:grid-cols-3 w-full divide-x-0 divide-brand-300 divide-solid lg:divide-x-2 items-center mt-12">
+              {whyChooseUs.map((item, index) => (
+                <div className="flex w-full" key={index}>
+                  <div className="flex flex-col gap-4 items-start ml-[25%]">
+                    <Image
+                      src={item.image}
+                      alt={item.alt}
+                      style={{
+                        backgroundSize: 'cover',
+                      }}
+                    />
+                    <div className="text-xl lg:text-2xl xl:text-3xl font-semibold text-brand z-20 inline-block whitespace-nowrap">
+                      <p> {item.title}</p>
+                    </div>
+                    <div className=" text-xs text-brand-700 z-20 max-w-[75%]">
+                      {item.description}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-
-            {/* third flex col */}
-            <div className="flex flex-col items-center gap-1 ">
-              {/* space intentialy */}
-              <div className="mt-2">
-                <Image src={twemoji_trophy} alt="--" width="70" height="35" />
+            <div className="w-full flex justify-end">
+              <div className="btn btn-brand flex gap-2 max-w-fit">
+                <p>Join Now</p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={3}
+                  stroke="currentColor"
+                  className="w-3 h-3"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                  />
+                </svg>
               </div>
-
-              <div className=" text-xl font-semibold text-brand z-20">
-                <p> Points System</p>
-              </div>
-
-              <div className=" text-xs font-semibold text-brand z-20">
-                Keep track of your
-                <br />
-                points and compete with
-                <br />
-                others
-              </div>
-            </div>
-            <div className="absolute md:right-[248px] lg:right-14 bottom-12 md:bottom-8 lg:bottom-12 btn bg-brand-500 text-white text-xs flex flex-row gap-2 max-w-fit rounded-2xl">
-              <p>Join Now</p>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={3}
-                stroke="currentColor"
-                className="w-3 h-3"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-              </svg>
             </div>
           </div>
         </div>
