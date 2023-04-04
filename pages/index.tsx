@@ -105,7 +105,7 @@ export default function Home() {
               <Image src={Vector52} alt={'TESTIMONIAL'} width={500} height={500} />
             </div>
             <div className="text-lg font-semibold absolute top-1/3 left-1/6 pl-10">
-             <Testimonial name="sarah" review="My son has always been interested in robots, but we don't live near any of the Ninja Co branches. Thanks to their new online platform, he can finally take classes and learn about robotics from the comfort of our own home." isBlue true></Testimonial>
+             <Testimonial name="sarah" review= review={t.LandingPage.Testimonials.reviews.review1} isBlue true></Testimonial>
             </div>
           
       
@@ -115,7 +115,7 @@ export default function Home() {
               <Image src={Vector51} alt={'TESTIMONIAL'} width={500} height={500} />
             </div>
             <div className="text-lg font-semibold absolute top-1/4 left-1/6 pl-10">
-            <Testimonial name="Ali" review="I've been an instructor at Ninja Co for two years, and I was initially skeptical about the move to an online platform. However, I've been blown away by the capabilities of the new software." isBlue true></Testimonial>
+            <Testimonial name="Ali" review={t.LandingPage.Testimonials.reviews.review2} isBlue true></Testimonial>
             </div>
           
           </div>
@@ -124,7 +124,7 @@ export default function Home() {
               <Image src={Vector52} alt={'TESTIMONIAL'} width={500} height={500} />
             </div>
             <div className="text-lg font-semibold absolute top-1/4 left-1/6 pl-10">
-            <Testimonial name="Charbel" review="My son has always been interested in robots, but we don't live near any of the Ninja Co branches. Thanks to their new online platform, he can finally take classes and learn about robotics from the comfort of our own home." isBlue true></Testimonial>
+            <Testimonial name="Charbel" review= review={t.LandingPage.Testimonials.reviews.review3} isBlue true></Testimonial>
             </div>
             
             
