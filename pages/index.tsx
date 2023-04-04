@@ -94,10 +94,10 @@ export default function Home() {
                 className="mt-0 md:mt-4 lg:mt-12"
               ></Image>
               <div className="flex-col pl-6 md:pt-8 lg:pt-12 flex-start">
-                <div className="text-sm / font-semibold text-brand text-start mt-0 md:mt-0 lg:mt-6 md:text-2xl lg:text-4xl">
+                <div className="text-sm font-semibold text-brand text-start mt-0 md:mt-0 lg:mt-6 md:text-2xl lg:text-4xl">
                   Our Mission
                 </div>
-                <p className="text-[8px] / font-semibold text-brand mt-2 md:mt-8 md:text-xs lg:text-sm">
+                <p className="text-xs text-brand mt-2 md:mt-8 md:text-xs lg:text-sm">
                   Make STEM education fun and interactive for children and teens through the use of
                   LEGO kits and iPad coding sessions. The company is committed to enhancing STEM
                   education and providing top-grade opportunities for the youth of Lebanon to learn
@@ -118,7 +118,7 @@ export default function Home() {
                 <div className="text-sm / font-semibold text-brand text-start mt-4 md:mt-6 lg:mt-12 md:text-2xl lg:text-4xl">
                   So Far
                 </div>
-                <p className="text-[8px] / font-semibold text-brand mt-2 md:mt-8 md:text-xs lg:text-sm">
+                <p className="text-xs text-brand mb-12 mt-2 md:mt-8 md:text-xs lg:text-sm ">
                   Ninja Co has established over 20 education centers across Lebanon, offering an
                   engaging and interactive curriculum in robotics that is constantly updated. The
                   company&apos; s traditional in-person class model has proven successful, but to
