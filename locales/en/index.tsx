@@ -32,7 +32,14 @@ const englishTranslations: WebsiteTranslations = {
       ),
       getStarted: 'Get Started',
     },
+    Mission: {
+      ourMission: 'Our Mission',
+      ourMissionDescription:
+        'Make STEM education fun and interactive for children and teens through the use of LEGO kits and iPad coding sessions. The company is committed to enhancing STEM education and providing top-grade opportunities for the youth of Lebanon to learn about robotics and programming.',
+      soFar: 'So Far',
+      soFarDescription:
+        "Ninja Co has established over 20 education centers across Lebanon, offering an engaging and interactive curriculum in robotics that is constantly updated. The company's traditional in-person class model has proven successful, but to expand its reach and drive growth, We developed this online platform that will transform the company's offerings",
+    },
   },
 }
-
 export default englishTranslations

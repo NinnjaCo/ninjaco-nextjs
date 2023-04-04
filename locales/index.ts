@@ -25,6 +25,12 @@ export interface WebsiteTranslations {
       description: translationElement
       getStarted: translationElement
     }
+    Mission: {
+      ourMission: translationElement
+      ourMissionDescription: translationElement
+      soFar: translationElement
+      soFarDescription: translationElement
+    }
   }
 }
 
