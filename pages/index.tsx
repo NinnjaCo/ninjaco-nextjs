@@ -1,17 +1,35 @@
 import Head from 'next/head'
 import HeroImage from '@/components/heroImage'
+import Image from 'next/image'
 import Menu from '@/components/menu'
-import useTranslation from '@/hooks/useTranslation'
-import Star from '@/components/star'
 import Testimonial from '@/components/testimonial'
+
+import quotes from '@/images/quotes.svg'
 import testimonialsTilda1 from '@/images/testimonialsTilda1.svg'
 import testimonialsTilda2 from '@/images/testimonialsTilda2.svg'
 import testimonialsTilda3 from '@/images/testimonialsTilda3.svg'
-import Image from 'next/image'
-import quotes from '@/images/quotes.svg'
+import useTranslation from '@/hooks/useTranslation'
 
 export default function Home() {
   const t = useTranslation()
+
+  const testimonials = [
+    {
+      name: 'Sarah',
+      review: t.LandingPage.Testimonials.reviews.review1,
+      isBlue: true,
+    },
+    {
+      name: 'Ali',
+      review: t.LandingPage.Testimonials.reviews.review2,
+      isBlue: false,
+    },
+    {
+      name: 'Charbel',
+      review: t.LandingPage.Testimonials.reviews.review3,
+      isBlue: true,
+    },
+  ]
 
   return (
     <>
@@ -86,41 +104,29 @@ export default function Home() {
           </div>
         </div>
 
-         {/* testimonials sections */}
-         <div className="flex  pl-10 mt-20 flex-col">
-          <div className="pl-96">
-            <Image src={quotes} alt="quotes" width={111} height={111} />
-          </div>
-          <div className="text-5xl text-brand-700 font-semibold flex  ">What others say</div>
-        </div>
-        <div className="flex flex-col items-center w-max">
+        {/* Testimonial section */}
+        <div className="my-16">
+          <div className="pl-6 md:pl-8 lg:pl-12 text-2xl md:text-3xl lg:text-4xl text-brand-700 font-semibold relative w-fit">
+            {t.LandingPage.Testimonials.title}
+            <Image
+              src={quotes}
+              alt="quotes"
+              width={60}
+              height={60}
+              className="absolute -top-4 -right-12"
+            />
+            <div className="flex flex-col items-center w-max">
               <Image src={testimonialsTilda1} alt="~" className="w-12 md:w-14 lg:w-auto" />
               <Image src={testimonialsTilda2} alt="~" className="w-14 md:w-16 lg:w-auto" />
               <Image src={testimonialsTilda3} alt="~" className="w-12 lg:w-auto" />
             </div>
-        <div className="flex  items-center  justify-evenly">
-          <div className="relative ">
-            
-            <div className="text-lg font-semibold absolute top-1/3 left-1/6 pl-10">
-             <Testimonial name="sarah" review={t.LandingPage.Testimonials.reviews.review1} isBlue true></Testimonial>
-            </div>
-          
-      
           </div>
-          <div className="relative ">
-            
-            <div className="text-lg font-semibold absolute top-1/4 left-1/6 pl-10">
-            <Testimonial name="Ali" review={t.LandingPage.Testimonials.reviews.review2} isBlue true></Testimonial>
-            </div>
-          
-          </div>
-          <div className="relative ">
-           
-            <div className="text-lg font-semibold absolute top-1/4 left-1/6 pl-10">
-            <Testimonial name="Charbel"  review={t.LandingPage.Testimonials.reviews.review3} isBlue true></Testimonial>
-            </div>
-            
-            
+          <div className="flex justify-evenly w-full flex-wrap gap-12 px-6">
+            {testimonials.map((item, index) => (
+              <div key={index} className={clsx(index % 2 === 0 ? 'mt-6' : '')}>
+                <Testimonial name={item.name} isBlue={item.isBlue} review={item.review as string} />
+              </div>
+            ))}
           </div>
         </div>
       </main>
