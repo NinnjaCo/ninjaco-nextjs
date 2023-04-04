@@ -4,6 +4,11 @@ import Menu from '@/components/menu'
 import useTranslation from '@/hooks/useTranslation'
 import Star from '@/components/star'
 import Testimonial from '@/components/testimonial'
+import testimonialsTilda1 from '@/images/testimonialsTilda1.svg'
+import testimonialsTilda2 from '@/images/testimonialsTilda2.svg'
+import testimonialsTilda3 from '@/images/testimonialsTilda3.svg'
+import Image from 'next/image'
+import quotes from '@/images/quotes.svg'
 
 export default function Home() {
   const t = useTranslation()
@@ -88,22 +93,14 @@ export default function Home() {
           </div>
           <div className="text-5xl text-brand-700 font-semibold flex  ">What others say</div>
         </div>
-        <div className=" pl-12 pt-20">
-          <div>
-            <Image src={Vector6} alt="~" />
-          </div>
-          <div>
-            <Image src={Vector7} alt="~" />
-          </div>
-          <div>
-            <Image src={Vector8} alt="~" />
-          </div>
-        </div>
+        <div className="flex flex-col items-center w-max">
+              <Image src={testimonialsTilda1} alt="~" className="w-12 md:w-14 lg:w-auto" />
+              <Image src={testimonialsTilda2} alt="~" className="w-14 md:w-16 lg:w-auto" />
+              <Image src={testimonialsTilda3} alt="~" className="w-12 lg:w-auto" />
+            </div>
         <div className="flex  items-center  justify-evenly">
           <div className="relative ">
-            <div className=" max-w-full h-auto">
-              <Image src={Vector52} alt={'TESTIMONIAL'} width={500} height={500} />
-            </div>
+            
             <div className="text-lg font-semibold absolute top-1/3 left-1/6 pl-10">
              <Testimonial name="sarah" review={t.LandingPage.Testimonials.reviews.review1} isBlue true></Testimonial>
             </div>
@@ -111,18 +108,14 @@ export default function Home() {
       
           </div>
           <div className="relative ">
-            <div className=" max-w-full h-auto pb-40">
-              <Image src={Vector51} alt={'TESTIMONIAL'} width={500} height={500} />
-            </div>
+            
             <div className="text-lg font-semibold absolute top-1/4 left-1/6 pl-10">
             <Testimonial name="Ali" review={t.LandingPage.Testimonials.reviews.review2} isBlue true></Testimonial>
             </div>
           
           </div>
           <div className="relative ">
-            <div className=" max-w-full h-auto pb-40">
-              <Image src={Vector52} alt={'TESTIMONIAL'} width={500} height={500} />
-            </div>
+           
             <div className="text-lg font-semibold absolute top-1/4 left-1/6 pl-10">
             <Testimonial name="Charbel"  review={t.LandingPage.Testimonials.reviews.review3} isBlue true></Testimonial>
             </div>
