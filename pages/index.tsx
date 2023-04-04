@@ -2,6 +2,7 @@ import Head from 'next/head'
 import HeroImage from '@/components/heroImage'
 import Menu from '@/components/menu'
 import useTranslation from '@/hooks/useTranslation'
+import Star from '@/components/star'
 
 export default function Home() {
   const t = useTranslation()
@@ -147,16 +148,16 @@ export default function Home() {
               <Star color="#6480A7"></Star>
             </div>
             <div className="absolute bottom-64 left-20">
-              <Image src={starb} alt={'rating'} />
+            <Star color="#6480A7"></Star>
             </div>
             <div className="absolute bottom-64 left-28">
-              <Image src={starb} alt={'rating'} />
+            <Star color="#6480A7"></Star>
             </div>
             <div className="absolute bottom-64 left-36">
-              <Image src={starb} alt={'rating'} />
+            <Star color="#6480A7"></Star>
             </div>
             <div className="absolute bottom-64 left-44">
-              <Image src={starb} alt={'rating'} />
+            <Star color="#6480A7"></Star>
             </div>
           </div>
           <div className="relative ">
