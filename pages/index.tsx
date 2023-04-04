@@ -89,29 +89,29 @@ export default function Home() {
 
         <div className="flex flex-row justify-center" />
         {/* grey background */}
-        <div className="mt-[140px] ml-64 relative w-[865px] h-[450px] bg-indigo-100 rounded-[65px] shadow-xl z-0">
+        <div className="mt-[400px] md:mt-[140px] lg:mt-[140px] ml-56 md:ml-52 lg:ml-64 relative w-[250px] md:w-[600px] lg:w-[865px] h-[850px] md:h-[450px] lg:h-[450px] bg-indigo-100 rounded-[65px] shadow-xl z-0">
           {/* align first 4 elements using flex */}
           <div className="flex flex-row">
-            <div className="absolute top-10 left-10">
+            <div className=" hidden lg:flex absolute top-10 left-10">
               <Image src={Lego1} alt="--" />
             </div>
-            <p className="relative top-12 left-52 text-3xl font-semibold text-brand-700 h-fit w-fit ">
+            <p className="absolute hidden md:flex lg:flex md:top-12 lg:top-12 md:left-32 lg:left-52 text-3xl font-semibold text-brand-700 h-fit w-fit ">
               Why choose our platform?
             </p>
-            <div className="absolute top-3 left-96">
+            <div className="absolute hidden md:flex lg:flex top-3 md:left-[305px] lg:left-96">
               <Image src={Vector} alt="--" />
             </div>
-            <div className="absolute left-[675px]">
+            <div className="hidden lg:flex absolute left-[675px]">
               <Image src={logo_rev} alt="--" />
             </div>
           </div>
 
-          <div className="absolute top-32 left-3">
+          <div className="hidden lg:flex absolute top-32 left-3">
             <Image src={Lego2} alt="--" />
           </div>
 
           {/* here i am gonna do flex row, and 3 flex col in it */}
-          <div className="flex flex-row gap-14 items-center mt-32 justify-center">
+          <div className="flex flex-wrap gap-14 items-center mt-40 justify-center">
             {/* first flex col */}
             <div className="flex flex-col items-center gap-1">
               {/* space intentialy */}
@@ -167,19 +167,19 @@ export default function Home() {
                 others
               </div>
             </div>
-          </div>
-          <div className="ml-[625px] mt-10 btn bg-brand-500 text-white text-xs flex flex-row gap-2 max-w-fit rounded-2xl">
-            <p>Join Now</p>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={3}
-              stroke="currentColor"
-              className="w-3 h-3"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-            </svg>
+            <div className="absolute md:right-[248px] lg:right-14 bottom-12 md:bottom-8 lg:bottom-12 btn bg-brand-500 text-white text-xs flex flex-row gap-2 max-w-fit rounded-2xl">
+              <p>Join Now</p>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={3}
+                stroke="currentColor"
+                className="w-3 h-3"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+            </div>
           </div>
         </div>
       </main>
