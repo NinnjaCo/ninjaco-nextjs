@@ -35,6 +35,12 @@ export interface WebsiteTranslations {
       trophyDescription: translationElement
       joinNow: translationElement
     }
+    Mission: {
+      ourMission: translationElement
+      ourMissionDescription: translationElement
+      soFar: translationElement
+      soFarDescription: translationElement
+    }
   }
 }
 

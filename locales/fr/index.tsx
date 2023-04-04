@@ -26,10 +26,9 @@ const frenchTranslations: WebsiteTranslations = {
       ),
       description: (
         <>
-          Découvrez le plaisir et l&apos;excitation de la robotique et de la programmation avec la
-          plateforme en ligne de Ninja Co ! Notre guide étape par étape et nos cours interactifs
-          vous aideront à libérer votre ninja intérieur et à maîtriser ces compétences essentielles
-          depuis le confort de votre propre domicile.
+          Discover the fun and excitement of robotics and coding with Ninja Co&apos;s online
+          platform! Our step-by-step guide and interactive courses will help you unleash your inner
+          ninja and master these essential skills from the comfort of your own home.
         </>
       ),
       getStarted: 'Commencer',
@@ -44,6 +43,14 @@ const frenchTranslations: WebsiteTranslations = {
       trophy: 'Trophée',
       trophyDescription: 'Nous récompensons les enfants pour leurs réalisations',
       joinNow: 'Adhérer maintenant',
+    },
+    Mission: {
+      ourMission: 'Notre mission',
+      ourMissionDescription:
+        "Offrir une éducation STEM amusante et interactive pour les enfants et les adolescents en utilisant des kits LEGO et des sessions de codage sur iPad, s'engager à améliorer l'éducation STEM et fournir des opportunités de qualité pour la jeunesse libanaise afin d'apprendre la robotique et la programmation.",
+      soFar: "Jusqu'à présent",
+      soFarDescription:
+        "Ninja Co a établi plus de 20 centres d'éducation à travers le Liban, offrant un programme attractif et interactif en robotique constamment mis à jour. Le modèle en préseniel actuellement adopté par l'entreprise s'est avéré être un succès, mais pour étendre sa portée et stimuler sa croissance, nous avons développé cette plateforme en ligne qui transformera les offres disponibles.",
     },
   },
 }

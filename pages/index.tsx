@@ -7,7 +7,10 @@ import Lego2 from '../public/images/legoBlue.svg'
 import Menu from '@/components/menu'
 import Vector from '../public/images/aboutCircleVector.svg'
 import logo_rev from '../public/images/logoPointing.svg'
+import missionSection from '../public/missionSection.svg'
+import ourMission from '../public/ourMission.svg'
 import playStick from '../public/images/playStick.svg'
+import soFar from '../public/SoFar.svg'
 import trophy from '../public/images/trophy.svg'
 import useTranslation from '@/hooks/useTranslation'
 
@@ -34,6 +37,21 @@ export default function Home() {
       alt: t.LandingPage.About.trophy as string,
     },
   ]
+  const ourMissionSection = [
+    {
+      title: t.LandingPage.Mission.ourMission,
+      description: t.LandingPage.Mission.ourMissionDescription,
+      image: ourMission,
+      alt: t.LandingPage.Mission.ourMission as string,
+    },
+    {
+      title: t.LandingPage.Mission.soFar,
+      description: t.LandingPage.Mission.soFarDescription,
+      image: soFar,
+      alt: t.LandingPage.Mission.soFar as string,
+    },
+  ]
+
   return (
     <>
       <Head>
@@ -177,6 +195,38 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+        {/* Mission section */}
+        <div className="flex w-full my-16">
+          <div className="flex flex-col gap-12 ml-6 md:ml-12 mr-12">
+            {ourMissionSection.map((item, index) => (
+              <div className="flex flex-col gap-6" key={index}>
+                <div className="flex items-start">
+                  <Image
+                    src={item.image}
+                    alt={item.alt}
+                    className="w-16 md:w-28 lg:w-32 mt-0 md:mt-4 lg:mt-12"
+                  ></Image>
+                  <div className="flex flex-col gap-8 pl-4 md:pt-8 lg:pt-12">
+                    <div className="text-xl md:text-2xl lg:text-4xl font-bold text-brand text-start mt-0 md:mt-0 lg:mt-6 whitespace-nowrap">
+                      {item.title}
+                    </div>
+                    <p className="hidden md:block text-xs font-semibold text-brand">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+                <div className="block md:hidden text-xs font-semibold text-brand">
+                  {item.description}
+                </div>
+              </div>
+            ))}
+          </div>
+          <Image
+            src={missionSection}
+            alt="Mission Section"
+            className="hidden md:block lg:block md:w-56 lg:w-80 lg:w-300 mt-2"
+          ></Image>
         </div>
       </main>
     </>
