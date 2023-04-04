@@ -1,6 +1,10 @@
 import Head from 'next/head'
 import HeroImage from '@/components/heroImage'
+import Image from 'next/image'
 import Menu from '@/components/menu'
+import missionSection from '../public/missionSection.svg'
+import ourMission from '../public/ourMission.svg'
+import soFar from '../public/So Far.svg'
 import useTranslation from '@/hooks/useTranslation'
 
 export default function Home() {
@@ -77,6 +81,38 @@ export default function Home() {
               </svg>
             </div>
           </div>
+        </div>
+
+        <div className="text-5xl / font-semibold  text-blue-600 flex">
+          <div className="m-44 ">
+            <div className="flex">
+              <Image src={ourMission} alt="Our Mission" width={160} height={141.22}></Image>
+              <div className="flex-col pl-5">
+                <div className="h-fit p-"> Our Mission </div>
+                <p className="text-xl / font-semibold">
+                  Make STEM education fun and interactive for children and teens through the use of
+                  LEGO kits and iPad coding sessions. The company is committed to enhancing STEM
+                  education and providing top-grade opportunities for the youth of Lebanon to learn
+                  about robotics and programming.
+                </p>
+              </div>
+            </div>
+            <div className="h-1 w-full bg-blue-600 lg:w-2/3 my-20"></div>
+            <div className="flex mt-44">
+              <Image src={soFar} alt="So Far" width={117.04} height={192.22}></Image>
+              <div className="flex-col pl-5">
+                <div className="h-fit"> So Far </div>
+                <p className="text-xl / font-semibold">
+                  Ninja Co has established over 20 education centers across Lebanon, offering an
+                  engaging and interactive curriculum in robotics that is constantly updated. The
+                  company's traditional in-person class model has proven successful, but to expand
+                  its reach and drive growth, We developed this online platform that will transform
+                  the company's offerings.
+                </p>
+              </div>
+            </div>
+          </div>
+          <Image src={missionSection} alt="Mission Section" width={1081.11} height={1211}></Image>
         </div>
       </main>
     </>
