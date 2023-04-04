@@ -7,8 +7,8 @@ import Lego2 from '../public/images/lego2.svg'
 import Menu from '@/components/menu'
 import Vector from '../public/images/Vector.svg'
 import logo_rev from '../public/images/logo_rev.svg'
-import twemoji_trophy from '../public/images/twemoji_trophy.svg'
-import twemoji_video from '../public/images/twemoji_video-game.svg'
+import playStick from '../public/images/playStick.svg'
+import trophy from '../public/images/twemoji_trophy.svg'
 import useTranslation from '@/hooks/useTranslation'
 
 export default function Home() {
@@ -16,22 +16,22 @@ export default function Home() {
 
   const whyChooseUs = [
     {
-      title: 'Courses',
-      description: 'All kind of courses tailored to your needs',
+      title: t.LandingPage.About.courses,
+      description: t.LandingPage.About.coursesDescription,
       image: Courses,
-      alt: 'Courses',
+      alt: t.LandingPage.About.courses as string,
     },
     {
-      title: 'Playful forms',
-      description: 'We motivate children to study using visual programming',
-      image: twemoji_video,
-      alt: 'Playful forms',
+      title: t.LandingPage.About.playForms,
+      description: t.LandingPage.About.playFormsDescription,
+      image: playStick,
+      alt: t.LandingPage.About.playForms as string,
     },
     {
-      title: 'Trophy',
-      description: 'We reward children for their achievements',
-      image: twemoji_trophy,
-      alt: 'Trophy',
+      title: t.LandingPage.About.trophy,
+      description: t.LandingPage.About.trophyDescription,
+      image: trophy,
+      alt: t.LandingPage.About.trophy as string,
     },
   ]
   return (
@@ -116,7 +116,7 @@ export default function Home() {
                 <Image src={Lego2} alt="Lego Brick Blue" className="absolute top-full -z-10 w-36" />
               </div>
               <p className="hidden md:block text-xl lg:text-2xl xl:text-3xl font-bold text-brand-700 h-fit w-fit relative mt-12 whitespace-nowrap">
-                Why choose our platform?
+                {t.LandingPage.About.title}
                 <Image
                   src={Vector}
                   alt="Circle Platform"
@@ -127,7 +127,7 @@ export default function Home() {
             </div>
             <div className="w-full flex justify-center">
               <p className="block md:hidden text-xl sm:text-2xl font-bold text-brand-700 h-fit w-fit relative mt-4 whitespace-nowrap">
-                Why choose our platform?
+                {t.LandingPage.About.title}
                 <Image
                   src={Vector}
                   alt="Circle Platform"
@@ -159,7 +159,7 @@ export default function Home() {
             </div>
             <div className="w-full flex justify-end">
               <div className="btn btn-brand flex gap-2 max-w-fit">
-                <p>Join Now</p>
+                <p>{t.LandingPage.About.joinNow}</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"

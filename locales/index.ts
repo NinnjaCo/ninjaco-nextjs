@@ -25,6 +25,16 @@ export interface WebsiteTranslations {
       description: translationElement
       getStarted: translationElement
     }
+    About: {
+      title: translationElement
+      courses: translationElement
+      coursesDescription: translationElement
+      playForms: translationElement
+      playFormsDescription: translationElement
+      trophy: translationElement
+      trophyDescription: translationElement
+      joinNow: translationElement
+    }
   }
 }
 
