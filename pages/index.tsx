@@ -83,13 +83,21 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="text-5xl / font-semibold  text-blue-600 flex">
-          <div className="m-44 ">
-            <div className="flex">
-              <Image src={ourMission} alt="Our Mission" width={160} height={141.22}></Image>
-              <div className="flex-col pl-5 pt-12">
-                <div className="text-5xl / font-semibold text-brand text-start"> Our Mission </div>
-                <p className="text-xl / font-semibold text-brand mt-16">
+        <div className="flex w-full pt-4">
+          <div className="pl-2 md:pl-12 lg:pl-32">
+            <div className="flex items-start">
+              <Image
+                src={ourMission}
+                alt="Our Mission"
+                width={120}
+                height={100}
+                className="mt-0 md:mt-4 lg:mt-12"
+              ></Image>
+              <div className="flex-col pl-6 md:pt-8 lg:pt-12 flex-start">
+                <div className="text-sm / font-semibold text-brand text-start mt-0 md:mt-0 lg:mt-6 md:text-2xl lg:text-4xl">
+                  Our Mission
+                </div>
+                <p className="text-[8px] / font-semibold text-brand mt-2 md:mt-8 md:text-xs lg:text-sm">
                   Make STEM education fun and interactive for children and teens through the use of
                   LEGO kits and iPad coding sessions. The company is committed to enhancing STEM
                   education and providing top-grade opportunities for the youth of Lebanon to learn
@@ -97,17 +105,25 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="h-1 w-full bg-brand lg:w-2/3 my-40"></div>
-            <div className="flex mt-44">
-              <Image src={soFar} alt="So Far" width={117.04} height={192.22}></Image>
-              <div className="flex-col pl-5 pt-8">
-                <div className="text-5xl / font-semibold text-brand text-start"> So Far </div>
-                <p className="text-xl / font-semibold text-brand mt-16">
+            <div className="hidden md:block h-1 w-3/4 bg-brand md:mt-8 lg:mt-12 ml-8 "></div>
+            <div className="flex items-start pt-8">
+              <Image
+                src={soFar}
+                alt="So Far"
+                width={80}
+                height={150}
+                className=" md:mt-6 lg:mt-10"
+              ></Image>
+              <div className="flex-col pl-6 md:pt-4 lg:pt-4">
+                <div className="text-sm / font-semibold text-brand text-start mt-4 md:mt-6 lg:mt-12 md:text-2xl lg:text-4xl">
+                  So Far
+                </div>
+                <p className="text-[8px] / font-semibold text-brand mt-2 md:mt-8 md:text-xs lg:text-sm">
                   Ninja Co has established over 20 education centers across Lebanon, offering an
                   engaging and interactive curriculum in robotics that is constantly updated. The
-                  company's traditional in-person class model has proven successful, but to expand
-                  its reach and drive growth, We developed this online platform that will transform
-                  the company's offerings.
+                  company&apos; s traditional in-person class model has proven successful, but to
+                  expand its reach and drive growth, We developed this online platform that will
+                  transform the company&apos;s offerings.
                 </p>
               </div>
             </div>
