@@ -25,6 +25,7 @@ export interface WebsiteTranslations {
       description: translationElement
       getStarted: translationElement
     }
+
     Testimonials: {
       title: translationElement
       reviews: {
@@ -32,6 +33,12 @@ export interface WebsiteTranslations {
         review2: translationElement
         review3: translationElement
       }
+    }
+    Mission: {
+      ourMission: translationElement
+      ourMissionDescription: translationElement
+      soFar: translationElement
+      soFarDescription: translationElement
     }
   }
 }

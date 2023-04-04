@@ -2,6 +2,7 @@ import Head from 'next/head'
 import HeroImage from '@/components/heroImage'
 import Image from 'next/image'
 import Menu from '@/components/menu'
+
 import Testimonial from '@/components/testimonial'
 
 import clsx from 'clsx'
@@ -9,6 +10,11 @@ import quotes from '@/images/quotes.svg'
 import testimonialsTilda1 from '@/images/testimonialsTilda1.svg'
 import testimonialsTilda2 from '@/images/testimonialsTilda2.svg'
 import testimonialsTilda3 from '@/images/testimonialsTilda3.svg'
+
+import missionSection from '../public/missionSection.svg'
+import ourMission from '../public/ourMission.svg'
+import soFar from '../public/SoFar.svg'
+
 import useTranslation from '@/hooks/useTranslation'
 
 export default function Home() {
@@ -29,6 +35,20 @@ export default function Home() {
       name: 'Charbel',
       review: t.LandingPage.Testimonials.reviews.review3,
       isBlue: true,
+    },
+  ]
+  const ourMissionSection = [
+    {
+      title: t.LandingPage.Mission.ourMission,
+      description: t.LandingPage.Mission.ourMissionDescription,
+      image: ourMission,
+      alt: t.LandingPage.Mission.ourMission as string,
+    },
+    {
+      title: t.LandingPage.Mission.soFar,
+      description: t.LandingPage.Mission.soFarDescription,
+      image: soFar,
+      alt: t.LandingPage.Mission.soFar as string,
     },
   ]
 
@@ -105,6 +125,38 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Mission section */}
+        <div className="flex w-full my-16">
+          <div className="flex flex-col gap-12 ml-6 md:ml-12 mr-12">
+            {ourMissionSection.map((item, index) => (
+              <div className="flex flex-col gap-6" key={index}>
+                <div className="flex items-start">
+                  <Image
+                    src={item.image}
+                    alt={item.alt}
+                    className="w-16 md:w-28 lg:w-32 mt-0 md:mt-4 lg:mt-12"
+                  ></Image>
+                  <div className="flex flex-col gap-8 pl-4 md:pt-8 lg:pt-12">
+                    <div className="text-xl md:text-2xl lg:text-4xl font-bold text-brand text-start mt-0 md:mt-0 lg:mt-6 whitespace-nowrap">
+                      {item.title}
+                    </div>
+                    <p className="hidden md:block text-xs font-semibold text-brand">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+                <div className="block md:hidden text-xs font-semibold text-brand">
+                  {item.description}
+                </div>
+              </div>
+            ))}
+          </div>
+          <Image
+            src={missionSection}
+            alt="Mission Section"
+            className="hidden md:block lg:block md:w-56 lg:w-80 lg:w-300 mt-2"
+          ></Image>
+        </div>
         {/* Testimonial section */}
         <div className="my-16">
           <div className="pl-6 md:pl-8 lg:pl-12 text-2xl md:text-3xl lg:text-4xl text-brand-700 font-semibold relative w-fit">
