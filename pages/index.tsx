@@ -87,9 +87,9 @@ export default function Home() {
           <div className="m-44 ">
             <div className="flex">
               <Image src={ourMission} alt="Our Mission" width={160} height={141.22}></Image>
-              <div className="flex-col pl-5">
-                <div className="h-fit p-"> Our Mission </div>
-                <p className="text-xl / font-semibold">
+              <div className="flex-col pl-5 pt-12">
+                <div className="text-5xl / font-semibold text-brand text-start"> Our Mission </div>
+                <p className="text-xl / font-semibold text-brand mt-16">
                   Make STEM education fun and interactive for children and teens through the use of
                   LEGO kits and iPad coding sessions. The company is committed to enhancing STEM
                   education and providing top-grade opportunities for the youth of Lebanon to learn
