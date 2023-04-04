@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Menu from '@/components/menu'
 import missionSection from '../public/missionSection.svg'
 import ourMission from '../public/ourMission.svg'
-import soFar from '../public/So Far.svg'
+import soFar from '../public/SoFar.svg'
 import useTranslation from '@/hooks/useTranslation'
 
 export default function Home() {
@@ -97,12 +97,12 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="h-1 w-full bg-blue-600 lg:w-2/3 my-20"></div>
+            <div className="h-1 w-full bg-brand lg:w-2/3 my-40"></div>
             <div className="flex mt-44">
               <Image src={soFar} alt="So Far" width={117.04} height={192.22}></Image>
-              <div className="flex-col pl-5">
-                <div className="h-fit"> So Far </div>
-                <p className="text-xl / font-semibold">
+              <div className="flex-col pl-5 pt-8">
+                <div className="text-5xl / font-semibold text-brand text-start"> So Far </div>
+                <p className="text-xl / font-semibold text-brand mt-16">
                   Ninja Co has established over 20 education centers across Lebanon, offering an
                   engaging and interactive curriculum in robotics that is constantly updated. The
                   company's traditional in-person class model has proven successful, but to expand
