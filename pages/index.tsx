@@ -105,7 +105,7 @@ export default function Home() {
               <Image src={Vector52} alt={'TESTIMONIAL'} width={500} height={500} />
             </div>
             <div className="text-lg font-semibold absolute top-1/3 left-1/6 pl-10">
-             <Testimonial name="sarah" review= review={t.LandingPage.Testimonials.reviews.review1} isBlue true></Testimonial>
+             <Testimonial name="sarah" review={t.LandingPage.Testimonials.reviews.review1} isBlue true></Testimonial>
             </div>
           
       
@@ -124,7 +124,7 @@ export default function Home() {
               <Image src={Vector52} alt={'TESTIMONIAL'} width={500} height={500} />
             </div>
             <div className="text-lg font-semibold absolute top-1/4 left-1/6 pl-10">
-            <Testimonial name="Charbel" review= review={t.LandingPage.Testimonials.reviews.review3} isBlue true></Testimonial>
+            <Testimonial name="Charbel"  review={t.LandingPage.Testimonials.reviews.review3} isBlue true></Testimonial>
             </div>
             
             
