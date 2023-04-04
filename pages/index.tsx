@@ -10,6 +10,21 @@ import useTranslation from '@/hooks/useTranslation'
 export default function Home() {
   const t = useTranslation()
 
+  const ourMissionSection = [
+    {
+      title: t.LandingPage.Mission.ourMission,
+      description: t.LandingPage.Mission.ourMissionDescription,
+      image: ourMission,
+      alt: t.LandingPage.Mission.ourMission as string,
+    },
+    {
+      title: t.LandingPage.Mission.soFar,
+      description: t.LandingPage.Mission.soFarDescription,
+      image: soFar,
+      alt: t.LandingPage.Mission.soFar as string,
+    },
+  ]
+
   return (
     <>
       <Head>
@@ -83,52 +98,37 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex w-full pt-4">
-          <div className="pl-2 md:pl-12 lg:pl-32">
-            <div className="flex items-start">
-              <Image
-                src={ourMission}
-                alt="Our Mission"
-                width={120}
-                height={100}
-                className="mt-0 md:mt-4 lg:mt-12"
-              ></Image>
-              <div className="flex-col pl-6 md:pt-8 lg:pt-12 flex-start">
-                <div className="text-sm font-semibold text-brand text-start mt-0 md:mt-0 lg:mt-6 md:text-2xl lg:text-4xl">
-                  Our Mission
+        {/* Mission section */}
+        <div className="flex w-full my-16">
+          <div className="flex flex-col gap-12 ml-6 md:ml-12 mr-12">
+            {ourMissionSection.map((item, index) => (
+              <div className="flex flex-col gap-6" key={index}>
+                <div className="flex items-start">
+                  <Image
+                    src={item.image}
+                    alt={item.alt}
+                    className="w-16 md:w-28 lg:w-32 mt-0 md:mt-4 lg:mt-12"
+                  ></Image>
+                  <div className="flex flex-col gap-8 pl-4 md:pt-8 lg:pt-12">
+                    <div className="text-xl md:text-2xl lg:text-4xl font-bold text-brand text-start mt-0 md:mt-0 lg:mt-6 whitespace-nowrap">
+                      {item.title}
+                    </div>
+                    <p className="hidden md:block text-xs font-semibold text-brand">
+                      {item.description}
+                    </p>
+                  </div>
                 </div>
-                <p className="text-xs text-brand mt-2 md:mt-8 md:text-xs lg:text-sm">
-                  Make STEM education fun and interactive for children and teens through the use of
-                  LEGO kits and iPad coding sessions. The company is committed to enhancing STEM
-                  education and providing top-grade opportunities for the youth of Lebanon to learn
-                  about robotics and programming.
-                </p>
-              </div>
-            </div>
-            <div className="hidden md:block h-1 w-3/4 bg-brand md:mt-8 lg:mt-12 ml-8 "></div>
-            <div className="flex items-start pt-8">
-              <Image
-                src={soFar}
-                alt="So Far"
-                width={80}
-                height={150}
-                className=" md:mt-6 lg:mt-10"
-              ></Image>
-              <div className="flex-col pl-6 md:pt-4 lg:pt-4">
-                <div className="text-sm / font-semibold text-brand text-start mt-4 md:mt-6 lg:mt-12 md:text-2xl lg:text-4xl">
-                  So Far
+                <div className="block md:hidden text-xs font-semibold text-brand">
+                  {item.description}
                 </div>
-                <p className="text-xs text-brand mb-12 mt-2 md:mt-8 md:text-xs lg:text-sm ">
-                  Ninja Co has established over 20 education centers across Lebanon, offering an
-                  engaging and interactive curriculum in robotics that is constantly updated. The
-                  company&apos; s traditional in-person class model has proven successful, but to
-                  expand its reach and drive growth, We developed this online platform that will
-                  transform the company&apos;s offerings.
-                </p>
               </div>
-            </div>
+            ))}
           </div>
-          <Image src={missionSection} alt="Mission Section" width={1081.11} height={1211}></Image>
+          <Image
+            src={missionSection}
+            alt="Mission Section"
+            className="hidden md:block lg:block md:w-56 lg:w-80 lg:w-300 mt-2"
+          ></Image>
         </div>
       </main>
     </>
