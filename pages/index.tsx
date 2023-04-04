@@ -3,6 +3,7 @@ import HeroImage from '@/components/heroImage'
 import Menu from '@/components/menu'
 import useTranslation from '@/hooks/useTranslation'
 import Star from '@/components/star'
+import Testimonial from '@/components/testimonial'
 
 export default function Home() {
   const t = useTranslation()
@@ -104,91 +105,29 @@ export default function Home() {
               <Image src={Vector52} alt={'TESTIMONIAL'} width={500} height={500} />
             </div>
             <div className="text-lg font-semibold absolute top-1/3 left-1/6 pl-10">
-              My son has always been interested in robots,
-              <br /> but we don&apos;t live near any of the Ninja Co branches.
-              <br /> Thanks to their new online platform, he can finally <br />
-              take classes and learn about robotics from the <br />
-              comfort of our own home.{' '}
+             <Testimonial name="sarah" review="My son has always been interested in robots, but we don't live near any of the Ninja Co branches. Thanks to their new online platform, he can finally take classes and learn about robotics from the comfort of our own home." isBlue true></Testimonial>
             </div>
-            <div className="text-3xl font-semibold text-brand-800 absolute bottom-1/4 left-12">
-              {' Sarah'}
-            </div>
-            <div className="absolute bottom-24 left-12">
-            <Star color="#6480A7"></Star>
-            </div>
-            <div className="absolute bottom-24 left-20">
-            <Star color="#6480A7"></Star>
-            </div>
-            <div className="absolute bottom-24 left-28">
-            <Star color="#6480A7"></Star>
-            </div>
-            <div className="absolute bottom-24 left-36">
-            <Star color="#6480A7"></Star>
-            </div>
-            <div className="absolute bottom-24 left-44">
-            <Star color="#6480A7"></Star>
-            </div>
+          
+      
           </div>
           <div className="relative ">
             <div className=" max-w-full h-auto pb-40">
               <Image src={Vector51} alt={'TESTIMONIAL'} width={500} height={500} />
             </div>
             <div className="text-lg font-semibold absolute top-1/4 left-1/6 pl-10">
-              I&apos;ve been an instructor at Ninja Co for two years,
-              <br /> and I was initially skeptical about the move to an
-              <br /> online platform. However, I&apos;ve been blown away
-              <br /> by the capabilities of the new software.
+            <Testimonial name="Ali" review="I've been an instructor at Ninja Co for two years, and I was initially skeptical about the move to an online platform. However, I've been blown away by the capabilities of the new software." isBlue true></Testimonial>
             </div>
-            <div className="text-3xl font-semibold text-brand-800 absolute bottom-72 left-12">
-              {' Ali'}
-            </div>
-
-            <div className="absolute bottom-64 left-12">
-            <Star color="#6480A7"></Star>
-              <Star color="#6480A7"></Star>
-            </div>
-            <div className="absolute bottom-64 left-20">
-            <Star color="#6480A7"></Star>
-            </div>
-            <div className="absolute bottom-64 left-28">
-            <Star color="#6480A7"></Star>
-            </div>
-            <div className="absolute bottom-64 left-36">
-            <Star color="#6480A7"></Star>
-            </div>
-            <div className="absolute bottom-64 left-44">
-            <Star color="#6480A7"></Star>
-            </div>
+          
           </div>
           <div className="relative ">
             <div className=" max-w-full h-auto pb-40">
               <Image src={Vector52} alt={'TESTIMONIAL'} width={500} height={500} />
             </div>
             <div className="text-lg font-semibold absolute top-1/4 left-1/6 pl-10">
-              I&apos;ve always been fascinated by robots, but I never thought I could build one
-              myself.
-              <br /> Thanks to Ninja Co&apos;s online platform, I&apos;m now able
-              <br /> to take classes and learn how to create
-              <br /> my own robot step-by-step!
+            <Testimonial name="Charbel" review="My son has always been interested in robots, but we don't live near any of the Ninja Co branches. Thanks to their new online platform, he can finally take classes and learn about robotics from the comfort of our own home." isBlue true></Testimonial>
             </div>
-            <div className="text-3xl font-semibold text-brand-800 absolute bottom-72 left-12">
-              {' Charbel'}
-            </div>
-            <div className="absolute bottom-64 left-12">
-            <Star color="#6480A7"></Star>
-            </div>
-            <div className="absolute bottom-64 left-20">
-            <Star color="#6480A7"></Star>
-            </div>
-            <div className="absolute bottom-64 left-28">
-            <Star color="#6480A7"></Star>
-            </div>
-            <div className="absolute bottom-64 left-36">
-            <Star color="#6480A7"></Star>
-            </div>
-            <div className="absolute bottom-64 left-44">
-            <Star color="#6480A7"></Star>
-            </div>
+            
+            
           </div>
         </div>
       </main>
