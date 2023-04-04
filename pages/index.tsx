@@ -89,68 +89,97 @@ export default function Home() {
 
         <div className="flex flex-row justify-center" />
         {/* grey background */}
-        <div className="mt-[140px] ml-64 absolute w-[859px] h-[410px] bg-indigo-100 rounded-3xl shadow-xl z-0" />
-        {/* align first 4 elements using flex */}
-        <div className="flex flex-col mt-44 ml-[464px] justify-center">
-          <div className="absolute left-72 mt-6">
-            <Image src={Lego1} alt="--" />
+        <div className="mt-[140px] ml-64 relative w-[865px] h-[450px] bg-indigo-100 rounded-[65px] shadow-xl z-0">
+          {/* align first 4 elements using flex */}
+          <div className="flex flex-row">
+            <div className="absolute top-10 left-10">
+              <Image src={Lego1} alt="--" />
+            </div>
+            <p className="relative top-12 left-52 text-3xl font-semibold text-brand-700 h-fit w-fit ">
+              Why choose our platform?
+            </p>
+            <div className="absolute top-3 left-96">
+              <Image src={Vector} alt="--" />
+            </div>
+            <div className="absolute left-[675px]">
+              <Image src={logo_rev} alt="--" />
+            </div>
           </div>
-          <p className="text-3xl font-semibold text-blue-700 z-20">Why choose our platform?</p>
-          <div className="absolute right-[490px] ">
-            <Image src={Vector} alt="--" />
-          </div>
-          <div className="absolute pl-[500px]">
-            <Image src={logo_rev} alt="--" />
-          </div>
-        </div>
 
-        <div className="absolute left-64 mt-12">
-          <Image src={Lego2} alt="--" />
-        </div>
+          <div className="absolute top-32 left-3">
+            <Image src={Lego2} alt="--" />
+          </div>
 
-        <div className="flex flex-row items-center mt-32 pl-[450px]">
-          <div className="absolute">
-            <Image src={Courses} alt="--" width="90" height="45" />
-          </div>
-          <div className="absolute pl-48">
-            <Image src={twemoji_video} alt="--" width="80" height="40" />
-          </div>
-          <div className="absolute pl-[410px]">
-            <Image src={twemoji_trophy} alt="--" width="70" height="35" />
-          </div>
-        </div>
+          {/* here i am gonna do flex row, and 3 flex col in it */}
+          <div className="flex flex-row gap-14 items-center mt-32 justify-center">
+            {/* first flex col */}
+            <div className="flex flex-col items-center gap-1">
+              {/* space intentialy */}
+              <div>
+                <Image src={Courses} alt="--" width="90" height="45" />
+              </div>
+              <div className=" text-xl font-semibold text-brand z-20">
+                <p> Courses</p>
+              </div>
+              <div className=" text-xs font-semibold text-brand z-20">
+                All kind of courses
+                <br />
+                tailored by experts
+              </div>
+            </div>
 
-        <div className="flex flex-row gap-24 mt-10 pl-[450px]">
-          <div className=" text-xl font-semibold text-black z-20 pl-1">
-            <p> Courses</p>
-          </div>
-          <div className=" text-xl font-semibold text-black z-20 ">
-            <p> Playful forms</p>
-          </div>
-          <div className=" text-xl font-semibold text-black z-20">
-            <p> Points System</p>
-          </div>
-        </div>
+            {/* second flex col */}
+            <div className="flex flex-col items-center gap-1">
+              {/* space intentialy */}
+              <div>
+                <Image src={twemoji_video} alt="--" width="80" height="40" />
+              </div>
 
-        <div className="flex flex-row gap-20  mt-3 pl-[445px]">
-          <div className=" text-xs font-semibold text-black z-20">
-            All kind of courses
-            <br />
-            tailored by experts
+              <div className=" text-xl font-semibold text-brand z-20 ">
+                <p> Playful forms</p>
+              </div>
+
+              <div className="text-xs font-semibold text-brand z-20 ">
+                We motivate children to
+                <br />
+                study using visual
+                <br />
+                programming blocks
+              </div>
+            </div>
+
+            {/* third flex col */}
+            <div className="flex flex-col items-center gap-1 ">
+              {/* space intentialy */}
+              <div className="mt-2">
+                <Image src={twemoji_trophy} alt="--" width="70" height="35" />
+              </div>
+
+              <div className=" text-xl font-semibold text-brand z-20">
+                <p> Points System</p>
+              </div>
+
+              <div className=" text-xs font-semibold text-brand z-20">
+                Keep track of your
+                <br />
+                points and compete with
+                <br />
+                others
+              </div>
+            </div>
           </div>
-          <div className="text-xs font-semibold text-black z-20 ">
-            We motivate children to
-            <br />
-            study using visual
-            <br />
-            programming blocks
-          </div>
-          <div className=" text-xs font-semibold text-black z-20 pl-3">
-            Keep track of your
-            <br />
-            points and compete with
-            <br />
-            others
+          <div className="ml-[625px] mt-10 btn bg-brand-500 text-white text-xs flex flex-row gap-2 max-w-fit rounded-2xl">
+            <p>Join Now</p>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={3}
+              stroke="currentColor"
+              className="w-3 h-3"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
           </div>
         </div>
       </main>
