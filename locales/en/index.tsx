@@ -33,7 +33,7 @@ const englishTranslations: WebsiteTranslations = {
       getStarted: 'Get Started',
     },
     About: {
-      title: 'Why choose our platform?Circle Platform?',
+      title: 'Why choose our platform?',
       courses: 'Courses',
       coursesDescription: 'All kind of courses tailored to your needs',
       playForms: 'Playful forms',
