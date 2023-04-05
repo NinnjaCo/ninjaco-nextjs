@@ -6,8 +6,10 @@ import facebook from '@/images/facebook.svg'
 import instagram from '@/images/instagram.svg'
 import linkedin from '@/images/linkedin.svg'
 import twitter from '@/images/twitter.svg'
+import useTranslation from '@/hooks/useTranslation'
 
 const Footer = () => {
+  const t = useTranslation()
   const router = useRouter()
 
   const handleSocialMediaIcon = (url: string) => {
@@ -60,23 +62,23 @@ const Footer = () => {
         <Image src={darkBackgroundLogo} alt="Hero Image" fill></Image>
       </div>
       <div className="flex flex-col justify-center gap-4">
-        <p className="text-brand-50 font-bold text-sm md:text-base">Contact Us</p>
+        <p className="text-brand-50 font-bold text-sm md:text-base">{t.Footer.contactUs}</p>
         <div className="flex flex-col gap-0 text-xs md:text-base">
           <p className="text-brand-50">+961 71 464 624</p>
           <p className="text-brand-50">+961 71 370 811</p>
         </div>
       </div>
       <div className="flex flex-col justify-center gap-4">
-        <p className="text-brand-50 font-bold text-sm md:text-base">Find Us</p>
+        <p className="text-brand-50 font-bold text-sm md:text-base">{t.Footer.FindUs}</p>
         <div className="flex flex-col text-xs md:text-base">
           <p className="text-brand-50">Sarba, Lebanon</p>
         </div>
       </div>
       <div className="flex flex-col justify-center gap-4">
-        <p className="text-brand-50 font-bold text-sm md:text-base">Links</p>
+        <p className="text-brand-50 font-bold text-sm md:text-base">{t.Footer.Links}</p>
         <div className="flex flex-col text-xs md:text-base">
-          <p className="text-brand-50">Privacy Policy</p>
-          <p className="text-brand-50">FAQ Page</p>
+          <p className="text-brand-50">{t.Footer.Terms}</p>
+          <p className="text-brand-50">{t.Footer.Faq}</p>
         </div>
       </div>
       <div className="flex gap-2">

@@ -65,5 +65,13 @@ const frenchTranslations: WebsiteTranslations = {
         "Ninja Co a établi plus de 20 centres d'éducation à travers le Liban, offrant un programme attractif et interactif en robotique constamment mis à jour. Le modèle en préseniel actuellement adopté par l'entreprise s'est avéré être un succès, mais pour étendre sa portée et stimuler sa croissance, nous avons développé cette plateforme en ligne qui transformera les offres disponibles.",
     },
   },
+  Footer: {
+    contactUs: 'Contactez-nous',
+    FindUs: 'Trouvez-nous',
+    aboutUs: 'À propos de nous',
+    Links: 'Liens',
+    Faq: 'FAQ ',
+    Terms: 'Politique de confidentialité',
+  },
 }
 export default frenchTranslations

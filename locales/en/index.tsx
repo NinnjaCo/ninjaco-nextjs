@@ -63,5 +63,13 @@ const englishTranslations: WebsiteTranslations = {
         "Ninja Co has established over 20 education centers across Lebanon, offering an engaging and interactive curriculum in robotics that is constantly updated. The company's traditional in-person class model has proven successful, but to expand its reach and drive growth, We developed this online platform that will transform the company's offerings",
     },
   },
+  Footer: {
+    contactUs: 'Contact Us',
+    FindUs: 'Find Us',
+    aboutUs: 'About Us',
+    Links: 'Links',
+    Faq: 'FAQ page',
+    Terms: 'Privacy Policy',
+  },
 }
 export default englishTranslations
