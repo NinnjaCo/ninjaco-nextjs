@@ -124,6 +124,33 @@ const frenchTranslations: WebsiteTranslations = {
         pour vous montrer des publicités qui sont pertinentes pour vos intérêts. <br></br>
       </>
     ),
+    shareInformation: (
+      <>
+        <strong> Comment nous partageons vos informations : </strong>Nous ne vendons,
+        n&apos;échangeons ou ne louons pas vos informations personnelles à des tiers. Nous pouvons
+        partager vos informations avec les types de tiers suivants : <br></br>
+      </>
+    ),
+    share1: (
+      <>
+        <strong> Fournisseurs de services :</strong> Nous pouvons partager vos informations avec nos
+        prestataires de services, tels que les processeurs de paiement, les fournisseurs
+      </>
+    ),
+    share2: (
+      <>
+        <strong> Partenaires commerciaux :</strong>Nous pouvons partager vos informations avec nos
+        partenaires commerciaux, tels que les annonceurs et les agences de marketing, afin de vous
+        montrer des publicités pertinentes. <br></br>
+      </>
+    ),
+    share3: (
+      <>
+        <strong> Forces de l&apos;ordre : </strong> Nous pouvons partager vos informations avec des
+        organismes d&apos;application de la loi ou d&apos;autres tiers si la loi l&apos;exige ou
+        pour protéger nos droits ou notre propriété.<br></br>
+      </>
+    ),
   },
 }
 

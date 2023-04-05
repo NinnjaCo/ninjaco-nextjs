@@ -46,6 +46,10 @@ export interface WebsiteTranslations {
     use2: translationElement
     use3: translationElement
     use4: translationElement
+    shareInformation: translationElement
+    share1: translationElement
+    share2: translationElement
+    share3: translationElement
   }
 }
 

@@ -32,6 +32,17 @@ export default function Home() {
       title: t.Copyright.use4,
     },
   ]
+  const shareInfo = [
+    {
+      title: t.Copyright.share1,
+    },
+    {
+      title: t.Copyright.share2,
+    },
+    {
+      title: t.Copyright.share3,
+    },
+  ]
 
   return (
     <>
@@ -59,7 +70,18 @@ export default function Home() {
           {t.Copyright.useInformation}
           <br></br>
           <div className=" md:ml-8">
-            {collectInfo.map((item, index) => (
+            {useInfo.map((item, index) => (
+              <ul className="mb-2 ml-4" key={index}>
+                {item.title}
+              </ul>
+            ))}
+          </div>
+        </div>
+        <div className="my-8">
+          {t.Copyright.shareInformation}
+          <br></br>
+          <div className=" md:ml-8">
+            {shareInfo.map((item, index) => (
               <ul className="mb-2 ml-4" key={index}>
                 {item.title}
               </ul>
@@ -76,18 +98,20 @@ export default function Home() {
         services, such as sending you emails about your account or promotions. */}
         {/* To Advertise to You: We may use your information to show you advertisements that are
         relevant to your interests */}
-        Sharing Your Information We do not sell, trade, or rent your personal information to third
-        parties.We may share your information with the following types of third parties:Service
-        Providers: We may share your information with our service providers, such as payment
+        {/* Sharing Your Information We do not sell, trade, or rent your personal information to third
+        parties.We may share your information with the following types of third parties:
+        */}
+        {/* Service Providers: We may share your information with our service providers, such as payment
         processors, hosting providers, and shipping providers, in order to provide you with our
-        services.Business Partners: We may share your information with our business partners, such
-        as advertisers and marketing agencies, in order to show you relevant advertisements.Law
-        Enforcement: We may share your information with law enforcement agencies or other third
-        parties if required by law or to protect our rights or property.Your Rights You have the
-        following rights regarding your personal information:Access: You have the right to access
-        the personal information we have collected about you.Correction: You have the right to
-        correct any inaccurate or incomplete personal information we have collected about
-        you.Deletion: You have the right to request that we delete your personal
+        services. */}
+        {/* Business Partners: We may share your information with our business partners, such as
+        advertisers and marketing agencies, in order to show you relevant advertisements. */}
+        {/* Law Enforcement: We may share your information with law enforcement agencies or other third
+        parties if required by law or to protect our rights or property. */}
+        Your Rights You have the following rights regarding your personal information:Access: You
+        have the right to access the personal information we have collected about you.Correction:
+        You have the right to correct any inaccurate or incomplete personal information we have
+        collected about you.Deletion: You have the right to request that we delete your personal
         information.Restriction: You have the right to request that we restrict the processing of
         your personal information.Objection: You have the right to object to the processing of your
         personal information.Portability: You have the right to receive a copy of your personal

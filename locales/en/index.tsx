@@ -115,7 +115,35 @@ const englishTranslations: WebsiteTranslations = {
     use4: (
       <>
         <strong> To Advertise to You: </strong> We may use your information to show you
-        advertisements that are relevant to your interests <br> </br>
+        advertisements that are relevant to your interests <br></br>
+      </>
+    ),
+    shareInformation: (
+      <>
+        <strong> How We Share Your Information: </strong> We do not sell, trade, or rent your
+        personal information to third parties. We may share your information with the following
+        types of third parties: <br></br>
+      </>
+    ),
+    share1: (
+      <>
+        <strong> Service Providers: </strong> We may share your information with our service
+        providers, such as payment processors, hosting providers, and shipping providers, in order
+        to provide you with our services <br></br>
+      </>
+    ),
+    share2: (
+      <>
+        <strong> Business Partners: </strong> We may share your information with our business
+        partners, such as advertisers and marketing agencies, in order to show you relevant
+        advertisements <br></br>
+      </>
+    ),
+    share3: (
+      <>
+        <strong>Law Enforcement: </strong> We may share your information with law enforcement
+        agencies or other third parties if required by law or to protect our rights or property.
+        <br></br>
       </>
     ),
   },
