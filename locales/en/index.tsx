@@ -32,6 +32,16 @@ const englishTranslations: WebsiteTranslations = {
       ),
       getStarted: 'Get Started',
     },
+    About: {
+      title: 'Why choose our platform?',
+      courses: 'Courses',
+      coursesDescription: 'All kind of courses tailored to your needs',
+      playForms: 'Playful forms',
+      playFormsDescription: 'We motivate children to study using visual programming',
+      trophy: 'Trophy',
+      trophyDescription: 'We reward children for their achievements',
+      joinNow: 'Join Now',
+    },
     Mission: {
       ourMission: 'Our Mission',
       ourMissionDescription:
