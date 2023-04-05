@@ -17,7 +17,7 @@ export default function FAP_page() {
         <div className="mt-44 ml-14  font-mono text-2xl  text-brand-700">
           <h1>Frequently Asked Questions</h1>
         </div>
-        <div className="mt-10 flex flex-col gap-0">
+        <div className="mt-10 flex flex-col gap-10">
           <FAQComponent
             question="Should i have previous knowledge in programming?"
             answer="No, you do not need to have previous knowledge in programming to learn coding using visual blocks. This approach is designed to be beginner-friendly and accessible to students with no prior coding experience."
