@@ -41,6 +41,11 @@ export interface WebsiteTranslations {
     collect2: translationElement
     collect3: translationElement
     collect4: translationElement
+    useInformation: translationElement
+    use1: translationElement
+    use2: translationElement
+    use3: translationElement
+    use4: translationElement
   }
 }
 

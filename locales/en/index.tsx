@@ -85,6 +85,39 @@ const englishTranslations: WebsiteTranslations = {
         us, such as your preferences, feedback, or responses to surveys.<br></br>
       </>
     ),
+    useInformation: (
+      <>
+        <strong> How We Use Your Information: </strong> We use your personal information for the
+        following purposes: <br></br>
+      </>
+    ),
+    use1: (
+      <>
+        <strong> To provide our services: </strong> We use your information to our website and
+        services to you, such as processing your orders, responding to your inquiries, and
+        customizing our content, for you. <br></br>
+      </>
+    ),
+    use2: (
+      <>
+        <strong> To improve our services: </strong> We use your information to improve our website
+        and services, such as by analyzing website usage usage and measuring the effectiveness of
+        our marketing campaigns<br></br>
+      </>
+    ),
+    use3: (
+      <>
+        <strong> To communicate with you: </strong> We use your information to communicate with you
+        about our website and services, such as sending you emails about your account or promotions.
+        <br></br>
+      </>
+    ),
+    use4: (
+      <>
+        <strong> To Advertise to You: </strong> We may use your information to show you
+        advertisements that are relevant to your interests <br> </br>
+      </>
+    ),
   },
 }
 export default englishTranslations

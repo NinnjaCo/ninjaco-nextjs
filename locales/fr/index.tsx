@@ -91,6 +91,39 @@ const frenchTranslations: WebsiteTranslations = {
         enquêtes. <br></br>
       </>
     ),
+    useInformation: (
+      <>
+        <strong> Comment nous utilisons vos informations : </strong> Nous utilisons vos informations
+        personnelles à des fins suivantes :<br></br>
+      </>
+    ),
+    use1: (
+      <>
+        <strong> Pour fournir nos services : </strong> Nous utilisons vos informations pour vous
+        fournir nos services sur notre site web, tels que le traitement de vos commandes, la réponse
+        à vos demandes et la personnalisation de notre contenu pour vous. <br></br>
+      </>
+    ),
+    use2: (
+      <>
+        <strong> Pour améliorer nos services : </strong> Nous utilisons vos informations pour
+        améliorer notre site web et nos services, tels qu&apos;en analysant l&apos;utilisation de
+        notre site web et en mesurant l&apos;efficacité de nos campagnes marketing.<br></br>
+      </>
+    ),
+    use3: (
+      <>
+        <strong> Pour communiquer avec vous : </strong> Nous utilisons vos informations pour
+        communiquer avec vous au sujet de notre site web et de nos services, tels qu&apos;en vous
+        envoyant des e-mails sur votre compte ou des promotions. <br></br>
+      </>
+    ),
+    use4: (
+      <>
+        <strong> Pour vous faire de la publicité : </strong> Nous pouvons utiliser vos informations
+        pour vous montrer des publicités qui sont pertinentes pour vos intérêts. <br></br>
+      </>
+    ),
   },
 }
 
