@@ -24,6 +24,7 @@ import soFar from '../public/SoFar.svg'
 
 import trophy from '../public/images/trophy.svg'
 
+import Footer from '@/components/footer'
 import useTranslation from '@/hooks/useTranslation'
 
 export default function Home() {
@@ -283,6 +284,7 @@ export default function Home() {
           </div>
         </div>
       </main>
+      <Footer />
     </>
   )
 }

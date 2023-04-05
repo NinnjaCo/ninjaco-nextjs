@@ -51,6 +51,14 @@ export interface WebsiteTranslations {
       soFarDescription: translationElement
     }
   }
+  Footer: {
+    contactUs: translationElement
+    FindUs: translationElement
+    aboutUs: translationElement
+    Links: translationElement
+    Faq: translationElement
+    Terms: translationElement
+  }
 }
 
 // Create locale type support en | fr
