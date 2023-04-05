@@ -32,6 +32,18 @@ export interface WebsiteTranslations {
       soFarDescription: translationElement
     }
   }
+  Copyright: {
+    collectInformation: translationElement
+    // collectInformationDescription: translationElement
+    collect1: translationElement
+    // collect1description: translationElement
+    collect2: translationElement
+    // collect2description: translationElement
+    collect3: translationElement
+    // collect3description: translationElement
+    collect4: translationElement
+    // collect4description: translationElement
+  }
 }
 
 // Create locale type support en | fr

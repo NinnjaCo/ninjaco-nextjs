@@ -41,5 +41,40 @@ const englishTranslations: WebsiteTranslations = {
         "Ninja Co has established over 20 education centers across Lebanon, offering an engaging and interactive curriculum in robotics that is constantly updated. The company's traditional in-person class model has proven successful, but to expand its reach and drive growth, We developed this online platform that will transform the company's offerings",
     },
   },
+  Copyright: {
+    collectInformation: (
+      <>
+        <strong> Information We Collect: </strong>We may collect the following types of
+        personalinformation:<br></br>
+      </>
+    ),
+    collect1: (
+      <>
+        <strong> Contact Information: </strong>When you sign up for an account or contact us through
+        our website, we may collect your name, email address, phone number, and other contact
+        information.<br></br>
+      </>
+    ),
+    collect2: (
+      <>
+        <strong>Usage Information: </strong> We may collect information about how you use our
+        website, including your IP address, browser type, device type, operating system, and the
+        pages you visit.<br></br>
+      </>
+    ),
+    collect3: (
+      <>
+        <strong>Transaction Information: </strong> If you make a purchase through our website, we
+        may collect information about your purchase, including your name, billing address, shipping
+        address, payment method, and other transaction information.<br></br>
+      </>
+    ),
+    collect4: (
+      <>
+        <strong>Other Information: </strong> We may collect other information that you provide to
+        us, such as your preferences, feedback, or responses to surveys.<br></br>
+      </>
+    ),
+  },
 }
 export default englishTranslations
