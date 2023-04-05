@@ -16,15 +16,23 @@ const FAQComponent: React.FC<{ question: string; answer: string }> = ({ question
       >
         <div className="flex flex-col gap-3">
           <div className="flex justify-between">
-            <div className="text-lg font-medium text-brand-700">{question}</div>
+            <div className="text-base md:text-lg lg:text-xl  text-brand font-medium">
+              {question}
+            </div>
             <ChevronDownIcon
               className={clsx(
-                'w-5 h-5 text-brand-700 transform transition-transform duration-200',
+                'w-5 h-5 text-brand transform transition-transform duration-200',
                 isOpen && 'rotate-180'
               )}
             />
           </div>
-          <div className={clsx('text-brand-700', isOpen && 'block', !isOpen && 'hidden')}>
+          <div
+            className={clsx(
+              'text-brand-400 text-sm md:text-base lg:text-lg font-medium',
+              isOpen && 'block',
+              !isOpen && 'hidden'
+            )}
+          >
             {answer}
           </div>
         </div>
