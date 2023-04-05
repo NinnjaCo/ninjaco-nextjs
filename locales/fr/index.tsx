@@ -162,6 +162,76 @@ const frenchTranslations: WebsiteTranslations = {
         pour protéger nos droits ou notre propriété.<br></br>
       </>
     ),
+    rights: (
+      <>
+        <strong> Your Rights: </strong> You have the following rights regarding your personal
+        information: <br></br>
+      </>
+    ),
+    right1: (
+      <>
+        <strong> Accès: </strong> Vous avez le droit d&apos;accéder aux informations personnelles
+        que nous avons collectées à votre sujet. <br></br>
+      </>
+    ),
+    right2: (
+      <>
+        <strong> Correction: </strong> Vous avez le droit de corriger toute information personnelle
+        inexacte ou incomplète que nous avons collectée à votre sujet. <br></br>
+      </>
+    ),
+    right3: (
+      <>
+        <strong> Suppression: </strong>Vous avez le droit de demander que nous supprimions vos
+        informations personnelles. <br></br>
+      </>
+    ),
+    right4: (
+      <>
+        <strong> Restriction: </strong>Vous avez le droit de demander que nous limitions le
+        traitement de vos informations personnelles<br></br>
+      </>
+    ),
+    right5: (
+      <>
+        <strong> Objection: </strong>Você tem o direito de se opor ao processamento de suas
+        informações pessoais
+        <br></br>
+      </>
+    ),
+    right6: (
+      <>
+        <strong> Portabilité: </strong> Vous avez le droit de recevoir une copie de vos informations
+        personnelles dans un format structuré et lisible par machine<br></br>
+      </>
+    ),
+    security: (
+      <>
+        <strong> sécurité: </strong> Nous prenons des mesures raisonnables pour protéger vos
+        informations personnelles contre tout accès, divulgation ou destruction non autorisés.
+        Cependant, nous ne pouvons pas garantir la sécurité de vos informations car aucune méthode
+        de transmission sur Internet n&apos;est sécurisée à 100%. <br></br>
+      </>
+    ),
+    childrenPrivacy: (
+      <>
+        <strong>La vie privée des enfants </strong> Nous ne recueillons pas sciemment des
+        informations personnelles auprès des enfants de moins de 13 ans. <br></br>
+      </>
+    ),
+    changes: (
+      <>
+        <strong> Modifications à la présente politique de confidentialité: </strong>Nous pouvons
+        mettre à jour cette politique de temps en temps. Tout changement sera affiché sur notre site
+        Web et sera effectif immédiatement.
+        <br></br>
+      </>
+    ),
+    questions: (
+      <strong>
+        Si vous avez des questions concernant cette politique, veuillez nous contacter.
+      </strong>
+    ),
   },
 }
 

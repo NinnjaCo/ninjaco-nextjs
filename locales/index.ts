@@ -60,6 +60,17 @@ export interface WebsiteTranslations {
     share1: translationElement
     share2: translationElement
     share3: translationElement
+    rights: translationElement
+    right1: translationElement
+    right2: translationElement
+    right3: translationElement
+    right4: translationElement
+    right5: translationElement
+    right6: translationElement
+    security: translationElement
+    childrenPrivacy: translationElement
+    changes: translationElement
+    questions: translationElement
   }
 }
 

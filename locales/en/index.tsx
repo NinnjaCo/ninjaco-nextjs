@@ -156,6 +156,71 @@ const englishTranslations: WebsiteTranslations = {
         <br></br>
       </>
     ),
+    rights: (
+      <>
+        <strong> Your Rights: </strong> You have the following rights regarding your personal
+        information: <br></br>
+      </>
+    ),
+    right1: (
+      <>
+        <strong> Access: </strong> You have the right to access the personal information we have
+        collected about you. <br></br>
+      </>
+    ),
+    right2: (
+      <>
+        <strong> Correction: </strong> You have the right to correct any inaccurate or incomplete
+        personal information we have collected about you. <br></br>
+      </>
+    ),
+    right3: (
+      <>
+        <strong> Deletion: </strong> You have the right to request that we delete your personal
+        information. <br></br>
+      </>
+    ),
+    right4: (
+      <>
+        <strong> Restriction: </strong>You have the right to request that we restrict the processing
+        of your personal information.<br></br>
+      </>
+    ),
+    right5: (
+      <>
+        <strong> Objection: </strong> You have the right to object to the processing of your
+        personal information.
+        <br></br>
+      </>
+    ),
+    right6: (
+      <>
+        <strong> Portability: </strong> You have the right to receive a copy of your personal
+        information in a structured, machine-readable format.<br></br>
+      </>
+    ),
+    security: (
+      <>
+        <strong> Security: </strong> We take reasonable measures to protect your personal
+        information from unauthorized access, disclosure, or destruction. However, we cannot
+        guarantee the security of your information as no method of transmission over the internet is
+        100% secure. <br></br>
+      </>
+    ),
+    childrenPrivacy: (
+      <>
+        <strong> Children&apos;s Privacy: </strong> We do not knowingly collect personal information
+        from children under the age of 13. <br></br>
+      </>
+    ),
+    changes: (
+      <>
+        <strong> Changes to this Privacy Policy: </strong> We may update this policy from time to
+        time. Any changes will be posted on our website and will become effective immediately.
+        <br></br>
+      </>
+    ),
+    questions: <strong> If you have any questions about this policy, please contact us </strong>,
   },
 }
 export default englishTranslations
