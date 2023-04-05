@@ -4,17 +4,18 @@ import { useRouter } from 'next/router'
 import Image from 'next/image'
 import Link from 'next/link'
 import LocaleMenu from '@/components/localeMenu'
-import React, { Fragment, useMemo } from 'react'
+import React, { Fragment, RefObject, useMemo } from 'react'
 import clsx from 'clsx'
 import darkBackgroundLogo from '@/images/logo_white.svg'
 import lightBackgroundLogo from '@/images/logo_black.svg'
 import useScrollPosition from '@/hooks/useScrollPosition'
 import useTranslation from '@/hooks/useTranslation'
 
-const Menu: React.FC<{ className?: string; isBackgroundLight: boolean }> = ({
-  className,
-  isBackgroundLight,
-}) => {
+const Menu: React.FC<{
+  className?: string
+  isBackgroundLight: boolean
+  aboutRef?: RefObject<HTMLDivElement>
+}> = ({ className, isBackgroundLight, aboutRef }) => {
   const t = useTranslation()
   const router = useRouter()
   const scrollPosition = useScrollPosition()
@@ -54,6 +55,15 @@ const Menu: React.FC<{ className?: string; isBackgroundLight: boolean }> = ({
     return 1
   }
 
+  const scrollToAbout = () => {
+    if (aboutRef?.current) {
+      aboutRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    }
+  }
+
   return (
     <div
       className={clsx(
@@ -86,12 +96,9 @@ const Menu: React.FC<{ className?: string; isBackgroundLight: boolean }> = ({
       </div>
 
       <div className="hidden md:flex justify-evenly md:gap-6 lg:gap-16 items-center">
-        <Link
-          href={'#about'}
-          className="md:text-base lg:text-xl text-brand-50 hover-underline-animation"
-        >
-          {t.Menu.about}
-        </Link>
+        <div className="md:text-base lg:text-xl text-brand-50 hover-underline-animation">
+          <button onClick={scrollToAbout}> {t.Menu.about}</button>
+        </div>
         <Link
           href={'/courses'}
           className="md:text-base lg:text-xl text-brand-50 hover-underline-animation"
