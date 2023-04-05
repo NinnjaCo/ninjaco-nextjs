@@ -68,7 +68,7 @@ const englishTranslations: WebsiteTranslations = {
     FindUs: 'Find Us',
     aboutUs: 'About Us',
     Links: 'Links',
-    Faq: 'FAQ page',
+    Faq: 'FAQ',
     Terms: 'Privacy Policy',
   },
 }

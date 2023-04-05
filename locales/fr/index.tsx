@@ -66,11 +66,11 @@ const frenchTranslations: WebsiteTranslations = {
     },
   },
   Footer: {
-    contactUs: 'Contactez-nous',
-    FindUs: 'Trouvez-nous',
+    contactUs: 'Contactez-Nous',
+    FindUs: 'Trouvez-Nous',
     aboutUs: 'À propos de nous',
     Links: 'Liens',
-    Faq: 'FAQ ',
+    Faq: 'FAQ',
     Terms: 'Politique de confidentialité',
   },
 }
