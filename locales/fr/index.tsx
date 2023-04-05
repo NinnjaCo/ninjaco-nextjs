@@ -33,6 +33,29 @@ const frenchTranslations: WebsiteTranslations = {
       ),
       getStarted: 'Commencer',
     },
+
+    Testimonials: {
+      title: 'Ce que disent les autres',
+      reviews: {
+        review1:
+          "Mon fils a toujours été intéressé par les robots, mais nous ne vivons à proximité d'aucune des succursales de Ninja Co. Grâce à leur nouvelle plateforme en ligne, il peut enfin suivre des cours et s'initier à la robotique dans le confort de sa maison.",
+        review2:
+          "Je suis instructeur chez Ninja Co depuis deux ans et j'étais initialement sceptique quant au passage à une plateforme en ligne. Cependant, j'ai été époustouflé par les capacités du nouveau logiciel.",
+        review3:
+          "J'ai toujours été fasciné par les robots, mais je n'aurais jamais pensé pouvoir en construire un moi-même. Grâce à la plateforme en ligne de Ninja Co, je peux désormais suivre des cours et apprendre à créer pas à pas mon propre robot !",
+      },
+    },
+    About: {
+      title: 'Pourquoi choisit notre plateforme?',
+      courses: 'Cours',
+      coursesDescription: 'Tous types de cours adaptés à vos besoins',
+      playForms: 'Formes ludiques',
+      playFormsDescription:
+        'Nous motivons les enfants à étudier en utilisant la programmation visuelle',
+      trophy: 'Trophée',
+      trophyDescription: 'Nous récompensons les enfants pour leurs réalisations',
+      joinNow: 'Adhérer maintenant',
+    },
     Mission: {
       ourMission: 'Notre mission',
       ourMissionDescription:
@@ -42,6 +65,13 @@ const frenchTranslations: WebsiteTranslations = {
         "Ninja Co a établi plus de 20 centres d'éducation à travers le Liban, offrant un programme attractif et interactif en robotique constamment mis à jour. Le modèle en préseniel actuellement adopté par l'entreprise s'est avéré être un succès, mais pour étendre sa portée et stimuler sa croissance, nous avons développé cette plateforme en ligne qui transformera les offres disponibles.",
     },
   },
+  Footer: {
+    contactUs: 'Contactez-Nous',
+    FindUs: 'Trouvez-Nous',
+    aboutUs: 'À propos de nous',
+    Links: 'Liens',
+    Faq: 'FAQ',
+    Terms: 'Politique de confidentialité',
+  },
 }
-
 export default frenchTranslations
