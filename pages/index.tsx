@@ -1,30 +1,25 @@
 import Courses from '../public/images/courses.svg'
+import Footer from '@/components/layout/footer'
 import Head from 'next/head'
-import HeroImage from '@/components/heroImage'
+import HeroImage from '@/components/landingPage/heroImage'
 import Image from 'next/image'
 import Lego1 from '../public/images/legoYellow.svg'
 import Lego2 from '../public/images/legoBlue.svg'
-import Menu from '@/components/menu'
-
-import Testimonial from '@/components/testimonial'
-
-import clsx from 'clsx'
-import quotes from '@/images/quotes.svg'
-import testimonialsTilda1 from '@/images/testimonialsTilda1.svg'
-import testimonialsTilda2 from '@/images/testimonialsTilda2.svg'
-import testimonialsTilda3 from '@/images/testimonialsTilda3.svg'
-
+import Link from 'next/link'
+import Menu from '@/components/layout/menu'
+import Testimonial from '@/components/landingPage/testimonial'
 import Vector from '../public/images/aboutCircleVector.svg'
+import clsx from 'clsx'
 import logo_rev from '../public/images/logoPointing.svg'
-
 import missionSection from '../public/missionSection.svg'
 import ourMission from '../public/ourMission.svg'
 import playStick from '../public/images/playStick.svg'
+import quotes from '@/images/quotes.svg'
 import soFar from '../public/SoFar.svg'
-
+import testimonialsTilda1 from '@/images/testimonialsTilda1.svg'
+import testimonialsTilda2 from '@/images/testimonialsTilda2.svg'
+import testimonialsTilda3 from '@/images/testimonialsTilda3.svg'
 import trophy from '../public/images/trophy.svg'
-
-import Footer from '@/components/footer'
 import useTranslation from '@/hooks/useTranslation'
 
 export default function Home() {
@@ -95,6 +90,8 @@ export default function Home() {
             logoToUse: 'dark',
             startBackgroundDark: false,
             startTextWhite: true,
+            isSticky: true,
+            startWithBottomBorder: false,
           }}
         />
         {/* Hero section */}
@@ -122,7 +119,10 @@ export default function Home() {
               <div className="hidden md:block text-xs text-brand-800 mt-[50%] md:mt-0 w-full md:w-1/3 place-self-start md:place-self-auto">
                 {t.LandingPage.Hero.description}
               </div>
-              <div className="hidden btn btn-brand max-w-fit md:flex gap-2 rounded-2xl text-base mt-8 md:mt-16">
+              <Link
+                className="hidden btn btn-brand max-w-fit md:flex gap-2 rounded-2xl text-base mt-8 md:mt-16"
+                href="/auth/signup"
+              >
                 <p>{t.LandingPage.Hero.getStarted}</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -138,7 +138,7 @@ export default function Home() {
                     d="M8.25 4.5l7.5 7.5-7.5 7.5"
                   />
                 </svg>
-              </div>
+              </Link>
             </div>
           </div>
 

@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import Menu from '@/components/menu'
+import Menu from '@/components/layout/menu'
 import useTranslation from '@/hooks/useTranslation'
 
 export default function FourOhFour(): React.ReactElement {
@@ -12,7 +12,15 @@ export default function FourOhFour(): React.ReactElement {
       </Head>
 
       <div className="h-screen flex flex-col">
-        <Menu isBackgroundLight={false} />
+        <Menu
+          menuOption={{
+            logoToUse: 'light',
+            startBackgroundDark: true,
+            startTextWhite: true,
+            isSticky: true,
+            startWithBottomBorder: true,
+          }}
+        />
         <div className="grid items-center h-screen grid-cols-1 justify-items-center pt-24 pb-20 relative flex-auto">
           <h1 className="self-end divide-x-2 divide-black">
             <span className="px-2 font-bold">404</span>

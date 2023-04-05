@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@/utils/test-utils'
-import Menu from '@/components/menu'
+import Menu from '@/components/layout/menu'
 import mockRouter from 'next-router-mock'
 
 describe('mock-router', () => {
