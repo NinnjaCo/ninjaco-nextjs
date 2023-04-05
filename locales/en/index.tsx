@@ -32,6 +32,7 @@ const englishTranslations: WebsiteTranslations = {
       ),
       getStarted: 'Get Started',
     },
+
     Testimonials: {
       title: 'What others say',
       reviews: {
@@ -42,6 +43,16 @@ const englishTranslations: WebsiteTranslations = {
         review3:
           "I've always been fascinated by robots, but I never thought I could build one myself. Thanks to Ninja Co's online platform, I'm now able to take classes and learn how to create my own robot step-by-step!",
       },
+    },
+    About: {
+      title: 'Why choose our platform?',
+      courses: 'Courses',
+      coursesDescription: 'All kind of courses tailored to your needs',
+      playForms: 'Playful forms',
+      playFormsDescription: 'We motivate children to study using visual programming',
+      trophy: 'Trophy',
+      trophyDescription: 'We reward children for their achievements',
+      joinNow: 'Join Now',
     },
     Mission: {
       ourMission: 'Our Mission',

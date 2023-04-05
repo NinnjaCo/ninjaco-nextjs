@@ -34,6 +34,16 @@ export interface WebsiteTranslations {
         review3: translationElement
       }
     }
+    About: {
+      title: translationElement
+      courses: translationElement
+      coursesDescription: translationElement
+      playForms: translationElement
+      playFormsDescription: translationElement
+      trophy: translationElement
+      trophyDescription: translationElement
+      joinNow: translationElement
+    }
     Mission: {
       ourMission: translationElement
       ourMissionDescription: translationElement

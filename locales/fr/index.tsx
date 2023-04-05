@@ -33,6 +33,7 @@ const frenchTranslations: WebsiteTranslations = {
       ),
       getStarted: 'Commencer',
     },
+
     Testimonials: {
       title: 'Ce que disent les autres',
       reviews: {
@@ -43,6 +44,17 @@ const frenchTranslations: WebsiteTranslations = {
         review3:
           "J'ai toujours été fasciné par les robots, mais je n'aurais jamais pensé pouvoir en construire un moi-même. Grâce à la plateforme en ligne de Ninja Co, je peux désormais suivre des cours et apprendre à créer pas à pas mon propre robot !",
       },
+    },
+    About: {
+      title: 'Pourquoi choisit notre plateforme?',
+      courses: 'Cours',
+      coursesDescription: 'Tous types de cours adaptés à vos besoins',
+      playForms: 'Formes ludiques',
+      playFormsDescription:
+        'Nous motivons les enfants à étudier en utilisant la programmation visuelle',
+      trophy: 'Trophée',
+      trophyDescription: 'Nous récompensons les enfants pour leurs réalisations',
+      joinNow: 'Adhérer maintenant',
     },
     Mission: {
       ourMission: 'Notre mission',
