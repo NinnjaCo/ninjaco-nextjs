@@ -33,16 +33,14 @@ export interface WebsiteTranslations {
     }
   }
   Copyright: {
+    privacy: translationElement
+    updated: translationElement
+    agreement: translationElement
     collectInformation: translationElement
-    // collectInformationDescription: translationElement
     collect1: translationElement
-    // collect1description: translationElement
     collect2: translationElement
-    // collect2description: translationElement
     collect3: translationElement
-    // collect3description: translationElement
     collect4: translationElement
-    // collect4description: translationElement
   }
 }
 

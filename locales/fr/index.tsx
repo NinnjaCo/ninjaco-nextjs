@@ -43,6 +43,17 @@ const frenchTranslations: WebsiteTranslations = {
     },
   },
   Copyright: {
+    privacy: 'Politique de confidentialité',
+    updated: 'Dernière mise à jour: 03 MARS 2023',
+    agreement: (
+      <>
+        <strong>
+          Cette politique de confidentialité décrit comment NinjaCo collecte, utilise et protège vos
+          informations personnelles. En utilisant notre site web, vous acceptez les termes de cette
+          politique.
+        </strong>
+      </>
+    ),
     collectInformation: (
       <>
         <strong>Les informations que nous collectons: </strong>Nous pouvons collecter les types
@@ -75,8 +86,8 @@ const frenchTranslations: WebsiteTranslations = {
     ),
     collect4: (
       <>
-        <strong>Autres informations :</strong>Nous pouvons collecter d'autres informations que vous
-        nous fournissez, telles que vos préférences, vos commentaires ou vos réponses à des
+        <strong>Autres informations :</strong>Nous pouvons collecter d&apos;autres informations que
+        vous nous fournissez, telles que vos préférences, vos commentaires ou vos réponses à des
         enquêtes. <br></br>
       </>
     ),

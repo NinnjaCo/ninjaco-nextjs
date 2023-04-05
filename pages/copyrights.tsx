@@ -6,43 +6,43 @@ export default function Home() {
   const collectInfo = [
     {
       title: t.Copyright.collect1,
-      //   description: t.Copyright.collect1description,
     },
     {
       title: t.Copyright.collect2,
-      //   description: t.Copyright.collect2description,
     },
     {
       title: t.Copyright.collect3,
-      //   description: t.Copyright.collect3description,
     },
     {
       title: t.Copyright.collect4,
-      //   description: t.Copyright.collect4description,
     },
   ]
+
   return (
     <>
       <Menu isBackgroundLight={true} />
-      <div className="mt-44 mx-12 text-2xl / font-semibold">Privacy Policy</div>
-      <div className="m-16 text-lg font-semibold"> Last updated: 03 MARCH 2023 </div>
-      <p className="whitespace-pre-line m-16 text-base">
-        <strong>
-          This privacy policy outlines how NinjaCo collects, uses, and protects your personal
-          information. <br></br> By using our website, you agree to the terms of this policy.
-        </strong>
-        <div className="mt-12">
+      <div className="mt-24 md:mt-44 lg:mt-80 ml-8 md:ml-12 lg:ml-16 text-4xl / font-bold">
+        {t.Copyright.privacy}
+      </div>
+      <div className="m-8 md:m-12 lg:m-12 ml-8 md:ml-12 lg:ml-16 text-lg font-bold">
+        {t.Copyright.updated}
+      </div>
+      <p className="mx-12 md:mx-12 lg:mx-16 text-s md:text-base">
+        {t.Copyright.agreement}
+        <div className="my-8">
           {t.Copyright.collectInformation}
           <br></br>
-          <div className="ml-8">
+          <div className=" md:ml-8">
             {collectInfo.map((item, index) => (
-              <ul key={index}>{item.title}</ul>
+              <ul className="mb-2 ml-4" key={index}>
+                {item.title}
+              </ul>
             ))}
           </div>
         </div>
         How We Use Your Information We use your personal information for the following purposes:TO
         Provide Our Services: We use your information to provide our website and services to you,
-        such as processing your orders, responding to your inquiries, and customizing our content
+        such as processing your orders, responding to your inquiries, and customizing our content,
         for you.To Improve Our Website: use your information to improve our website and services,
         such as by analyzing website usage usage and measuring the effectiveness of our marketing
         campaigns. To Communicate with You: your information to communicate with you about our
@@ -66,9 +66,9 @@ export default function Home() {
         information in a structured, machine-readable format. Security: We take reasonable measures
         to protect your personal information from unauthorized access, disclosure, or destruction.
         However, we cannot guarantee the security of your information as no method of transmission
-        over the internet is 100% secure. Children's Privacy: We do not knowingly collect personal
-        information from children under the age of 13.Changes to This Policy: We may update this
-        policy from time to time. Any changes will be posted on our website and will become
+        over the internet is 100% secure. Children&apos;s Privacy: We do not knowingly collect
+        personal information from children under the age of 13.Changes to This Policy: We may update
+        this policy from time to time. Any changes will be posted on our website and will become
         effective immediately.If you have any questions or concerns about this policy, please
         contact us.
       </p>

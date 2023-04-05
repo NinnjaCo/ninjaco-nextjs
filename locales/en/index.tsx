@@ -42,6 +42,16 @@ const englishTranslations: WebsiteTranslations = {
     },
   },
   Copyright: {
+    privacy: 'Privacy Policy',
+    updated: 'Last updated: 03 MARCH 2023',
+    agreement: (
+      <>
+        <strong>
+          This privacy policy outlines how NinjaCo collects, uses, and protects your personal
+          information. By using our website, you agree to the terms of this policy.
+        </strong>
+      </>
+    ),
     collectInformation: (
       <>
         <strong> Information We Collect: </strong>We may collect the following types of
