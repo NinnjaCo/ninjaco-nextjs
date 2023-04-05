@@ -33,6 +33,17 @@ const frenchTranslations: WebsiteTranslations = {
       ),
       getStarted: 'Commencer',
     },
+    About: {
+      title: 'Pourquoi choisit notre plateforme?',
+      courses: 'Cours',
+      coursesDescription: 'Tous types de cours adaptés à vos besoins',
+      playForms: 'Formes ludiques',
+      playFormsDescription:
+        'Nous motivons les enfants à étudier en utilisant la programmation visuelle',
+      trophy: 'Trophée',
+      trophyDescription: 'Nous récompensons les enfants pour leurs réalisations',
+      joinNow: 'Adhérer maintenant',
+    },
     Mission: {
       ourMission: 'Notre mission',
       ourMissionDescription:
