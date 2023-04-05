@@ -5,18 +5,47 @@ import Image from 'next/image'
 import Lego1 from '../public/images/legoYellow.svg'
 import Lego2 from '../public/images/legoBlue.svg'
 import Menu from '@/components/menu'
+
+import Testimonial from '@/components/testimonial'
+
+import clsx from 'clsx'
+import quotes from '@/images/quotes.svg'
+import testimonialsTilda1 from '@/images/testimonialsTilda1.svg'
+import testimonialsTilda2 from '@/images/testimonialsTilda2.svg'
+import testimonialsTilda3 from '@/images/testimonialsTilda3.svg'
+
 import Vector from '../public/images/aboutCircleVector.svg'
 import logo_rev from '../public/images/logoPointing.svg'
+
 import missionSection from '../public/missionSection.svg'
 import ourMission from '../public/ourMission.svg'
 import playStick from '../public/images/playStick.svg'
 import soFar from '../public/SoFar.svg'
+
 import trophy from '../public/images/trophy.svg'
+
 import useTranslation from '@/hooks/useTranslation'
 
 export default function Home() {
   const t = useTranslation()
 
+  const testimonials = [
+    {
+      name: 'Sarah',
+      review: t.LandingPage.Testimonials.reviews.review1,
+      isBlue: true,
+    },
+    {
+      name: 'Ali',
+      review: t.LandingPage.Testimonials.reviews.review2,
+      isBlue: false,
+    },
+    {
+      name: 'Charbel',
+      review: t.LandingPage.Testimonials.reviews.review3,
+      isBlue: true,
+    },
+  ]
   const whyChooseUs = [
     {
       title: t.LandingPage.About.courses,
@@ -227,6 +256,31 @@ export default function Home() {
             alt="Mission Section"
             className="hidden md:block lg:block md:w-56 lg:w-80 lg:w-300 mt-2"
           ></Image>
+        </div>
+        {/* Testimonial section */}
+        <div className="my-16">
+          <div className="pl-6 md:pl-8 lg:pl-12 text-2xl md:text-3xl lg:text-4xl text-brand-700 font-semibold relative w-fit">
+            {t.LandingPage.Testimonials.title}
+            <Image
+              src={quotes}
+              alt="quotes"
+              width={60}
+              height={60}
+              className="absolute -top-4 -right-12"
+            />
+            <div className="flex flex-col items-center w-max">
+              <Image src={testimonialsTilda1} alt="~" className="w-12 md:w-14 lg:w-auto" />
+              <Image src={testimonialsTilda2} alt="~" className="w-14 md:w-16 lg:w-auto" />
+              <Image src={testimonialsTilda3} alt="~" className="w-12 lg:w-auto" />
+            </div>
+          </div>
+          <div className="flex justify-evenly w-full flex-wrap gap-12 px-6">
+            {testimonials.map((item, index) => (
+              <div key={index} className={clsx(index % 2 === 0 ? 'mt-6' : '')}>
+                <Testimonial name={item.name} isBlue={item.isBlue} review={item.review as string} />
+              </div>
+            ))}
+          </div>
         </div>
       </main>
     </>
