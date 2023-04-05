@@ -25,6 +25,15 @@ export interface WebsiteTranslations {
       description: translationElement
       getStarted: translationElement
     }
+
+    Testimonials: {
+      title: translationElement
+      reviews: {
+        review1: translationElement
+        review2: translationElement
+        review3: translationElement
+      }
+    }
     About: {
       title: translationElement
       courses: translationElement
@@ -71,6 +80,14 @@ export interface WebsiteTranslations {
     childrenPrivacy: translationElement
     changes: translationElement
     questions: translationElement
+  }
+  Footer: {
+    contactUs: translationElement
+    FindUs: translationElement
+    aboutUs: translationElement
+    Links: translationElement
+    Faq: translationElement
+    Terms: translationElement
   }
 }
 
