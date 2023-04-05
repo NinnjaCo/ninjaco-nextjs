@@ -3,7 +3,7 @@ import { Popover, Transition } from '@headlessui/react'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import Link from 'next/link'
-import LocaleMenu from '@/components/localeMenu'
+import LocaleMenu from '@/components/layout/localeMenu'
 import React, { Fragment, useCallback, useMemo } from 'react'
 import clsx from 'clsx'
 import darkBackgroundLogo from '@/images/logo_white.svg'
@@ -15,9 +15,13 @@ export type MenuStyleOptions = {
   logoToUse: 'light' | 'dark'
   startBackgroundDark: boolean
   startTextWhite: boolean
+  isSticky: boolean
+  startWithBottomBorder: boolean
 }
 
 const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
+  const SCROLL_BREAKPOINT = 150
+
   const t = useTranslation()
   const router = useRouter()
   const scrollPosition = useScrollPosition()
@@ -39,7 +43,7 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
       if (scrollPosition.y === undefined) {
         return lightBackgroundLogo
       }
-      if (scrollPosition.y > 200) {
+      if (scrollPosition.y > SCROLL_BREAKPOINT) {
         return darkBackgroundLogo
       }
       return lightBackgroundLogo
@@ -52,8 +56,8 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
     if (scrollPosition.y === undefined) {
       return 0
     }
-    if (scrollPosition.y < 200) {
-      return scrollPosition.y / 200
+    if (scrollPosition.y < SCROLL_BREAKPOINT) {
+      return scrollPosition.y / SCROLL_BREAKPOINT
     }
     return 1
   }, [scrollPosition.y])
@@ -63,7 +67,7 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
       if (scrollPosition.y === undefined) {
         return 'text-brand-50'
       }
-      if (scrollPosition.y > 200) {
+      if (scrollPosition.y > SCROLL_BREAKPOINT) {
         return 'text-brand-50'
       }
       return 'text-brand-50'
@@ -71,7 +75,7 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
     if (scrollPosition.y === undefined) {
       return 'text-brand-700'
     }
-    if (scrollPosition.y > 200) {
+    if (scrollPosition.y > SCROLL_BREAKPOINT) {
       return 'text-brand-50'
     }
     return 'text-brand-700'
@@ -79,14 +83,24 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
 
   return (
     <div
-      className="flex justify-between items-center w-full h-fit px-4 md:pl-8 lg:pl-12 pt-2 md:pt-9 pb-2 fixed top-0 bg-brand z-10  border-b-2 border-secondary-700"
+      className={clsx(
+        'flex justify-between items-center w-full h-fit px-4 md:pl-8 lg:pl-12 pt-2 md:pt-9 pb-2 bg-brand z-10  border-b-2 border-secondary-700',
+        {
+          'fixed top-0': menuOption.isSticky,
+        }
+      )}
       style={{
         // backgroundColor is bg-brand
         backgroundColor: menuOption.startBackgroundDark
           ? 'rgba(41,55,91, 1)'
           : `rgba(41,55,91, ${getMenuOpacity()})`,
-        // borderBottomColor is border-secondary-700
-        borderBottomColor: menuOption.startBackgroundDark
+
+        // borderBottomColor is border-secondary-700 or border-brand-200
+        borderBottomColor: menuOption.startWithBottomBorder
+          ? menuOption.startBackgroundDark
+            ? 'rgba(254,209,98)'
+            : 'rgb(192, 210, 230)'
+          : menuOption.startBackgroundDark
           ? 'rgba(254,209,98, 1)'
           : `rgba(254,209,98, ${getMenuOpacity()})`,
       }}
@@ -125,7 +139,7 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
           {t.Menu.courses}
         </Link>
         <LocaleMenu colorClassName={getTextColorClassName()} />
-        <div
+        <Link
           className={clsx(
             'btn border-2 text-sm rounded-xl font-semibold  hover:bg-brand-500 hover:text-white text-brand-50',
             getTextColorClassName(),
@@ -133,9 +147,10 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
               'border-brand-700': !menuOption.startBackgroundDark,
             }
           )}
+          href={'/auth/signup'}
         >
           {t.Menu.startCoding}
-        </div>
+        </Link>
       </div>
       {/* Mobile menu */}
       <div className="flex md:hidden items-center gap-2">
