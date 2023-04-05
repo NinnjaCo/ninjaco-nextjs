@@ -8,7 +8,7 @@ const FAQComponent: React.FC<{ question: string; answer: string }> = ({ question
     <div className=" mt-4 peer-open://#endregion">
       <button
         className={clsx(
-          ' w-3/4 mx-14 py-2 text-left bg-brand-100 rounded-lg ',
+          'hover:shadow-xl w-3/4 mx-14 py-2 text-left bg-brand-100 rounded-lg ',
           isOpen && 'border-b-2 border-t-2 border-b-brand-400 border-t-brand-400',
           !isOpen && 'border-b-2 border-b-brand-300'
         )}
@@ -28,7 +28,7 @@ const FAQComponent: React.FC<{ question: string; answer: string }> = ({ question
           </div>
           <div
             className={clsx(
-              'ml-3 text-brand-400 text-sm md:text-base lg:text-lg font-medium',
+              'ml-3 text-brand-400 text-sm md:text-base lg:text-lg font-medium ',
               isOpen && 'block',
               !isOpen && 'hidden'
             )}
