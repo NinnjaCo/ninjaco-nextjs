@@ -60,7 +60,13 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main className="relative w-full">
-        <Menu isBackgroundLight={true} />
+        <Menu
+          menuOption={{
+            logoToUse: 'dark',
+            startBackgroundDark: false,
+            startTextWhite: true,
+          }}
+        />
         {/* Hero section */}
         <div className="relative w-full mb-8 md:mb-0">
           <HeroImage />
