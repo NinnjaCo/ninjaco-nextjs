@@ -1,5 +1,6 @@
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { useState } from 'react'
+import React from 'react'
 import clsx from 'clsx'
 
 const FAQComponent: React.FC<{ question: string; answer: string }> = ({ question, answer }) => {
