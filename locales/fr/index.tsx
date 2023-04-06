@@ -77,16 +77,16 @@ const frenchTranslations: WebsiteTranslations = {
     headTitle: 'Questions Fréquemment Posées',
     question1: 'Dois-je avoir des connaissances préalables en programmation ?',
     answer1:
-      "Non, vous n'avez pas besoin d'avoir des connaissances préalables en programmation pour apprendre à coder à l'aide de blocs visuels. Cette approche est conçue pour être conviviale pour les débutants et accessible aux étudiants sans expérience préalable en codage.",
+      "Non, une connaissance préalable en programmation n'est pas nécessaire pour s'inscrire aux cours de NinjaCo ou utiliser la plateforme en ligne. La plateforme inclura une interface conviviale avec un guide étape par étape pour construire des robots, permettant aux étudiants de suivre à leur propre rythme. La plateforme inclura également des options de programmation visuelle et de codage par blocs, rendant le processus d'apprentissage encore plus interactif.",
     question2: 'Ai-je besoin de pièces de quincaillerie ?',
     answer2:
-      'Cela dépend, pour les cours Arduino, vous aurez besoin de certaines pièces Arduino en fonction du cours',
+      "Oui, des pièces matérielles sont nécessaires pour construire les robots. Les cours sur place utilisent des kits LEGO pour construire les robots, et la plateforme en ligne fournira également un guide étape par étape pour construire des robots en utilisant des pièces matérielles. Cependant, ces pièces matérielles ne seront pas incluses dans la plateforme en ligne et doivent être achetées séparément par l'utilisateur.",
     question3: "Dois-je installer un autre logiciel pour me connecter à l'Arduino ?",
     answer3:
-      "Non, vous n'avez pas besoin d'installer de logiciel supplémentaire pour vous connecter à l'Arduino si le site Web ou la plate-forme que vous utilisez fournit une fonctionnalité intégrée pour connecter et programmer l'Arduino avec des blocs visuels. Le site Web ou la plate-forme doit contenir des instructions sur la façon de connecter l'Arduino et d'exécuter votre code directement sans nécessiter de logiciel externe",
+      'Comme la plateforme en ligne inclura des options de programmation visuelle et de codage par blocs, il est nécessaire de télécharger un agent Arduino pour programmer la carte Arduino.',
     question4: "Où puis-je m'inscrire aux cours?",
     answer4:
-      "Vous devriez pouvoir vous inscrire aux cours sur le site Web qui propose les cours de codage utilisant des blocs visuels et Arduino. Recherchez un bouton/lien S'inscrire ou S'inscrire sur la page d'accueil ou le menu de navigation du site Web. En cliquant sur ce bouton/lien, vous serez redirigé vers une page d'inscription où vous pourrez fournir vos informations et vous inscrire aux cours.",
+      "Vous devriez être en mesure de vous inscrire aux cours sur le site web qui offre des cours de codage à l'aide de blocs visuels et d'Arduino. Recherchez un bouton ou un lien « Commencer à coder » ou « Commencer » sur la page d'accueil ou le menu de navigation du site web. En cliquant sur ce bouton ou lien, vous devriez être dirigé vers une page d'inscription où vous pouvez fournir vos informations et vous inscrire aux cours.",
   },
 }
 export default frenchTranslations
