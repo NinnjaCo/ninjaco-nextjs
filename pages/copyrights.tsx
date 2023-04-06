@@ -1,5 +1,6 @@
 import Footer from '@/components/footer'
 import Menu from '@/components/menu'
+
 import useTranslation from '@/hooks/useTranslation'
 
 export default function Home() {
