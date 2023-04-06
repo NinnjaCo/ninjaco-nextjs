@@ -1,5 +1,5 @@
-import Footer from '@/components/footer'
-import Menu from '@/components/menu'
+import Footer from '@/components/layout/footer'
+import Menu from '@/components/layout/menu'
 
 import useTranslation from '@/hooks/useTranslation'
 
@@ -68,7 +68,16 @@ export default function Home() {
 
   return (
     <>
-      <Menu isBackgroundLight={true} />
+      <Menu
+        menuOption={{
+          isSticky: false,
+          logoToUse: 'dark',
+          startBackgroundDark: false,
+          startButtonDark: true,
+          startTextWhite: false,
+          startWithBottomBorder: true,
+        }}
+      />
       <div className="mt-24 md:mt-44 lg:mt-80 ml-8 md:ml-12 lg:ml-16 text-4xl / font-bold">
         {t.Copyright.privacy}
       </div>
