@@ -124,7 +124,7 @@ export default function Home() {
                 {t.LandingPage.Hero.description}
               </div>
               <Link
-                className="hidden btn btn-brand max-w-fit md:flex gap-2 rounded-2xl text-base mt-8 md:mt-16"
+                className="hidden btn btn-brand max-w-fit md:flex gap-2 hover:bg-brand-500 rounded-2xl text-base mt-8 md:mt-16"
                 href="/auth/signup"
               >
                 <p>{t.LandingPage.Hero.getStarted}</p>
@@ -223,7 +223,10 @@ export default function Home() {
               ))}
             </div>
             <div className="w-full flex justify-end">
-              <Link href={'/auth/signup'} className="btn btn-brand flex gap-2 max-w-fit">
+              <Link
+                href={'/auth/signup'}
+                className="btn btn-brand hover:bg-brand-500 flex gap-2 max-w-fit"
+              >
                 <p>{t.LandingPage.About.joinNow}</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
