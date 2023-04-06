@@ -184,7 +184,12 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
         <Popover>
           {() => (
             <>
-              <Popover.Button className="group flex items-center">
+              <Popover.Button
+                className="group flex items-center"
+                role="button"
+                tabIndex={0}
+                aria-label="Change language"
+              >
                 <Bars3Icon className={clsx('w-8 h-8 cursor-pointer', getTextColorClassName())} />
               </Popover.Button>
               <Transition
