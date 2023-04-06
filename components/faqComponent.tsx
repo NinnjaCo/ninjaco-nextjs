@@ -9,7 +9,7 @@ const FAQComponent: React.FC<{ question: string; answer: string }> = ({ question
     <div className="peer-open://#endregion">
       <button
         className={clsx(
-          'hover:shadow-xl w-full py-2 text-left bg-brand-100 rounded-lg transition-all',
+          'hover:shadow-xl w-full py-4 text-left bg-brand-100 rounded-lg transition-all',
           isOpen && 'border-b-2 border-t-2 border-b-brand-400 border-t-brand-400',
           !isOpen && 'border-b-2 border-b-brand-300'
         )}
