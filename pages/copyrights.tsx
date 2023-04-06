@@ -1,3 +1,4 @@
+import Footer from '@/components/footer'
 import Menu from '@/components/menu'
 import useTranslation from '@/hooks/useTranslation'
 
@@ -124,6 +125,7 @@ export default function Home() {
         <div className="my-8">{t.Copyright.changes}</div>
         <div className="mt-8 pb-16">{t.Copyright.questions}</div>
       </div>
+      <Footer></Footer>
     </>
   )
 }
