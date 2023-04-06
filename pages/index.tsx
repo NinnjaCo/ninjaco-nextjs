@@ -1,10 +1,86 @@
+import { useRef } from 'react'
+import { useSession } from 'next-auth/react'
+import Courses from '../public/images/courses.svg'
+import Footer from '@/components/layout/footer'
 import Head from 'next/head'
-import HeroImage from '@/components/heroImage'
-import Menu from '@/components/menu'
+import HeroImage from '@/components/landingPage/heroImage'
+import Image from 'next/image'
+import Lego1 from '../public/images/legoYellow.svg'
+import Lego2 from '../public/images/legoBlue.svg'
+import Link from 'next/link'
+import Menu from '@/components/layout/menu'
+import Testimonial from '@/components/landingPage/testimonial'
+import Vector from '../public/images/aboutCircleVector.svg'
+import clsx from 'clsx'
+import logo_rev from '../public/images/logoPointing.svg'
+import missionSection from '../public/missionSection.svg'
+import ourMission from '../public/ourMission.svg'
+import playStick from '../public/images/playStick.svg'
+import quotes from '@/images/quotes.svg'
+import soFar from '../public/SoFar.svg'
+import testimonialsTilda1 from '@/images/testimonialsTilda1.svg'
+import testimonialsTilda2 from '@/images/testimonialsTilda2.svg'
+import testimonialsTilda3 from '@/images/testimonialsTilda3.svg'
+import trophy from '../public/images/trophy.svg'
 import useTranslation from '@/hooks/useTranslation'
 
 export default function Home() {
   const t = useTranslation()
+  const aboutRef = useRef<HTMLDivElement>(null)
+  const session = useSession()
+  console.log(session)
+
+  const testimonials = [
+    {
+      name: 'Sarah',
+      review: t.LandingPage.Testimonials.reviews.review1,
+      isBlue: true,
+    },
+    {
+      name: 'Ali',
+      review: t.LandingPage.Testimonials.reviews.review2,
+      isBlue: false,
+    },
+    {
+      name: 'Charbel',
+      review: t.LandingPage.Testimonials.reviews.review3,
+      isBlue: true,
+    },
+  ]
+  const whyChooseUs = [
+    {
+      title: t.LandingPage.About.courses,
+      description: t.LandingPage.About.coursesDescription,
+      image: Courses,
+      alt: t.LandingPage.About.courses as string,
+    },
+    {
+      title: t.LandingPage.About.playForms,
+      description: t.LandingPage.About.playFormsDescription,
+      image: playStick,
+      alt: t.LandingPage.About.playForms as string,
+    },
+    {
+      title: t.LandingPage.About.trophy,
+      description: t.LandingPage.About.trophyDescription,
+      image: trophy,
+      alt: t.LandingPage.About.trophy as string,
+    },
+  ]
+  const ourMissionSection = [
+    {
+      title: t.LandingPage.Mission.ourMission,
+      description: t.LandingPage.Mission.ourMissionDescription,
+      image: ourMission,
+      alt: t.LandingPage.Mission.ourMission as string,
+    },
+    {
+      title: t.LandingPage.Mission.soFar,
+      description: t.LandingPage.Mission.soFarDescription,
+      image: soFar,
+      alt: t.LandingPage.Mission.soFar as string,
+    },
+  ]
 
   return (
     <>
@@ -14,7 +90,17 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main className="relative w-full">
-        <Menu isBackgroundLight={true} />
+        <Menu
+          menuOption={{
+            logoToUse: 'dark',
+            startBackgroundDark: false,
+            startTextWhite: true,
+            isSticky: true,
+            startWithBottomBorder: false,
+            startButtonDark: false,
+            aboutRef: aboutRef,
+          }}
+        />
         {/* Hero section */}
         <div className="relative w-full mb-8 md:mb-0">
           <HeroImage />
@@ -40,7 +126,10 @@ export default function Home() {
               <div className="hidden md:block text-xs text-brand-800 mt-[50%] md:mt-0 w-full md:w-1/3 place-self-start md:place-self-auto">
                 {t.LandingPage.Hero.description}
               </div>
-              <div className="hidden btn btn-brand max-w-fit md:flex gap-2 rounded-2xl text-base mt-8 md:mt-16">
+              <Link
+                className="hidden btn btn-brand max-w-fit md:flex gap-2 rounded-2xl text-base mt-8 md:mt-16"
+                href="/auth/signup"
+              >
                 <p>{t.LandingPage.Hero.getStarted}</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -56,14 +145,17 @@ export default function Home() {
                     d="M8.25 4.5l7.5 7.5-7.5 7.5"
                   />
                 </svg>
-              </div>
+              </Link>
             </div>
           </div>
 
           {/* Mobile Continuation of hero section */}
           <div className="block md:hidden bg-brand-500 p-6 md:bg-transparent md:p-0 text-brand-100 text-xs md:text-brand-800 w-full md:w-1/3 md:place-self-auto absolute bottom-0">
             {t.LandingPage.Hero.description}
-            <div className="md:hidden btn btn-brand max-w-fit flex gap-2 rounded-2xl text-base mt-8 md:mt-16">
+            <Link
+              className="md:hidden btn btn-brand max-w-fit flex gap-2 rounded-2xl text-base mt-8 md:mt-16"
+              href={'/auth/signup'}
+            >
               <p>{t.LandingPage.Hero.getStarted}</p>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -75,10 +167,151 @@ export default function Home() {
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
               </svg>
+            </Link>
+          </div>
+        </div>
+
+        {/* About section */}
+        <div ref={aboutRef} className="w-full grid grid-cols-8 my-16">
+          <div className="bg-brand-100 rounded-none md:rounded-3xl lg:rounded-[56px] shadow-lg shadow-brand-300 col-start-1 md:col-start-2 col-span-8 md:col-span-6 relative pb-12 px-6 flex flex-col gap-6 w-full z-0">
+            <div className="flex flex-row w-full justify-between items-start relative">
+              <div className="relative mt-4">
+                <Image src={Lego1} alt="Lego Brick Yellow" className="w-32 md:w-40 animate-float" />
+                <Image
+                  src={Lego2}
+                  alt="Lego Brick Blue"
+                  className="absolute top-full -z-10 w-36 animate-floatDelay"
+                />
+              </div>
+              <p className="hidden md:block text-xl lg:text-2xl xl:text-3xl font-bold text-brand-700 h-fit w-fit relative mt-12 whitespace-nowrap">
+                {t.LandingPage.About.title}
+
+                <Image
+                  src={Vector}
+                  alt="Circle Platform"
+                  className="absolute -bottom-[75%] -right-[1.8%] md:w-36 lg:w-44 xl:w-52"
+                />
+              </p>
+              <Image src={logo_rev} alt="Brand Logo Pointing" className="w-28" />
+            </div>
+            <div className="w-full flex justify-center">
+              <p className="block md:hidden text-xl sm:text-2xl font-bold text-brand-700 h-fit w-fit relative mt-4 whitespace-nowrap">
+                {t.LandingPage.About.title}
+                <Image
+                  src={Vector}
+                  alt="Circle Platform"
+                  className="absolute -bottom-[75%] -right-[2%] w-36"
+                />
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-0 lg:grid-cols-3 w-full divide-x-0 divide-brand-300 divide-solid lg:divide-x-2 items-center mt-12">
+              {whyChooseUs.map((item, index) => (
+                <div className="flex w-full" key={index}>
+                  <div className="flex flex-col gap-4 items-start ml-[25%]">
+                    <Image
+                      src={item.image}
+                      alt={item.alt}
+                      style={{
+                        backgroundSize: 'cover',
+                      }}
+                    />
+                    <div className="text-xl lg:text-2xl xl:text-3xl font-semibold text-brand z-20 inline-block whitespace-nowrap">
+                      <p> {item.title}</p>
+                    </div>
+                    <div className=" text-xs text-brand-700 z-20 max-w-[75%]">
+                      {item.description}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="w-full flex justify-end">
+              <Link href={'/auth/signup'} className="btn btn-brand flex gap-2 max-w-fit">
+                <p>{t.LandingPage.About.joinNow}</p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={3}
+                  stroke="currentColor"
+                  className="w-3 h-3"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                  />
+                </svg>
+              </Link>
             </div>
           </div>
         </div>
+        {/* Mission section */}
+        <div className="flex w-full my-16">
+          <div className="flex flex-col gap-12 ml-6 md:ml-12 mr-12">
+            {ourMissionSection.map((item, index) => (
+              <div className="flex flex-col gap-6" key={index}>
+                <div className="flex items-start">
+                  <Image
+                    src={item.image}
+                    alt={item.alt}
+                    className="w-16 md:w-28 lg:w-32 mt-0 md:mt-4 lg:mt-12"
+                  ></Image>
+                  <div className="flex flex-col gap-8 pl-4 md:pt-8 lg:pt-12">
+                    <div className="text-xl md:text-2xl lg:text-4xl font-bold text-brand text-start mt-0 md:mt-0 lg:mt-6 whitespace-nowrap">
+                      {item.title}
+                    </div>
+                    <p className="hidden md:block text-xs font-semibold text-brand">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+                <div className="block md:hidden text-xs font-semibold text-brand">
+                  {item.description}
+                </div>
+              </div>
+            ))}
+          </div>
+          <Image
+            src={missionSection}
+            alt="Mission Section"
+            className="hidden md:block lg:block md:w-56 lg:w-80 lg:w-300 mt-2"
+          ></Image>
+        </div>
+        {/* Testimonial section */}
+        <div className="my-16">
+          <div className="pl-6 md:pl-8 lg:pl-12 text-2xl md:text-3xl lg:text-4xl text-brand-700 font-semibold relative w-fit">
+            {t.LandingPage.Testimonials.title}
+            <Image
+              src={quotes}
+              alt="quotes"
+              width={60}
+              height={60}
+              className="absolute -top-4 -right-12"
+            />
+            <div className="flex flex-col items-center w-max">
+              <Image src={testimonialsTilda1} alt="~" className="w-12 md:w-14 lg:w-auto" />
+              <Image src={testimonialsTilda2} alt="~" className="w-14 md:w-16 lg:w-auto" />
+              <Image src={testimonialsTilda3} alt="~" className="w-12 lg:w-auto" />
+            </div>
+          </div>
+          <div className="flex justify-evenly w-full flex-wrap gap-12 px-6">
+            {testimonials.map((item, index) => (
+              <div key={index} className={clsx(index % 2 === 0 ? 'mt-6' : '')}>
+                <Testimonial name={item.name} isBlue={item.isBlue} review={item.review as string} />
+              </div>
+            ))}
+          </div>
+        </div>
       </main>
+      <Footer />
     </>
   )
+}
+
+export async function getStaticProps() {
+  return {
+    props: {},
+  }
 }
