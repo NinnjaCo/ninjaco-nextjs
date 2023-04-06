@@ -57,8 +57,12 @@ export default function FAP_page() {
   )
 }
 
-export async function getStaticProps() {
+export const getStaticProps = async () => {
   return {
-    props: {},
+    props: {
+      // force the browser to reload the page
+      // instead of relying on next navigation
+      hardLinks: true,
+    },
   }
 }

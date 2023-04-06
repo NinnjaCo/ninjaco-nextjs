@@ -212,7 +212,7 @@ export default function Home() {
                         backgroundSize: 'cover',
                       }}
                     />
-                    <div className="text-xl lg:text-2xl xl:text-3xl font-semibold text-brand z-20 inline-block whitespace-nowrap">
+                    <div className="text-l lg:text-xl xl:text-2xl font-semibold text-brand z-20 inline-block whitespace-nowrap">
                       <p> {item.title}</p>
                     </div>
                     <div className=" text-xs text-brand-700 z-20 max-w-[75%]">

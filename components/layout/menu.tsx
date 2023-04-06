@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import Image from 'next/image'
 import Link from 'next/link'
 import LocaleMenu from '@/components/layout/localeMenu'
-import React, { Fragment, useCallback, useMemo } from 'react'
+import React, { Fragment, RefObject, useCallback } from 'react'
 import clsx from 'clsx'
 import darkBackgroundLogo from '@/images/logo_white.svg'
 import lightBackgroundLogo from '@/images/logo_black.svg'
@@ -18,6 +18,7 @@ export type MenuStyleOptions = {
   isSticky: boolean
   startWithBottomBorder: boolean
   startButtonDark: boolean
+  aboutRef?: RefObject<HTMLDivElement>
 }
 
 const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
@@ -64,8 +65,6 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
   }, [scrollPosition.y])
 
   const getTextColorClassName = useCallback(() => {
-    const textOnLight = 'text-brand-700'
-    const textOnDark = 'text-brand-50'
     if (menuOption.startTextWhite) {
       if (scrollPosition.y === undefined) {
         return 'text-brand-50'
@@ -110,6 +109,15 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
     return outlineOnLight
   }, [scrollPosition.y, menuOption])
 
+  const scrollToAbout = () => {
+    if (menuOption.aboutRef?.current) {
+      menuOption.aboutRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    }
+  }
+
   return (
     <div
       className={clsx(
@@ -149,15 +157,27 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
       </div>
 
       <div className="hidden md:flex justify-evenly md:gap-6 lg:gap-16 items-center">
-        <Link
-          href={'/#about'}
-          className={clsx(
-            'md:text-base lg:text-xl hover-underline-animation',
-            getTextColorClassName()
-          )}
-        >
-          {t.Menu.about}
-        </Link>
+        {menuOption.aboutRef ? (
+          <button
+            onClick={scrollToAbout}
+            className={clsx(
+              'md:text-base lg:text-xl hover-underline-animation',
+              getTextColorClassName()
+            )}
+          >
+            {t.Menu.about}
+          </button>
+        ) : (
+          <Link
+            href={'/#about'}
+            className={clsx(
+              'md:text-base lg:text-xl hover-underline-animation',
+              getTextColorClassName()
+            )}
+          >
+            {t.Menu.about}
+          </Link>
+        )}
         <Link
           href={'/courses'}
           className={clsx(
