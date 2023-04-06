@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest --watch",
-    "ci": "npm insstall && npm run build"
+    "ci": "npm install && npm run build"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.13",
