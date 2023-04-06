@@ -59,7 +59,7 @@ export const Alert: FC<AlertProps> = ({
     >
       <div ref={ref}>
         <div className="p-4">
-          <div className="flex items-center text-center align-middle justify-center">
+          <div className="flex items-center text-start align-middle justify-center">
             <div className="flex-shrink-0">
               {variant === 'info' && (
                 <InformationCircleIcon className="w-5 h-5 text-brand" aria-hidden="true" />

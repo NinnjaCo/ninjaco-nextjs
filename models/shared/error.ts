@@ -4,14 +4,18 @@ export interface ModelError {
 }
 
 export interface ErrorMessage {
-  id: string
-  message: string
+  [key: string]: string
 }
 
 export interface AuthError {
-  statusCode: number
-  error: string
-  message: {
-    messages: ErrorMessage[]
-  }[]
+  error: {
+    message: string
+    name: string
+    status: number
+    response: {
+      errors: ErrorMessage
+      status: number
+    }
+  }
+  timestamp: number
 }

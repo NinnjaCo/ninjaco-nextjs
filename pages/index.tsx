@@ -1,3 +1,4 @@
+import { useSession } from 'next-auth/react'
 import Courses from '../public/images/courses.svg'
 import Footer from '@/components/layout/footer'
 import Head from 'next/head'
@@ -24,7 +25,6 @@ import useTranslation from '@/hooks/useTranslation'
 
 export default function Home() {
   const t = useTranslation()
-
   const testimonials = [
     {
       name: 'Sarah',

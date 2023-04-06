@@ -3,7 +3,7 @@ import NextAuth from 'next-auth'
 declare module 'next-auth' {
   // export default NextAuth
   interface User {
-    id: number
+    id: string
     jwt: string
     refresh: string
   }
@@ -15,6 +15,7 @@ declare module 'next-auth' {
     id: number
     jwt: string
     refresh: string
+    user: User
   }
 }
 
