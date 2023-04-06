@@ -30,12 +30,12 @@ const Footer = () => {
   const socialMediaIcons = [
     {
       name: 'instagram',
-      url: 'https://instagram.com',
+      url: 'https://instagram.com/ninjaco.lb?igshid=YmMyMTA2M2Y=',
       icon: instagram,
     },
     {
       name: 'facebook',
-      url: 'https://facebook.com',
+      url: 'https://www.facebook.com/ninjaco.dev?mibextid=LQQJ4d',
       icon: facebook,
     },
     {
@@ -45,7 +45,7 @@ const Footer = () => {
     },
     {
       name: 'linkedin',
-      url: 'https://linkedin.com',
+      url: 'https://www.linkedin.com/company/ninjaco/',
       icon: linkedin,
     },
   ]
