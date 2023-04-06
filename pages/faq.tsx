@@ -56,3 +56,9 @@ export default function FAP_page() {
     </>
   )
 }
+
+export async function getStaticProps() {
+  return {
+    props: {},
+  }
+}
