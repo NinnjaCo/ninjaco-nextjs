@@ -223,7 +223,7 @@ export default function Home() {
               ))}
             </div>
             <div className="w-full flex justify-end">
-              <div className="btn btn-brand flex gap-2 max-w-fit">
+              <Link href={'/auth/signup'} className="btn btn-brand flex gap-2 max-w-fit">
                 <p>{t.LandingPage.About.joinNow}</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -239,7 +239,7 @@ export default function Home() {
                     d="M8.25 4.5l7.5 7.5-7.5 7.5"
                   />
                 </svg>
-              </div>
+              </Link>
             </div>
           </div>
         </div>
@@ -304,4 +304,10 @@ export default function Home() {
       <Footer />
     </>
   )
+}
+
+export async function getStaticProps() {
+  return {
+    props: {},
+  }
 }
