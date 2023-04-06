@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { useSession } from 'next-auth/react'
 import Courses from '../public/images/courses.svg'
 import Footer from '@/components/layout/footer'
@@ -25,6 +26,7 @@ import useTranslation from '@/hooks/useTranslation'
 
 export default function Home() {
   const t = useTranslation()
+  const aboutRef = useRef<HTMLDivElement>(null)
   const session = useSession()
   console.log(session)
 
@@ -96,6 +98,7 @@ export default function Home() {
             isSticky: true,
             startWithBottomBorder: false,
             startButtonDark: false,
+            aboutRef: aboutRef,
           }}
         />
         {/* Hero section */}
@@ -169,7 +172,7 @@ export default function Home() {
         </div>
 
         {/* About section */}
-        <div className="w-full grid grid-cols-8 my-16">
+        <div ref={aboutRef} className="w-full grid grid-cols-8 my-16">
           <div className="bg-brand-100 rounded-none md:rounded-3xl lg:rounded-[56px] shadow-lg shadow-brand-300 col-start-1 md:col-start-2 col-span-8 md:col-span-6 relative pb-12 px-6 flex flex-col gap-6 w-full z-0">
             <div className="flex flex-row w-full justify-between items-start relative">
               <div className="relative mt-4">
@@ -182,6 +185,7 @@ export default function Home() {
               </div>
               <p className="hidden md:block text-xl lg:text-2xl xl:text-3xl font-bold text-brand-700 h-fit w-fit relative mt-12 whitespace-nowrap">
                 {t.LandingPage.About.title}
+
                 <Image
                   src={Vector}
                   alt="Circle Platform"
