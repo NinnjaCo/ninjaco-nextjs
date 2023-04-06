@@ -3,18 +3,25 @@ import { Popover, Transition } from '@headlessui/react'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import Link from 'next/link'
-import LocaleMenu from '@/components/localeMenu'
-import React, { Fragment, useMemo } from 'react'
+import LocaleMenu from '@/components/layout/localeMenu'
+import React, { Fragment, useCallback, useMemo } from 'react'
 import clsx from 'clsx'
 import darkBackgroundLogo from '@/images/logo_white.svg'
 import lightBackgroundLogo from '@/images/logo_black.svg'
 import useScrollPosition from '@/hooks/useScrollPosition'
 import useTranslation from '@/hooks/useTranslation'
 
-const Menu: React.FC<{ className?: string; isBackgroundLight: boolean }> = ({
-  className,
-  isBackgroundLight,
-}) => {
+export type MenuStyleOptions = {
+  logoToUse: 'light' | 'dark'
+  startBackgroundDark: boolean
+  startTextWhite: boolean
+  isSticky: boolean
+  startWithBottomBorder: boolean
+}
+
+const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
+  const SCROLL_BREAKPOINT = 150
+
   const t = useTranslation()
   const router = useRouter()
   const scrollPosition = useScrollPosition()
@@ -31,44 +38,71 @@ const Menu: React.FC<{ className?: string; isBackgroundLight: boolean }> = ({
     },
   ]
 
-  // if no isBackgroundLight is passed, use the default logo
-  // else if isBackgroundLight is true, use the light background logo only if the scroll position is less than 200
-  // else use the dark background logo
-  const logoToUse = useMemo(() => {
-    return isBackgroundLight === undefined
-      ? lightBackgroundLogo
-      : isBackgroundLight
-      ? scrollPosition.y === undefined || scrollPosition.y < 200
-        ? lightBackgroundLogo
-        : darkBackgroundLogo
-      : darkBackgroundLogo
-  }, [scrollPosition.y, isBackgroundLight])
+  const logoToUse = useCallback(() => {
+    if (menuOption.logoToUse === 'dark') {
+      if (scrollPosition.y === undefined) {
+        return lightBackgroundLogo
+      }
+      if (scrollPosition.y > SCROLL_BREAKPOINT) {
+        return darkBackgroundLogo
+      }
+      return lightBackgroundLogo
+    }
+    return darkBackgroundLogo
+  }, [scrollPosition.y, menuOption])
 
-  const getMenuOpacity = () => {
+  const getMenuOpacity = useCallback(() => {
+    // Returns a  value between 0 and 1 depending on the scroll position
     if (scrollPosition.y === undefined) {
       return 0
     }
-    if (scrollPosition.y < 200) {
-      return scrollPosition.y / 200
+    if (scrollPosition.y < SCROLL_BREAKPOINT) {
+      return scrollPosition.y / SCROLL_BREAKPOINT
     }
     return 1
-  }
+  }, [scrollPosition.y])
+
+  const getTextColorClassName = useCallback(() => {
+    if (menuOption.startTextWhite) {
+      if (scrollPosition.y === undefined) {
+        return 'text-brand-50'
+      }
+      if (scrollPosition.y > SCROLL_BREAKPOINT) {
+        return 'text-brand-50'
+      }
+      return 'text-brand-50'
+    }
+    if (scrollPosition.y === undefined) {
+      return 'text-brand-700'
+    }
+    if (scrollPosition.y > SCROLL_BREAKPOINT) {
+      return 'text-brand-50'
+    }
+    return 'text-brand-700'
+  }, [scrollPosition.y, menuOption])
 
   return (
     <div
       className={clsx(
-        'flex justify-between items-center w-full h-fit px-4 md:pl-8 lg:pl-12 pt-2 md:pt-9 pb-2 fixed top-0 bg-brand z-10  border-b-2 border-secondary-700',
-        className
+        'flex justify-between items-center w-full h-fit px-4 md:pl-8 lg:pl-12 pt-2 md:pt-9 pb-2 bg-brand z-10  border-b-2 border-secondary-700',
+        {
+          'fixed top-0': menuOption.isSticky,
+        }
       )}
       style={{
         // backgroundColor is bg-brand
-        backgroundColor: isBackgroundLight
-          ? `rgba(41,55,91, ${getMenuOpacity()})`
-          : 'rgba(41,55,91, 1)',
-        // borderBottomColor is border-secondary-700
-        borderBottomColor: isBackgroundLight
-          ? `rgba(254,209,98, ${getMenuOpacity()})`
-          : 'rgba(254,209,98, 1)',
+        backgroundColor: menuOption.startBackgroundDark
+          ? 'rgba(41,55,91, 1)'
+          : `rgba(41,55,91, ${getMenuOpacity()})`,
+
+        // borderBottomColor is border-secondary-700 or border-brand-200
+        borderBottomColor: menuOption.startWithBottomBorder
+          ? menuOption.startBackgroundDark
+            ? 'rgba(254,209,98)'
+            : 'rgb(192, 210, 230)'
+          : menuOption.startBackgroundDark
+          ? 'rgba(254,209,98, 1)'
+          : `rgba(254,209,98, ${getMenuOpacity()})`,
       }}
     >
       <div
@@ -82,35 +116,50 @@ const Menu: React.FC<{ className?: string; isBackgroundLight: boolean }> = ({
           router.push('/')
         }}
       >
-        <Image src={logoToUse} alt="Hero Image" fill></Image>
+        <Image src={logoToUse()} alt="Hero Image" fill></Image>
       </div>
 
       <div className="hidden md:flex justify-evenly md:gap-6 lg:gap-16 items-center">
         <Link
           href={'#about'}
-          className="md:text-base lg:text-xl text-brand-50 hover-underline-animation"
+          className={clsx(
+            'md:text-base lg:text-xl hover-underline-animation',
+            getTextColorClassName()
+          )}
         >
           {t.Menu.about}
         </Link>
         <Link
           href={'/courses'}
-          className="md:text-base lg:text-xl text-brand-50 hover-underline-animation"
+          className={clsx(
+            'md:text-base lg:text-xl hover-underline-animation',
+            getTextColorClassName()
+          )}
         >
           {t.Menu.courses}
         </Link>
-        <LocaleMenu />
-        <div className="btn border-2 text-sm rounded-xl font-semibold  hover:bg-brand-500 hover:text-white border-brand-200 text-brand-50">
+        <LocaleMenu colorClassName={getTextColorClassName()} />
+        <Link
+          className={clsx(
+            'btn border-2 text-sm rounded-xl font-semibold  hover:bg-brand-500 hover:text-white text-brand-50',
+            getTextColorClassName(),
+            {
+              'border-brand-700': !menuOption.startBackgroundDark,
+            }
+          )}
+          href={'/auth/signup'}
+        >
           {t.Menu.startCoding}
-        </div>
+        </Link>
       </div>
       {/* Mobile menu */}
       <div className="flex md:hidden items-center gap-2">
-        <LocaleMenu />
+        <LocaleMenu colorClassName={getTextColorClassName()} />
         <Popover>
           {() => (
             <>
               <Popover.Button className="group flex items-center">
-                <Bars3Icon className="w-8 h-8 text-brand-100 cursor-pointer" />
+                <Bars3Icon className={clsx('w-8 h-8 cursor-pointer', getTextColorClassName())} />
               </Popover.Button>
               <Transition
                 as={Fragment}
@@ -138,8 +187,12 @@ const Menu: React.FC<{ className?: string; isBackgroundLight: boolean }> = ({
                       ))}
                     </div>
                     <div className="bg-brand-100 p-4 flex items-center justify-between gap-8">
-                      <div className="btn btn-brand">{t.Menu.signIn}</div>
-                      <div className="btn btn-secondary">{t.Menu.register}</div>
+                      <Link className="btn btn-brand" href="auth/signin">
+                        {t.Menu.signIn}
+                      </Link>
+                      <Link className="btn btn-secondary" href="auth/signup">
+                        {t.Menu.register}
+                      </Link>
                     </div>
                   </div>
                 </Popover.Panel>

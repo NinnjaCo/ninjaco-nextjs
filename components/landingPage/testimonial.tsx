@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import React from 'react'
-import Star from '@/components/star'
+import Star from '@/components/landingPage/star'
 import clsx from 'clsx'
 import testimonialBlueB from '@/images/testimonialBlueB.svg'
 import testimonialYellowB from '@/images/testimonialYellowB.svg'
