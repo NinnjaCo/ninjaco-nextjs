@@ -44,8 +44,7 @@ const SignUpFormSchema = yup
 
 const Signup = () => {
   const authApi = useAuthApi()
-  const session = useSession()
-  console.log(session)
+
   const {
     register,
     handleSubmit,
@@ -88,26 +87,14 @@ const Signup = () => {
         password: data.password,
       })
     } catch (error) {
-      console.log(error)
       if (isAxiosError<AuthError>(error)) {
-        console.log(error)
         if (error.response?.data.error.response.errors) {
           Object.values(error.response?.data.error.response.errors).forEach((error) => {
-            // Duplicate Key Error
-            console.log(error)
-            if (error.startsWith('E11000')) {
-              setAlertData({
-                message: 'Email already exists',
-                variant: 'error',
-                open: true,
-              })
-            } else {
-              setAlertData({
-                message: error || 'Something went wrong, please try again later',
-                variant: 'error',
-                open: true,
-              })
-            }
+            setAlertData({
+              message: error || 'Something went wrong, please try again later',
+              variant: 'error',
+              open: true,
+            })
           })
         } else {
           setAlertData({
@@ -210,11 +197,13 @@ const Signup = () => {
 }
 
 export const getServerSideProps = async (context) => {
+  const { query } = context
+
   const session = await getSession(context)
   if (session) {
     return {
       redirect: {
-        destination: '/',
+        destination: (query.redirectTo as string | undefined) || '/',
         permanent: false,
       },
     }

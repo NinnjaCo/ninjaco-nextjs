@@ -18,13 +18,11 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
           password: { label: 'Password', type: 'password' },
         },
         async authorize(credentials) {
-          console.log(credentials)
           try {
             const res = await new AuthApi().signIn(
               credentials?.email ?? '',
               credentials?.password ?? ''
             )
-            console.log(res)
             return {
               id: res.payload.user._id,
               jwt: res.payload.access_token,
