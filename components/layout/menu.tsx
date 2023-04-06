@@ -17,6 +17,7 @@ export type MenuStyleOptions = {
   startTextWhite: boolean
   isSticky: boolean
   startWithBottomBorder: boolean
+  startButtonDark: boolean
 }
 
 const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
@@ -63,6 +64,8 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
   }, [scrollPosition.y])
 
   const getTextColorClassName = useCallback(() => {
+    const textOnLight = 'text-brand-700'
+    const textOnDark = 'text-brand-50'
     if (menuOption.startTextWhite) {
       if (scrollPosition.y === undefined) {
         return 'text-brand-50'
@@ -79,6 +82,32 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
       return 'text-brand-50'
     }
     return 'text-brand-700'
+  }, [scrollPosition.y, menuOption])
+
+  const getButtonColorClassName = useCallback(() => {
+    const outlineOnLight = 'border-brand text-brand-700'
+    const outlineOnDark = 'border-brand-400 text-brand-50'
+    const solidOnLight = 'bg-brand text-brand-100'
+    const solidOnDark = 'bg-brand-500 text-brand-50'
+    if (menuOption.startBackgroundDark) {
+      return menuOption.startButtonDark ? solidOnDark : outlineOnDark
+    }
+    if (menuOption.startButtonDark) {
+      if (scrollPosition.y === undefined) {
+        return solidOnLight
+      }
+      if (scrollPosition.y > SCROLL_BREAKPOINT) {
+        return solidOnDark
+      }
+      return solidOnLight
+    }
+    if (scrollPosition.y === undefined) {
+      return outlineOnLight
+    }
+    if (scrollPosition.y > SCROLL_BREAKPOINT) {
+      return outlineOnDark
+    }
+    return outlineOnLight
   }, [scrollPosition.y, menuOption])
 
   return (
@@ -141,11 +170,8 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
         <LocaleMenu colorClassName={getTextColorClassName()} />
         <Link
           className={clsx(
-            'btn border-2 text-sm rounded-xl font-semibold  hover:bg-brand-500 hover:text-white text-brand-50',
-            getTextColorClassName(),
-            {
-              'border-brand-700': !menuOption.startBackgroundDark,
-            }
+            'btn border-2 text-sm rounded-xl font-semibold hover:bg-brand-500',
+            getButtonColorClassName()
           )}
           href={'/auth/signup'}
         >

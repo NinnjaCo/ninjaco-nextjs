@@ -1,7 +1,7 @@
 import FAQComponent from '@/components/faqComponent'
-import Footer from '@/components/footer'
+import Footer from '@/components/layout/footer'
 import Head from 'next/head'
-import Menu from '@/components/menu'
+import Menu from '@/components/layout/menu'
 import useTranslation from '@/hooks/useTranslation'
 
 export default function FAP_page() {
@@ -32,8 +32,17 @@ export default function FAP_page() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main>
-        <Menu isBackgroundLight={false} />
-        <div className="mt-44 ml-7 md:ml-14  font-mono text-lg md:text-xl lg:text-2xl font-bold text-brand">
+        <Menu
+          menuOption={{
+            isSticky: true,
+            logoToUse: 'dark',
+            startBackgroundDark: false,
+            startButtonDark: true,
+            startTextWhite: false,
+            startWithBottomBorder: true,
+          }}
+        />
+        <div className="mt-32 px-7 md:px-14 font-bold text-lg md:text-xl lg:text-2xl text-brand">
           <h1>{t.Faq.headTitle}</h1>
         </div>
         <div className="px-7 md:px-14 mt-14 mb-24 flex flex-col gap-10">
@@ -42,7 +51,6 @@ export default function FAP_page() {
             <FAQComponent key={index} question={item.question} answer={item.answer} />
           ))}
         </div>
-        <div className="mt-44"></div>
       </main>
       <Footer />
     </>

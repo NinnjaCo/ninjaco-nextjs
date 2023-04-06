@@ -95,6 +95,7 @@ export default function Home() {
             startTextWhite: true,
             isSticky: true,
             startWithBottomBorder: false,
+            startButtonDark: false,
           }}
         />
         {/* Hero section */}
