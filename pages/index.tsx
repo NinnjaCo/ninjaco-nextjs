@@ -145,7 +145,10 @@ export default function Home() {
           {/* Mobile Continuation of hero section */}
           <div className="block md:hidden bg-brand-500 p-6 md:bg-transparent md:p-0 text-brand-100 text-xs md:text-brand-800 w-full md:w-1/3 md:place-self-auto absolute bottom-0">
             {t.LandingPage.Hero.description}
-            <div className="md:hidden btn btn-brand max-w-fit flex gap-2 rounded-2xl text-base mt-8 md:mt-16">
+            <Link
+              className="md:hidden btn btn-brand max-w-fit flex gap-2 rounded-2xl text-base mt-8 md:mt-16"
+              href={'/auth/signup'}
+            >
               <p>{t.LandingPage.Hero.getStarted}</p>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -157,7 +160,7 @@ export default function Home() {
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
               </svg>
-            </div>
+            </Link>
           </div>
         </div>
 

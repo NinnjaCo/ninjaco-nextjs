@@ -187,8 +187,12 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
                       ))}
                     </div>
                     <div className="bg-brand-100 p-4 flex items-center justify-between gap-8">
-                      <div className="btn btn-brand">{t.Menu.signIn}</div>
-                      <div className="btn btn-secondary">{t.Menu.register}</div>
+                      <Link className="btn btn-brand" href="auth/signin">
+                        {t.Menu.signIn}
+                      </Link>
+                      <Link className="btn btn-secondary" href="auth/signup">
+                        {t.Menu.register}
+                      </Link>
                     </div>
                   </div>
                 </Popover.Panel>
