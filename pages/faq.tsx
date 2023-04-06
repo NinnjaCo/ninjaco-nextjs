@@ -1,4 +1,5 @@
 import FAQComponent from '@/components/faqComponent'
+import Footer from '@/components/footer'
 import Head from 'next/head'
 import Menu from '@/components/menu'
 import useTranslation from '@/hooks/useTranslation'
@@ -40,6 +41,9 @@ export default function FAP_page() {
           {faq.map((item, index) => (
             <FAQComponent key={index} question={item.question} answer={item.answer} />
           ))}
+        </div>
+        <div className="mt-44">
+          <Footer />
         </div>
       </main>
     </>
