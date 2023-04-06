@@ -14,6 +14,16 @@ module.exports = {
         '3xs': '0.5rem',
         '2xs': '0.625rem',
       },
+      animation: {
+        float: 'float 2s ease infinite',
+        floatDelay: 'float 2s ease infinite 1s',
+      },
+      keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-5%)' },
+        },
+      },
       colors: {
         brand: {
           900: '#101624',
