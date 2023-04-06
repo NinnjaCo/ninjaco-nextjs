@@ -150,7 +150,7 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
 
       <div className="hidden md:flex justify-evenly md:gap-6 lg:gap-16 items-center">
         <Link
-          href={'#about'}
+          href={'/#about'}
           className={clsx(
             'md:text-base lg:text-xl hover-underline-animation',
             getTextColorClassName()
