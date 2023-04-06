@@ -34,7 +34,7 @@ export default function FAP_page() {
       <main>
         <Menu
           menuOption={{
-            isSticky: true,
+            isSticky: false,
             logoToUse: 'dark',
             startBackgroundDark: false,
             startButtonDark: true,
