@@ -24,9 +24,15 @@ export class AuthApi extends CoreApi {
   }
 
   async refresh(token: string): Promise<ApiResponse<AuthResponse>> {
-    const res = await this.client.post<ApiResponse<AuthResponse>>(`${this.path2}/refresh`, {
-      token,
-    })
+    const res = await this.client.post<ApiResponse<AuthResponse>>(
+      `${this.path2}/refresh`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
     return res.data
   }
 

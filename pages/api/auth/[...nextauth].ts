@@ -60,12 +60,16 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
             throw new Error('Invalid token')
 
           if (decoded.exp < Math.floor(Date.now() / 1000)) {
-            const res = await new AuthApi().refresh(token.refreshToken)
-            return {
-              ...token,
-              jwt: res.payload.access_token,
-              refreshToken: res.payload.refresh_token,
-              id: res.payload.user._id,
+            try {
+              const res = await new AuthApi().refresh(token.refreshToken)
+              return {
+                ...token,
+                jwt: res.payload.access_token,
+                refreshToken: res.payload.refresh_token,
+                id: res.payload.user._id,
+              }
+            } catch (e) {
+              throw new Error('Invalid token')
             }
           }
 
