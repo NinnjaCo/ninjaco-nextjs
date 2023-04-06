@@ -30,7 +30,7 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
     {
       name: t.Menu.about,
       description: t.Menu.aboutDescription,
-      href: '#about',
+      href: '/#about',
     },
     {
       name: t.Menu.courses,
@@ -218,10 +218,10 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
                       ))}
                     </div>
                     <div className="bg-brand-100 p-4 flex items-center justify-between gap-8">
-                      <Link className="btn btn-brand" href="auth/signin">
+                      <Link className="btn btn-brand" href="/auth/signin">
                         {t.Menu.signIn}
                       </Link>
-                      <Link className="btn btn-secondary" href="auth/signup">
+                      <Link className="btn btn-secondary" href="/auth/signup">
                         {t.Menu.register}
                       </Link>
                     </div>

@@ -102,6 +102,7 @@ const Signup = () => {
     <>
       <Head>
         <title>NinjaCo | Sign Up</title>
+        <meta name="description" content="Sign Up to NinjaCo" />
       </Head>
       <main className="relative w-full h-screen">
         <Menu
