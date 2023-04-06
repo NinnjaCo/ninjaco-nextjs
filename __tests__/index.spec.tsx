@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@/utils/test-utils'
-import Menu from '@/components/menu'
+import Menu from '@/components/layout/menu'
 import mockRouter from 'next-router-mock'
 
 describe('mock-router', () => {
@@ -8,7 +8,18 @@ describe('mock-router', () => {
     mockRouter.push('/')
 
     // Render the component:
-    render(<Menu isBackgroundLight={true} />)
+    render(
+      <Menu
+        menuOption={{
+          isSticky: true,
+          logoToUse: 'dark',
+          startBackgroundDark: false,
+          startButtonDark: true,
+          startTextWhite: false,
+          startWithBottomBorder: true,
+        }}
+      />
+    )
     expect(screen.getByText('Courses')).toHaveTextContent('Courses')
 
     // Click the button:

@@ -5,7 +5,7 @@ import { Uid } from '@/models/shared'
 
 export default class CrudApi<Model, RequestModel> extends CoreApi {
   path = ''
-  basePath = '/api'
+  basePath = ''
   constructor(param?: ApiParam) {
     super(param)
   }

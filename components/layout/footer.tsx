@@ -1,3 +1,5 @@
+// import to use the navigate hook
+
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -81,7 +83,9 @@ const Footer = () => {
           <Link href="/copyrights" className="text-brand-50">
             {t.Footer.Terms}
           </Link>
-          <p className="text-brand-50">{t.Footer.Faq}</p>
+          <Link href={'/faq'} className=" text-brand-50 ">
+            {t.Footer.Faq}
+          </Link>
         </div>
       </div>
       <div className="flex gap-2">

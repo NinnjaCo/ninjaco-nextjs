@@ -89,6 +89,17 @@ export interface WebsiteTranslations {
     Faq: translationElement
     Terms: translationElement
   }
+  Faq: {
+    headTitle: translationElement
+    question1: translationElement
+    answer1: translationElement
+    question2: translationElement
+    answer2: translationElement
+    question3: translationElement
+    answer3: translationElement
+    question4: translationElement
+    answer4: translationElement
+  }
 }
 
 // Create locale type support en | fr

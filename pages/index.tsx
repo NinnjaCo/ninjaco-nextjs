@@ -1,36 +1,34 @@
 import { useRef } from 'react'
+import { useSession } from 'next-auth/react'
 import Courses from '../public/images/courses.svg'
+import Footer from '@/components/layout/footer'
 import Head from 'next/head'
-import HeroImage from '@/components/heroImage'
+import HeroImage from '@/components/landingPage/heroImage'
 import Image from 'next/image'
 import Lego1 from '../public/images/legoYellow.svg'
 import Lego2 from '../public/images/legoBlue.svg'
-import Menu from '@/components/menu'
-
-import Testimonial from '@/components/testimonial'
-
-import clsx from 'clsx'
-import quotes from '@/images/quotes.svg'
-import testimonialsTilda1 from '@/images/testimonialsTilda1.svg'
-import testimonialsTilda2 from '@/images/testimonialsTilda2.svg'
-import testimonialsTilda3 from '@/images/testimonialsTilda3.svg'
-
+import Link from 'next/link'
+import Menu from '@/components/layout/menu'
+import Testimonial from '@/components/landingPage/testimonial'
 import Vector from '../public/images/aboutCircleVector.svg'
+import clsx from 'clsx'
 import logo_rev from '../public/images/logoPointing.svg'
-
 import missionSection from '../public/missionSection.svg'
 import ourMission from '../public/ourMission.svg'
 import playStick from '../public/images/playStick.svg'
+import quotes from '@/images/quotes.svg'
 import soFar from '../public/SoFar.svg'
-
+import testimonialsTilda1 from '@/images/testimonialsTilda1.svg'
+import testimonialsTilda2 from '@/images/testimonialsTilda2.svg'
+import testimonialsTilda3 from '@/images/testimonialsTilda3.svg'
 import trophy from '../public/images/trophy.svg'
-
-import Footer from '@/components/footer'
 import useTranslation from '@/hooks/useTranslation'
 
 export default function Home() {
   const t = useTranslation()
   const aboutRef = useRef<HTMLDivElement>(null)
+  const session = useSession()
+  console.log(session)
 
   const testimonials = [
     {
@@ -92,7 +90,17 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main className="relative w-full">
-        <Menu isBackgroundLight={true} aboutRef={aboutRef} />
+        <Menu
+          menuOption={{
+            logoToUse: 'dark',
+            startBackgroundDark: false,
+            startTextWhite: true,
+            isSticky: true,
+            startWithBottomBorder: false,
+            startButtonDark: false,
+            aboutRef: aboutRef,
+          }}
+        />
         {/* Hero section */}
         <div className="relative w-full mb-8 md:mb-0">
           <HeroImage />
@@ -118,7 +126,10 @@ export default function Home() {
               <div className="hidden md:block text-xs text-brand-800 mt-[50%] md:mt-0 w-full md:w-1/3 place-self-start md:place-self-auto">
                 {t.LandingPage.Hero.description}
               </div>
-              <div className="hidden btn btn-brand max-w-fit md:flex gap-2 rounded-2xl text-base mt-8 md:mt-16">
+              <Link
+                className="hidden btn btn-brand max-w-fit md:flex gap-2 rounded-2xl text-base mt-8 md:mt-16"
+                href="/auth/signup"
+              >
                 <p>{t.LandingPage.Hero.getStarted}</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -134,14 +145,17 @@ export default function Home() {
                     d="M8.25 4.5l7.5 7.5-7.5 7.5"
                   />
                 </svg>
-              </div>
+              </Link>
             </div>
           </div>
 
           {/* Mobile Continuation of hero section */}
           <div className="block md:hidden bg-brand-500 p-6 md:bg-transparent md:p-0 text-brand-100 text-xs md:text-brand-800 w-full md:w-1/3 md:place-self-auto absolute bottom-0">
             {t.LandingPage.Hero.description}
-            <div className="md:hidden btn btn-brand max-w-fit flex gap-2 rounded-2xl text-base mt-8 md:mt-16">
+            <Link
+              className="md:hidden btn btn-brand max-w-fit flex gap-2 rounded-2xl text-base mt-8 md:mt-16"
+              href={'/auth/signup'}
+            >
               <p>{t.LandingPage.Hero.getStarted}</p>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -153,7 +167,7 @@ export default function Home() {
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
               </svg>
-            </div>
+            </Link>
           </div>
         </div>
 
@@ -162,8 +176,12 @@ export default function Home() {
           <div className="bg-brand-100 rounded-none md:rounded-3xl lg:rounded-[56px] shadow-lg shadow-brand-300 col-start-1 md:col-start-2 col-span-8 md:col-span-6 relative pb-12 px-6 flex flex-col gap-6 w-full z-0">
             <div className="flex flex-row w-full justify-between items-start relative">
               <div className="relative mt-4">
-                <Image src={Lego1} alt="Lego Brick Yellow" className="w-32 md:w-40" />
-                <Image src={Lego2} alt="Lego Brick Blue" className="absolute top-full -z-10 w-36" />
+                <Image src={Lego1} alt="Lego Brick Yellow" className="w-32 md:w-40 animate-float" />
+                <Image
+                  src={Lego2}
+                  alt="Lego Brick Blue"
+                  className="absolute top-full -z-10 w-36 animate-floatDelay"
+                />
               </div>
               <p className="hidden md:block text-xl lg:text-2xl xl:text-3xl font-bold text-brand-700 h-fit w-fit relative mt-12 whitespace-nowrap">
                 {t.LandingPage.About.title}
@@ -209,7 +227,7 @@ export default function Home() {
               ))}
             </div>
             <div className="w-full flex justify-end">
-              <div className="btn btn-brand flex gap-2 max-w-fit">
+              <Link href={'/auth/signup'} className="btn btn-brand flex gap-2 max-w-fit">
                 <p>{t.LandingPage.About.joinNow}</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -225,7 +243,7 @@ export default function Home() {
                     d="M8.25 4.5l7.5 7.5-7.5 7.5"
                   />
                 </svg>
-              </div>
+              </Link>
             </div>
           </div>
         </div>
@@ -290,4 +308,10 @@ export default function Home() {
       <Footer />
     </>
   )
+}
+
+export async function getStaticProps() {
+  return {
+    props: {},
+  }
 }
