@@ -42,9 +42,6 @@ export default function FAP_page() {
             <FAQComponent key={index} question={item.question} answer={item.answer} />
           ))}
         </div>
-        <div className="mt-44">
-          <Footer />
-        </div>
       </main>
       <Footer />
     </>
