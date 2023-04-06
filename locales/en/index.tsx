@@ -71,5 +71,21 @@ const englishTranslations: WebsiteTranslations = {
     Faq: 'FAQ',
     Terms: 'Privacy Policy',
   },
+  Faq: {
+    headTitle: 'Frequently Asked Questions',
+    question1: 'Should I have previous knowledge in programming?',
+    answer1:
+      "No, previous knowledge in programming is not necessary to enroll in NinjaCo's courses or use the online platform. The platform will include a user-friendly interface with a step-by-step guide to building robots, allowing students to follow along at their own pace. The platform will also include visual programming and block coding options, making the learning process even more interactive.",
+    question2: 'Do I need hardware parts?',
+    answer2:
+      'Yes, hardware parts are needed to build the robots. The on-site classes use arduino kits to build the robots, and the online platform will also provide a step-by-step guide for building robots using hardware parts. However, these hardware parts will not be included with the online platform and must be purchased separately by the user.',
+    question3: 'Should I install any other software to connect to the Arduino?',
+    answer3:
+      'Since the online platform will include visual programming and block coding options, it is required to download an Arduino agent to program the Arduino board.',
+    question4: 'Where can I register for the courses?',
+    answer4:
+      "You should be able to register for the courses on the website that offers the coding courses using visual blocks and Arduino. Look for a « Start coding » or « Get started » button/link on the website's landing page or navigation menu. Clicking on that button/link should take you to a registration page where you can provide your information and enroll in the courses.",
+  },
 }
+
 export default englishTranslations

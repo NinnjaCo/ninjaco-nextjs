@@ -8,7 +8,18 @@ describe('mock-router', () => {
     mockRouter.push('/')
 
     // Render the component:
-    render(<Menu isBackgroundLight={true} />)
+    render(
+      <Menu
+        menuOption={{
+          isSticky: true,
+          logoToUse: 'dark',
+          startBackgroundDark: false,
+          startButtonDark: true,
+          startTextWhite: false,
+          startWithBottomBorder: true,
+        }}
+      />
+    )
     expect(screen.getByText('Courses')).toHaveTextContent('Courses')
 
     // Click the button:

@@ -4,7 +4,7 @@ import { AuthError, ErrorMessage } from '@/models/shared'
 import { CalendarIcon, EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/outline'
 import { Input } from '@/components/forms/input'
 import { getSession, signIn, useSession } from 'next-auth/react'
-import { isAxiosError } from '@/utils/errors'
+import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Alert from '@/components/auth/alert'
@@ -88,22 +88,12 @@ const Signup = () => {
       })
     } catch (error) {
       if (isAxiosError<AuthError>(error)) {
-        if (error.response?.data.error.response.errors) {
-          Object.values(error.response?.data.error.response.errors).forEach((error) => {
-            setAlertData({
-              message: error || 'Something went wrong, please try again later',
-              variant: 'error',
-              open: true,
-            })
-          })
-        } else {
-          setAlertData({
-            message:
-              error.response?.data.error.message || 'Something went wrong, please try again later',
-            variant: 'error',
-            open: true,
-          })
-        }
+        const errors = unWrapAuthError(error)
+        setAlertData({
+          message: errors[0].message || 'Something went wrong',
+          variant: 'error',
+          open: true,
+        })
       }
     }
   }
@@ -121,6 +111,7 @@ const Signup = () => {
             startTextWhite: false,
             isSticky: false,
             startWithBottomBorder: true,
+            startButtonDark: true,
           }}
         ></Menu>
         <AuthCard title="Sign Up" titleImage={logoPointingDown} underLineImage={heavilyWavedLine}>

@@ -1,5 +1,8 @@
+// import to use the navigate hook
+
 import { useRouter } from 'next/router'
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 import darkBackgroundLogo from '@/images/logo_white.svg'
 import facebook from '@/images/facebook.svg'
@@ -78,7 +81,9 @@ const Footer = () => {
         <p className="text-brand-50 font-bold text-sm md:text-base">{t.Footer.Links}</p>
         <div className="flex flex-col text-xs md:text-base">
           <p className="text-brand-50">{t.Footer.Terms}</p>
-          <p className="text-brand-50">{t.Footer.Faq}</p>
+          <Link href={'/faq'} className=" text-brand-50 ">
+            {t.Footer.Faq}
+          </Link>
         </div>
       </div>
       <div className="flex gap-2">

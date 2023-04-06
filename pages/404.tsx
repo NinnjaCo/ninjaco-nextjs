@@ -19,6 +19,7 @@ export default function FourOhFour(): React.ReactElement {
             startTextWhite: true,
             isSticky: true,
             startWithBottomBorder: true,
+            startButtonDark: false,
           }}
         />
         <div className="grid items-center h-screen grid-cols-1 justify-items-center pt-24 pb-20 relative flex-auto">
