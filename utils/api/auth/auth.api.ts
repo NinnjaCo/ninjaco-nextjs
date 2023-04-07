@@ -43,7 +43,7 @@ export class AuthApi extends CoreApi {
     email: string
     password: string
   }): Promise<ApiResponse<AuthResponse>> {
-    const res = await this.client.post<ApiResponse<AuthResponse>>(`${this.path}/signUp`, data)
+    const res = await this.client.post<ApiResponse<AuthResponse>>(`${this.path}/signup`, data)
     return res.data
   }
 
