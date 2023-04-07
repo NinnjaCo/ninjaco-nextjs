@@ -3,6 +3,7 @@ export interface User {
   firstName: string
   lastName: string
   email: string
+  dateOfBirth: string
 }
 
 export interface UserRequest {
@@ -10,4 +11,5 @@ export interface UserRequest {
   lastName: string
   email: string
   password: string
+  dateOfBirth: string
 }

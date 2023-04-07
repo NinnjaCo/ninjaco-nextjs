@@ -39,6 +39,7 @@ export class AuthApi extends CoreApi {
   async signUp(data: {
     firstName: string
     lastName: string
+    dateOfBirth: string
     email: string
     password: string
   }): Promise<ApiResponse<AuthResponse>> {

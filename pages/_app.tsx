@@ -1,4 +1,6 @@
 import '@/pages/globals.css'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { LocalizationProvider } from '@mui/x-date-pickers'
 import { Quicksand } from 'next/font/google'
 import { TranslationsProvider } from '@/contexts/TranslationContext'
 import SessionManager from '@/components/auth/sessionManager'
@@ -15,12 +17,14 @@ const quick_sand = Quicksand({
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <TranslationsProvider initialLocale={pageProps.initialLocale}>
-      <SessionManager serverSession={pageProps.session}>
-        <main className={`${quick_sand.variable} font-sans`}>
-          <Component {...pageProps} />
-        </main>
-      </SessionManager>
-    </TranslationsProvider>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <TranslationsProvider initialLocale={pageProps.initialLocale}>
+        <SessionManager serverSession={pageProps.session}>
+          <main className={`${quick_sand.variable} font-sans`}>
+            <Component {...pageProps} />
+          </main>
+        </SessionManager>
+      </TranslationsProvider>
+    </LocalizationProvider>
   )
 }

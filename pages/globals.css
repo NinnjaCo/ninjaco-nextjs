@@ -41,6 +41,11 @@ a {
   }
 }
 
+/* Used to changee the background color of MUI datepicker component (day selected) */
+.Mui-selected {
+  background-color: #212c49 !important;
+}
+
 .hover-underline-animation {
   display: inline-block;
   position: relative;
