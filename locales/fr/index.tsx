@@ -275,9 +275,9 @@ const frenchTranslations: WebsiteTranslations = {
     headTitle: 'Ninja Co | Connecion',
     email: 'e-mail',
     password: 'mot de passe',
-    BTH: "Retour à la page d'accueil ",
+    backToHome: "Retour à la page d'accueil ",
     dontHaveAccount: "Vous n'avez pas de compte ?",
-    SU: 'Inscrivez-vous',
+    signUp: 'Inscrivez-vous',
   },
 }
 export default frenchTranslations

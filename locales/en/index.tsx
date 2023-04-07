@@ -264,9 +264,9 @@ const englishTranslations: WebsiteTranslations = {
     signIn: 'Sign In',
     email: 'Email',
     password: 'Password',
-    BTH: 'Back to home ',
+    backToHome: 'Back to home ',
     dontHaveAccount: 'Don’t have an account?',
-    SU: 'Sign Up',
+    signUp: 'Sign Up',
   },
 }
 

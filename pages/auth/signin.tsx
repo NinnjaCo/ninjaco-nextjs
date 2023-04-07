@@ -85,7 +85,7 @@ const Signin = () => {
     <>
       <Head>
         <title>{t.signin.headTitle}</title>
-        <meta name="description" content="Sign Up to NinjaCo" />
+        <meta name="description" content="Sign In to NinjaCo" />
       </Head>
       <main className="relative w-full h-screen">
         <Menu
@@ -138,12 +138,12 @@ const Signin = () => {
           </form>
           <div className="w-full flex justify-between text-xs mt-6">
             <Link className="cursor-pointer text-brand-500" href="/">
-              {t.signin.BTH}
+              {t.signin.backToHome}
             </Link>
             <div className="text-brand-500">
               {t.signin.dontHaveAccount}
               <span className="ml-2  cursor-pointer text-brand font-semibold">
-                <Link href="/auth/signup">{t.signin.SU}</Link>
+                <Link href="/auth/signup">{t.signin.signUp}</Link>
               </span>
             </div>
           </div>
