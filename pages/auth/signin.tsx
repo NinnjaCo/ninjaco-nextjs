@@ -14,9 +14,10 @@ import AuthCard from '@/components/auth/authCard'
 import Footer from '@/components/layout/footer'
 import Link from 'next/link'
 import Menu from '@/components/layout/menu'
-import React from 'react'
+import React, { useTransition } from 'react'
 import heavilyWavedLine from '@/images/heavilyWavedLine.svg'
 import logoPointingDown from '@/images/logoPointingYellowBand.svg'
+import useTranslation from '@/hooks/useTranslation'
 type SignInFormDataType = {
   email: string
   password: string
@@ -78,11 +79,12 @@ const Signin = () => {
       }
     }
   }
+  const t = useTranslation()
 
   return (
     <>
       <Head>
-        <title>NinjaCo | Sign in</title>
+        <title>{t.signin.headTitle}</title>
         <meta name="description" content="Sign Up to NinjaCo" />
       </Head>
       <main className="relative w-full h-screen">
@@ -96,7 +98,11 @@ const Signin = () => {
             startButtonDark: true,
           }}
         ></Menu>
-        <AuthCard title="Sign In" titleImage={logoPointingDown} underLineImage={heavilyWavedLine}>
+        <AuthCard
+          title={t.signin.signIn as string}
+          titleImage={logoPointingDown}
+          underLineImage={heavilyWavedLine}
+        >
           <Alert
             className="my-3"
             message={alertData.message}
@@ -107,16 +113,16 @@ const Signin = () => {
           <form onSubmit={handleSubmit(onSubmitHandler)} className="flex flex-col gap-4" id="form">
             <Input
               {...register('email')}
-              label={'Email'}
-              placeholder={'Email'}
+              label={t.signin.email as string}
+              placeholder={t.signin.email as string}
               StartIcon={EnvelopeIcon}
               error={errors.email?.message}
             />
             <Input
               {...register('password')}
               type="password"
-              label={'Password'}
-              placeholder={'Password'}
+              label={t.signin.password as string}
+              placeholder={t.signin.password as string}
               StartIcon={LockClosedIcon}
               error={errors.password?.message}
             />
@@ -127,17 +133,17 @@ const Signin = () => {
               value="Submit"
               className="w-full btn bg-brand-200 hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500"
             >
-              Sign in
+              {t.signin.signIn}
             </button>
           </form>
           <div className="w-full flex justify-between text-xs mt-6">
             <Link className="cursor-pointer text-brand-500" href="/">
-              Back to Home
+              {t.signin.BTH}
             </Link>
             <div className="text-brand-500">
-              Don&apos;t Have an Account?
+              {t.signin.dontHaveAccount}
               <span className="ml-2  cursor-pointer text-brand font-semibold">
-                <Link href="/auth/signin">Sign up</Link>
+                <Link href="/auth/signup">{t.signin.SU}</Link>
               </span>
             </div>
           </div>
