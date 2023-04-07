@@ -52,6 +52,7 @@ export interface WebsiteTranslations {
     }
   }
   Copyright: {
+    headTitle: translationElement
     privacy: translationElement
     updated: translationElement
     agreement: translationElement
@@ -91,6 +92,7 @@ export interface WebsiteTranslations {
   }
   Faq: {
     headTitle: translationElement
+    title: translationElement
     question1: translationElement
     answer1: translationElement
     question2: translationElement

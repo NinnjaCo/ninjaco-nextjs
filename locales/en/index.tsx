@@ -64,6 +64,7 @@ const englishTranslations: WebsiteTranslations = {
     },
   },
   Copyright: {
+    headTitle: 'Ninja Co | Copyright',
     privacy: 'Privacy Policy',
     updated: 'Last updated: 03 MARCH 2023',
     agreement: (
@@ -243,7 +244,8 @@ const englishTranslations: WebsiteTranslations = {
     Terms: 'Privacy Policy',
   },
   Faq: {
-    headTitle: 'Frequently Asked Questions',
+    headTitle: 'Ninja Co | FAQ',
+    title: 'Frequently Asked Questions',
     question1: 'Should I have previous knowledge in programming?',
     answer1:
       "No, previous knowledge in programming is not necessary to enroll in NinjaCo's courses or use the online platform. The platform will include a user-friendly interface with a step-by-step guide to building robots, allowing students to follow along at their own pace. The platform will also include visual programming and block coding options, making the learning process even more interactive.",
