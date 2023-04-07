@@ -93,4 +93,4 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
   })
 }
 //  export authoption
-export const authOptions: AuthOptions = { providers: [] } //  export authoption end here
+export const authOptions: AuthOptions = { providers: [] }
