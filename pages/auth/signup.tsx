@@ -1,14 +1,16 @@
 import * as yup from 'yup'
-import { AuthApi, useAuthApi } from '@/utils/api/auth'
-import { AuthError, ErrorMessage } from '@/models/shared'
-import { CalendarIcon, EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/outline'
+import { AuthError } from '@/models/shared'
+import { CircularProgress } from '@mui/material'
+import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/outline'
 import { Input } from '@/components/forms/input'
-import { getSession, signIn, useSession } from 'next-auth/react'
+import { getSession, signIn } from 'next-auth/react'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
-import { useForm } from 'react-hook-form'
+import { useAuthApi } from '@/utils/api/auth'
+import { useForm, useWatch } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Alert from '@/components/auth/alert'
 import AuthCard from '@/components/auth/authCard'
+import DatePickerWithHookForm from '@/components/forms/datePickerWithHookForm'
 import Footer from '@/components/layout/footer'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -20,6 +22,7 @@ import logoPointingDown from '@/images/logoPointingYellowBand.svg'
 type SignUpFormDataType = {
   firstName: string
   lastName: string
+  dateOfBirth: Date
   email: string
   password: string
   passwordConfirmation: string
@@ -30,6 +33,7 @@ const SignUpFormSchema = yup
   .shape({
     firstName: yup.string().required('First Name is required'),
     lastName: yup.string().required('Last Name is required'),
+    dateOfBirth: yup.date().required('Date of Birth is required'),
     email: yup.string().email('Invalid email').required('Email is required'),
     password: yup
       .string()
@@ -68,10 +72,12 @@ const Signup = () => {
 
   const onSubmitHandler = async (data: SignUpFormDataType) => {
     try {
+      console.log(data)
       closeAlert()
       await authApi.signUp({
         firstName: data.firstName,
         lastName: data.lastName,
+        dateOfBirth: data.dateOfBirth.toISOString(),
         email: data.email,
         password: data.password,
       })
@@ -138,6 +144,13 @@ const Signup = () => {
               StartIcon={UserIcon}
               error={errors.lastName?.message}
             />
+            <DatePickerWithHookForm
+              control={control}
+              name={register('dateOfBirth').name} // we only need the "name" prop
+              placeholder="Date of Birth"
+              label="Date of Birth"
+              error={errors.dateOfBirth?.message}
+            />
             <Input
               {...register('email')}
               label={'Email'}
@@ -174,12 +187,9 @@ const Signup = () => {
             <Link className="cursor-pointer text-brand-500" href="/">
               Back to Home
             </Link>
-            <div className="text-brand-500">
-              Already Have an Account?
-              <span className="ml-2  cursor-pointer text-brand font-semibold">
-                <Link href="/auth/signin">Sign In</Link>
-              </span>
-            </div>
+            <Link href="/auth/signin" className="cursor-pointer text-brand font-semibold">
+              Sign In
+            </Link>
           </div>
         </AuthCard>
         <Footer />
