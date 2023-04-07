@@ -22,20 +22,18 @@ export default function AdminDashboard() {
           <Image src={statistics} alt="image" />
           <div className="text-brand-700 font-bold text-3xl"> Statistics </div>
         </div>
-        <div className=" bg-brand-50 h-72 w-[1300px] ml-96 rounded-2xl mt-2">
-          <div className="flex gap-16 justify-around pt-10">
-            <div>
-              <Image src={total_users} alt="image" />
-              <div className="-mt-[184px] ml-20 text-brand-100 font-semibold text-3xl">2560</div>
-            </div>
-            <div>
-              <Image src={total_courses} alt="image" />
-              <div className="-mt-[184px] ml-20 text-brand-100 font-semibold text-3xl">10</div>
-            </div>
-            <div>
-              <Image src={total_creators} alt="image" />
-              <div className="-mt-[184px] ml-20 text-brand-100 font-semibold text-3xl">210</div>
-            </div>
+        <div className=" bg-brand-50 h-72 w-[1300px] ml-96 rounded-2xl mt-2 flex gap-16 justify-around pt-10">
+          <div>
+            <Image src={total_users} alt="image" />
+            <div className="-mt-[184px] ml-20 text-brand-100 font-semibold text-3xl">2560</div>
+          </div>
+          <div>
+            <Image src={total_courses} alt="image" />
+            <div className="-mt-[184px] ml-20 text-brand-100 font-semibold text-3xl">10</div>
+          </div>
+          <div>
+            <Image src={total_creators} alt="image" />
+            <div className="-mt-[184px] ml-20 text-brand-100 font-semibold text-3xl">210</div>
           </div>
         </div>
         <div className="flex gap-3 items-start pl-96 mt-8">
