@@ -2,8 +2,8 @@ import * as yup from 'yup'
 import { AuthError } from '@/models/shared'
 import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/20/solid'
 import { Input } from '@/components/forms/input'
-import Head from 'next/head'
-
+import { authOptions } from '../api/auth/[...nextauth]'
+import { getServerSession } from 'next-auth'
 import { getSession, signIn } from 'next-auth/react'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { useAuthApi } from '@/utils/api/auth'
@@ -12,6 +12,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import Alert from '@/components/auth/alert'
 import AuthCard from '@/components/auth/authCard'
 import Footer from '@/components/layout/footer'
+import Head from 'next/head'
 import Link from 'next/link'
 import Menu from '@/components/layout/menu'
 import React, { useTransition } from 'react'
@@ -155,9 +156,9 @@ const Signin = () => {
 }
 
 export const getServerSideProps = async (context) => {
-  const { query } = context
+  const { query, req, res } = context
 
-  const session = await getSession(context)
+  const session = await getServerSession(req, res, authOptions)
   if (session) {
     return {
       redirect: {

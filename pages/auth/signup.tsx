@@ -3,6 +3,8 @@ import { AuthApi, useAuthApi } from '@/utils/api/auth'
 import { AuthError, ErrorMessage } from '@/models/shared'
 import { CalendarIcon, EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/outline'
 import { Input } from '@/components/forms/input'
+import { authOptions } from '../api/auth/[...nextauth]'
+import { getServerSession } from 'next-auth'
 import { getSession, signIn, useSession } from 'next-auth/react'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { useForm } from 'react-hook-form'
@@ -189,9 +191,9 @@ const Signup = () => {
 }
 
 export const getServerSideProps = async (context) => {
-  const { query } = context
+  const { query, req, res } = context
 
-  const session = await getSession(context)
+  const session = await getServerSession(req, res, authOptions)
   if (session) {
     return {
       redirect: {

@@ -1,8 +1,10 @@
 import { AuthApi } from '@/utils/api/auth'
 import { AuthError } from '@/models/shared/error'
+
 import { isAxiosError, isError } from '@/utils/errors'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import NextAuth from 'next-auth'
+import NextAuth, { AuthOptions } from 'next-auth'
+
 import jwt from 'jsonwebtoken'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
@@ -90,3 +92,5 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
     },
   })
 }
+//  export authoption
+export const authOptions: AuthOptions = { providers: [] } //  export authoption end here
