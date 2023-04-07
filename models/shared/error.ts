@@ -14,6 +14,7 @@ export interface AuthError {
     status: number
     response: {
       errors: ErrorMessage
+      message: string
       status: number
     }
   }

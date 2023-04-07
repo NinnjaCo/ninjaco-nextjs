@@ -12,16 +12,17 @@ declare module 'next-auth' {
    * Returned by `useSession`, `getSession` and received as a prop on the `Provider` React Context
    */
   interface Session {
-    id: number
+    id: string
     jwt: string
     refresh: string
     user: User
+    test: string
   }
 }
 
 declare module 'next-auth/jwt' {
   interface JWT {
-    id: number
+    id: string
     jwt: string
     refreshToken: string
   }

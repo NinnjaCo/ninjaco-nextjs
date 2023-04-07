@@ -11,11 +11,22 @@ export function unWrapAxiosError<T>(error: AxiosError<T>): T | undefined {
 
 export function unWrapAuthError(error: AxiosError<AuthError> | undefined): ErrorMessage[] {
   // this is a key value dictionary of errors ==> error?.error.response.errors
-  if (error?.response?.data.error.response.errors) {
+  // Usually sent by class-validator errors from the backend
+  if (error?.response?.data.error.response?.errors) {
     return Object.values(error?.response?.data.error.response?.errors).map((message) => ({
       id: 'auth',
       message,
     }))
+  }
+
+  // This is a single error message from the backend
+  if (error?.response?.data.error.response.message) {
+    return [
+      {
+        id: 'auth',
+        message: error?.response?.data.error.response.message,
+      },
+    ]
   }
   // Don't handle non-api responses since they might contain "non frontend"  info
   return [{ id: 'internal', message: 'Something went wrong, please try again later' }]
