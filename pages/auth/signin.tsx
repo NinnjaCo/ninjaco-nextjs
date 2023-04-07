@@ -1,12 +1,11 @@
 import * as yup from 'yup'
 import { AuthError } from '@/models/shared'
-import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/20/solid'
+import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline'
 import { Input } from '@/components/forms/input'
 import { authOptions } from '../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { signIn } from 'next-auth/react'
-import { useAuthApi } from '@/utils/api/auth'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Alert from '@/components/auth/alert'
@@ -15,7 +14,7 @@ import Footer from '@/components/layout/footer'
 import Head from 'next/head'
 import Link from 'next/link'
 import Menu from '@/components/layout/menu'
-import React from 'react'
+import React, { useEffect } from 'react'
 import heavilyWavedLine from '@/images/heavilyWavedLine.svg'
 import logoPointingDown from '@/images/logoPointingYellowBand.svg'
 import useTranslation from '@/hooks/useTranslation'
@@ -35,7 +34,10 @@ const SignInFormSchema = yup
   })
   .required()
 
-const Signin = () => {
+interface ServerProps {
+  error: string | null
+}
+const Signin = (props: ServerProps) => {
   const {
     register,
     handleSubmit,
@@ -63,7 +65,6 @@ const Signin = () => {
 
       // sign in the user using next-auth
       await signIn('credentials', {
-        redirect: true,
         email: data.email,
         password: data.password,
         callbackUrl: '/',
@@ -81,6 +82,15 @@ const Signin = () => {
   }
   const t = useTranslation()
 
+  useEffect(() => {
+    if (props.error) {
+      setAlertData({
+        message: props.error,
+        variant: 'error',
+        open: true,
+      })
+    }
+  }, [props.error])
   return (
     <>
       <Head>
@@ -131,7 +141,7 @@ const Signin = () => {
               type="submit"
               form="form"
               value="Submit"
-              className="w-full btn bg-brand-200 hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500"
+              className="w-full btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500"
             >
               {t.signin.signIn}
             </button>
@@ -157,6 +167,8 @@ const Signin = () => {
 export const getServerSideProps = async (context) => {
   const { query, req, res } = context
 
+  const error = query.error as string | null
+
   const session = await getServerSession(req, res, authOptions)
   if (session) {
     return {
@@ -167,7 +179,9 @@ export const getServerSideProps = async (context) => {
     }
   }
   return {
-    props: {},
+    props: {
+      error: error || null,
+    },
   }
 }
 export default Signin

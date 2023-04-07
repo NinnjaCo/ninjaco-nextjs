@@ -1,6 +1,7 @@
 import { AuthApi } from '@/utils/api/auth'
 import { AuthError } from '@/models/shared/error'
-import { isAxiosError, isError } from '@/utils/errors'
+import { error } from 'console'
+import { isAxiosError, isError, unWrapAuthError } from '@/utils/errors'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import NextAuth, { AuthOptions } from 'next-auth'
 import jwt from 'jsonwebtoken'
@@ -28,9 +29,9 @@ export const authOptions: AuthOptions = {
           }
         } catch (e) {
           if (isAxiosError<AuthError>(e)) {
-            throw new Error(
-              e.response?.data.error?.response?.errors?.message ?? 'Something went wrong'
-            )
+            if (e.response?.data.error?.status === 401) throw new Error('Invalid Credentials')
+            const errors = unWrapAuthError(e)
+            throw new Error(errors[0].message ?? 'Something went wrong')
           }
           throw new Error(isError(e) ? e.message : 'Something went wrong')
         }
@@ -40,7 +41,7 @@ export const authOptions: AuthOptions = {
   pages: {
     signIn: '/auth/signin',
     newUser: '/',
-    error: '/auth/signip',
+    error: '/auth/signin',
   },
   callbacks: {
     session: async ({ session, token }) => {
