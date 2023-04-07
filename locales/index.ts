@@ -102,6 +102,15 @@ export interface WebsiteTranslations {
     question4: translationElement
     answer4: translationElement
   }
+  signin: {
+    headTitle: translationElement
+    email: translationElement
+    password: translationElement
+    signIn: translationElement
+    backToHome: translationElement
+    signUp: translationElement
+    dontHaveAccount: translationElement
+  }
 }
 
 // Create locale type support en | fr

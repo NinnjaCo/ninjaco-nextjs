@@ -1,62 +1,50 @@
 import * as yup from 'yup'
 import { AuthError } from '@/models/shared'
-import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/outline'
+import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline'
 import { Input } from '@/components/forms/input'
 import { authOptions } from '../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { signIn } from 'next-auth/react'
-import { useAuthApi } from '@/utils/api/auth'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Alert from '@/components/auth/alert'
 import AuthCard from '@/components/auth/authCard'
-import DatePickerWithHookForm from '@/components/forms/datePickerWithHookForm'
 import Footer from '@/components/layout/footer'
 import Head from 'next/head'
 import Link from 'next/link'
 import Menu from '@/components/layout/menu'
-import React from 'react'
+import React, { useEffect } from 'react'
 import heavilyWavedLine from '@/images/heavilyWavedLine.svg'
 import logoPointingDown from '@/images/logoPointingYellowBand.svg'
-
-type SignUpFormDataType = {
-  firstName: string
-  lastName: string
-  dateOfBirth: Date
+import useTranslation from '@/hooks/useTranslation'
+type SignInFormDataType = {
   email: string
   password: string
-  passwordConfirmation: string
 }
 
-const SignUpFormSchema = yup
+const SignInFormSchema = yup
   .object()
   .shape({
-    firstName: yup.string().required('First Name is required'),
-    lastName: yup.string().required('Last Name is required'),
-    dateOfBirth: yup.date().required('Date of Birth is required'),
     email: yup.string().email('Invalid email').required('Email is required'),
     password: yup
       .string()
       .min(8, 'Password must be at least 8 characters')
       .required('Password is required'),
-    passwordConfirmation: yup
-      .string()
-      .oneOf([yup.ref('password')], 'Passwords must match')
-      .required('Password Confirmation is required'),
   })
   .required()
 
-const Signup = () => {
-  const authApi = useAuthApi()
-
+interface ServerProps {
+  error: string | null
+}
+const Signin = (props: ServerProps) => {
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<SignUpFormDataType>({
-    resolver: yupResolver(SignUpFormSchema),
+  } = useForm<SignInFormDataType>({
+    resolver: yupResolver(SignInFormSchema),
   })
   const [alertData, setAlertData] = React.useState<{
     message: string
@@ -71,26 +59,15 @@ const Signup = () => {
     setAlertData({ ...alertData, open: false })
   }
 
-  const onSubmitHandler = async (data: SignUpFormDataType) => {
+  const onSubmitHandler = async (data: SignInFormDataType) => {
     try {
       closeAlert()
-      await authApi.signUp({
-        firstName: data.firstName,
-        lastName: data.lastName,
-        dateOfBirth: data.dateOfBirth.toISOString(),
-        email: data.email,
-        password: data.password,
-      })
-      setAlertData({
-        message: 'Account Created Successfully',
-        variant: 'success',
-        open: true,
-      })
+
       // sign in the user using next-auth
       await signIn('credentials', {
-        redirect: true,
         email: data.email,
         password: data.password,
+        callbackUrl: '/',
       })
     } catch (error) {
       if (isAxiosError<AuthError>(error)) {
@@ -103,12 +80,22 @@ const Signup = () => {
       }
     }
   }
+  const t = useTranslation()
 
+  useEffect(() => {
+    if (props.error) {
+      setAlertData({
+        message: props.error,
+        variant: 'error',
+        open: true,
+      })
+    }
+  }, [props.error])
   return (
     <>
       <Head>
-        <title>NinjaCo | Sign Up</title>
-        <meta name="description" content="Sign Up to NinjaCo" />
+        <title>{t.signin.headTitle}</title>
+        <meta name="description" content="Sign In to NinjaCo" />
       </Head>
       <main className="relative w-full h-screen">
         <Menu
@@ -121,7 +108,11 @@ const Signup = () => {
             startButtonDark: true,
           }}
         ></Menu>
-        <AuthCard title="Sign Up" titleImage={logoPointingDown} underLineImage={heavilyWavedLine}>
+        <AuthCard
+          title={t.signin.signIn as string}
+          titleImage={logoPointingDown}
+          underLineImage={heavilyWavedLine}
+        >
           <Alert
             className="my-3"
             message={alertData.message}
@@ -131,65 +122,40 @@ const Signup = () => {
           />
           <form onSubmit={handleSubmit(onSubmitHandler)} className="flex flex-col gap-4" id="form">
             <Input
-              {...register('firstName')}
-              label={'First Name'}
-              placeholder="John"
-              StartIcon={UserIcon}
-              error={errors.firstName?.message}
-            />
-            <Input
-              {...register('lastName')}
-              label={'Last Name'}
-              placeholder="Smith"
-              StartIcon={UserIcon}
-              error={errors.lastName?.message}
-            />
-            <DatePickerWithHookForm
-              control={control}
-              name={register('dateOfBirth').name} // we only need the "name" prop
-              placeholder="Date of Birth"
-              label="Date of Birth"
-              error={errors.dateOfBirth?.message}
-            />
-            <Input
               {...register('email')}
-              label={'Email'}
-              placeholder={'Email'}
+              label={t.signin.email as string}
+              placeholder={t.signin.email as string}
               StartIcon={EnvelopeIcon}
               error={errors.email?.message}
             />
             <Input
               {...register('password')}
               type="password"
-              label={'Password'}
-              placeholder={'Password'}
+              label={t.signin.password as string}
+              placeholder={t.signin.password as string}
               StartIcon={LockClosedIcon}
               error={errors.password?.message}
             />
-            <Input
-              {...register('passwordConfirmation')}
-              type="password"
-              label={'Confirm Password'}
-              placeholder={'Confirm Password'}
-              StartIcon={LockClosedIcon}
-              error={errors.passwordConfirmation?.message}
-            />
+
             <button
               type="submit"
               form="form"
               value="Submit"
               className="w-full btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500"
             >
-              Sign Up
+              {t.signin.signIn}
             </button>
           </form>
           <div className="w-full flex justify-between text-xs mt-6">
             <Link className="cursor-pointer text-brand-500" href="/">
-              Back to Home
+              {t.signin.backToHome}
             </Link>
-            <Link href="/auth/signin" className="cursor-pointer text-brand font-semibold">
-              Sign In
-            </Link>
+            <div className="text-brand-500">
+              {t.signin.dontHaveAccount}
+              <span className="ml-2  cursor-pointer text-brand font-semibold">
+                <Link href="/auth/signup">{t.signin.signUp}</Link>
+              </span>
+            </div>
           </div>
         </AuthCard>
         <Footer />
@@ -201,6 +167,8 @@ const Signup = () => {
 export const getServerSideProps = async (context) => {
   const { query, req, res } = context
 
+  const error = query.error as string | null
+
   const session = await getServerSession(req, res, authOptions)
   if (session) {
     return {
@@ -211,7 +179,9 @@ export const getServerSideProps = async (context) => {
     }
   }
   return {
-    props: {},
+    props: {
+      error: error || null,
+    },
   }
 }
-export default Signup
+export default Signin
