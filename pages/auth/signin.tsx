@@ -1,11 +1,11 @@
 import * as yup from 'yup'
 import { AuthError } from '@/models/shared'
-import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/20/solid'
+import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/20/solid'
 import { Input } from '@/components/forms/input'
 import { authOptions } from '../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
-import { getSession, signIn } from 'next-auth/react'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
+import { signIn } from 'next-auth/react'
 import { useAuthApi } from '@/utils/api/auth'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -15,7 +15,7 @@ import Footer from '@/components/layout/footer'
 import Head from 'next/head'
 import Link from 'next/link'
 import Menu from '@/components/layout/menu'
-import React, { useTransition } from 'react'
+import React from 'react'
 import heavilyWavedLine from '@/images/heavilyWavedLine.svg'
 import logoPointingDown from '@/images/logoPointingYellowBand.svg'
 import useTranslation from '@/hooks/useTranslation'
@@ -36,8 +36,6 @@ const SignInFormSchema = yup
   .required()
 
 const Signin = () => {
-  const authApi = useAuthApi()
-
   const {
     register,
     handleSubmit,
@@ -68,6 +66,7 @@ const Signin = () => {
         redirect: true,
         email: data.email,
         password: data.password,
+        callbackUrl: '/',
       })
     } catch (error) {
       if (isAxiosError<AuthError>(error)) {
