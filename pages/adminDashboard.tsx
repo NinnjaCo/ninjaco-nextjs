@@ -18,7 +18,7 @@ export default function AdminDashboard() {
       </Head>
       <main className="flex h-screen">
         <MenuSection />
-        <div className="flex gap-3 pl-96 pt-24 items-start ">
+        {/* <div className="flex gap-3 pl-96 pt-24 items-start ">
           <Image src={statistics} alt="image" />
           <div className="text-brand-700 font-bold text-3xl"> Statistics </div>
         </div>
@@ -41,7 +41,7 @@ export default function AdminDashboard() {
         <div className="flex gap-3 items-start pl-96 mt-8">
           <Image src={leaderboard} alt="image" />
           <div className="text-brand-700 font-bold text-3xl"> Leaderboard </div>
-        </div>
+        </div> */}
       </main>
     </>
   )
