@@ -48,7 +48,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
       session: async ({ session, token }) => {
         session.jwt = token.jwt
         session.refresh = token.refreshToken
-        session.id = token.id
+        session.id = token.sub ?? token.id
         const { exp } = jwt.decode(token.jwt) as jwt.JwtPayload
         session.expires = new Date((exp as number) * 1000).toISOString()
         return session

@@ -72,7 +72,6 @@ const Signup = () => {
 
   const onSubmitHandler = async (data: SignUpFormDataType) => {
     try {
-      console.log(data)
       closeAlert()
       await authApi.signUp({
         firstName: data.firstName,
