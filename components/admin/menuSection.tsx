@@ -39,12 +39,12 @@ const MenuSection = () => {
     },
   ]
   return (
-    <div className="bg-brand w-72 h-screen ">
-      <div className="absolute top-8 left-16">
+    <div className=" bg-brand w-72 h-screen">
+      <div className="relative pt-8 pl-16">
         <Image src={logo_white} alt="Hero Image" width={150} height={50}></Image>
       </div>
 
-      <div className="flex flex-col gap-3 pt-64 pl-16 ">
+      <div className="relative flex flex-col gap-3 pt-56 pl-16 ">
         {dash.map((item) => (
           <>
             <div className="bg-brand-300 w-52 h-[2px] opacity-25 -ml-5" />
@@ -55,7 +55,7 @@ const MenuSection = () => {
           </>
         ))}
       </div>
-      <div className="flex flex-col gap-3 pt-64 pl-16 ">
+      <div className="relative flex flex-col gap-3 pt-64 pl-16 ">
         {dash2.map((item) => (
           <>
             <div className="bg-brand-300 w-52 h-[2px] opacity-25 -ml-5" />
