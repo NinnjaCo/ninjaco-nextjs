@@ -39,29 +39,27 @@ const MenuSection = () => {
     },
   ]
   return (
-    <div className=" bg-brand h-screen flex flex-col justify-between items-center">
-      <div className="relative">
-        <Image src={logo_white} alt="Hero Image" width={150} height={50}></Image>
-      </div>
+    <div className=" bg-brand h-screen w-1/5 flex flex-col justify-between items-center">
+      <Image src={logo_white} alt="Hero Image" width={150} height={50} className=" mt-7"></Image>
 
-      <div className="relative flex flex-col gap-3 mx-4">
+      <div className="relative flex flex-col gap-3 w-2/3 ">
         {dash.map((item) => (
           <>
-            <div className="bg-brand-300 w-52 h-[2px] opacity-25 -ml-5" />
-            <div key={item.text} className="flex gap-5 mb-4">
+            <div className="bg-brand-300 h-px opacity-25" />
+            <div key={item.text} className="flex gap-3 mb-4">
               <Image src={item.icon} alt="image"></Image>
-              <button className="text-brand-300 font-semibold">{item.text}</button>
+              <button className="text-brand-300 font-semibold text-sm">{item.text}</button>
             </div>
           </>
         ))}
       </div>
-      <div className="relative flex flex-col gap-3">
+      <div className="relative flex flex-col gap-3 w-2/3 ">
         {dash2.map((item) => (
           <>
-            <div className="bg-brand-300 w-52 h-[2px] opacity-25 -ml-5" />
-            <div key={item.text} className="flex gap-5 mb-4">
+            <div className="bg-brand-300  h-px opacity-25" />
+            <div key={item.text} className="flex gap-3 mb-4">
               <Image src={item.icon} alt="image"></Image>
-              <button className="text-brand-300 font-semibold">{item.text}</button>
+              <button className="text-brand-300 font-semibold text-sm">{item.text}</button>
             </div>
           </>
         ))}

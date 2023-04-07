@@ -18,28 +18,30 @@ export default function AdminDashboard() {
       </Head>
       <main className="flex h-screen">
         <MenuSection />
-        {/* <div className="flex gap-3 pl-96 pt-24 items-start ">
-          <Image src={statistics} alt="image" />
-          <div className="text-brand-700 font-bold text-3xl"> Statistics </div>
+        <div className="flex flex-col w-full">
+          <div className="flex gap-3 pt-5 items-start pl-24">
+            <Image src={statistics} alt="image" />
+            <div className="text-brand-700 font-semibold text-3xl"> Statistics </div>
+          </div>
+          <div className=" bg-brand-50 ml-24 w-5/6 h-full md:h-2/3 lg:h-2/6 rounded-2xl flex flex-wrap gap-5 justify-around pt-10 relative">
+            <div>
+              <Image src={total_users} alt="image" />
+              <div className="ml-14 text-brand-100 font-semibold text-xl -mt-[134px]">2560</div>
+            </div>
+            <div>
+              <Image src={total_courses} alt="image" />
+              <div className="ml-14 text-brand-100 font-semibold text-xl -mt-[134px]">10</div>
+            </div>
+            <div>
+              <Image src={total_creators} alt="image" />
+              <div className="ml-14 text-brand-100 font-semibold text-xl -mt-[134px]">210</div>
+            </div>
+          </div>
+          <div className="flex gap-3 items-start pl-24  mt-5">
+            <Image src={leaderboard} alt="image" />
+            <div className="text-brand-700 font-semibold text-3xl"> Leaderboard </div>
+          </div>
         </div>
-        <div className=" bg-brand-50 h-72 w-[1300px] ml-96 rounded-2xl mt-2 flex gap-16 justify-around pt-10">
-          <div>
-            <Image src={total_users} alt="image" />
-            <div className="-mt-[184px] ml-20 text-brand-100 font-semibold text-3xl">2560</div>
-          </div>
-          <div>
-            <Image src={total_courses} alt="image" />
-            <div className="-mt-[184px] ml-20 text-brand-100 font-semibold text-3xl">10</div>
-          </div>
-          <div>
-            <Image src={total_creators} alt="image" />
-            <div className="-mt-[184px] ml-20 text-brand-100 font-semibold text-3xl">210</div>
-          </div>
-        </div>
-        <div className="flex gap-3 items-start pl-96 mt-8">
-          <Image src={leaderboard} alt="image" />
-          <div className="text-brand-700 font-bold text-3xl"> Leaderboard </div>
-        </div> */}
       </main>
     </>
   )
