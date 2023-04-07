@@ -1,32 +1,30 @@
-import { useRef } from 'react'
 import { useSession } from 'next-auth/react'
-import Courses from '../public/images/courses.svg'
+import Courses from '@/images/courses.svg'
 import Footer from '@/components/layout/footer'
 import Head from 'next/head'
 import HeroImage from '@/components/landingPage/heroImage'
 import Image from 'next/image'
-import Lego1 from '../public/images/legoYellow.svg'
-import Lego2 from '../public/images/legoBlue.svg'
+import Lego1 from '@/images/legoYellow.svg'
+import Lego2 from '@/images/legoBlue.svg'
 import Link from 'next/link'
 import Menu from '@/components/layout/menu'
 import Testimonial from '@/components/landingPage/testimonial'
-import Vector from '../public/images/aboutCircleVector.svg'
+import Vector from '@/images/aboutCircleVector.svg'
 import clsx from 'clsx'
-import logo_rev from '../public/images/logoPointing.svg'
-import missionSection from '../public/missionSection.svg'
-import ourMission from '../public/ourMission.svg'
-import playStick from '../public/images/playStick.svg'
+import logo_rev from '@/images/logoPointing.svg'
+import missionSection from '@/images/missionSection.svg'
+import ourMission from '@/images/ourMission.svg'
+import playStick from '@/images/playStick.svg'
 import quotes from '@/images/quotes.svg'
-import soFar from '../public/SoFar.svg'
+import soFar from '@/images/soFar.svg'
 import testimonialsTilda1 from '@/images/testimonialsTilda1.svg'
 import testimonialsTilda2 from '@/images/testimonialsTilda2.svg'
 import testimonialsTilda3 from '@/images/testimonialsTilda3.svg'
-import trophy from '../public/images/trophy.svg'
+import trophy from '@/images/trophy.svg'
 import useTranslation from '@/hooks/useTranslation'
 
 export default function Home() {
   const t = useTranslation()
-  const aboutRef = useRef<HTMLDivElement>(null)
   const session = useSession()
   console.log(session)
 
@@ -98,7 +96,6 @@ export default function Home() {
             isSticky: true,
             startWithBottomBorder: false,
             startButtonDark: false,
-            aboutRef: aboutRef,
           }}
         />
         {/* Hero section */}
@@ -127,7 +124,7 @@ export default function Home() {
                 {t.LandingPage.Hero.description}
               </div>
               <Link
-                className="hidden btn btn-brand max-w-fit md:flex gap-2 rounded-2xl text-base mt-8 md:mt-16"
+                className="hidden btn btn-brand max-w-fit md:flex gap-2 hover:bg-brand-500 rounded-2xl text-base mt-8 md:mt-16"
                 href="/auth/signup"
               >
                 <p>{t.LandingPage.Hero.getStarted}</p>
@@ -172,7 +169,7 @@ export default function Home() {
         </div>
 
         {/* About section */}
-        <div ref={aboutRef} className="w-full grid grid-cols-8 my-16">
+        <div className="w-full grid grid-cols-8 my-16">
           <div className="bg-brand-100 rounded-none md:rounded-3xl lg:rounded-[56px] shadow-lg shadow-brand-300 col-start-1 md:col-start-2 col-span-8 md:col-span-6 relative pb-12 px-6 flex flex-col gap-6 w-full z-0">
             <div className="flex flex-row w-full justify-between items-start relative">
               <div className="relative mt-4">
@@ -185,7 +182,6 @@ export default function Home() {
               </div>
               <p className="hidden md:block text-xl lg:text-2xl xl:text-3xl font-bold text-brand-700 h-fit w-fit relative mt-12 whitespace-nowrap">
                 {t.LandingPage.About.title}
-
                 <Image
                   src={Vector}
                   alt="Circle Platform"
@@ -216,7 +212,7 @@ export default function Home() {
                         backgroundSize: 'cover',
                       }}
                     />
-                    <div className="text-xl lg:text-2xl xl:text-3xl font-semibold text-brand z-20 inline-block whitespace-nowrap">
+                    <div className="text-l lg:text-xl xl:text-2xl font-semibold text-brand z-20 inline-block whitespace-nowrap">
                       <p> {item.title}</p>
                     </div>
                     <div className=" text-xs text-brand-700 z-20 max-w-[75%]">
@@ -227,7 +223,10 @@ export default function Home() {
               ))}
             </div>
             <div className="w-full flex justify-end">
-              <Link href={'/auth/signup'} className="btn btn-brand flex gap-2 max-w-fit">
+              <Link
+                href={'/auth/signup'}
+                className="btn btn-brand hover:bg-brand-500 flex gap-2 max-w-fit"
+              >
                 <p>{t.LandingPage.About.joinNow}</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
