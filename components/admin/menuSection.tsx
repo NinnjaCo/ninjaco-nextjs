@@ -9,6 +9,35 @@ import profile_icon from '@/images/profile_icon.svg'
 import user_group from '@/images/user_group.svg'
 
 const MenuSection = () => {
+  const dash = [
+    {
+      icon: dashboard_logo,
+      text: 'DASHBOARD',
+    },
+    {
+      icon: open_book,
+      text: 'COURSES',
+    },
+    {
+      icon: user_group,
+      text: 'USERS',
+    },
+    {
+      icon: creators,
+      text: 'CREATORS',
+    },
+  ]
+
+  const dash2 = [
+    {
+      icon: profile_icon,
+      text: 'PROFILE',
+    },
+    {
+      icon: logout,
+      text: 'LOGOUT',
+    },
+  ]
   return (
     <div className="bg-brand w-72 h-screen ">
       <div className="absolute top-8 left-16">
@@ -16,38 +45,26 @@ const MenuSection = () => {
       </div>
 
       <div className="flex flex-col gap-3 pt-64 pl-16 ">
-        <div className="bg-brand-300 w-52 h-[2px] opacity-25 -ml-5" />
-        <div className="flex gap-5 mb-4">
-          <Image src={dashboard_logo} alt="dash logo"></Image>
-          <button className="text-brand-300 font-semibold"> DASHBOARD</button>
-        </div>
-        <div className="bg-brand-300 w-52 h-[2px] opacity-25 -ml-5" />
-        <div className="flex gap-5 mb-4">
-          <Image src={open_book} alt="open_book"></Image>
-          <button className="text-brand-300 font-semibold"> COURSES</button>
-        </div>
-        <div className="bg-brand-300 w-52 h-[2px] opacity-25 -ml-5" />
-        <div className="flex gap-5 mb-4">
-          <Image src={user_group} alt="user group"></Image>
-          <button className="text-brand-300 font-semibold"> USERS</button>
-        </div>
-        <div className="bg-brand-300 w-52 h-[2px] opacity-25 -ml-5" />
-        <div className="flex gap-5 mb-4">
-          <Image src={creators} alt="creators"></Image>
-          <button className="text-brand-300 font-semibold"> CREATORS</button>
-        </div>
+        {dash.map((item) => (
+          <>
+            <div className="bg-brand-300 w-52 h-[2px] opacity-25 -ml-5" />
+            <div key={item.text} className="flex gap-5 mb-4">
+              <Image src={item.icon} alt="image"></Image>
+              <button className="text-brand-300 font-semibold">{item.text}</button>
+            </div>
+          </>
+        ))}
       </div>
       <div className="flex flex-col gap-3 pt-64 pl-16 ">
-        <div className="bg-brand-300 w-52 h-[2px] opacity-25 -ml-5" />
-        <div className="flex gap-5 mb-4">
-          <Image src={profile_icon} alt="dash logo"></Image>
-          <button className="text-brand-300 font-semibold"> PROFILE</button>
-        </div>
-        <div className="bg-brand-300 w-52 h-[2px] opacity-25 -ml-5" />
-        <div className="flex gap-5 mb-4">
-          <Image src={logout} alt="open_book"></Image>
-          <button className="text-brand-300 font-semibold"> LOGOUT</button>
-        </div>
+        {dash2.map((item) => (
+          <>
+            <div className="bg-brand-300 w-52 h-[2px] opacity-25 -ml-5" />
+            <div key={item.text} className="flex gap-5 mb-4">
+              <Image src={item.icon} alt="image"></Image>
+              <button className="text-brand-300 font-semibold">{item.text}</button>
+            </div>
+          </>
+        ))}
       </div>
     </div>
   )
