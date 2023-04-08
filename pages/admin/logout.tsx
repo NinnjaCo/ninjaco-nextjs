@@ -1,17 +1,17 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import MenuSection from '@/components/admin/menuSection'
+import SideMenu from '@/components/admin/sideMenu'
 
 export default function AdminDashboard() {
   return (
     <>
       <Head>
-        <title>Ninja Co | Profile</title>
+        <title>Ninja Co | Log Out</title>
         <meta name="description" content="Leading online platform for visual programming" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main className="flex h-screen ">
-        <MenuSection />
+        <SideMenu higlightDashboard={true} />
         <div className="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
           <div className="bg-white px-16 py-8 rounded-2xl text-center">
             <h1 className="text-lg mb-4 font-bold text-brand-700">
