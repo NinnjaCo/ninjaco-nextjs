@@ -7,6 +7,7 @@ import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { useAuthApi } from '@/utils/api/auth'
 import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/router'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Alert from '@/components/auth/alert'
 import AuthCard from '@/components/auth/authCard'
@@ -39,6 +40,7 @@ interface ServerProps {
 
 const ResetPassword = (props: ServerProps) => {
   const authApi = useAuthApi()
+  const router = useRouter()
 
   const {
     register,
@@ -48,6 +50,9 @@ const ResetPassword = (props: ServerProps) => {
     formState: { errors, isSubmitted },
   } = useForm<VerifyEmailFormDataType>({
     resolver: yupResolver(VerifyEmailFormSchema),
+    defaultValues: {
+      code: props.token,
+    },
   })
 
   const closeAlert = () => {
@@ -66,10 +71,7 @@ const ResetPassword = (props: ServerProps) => {
   const onSubmitHandler = async (data: VerifyEmailFormDataType) => {
     try {
       closeAlert()
-
-      const res = await authApi.confirmEmail({
-        code: data.code,
-      })
+      const res = await authApi.confirmEmail(data.code)
 
       if (!res.payload) {
         setAlertData({
@@ -85,6 +87,10 @@ const ResetPassword = (props: ServerProps) => {
         variant: 'success',
         open: true,
       })
+      // redirect to home page after two seconds
+      setTimeout(() => {
+        router.push('/')
+      }, 2000)
     } catch (error) {
       if (isAxiosError<AuthError>(error)) {
         const errors = unWrapAuthError(error)
