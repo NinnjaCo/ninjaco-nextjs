@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import MenuSection from '@/components/admin/menuSection'
-import React, { Fragment } from 'react'
+import React from 'react'
+import SideMenu from '@/components/admin/sideMenu'
 import leaderboard from '@/images/leaderboard_icon.svg'
 import profile_photo from '@/images/profile_photo.svg'
 import statistics from '@/images/statistics.svg'
@@ -18,7 +18,7 @@ export default function AdminDashboard() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main className="flex h-screen overflow-hidden">
-        <MenuSection />
+        <SideMenu higlightDashboard={true} />
         <div className="flex flex-col w-full px-4 md:px-9 py-4 gap-4">
           {/* statistics */}
           <div className="w-full flex flex-col">
@@ -28,31 +28,31 @@ export default function AdminDashboard() {
             </div>
 
             <div className=" bg-brand-50 p-4 rounded-2xl justify-between w-fit sm:w-full grid grid-cols-1 sm:grid-cols-3 gap-6 place-self-center sm:place-self-auto">
-              <div className="h-20 md:h-auto relative">
+              <div className="h-24 md:h-auto relative">
                 <Image src={total_users} alt="image" className="w-full h-full relative " priority />
-                <div className="text-brand-100 font-semibold text-base md:text-lg lg:text-xl absolute top-1 lg:top-3 left-8 md:left-10 lg:left-12">
+                <div className="text-brand-100 font-semibold text-base md:text-lg lg:text-xl absolute top-1 lg:top-3 xl:top-6 left-8 md:left-10 lg:left-12 xl:left-16">
                   2560
                 </div>
               </div>
-              <div className="h-20 md:h-auto relative">
+              <div className="h-24 md:h-auto relative">
                 <Image
                   src={total_courses}
                   alt="image"
                   className="w-full h-full relative "
                   priority
                 />
-                <div className="text-brand-100 font-semibold text-base md:text-lg lg:text-xl absolute top-1 lg:top-3 left-8 md:left-10 lg:left-12">
+                <div className="text-brand-100 font-semibold text-base md:text-lg lg:text-xl absolute top-1 lg:top-3 xl:top-6 left-8 md:left-10 lg:left-12 xl:left-16">
                   10
                 </div>
               </div>
-              <div className="h-20 md:h-auto relative">
+              <div className="h-24 md:h-auto relative">
                 <Image
                   src={total_creators}
                   alt="image"
                   className="w-full h-full relative "
                   priority
                 />
-                <div className="text-brand-100 font-semibold text-base md:text-lg lg:text-xl absolute top-1 lg:top-3 left-8 md:left-10 lg:left-12">
+                <div className="text-brand-100 font-semibold text-base md:text-lg lg:text-xl absolute top-1 lg:top-3 xl:top-6 left-8 md:left-10 lg:left-12 xl:left-16">
                   20
                 </div>
               </div>
