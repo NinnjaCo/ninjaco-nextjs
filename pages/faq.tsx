@@ -42,7 +42,7 @@ export default function FAP_page() {
             startWithBottomBorder: true,
           }}
         />
-        <div className="mt-32 px-7 md:px-14 font-bold text-lg md:text-xl lg:text-2xl text-brand">
+        <div className="mt-32 px-7 md:px-14 font-bold text-2xl text-brand">
           <h1>{t.Faq.title}</h1>
         </div>
         <div className="px-7 md:px-14 mt-14 mb-24 flex flex-col gap-10">
