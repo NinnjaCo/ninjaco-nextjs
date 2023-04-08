@@ -111,15 +111,15 @@ export interface WebsiteTranslations {
     signUp: translationElement
   }
   forgetPassword: {
-    Title: translationElement
+    title: translationElement
     invalidEmail: translationElement
-    EmailRequired: translationElement
+    emailRequired: translationElement
     wrong: translationElement
     checkEmail: translationElement
-    Label: translationElement
+    label: translationElement
     sendResetLink: translationElement
-    backTohome: translationElement
-    Signin: translationElement
+    backToHome: translationElement
+    signIn: translationElement
   }
 }
 

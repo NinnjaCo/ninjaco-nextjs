@@ -269,15 +269,15 @@ const englishTranslations: WebsiteTranslations = {
   },
 
   forgetPassword: {
-    Title: 'Forgot Password',
+    title: 'Forgot Password',
     invalidEmail: 'Invalid email',
-    EmailRequired: 'Email is required',
+    emailRequired: 'Email is required',
     wrong: 'Something went wrong',
     checkEmail: 'Check your email for a link to reset your password',
-    Label: 'Email',
+    label: 'Email',
     sendResetLink: 'Send Reset Link',
-    backTohome: 'Back to Home',
-    Signin: 'Sign In',
+    backToHome: 'Back to Home',
+    signIn: 'Sign In',
   },
 }
 

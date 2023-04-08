@@ -91,7 +91,7 @@ const ForgotPassword = () => {
   return (
     <>
       <Head>
-        <title> {t.forgetPassword.Title}</title>
+        <title> {t.forgetPassword.title}</title>
         <meta name="description" content="Reset Password with NinjaCo" />
       </Head>
       <main className="relative w-full h-screen">
@@ -106,7 +106,7 @@ const ForgotPassword = () => {
           }}
         ></Menu>
         <AuthCard
-          title={t.forgetPassword.Title as string}
+          title={t.forgetPassword.title as string}
           titleImage={logoPointingDown}
           underLineImage={lightlyWavedLine}
         >
@@ -120,7 +120,7 @@ const ForgotPassword = () => {
           <form onSubmit={handleSubmit(onSubmitHandler)} className="flex flex-col gap-4" id="form">
             <Input
               {...register('email')}
-              label={t.forgetPassword.Label as string}
+              label={t.forgetPassword.label as string}
               placeholder={'John.smith@email.com'}
               StartIcon={EnvelopeIcon}
               error={errors.email?.message}
@@ -136,10 +136,10 @@ const ForgotPassword = () => {
           </form>
           <div className="w-full flex justify-between text-xs mt-6">
             <Link className="cursor-pointer text-brand-500" href="/">
-              {t.forgetPassword.backTohome}
+              {t.forgetPassword.backToHome}
             </Link>
             <Link href="/auth/signin" className="cursor-pointer text-brand font-semibold">
-              {t.forgetPassword.Signin}
+              {t.forgetPassword.signIn}
             </Link>
           </div>
         </AuthCard>
