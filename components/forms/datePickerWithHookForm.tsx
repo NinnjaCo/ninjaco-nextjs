@@ -36,7 +36,7 @@ const DatePickerWithHookForm: React.FC<DatePickerProps> = ({ control, name, labe
                     border: '1px solid',
                   },
                   className: clsx(
-                    'w-full text-brand-300 placeholder-brand-400 border border-brand-300 rounded-md focus:outline-none focus:ring-brand focus:border-brand sm:text-sm',
+                    'w-full bg-white text-brand-300 placeholder-brand-400 border border-brand-100 rounded-md focus:outline-none focus:ring-brand focus:border-brand sm:text-sm',
                     {
                       'border-error-dark text-error placeholder-error': error,
                     }
