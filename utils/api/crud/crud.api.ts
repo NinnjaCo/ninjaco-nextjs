@@ -4,7 +4,7 @@ import { AxiosRequestConfig } from 'axios'
 import { Uid } from '@/models/shared'
 
 export interface CrudResponse<T> {
-  paylaod: T
+  payload: T
   timestamp: number
 }
 
