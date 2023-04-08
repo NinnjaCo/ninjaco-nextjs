@@ -20,7 +20,7 @@ export default function AdminDashboard() {
       <main className="flex h-screen">
         <MenuSection />
         {/* statistics */}
-        <div className="flex flex-col w-full h-full">
+        {/* <div className="flex flex-col w-full h-full">
           <div className="flex gap-3 pt-5 items-start pl-24">
             <Image src={statistics} alt="image" />
             <div className="text-brand-700 font-semibold text-3xl"> Statistics </div>
@@ -40,10 +40,10 @@ export default function AdminDashboard() {
               <Image src={total_creators} alt="image" className="w-full h-full" />
               <div className="text-brand-100 font-semibold text-xl absolute top-3 left-12">20</div>
             </div>
-          </div>
-          {/* leaderboard */}
+          </div> */}
+        {/* leaderboard */}
 
-          <div className="flex gap-3 items-start pl-24  mt-14">
+        {/* <div className="flex gap-3 items-start pl-24  mt-14">
             <Image src={leaderboard} alt="image" />
             <div className="text-brand-700 font-semibold text-3xl"> Leaderboard </div>
           </div>
@@ -108,7 +108,7 @@ export default function AdminDashboard() {
               </tbody>
             </table>
           </div>
-        </div>
+        </div> */}
       </main>
     </>
   )
