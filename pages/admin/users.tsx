@@ -4,9 +4,13 @@ import MenuSection from '@/components/admin/menuSection'
 import React, { Fragment, useEffect } from 'react'
 import filter_logo from '@/images/filter_logo.svg'
 
+import { ISODateString } from 'next-auth'
 import { User } from '@/models/crud/user.model'
 import { UserApi } from '@/utils/api/user'
+import { date } from 'yup'
 import { getSession, useSession } from 'next-auth/react'
+import dayjs from 'dayjs'
+import format from 'date-fns/format'
 import pen_logo from '@/images/pen_logo.svg'
 
 const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
@@ -65,25 +69,8 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
                 </tr>
               </thead>
               <tbody>
-                {/* <tr className="bg-brand-50">
-                  <td className="px-6 py-4">2</td>
-
-                  <td className="px-6 py-4">{users[0].firstName}</td>
-                  <td className="px-6 py-4">khoury</td>
-                  <td className="px-6 py-4">raghid@gmail.commmm</td>
-                  <td className="px-6 py-4">1/1/1000</td>
-                  <td className="px-6 py-4">20/2/2003</td>
-                  <td className="px-6 py-4">
-                    <button className="bg-brand-200 rounded-full w-6 h-6">
-                      <Image className="rounded" src={pen_logo} alt={'pen logo'}></Image>
-                    </button>
-                  </td>
-                </tr> */}
-                {/* create a loop that fill the table using the user information */}
-                {/* map over the users array and return a tr for each user */}
                 {users.map((user, index) => (
                   <>
-                    <div key={index}></div>
                     <tr className="bg-brand-50">
                       <td className="px-6 py-4 text-xs">{users[index]._id}</td>
                       <td className="px-6 py-4">{users[index].firstName}</td>
