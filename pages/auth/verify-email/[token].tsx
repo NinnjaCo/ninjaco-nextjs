@@ -1,8 +1,8 @@
 import * as yup from 'yup'
 import { AuthError } from '@/models/shared'
-import { EnvelopeIcon } from '@heroicons/react/24/outline'
 import { Input } from '@/components/forms/input'
-import { authOptions } from '../api/auth/[...nextauth]'
+import { LockClosedIcon } from '@heroicons/react/24/outline'
+import { authOptions } from '../../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { useAuthApi } from '@/utils/api/auth'
@@ -14,34 +14,45 @@ import Footer from '@/components/layout/footer'
 import Head from 'next/head'
 import Link from 'next/link'
 import Menu from '@/components/layout/menu'
-import React from 'react'
+import React, { useEffect } from 'react'
+import clsx from 'clsx'
+import jwt from 'jsonwebtoken'
 import lightlyWavedLine from '@/images/lightlyWavedLine.svg'
 import logoPointingDown from '@/images/logoPointingYellowBand.svg'
 
-type VerificationCodeFormDataType = {
+type VerifyEmailFormDataType = {
   code: string
 }
 
 const VerifyEmailFormSchema = yup
   .object()
   .shape({
-    //ask charbel if he wants a number or a string
-    // code: yup.number().integer().required().min(100000).max(999999),
-    email: yup.string().email('Invalid email').required('Email is required'),
+    code: yup.string().required('Code is required'),
   })
   .required()
 
-const VerifyEmail = () => {
+interface ServerProps {
+  token: string
+  errorMessage: string
+  decodedUserId: string
+}
+
+const ResetPassword = (props: ServerProps) => {
   const authApi = useAuthApi()
 
   const {
     register,
     handleSubmit,
     control,
-    formState: { errors },
-  } = useForm<VerificationCodeFormDataType>({
+
+    formState: { errors, isSubmitted },
+  } = useForm<VerifyEmailFormDataType>({
     resolver: yupResolver(VerifyEmailFormSchema),
   })
+
+  const closeAlert = () => {
+    setAlertData({ ...alertData, open: false })
+  }
   const [alertData, setAlertData] = React.useState<{
     message: string
     variant: 'success' | 'info' | 'warning' | 'error'
@@ -51,16 +62,14 @@ const VerifyEmail = () => {
     variant: 'info',
     open: false,
   })
-  const closeAlert = () => {
-    setAlertData({ ...alertData, open: false })
-  }
 
-  const onSubmitHandler = async (data: VerificationCodeFormDataType) => {
+  const onSubmitHandler = async (data: VerifyEmailFormDataType) => {
     try {
       closeAlert()
-      // Send a secret link to the user's email and save the token in the database
 
-      const res = await authApi.confirmEmail(data.code)
+      const res = await authApi.confirmEmail({
+        code: data.code,
+      })
 
       if (!res.payload) {
         setAlertData({
@@ -72,7 +81,7 @@ const VerifyEmail = () => {
       }
 
       setAlertData({
-        message: 'Email verified successfully',
+        message: 'Verify Email Successful',
         variant: 'success',
         open: true,
       })
@@ -87,14 +96,23 @@ const VerifyEmail = () => {
       }
     }
   }
+  useEffect(() => {
+    if (props.errorMessage) {
+      setAlertData({
+        message: props.errorMessage,
+        variant: 'error',
+        open: true,
+      })
+    }
+  }, [props.errorMessage, alertData.open])
 
   return (
     <>
       <Head>
-        <title>Verify Email</title>
-        <meta name="description" content="Verify Email"></meta>
+        <title>NinjaCo | Verify Your Email</title>
+        <meta name="description" content="Reset Password with NinjaCo" />
       </Head>
-      <main className="relative w-full h-full">
+      <main className="relative w-full h-screen">
         <Menu
           menuOption={{
             logoToUse: 'dark',
@@ -110,7 +128,6 @@ const VerifyEmail = () => {
           titleImage={logoPointingDown}
           underLineImage={lightlyWavedLine}
         >
-          Account activation code has been sent to your email address.
           <Alert
             className="my-3"
             message={alertData.message}
@@ -121,18 +138,27 @@ const VerifyEmail = () => {
           <form onSubmit={handleSubmit(onSubmitHandler)} className="flex flex-col gap-4" id="form">
             <Input
               {...register('code')}
-              label={'Verification Code'}
+              type="text"
+              label={'Code'}
               placeholder={'Code'}
-              StartIcon={EnvelopeIcon}
+              StartIcon={LockClosedIcon}
               error={errors.code?.message}
+              disabled={props.errorMessage !== undefined}
             />
             <button
               type="submit"
               form="form"
               value="Submit"
-              className="w-full btn bg-brand-200 hover:bg-brand text-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500"
+              disabled={isSubmitted || props.errorMessage !== undefined}
+              className={clsx(
+                'w-full btn bg-brand-200 hover:bg-brand text-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500',
+                {
+                  'cursor-not-allowed hover:bg-brand-200 hover:text-brand':
+                    isSubmitted || props.errorMessage,
+                }
+              )}
             >
-              Submit
+              Verify Your Email
             </button>
           </form>
           <div className="w-full flex justify-between text-xs mt-6">
@@ -140,12 +166,11 @@ const VerifyEmail = () => {
               Back to Home
             </Link>
             <Link href="/auth/signin" className="cursor-pointer text-brand font-semibold">
-              Resend Code
+              Sign Up
             </Link>
           </div>
         </AuthCard>
-
-        <Footer></Footer>
+        <Footer />
       </main>
     </>
   )
@@ -153,18 +178,48 @@ const VerifyEmail = () => {
 
 export const getServerSideProps = async (context) => {
   const { query, req, res } = context
+  const { token } = query
+
+  const auth_secret = process.env.JWT_ACCESS_SECRET
+  if (!auth_secret) {
+    return {
+      props: {
+        token: null,
+        errorMessage: 'Something went wrong',
+      },
+    }
+  }
+  // check if token is a valid jwt token and did not expire
+  let error = false
+  let decodedUserId
+  jwt.verify(token, auth_secret, (err, decoded) => {
+    if (err) {
+      error = true
+    } else {
+      decodedUserId = decoded?.sub
+    }
+  })
+  if (error || !decodedUserId) {
+    return {
+      props: {
+        token: null,
+        errorMessage: 'Invalid or Expired Token Provided',
+      },
+    }
+  }
 
   const session = await getServerSession(req, res, authOptions)
-  if (session) {
+  if (!session) {
     return {
       redirect: {
-        destination: (query.redirectTo as string | undefined) || '/',
+        destination: (query.redirectTo as string | undefined) || '/auth/signup',
         permanent: false,
       },
     }
   }
+
   return {
-    props: {},
+    props: { token, decodedUserId },
   }
 }
-export default VerifyEmail
+export default ResetPassword
