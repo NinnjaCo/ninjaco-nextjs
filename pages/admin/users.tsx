@@ -39,13 +39,15 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
 
         <div className="flex flex-col ">
           <div className="flex justify justify-between">
-            <div className="text-brand-700 text-3xl font-semibold ml-24 mt-10">users</div>
-            <div className="mt-10 mr-24 btn w-32 h-10 rounded-xl border-x-2 border-y-2 border-brand text-lg font-semibold text-brand   ">
+            <div className="text-brand-700 text-xl md:text-2xl lg:text-3xl font-semibold ml-24 mt-10">
+              users
+            </div>
+            <div className="mt-10 mr-24 btn w-32 h-10 rounded-xl border-x-2 border-y-2 border-brand text-sm md:text-base lg:text-lg font-semibold text-brand   ">
               Add user
             </div>
           </div>
           <div className="ml-24 mt-1 text-sm text-brand  "> 1234 entries found</div>
-          <div className="ml-24 mt-10 mb-2 btn w-32 h-8 rounded-lg border-x-1 border-y-1 bg-brand-200 border-brand text-lg font-semibold text-brand flex gap-2 max-w-fit">
+          <div className="ml-24 mt-10 mb-2 btn w-32 h-8 rounded-lg border-x-1 border-y-1 bg-brand-200 border-brand text-sm md:text-base lg:text-lg font-semibold text-brand flex gap-2 max-w-fit">
             {/* add filter_logo image */}
             <Image src={filter_logo} alt={'filter'}></Image>
             Filter
