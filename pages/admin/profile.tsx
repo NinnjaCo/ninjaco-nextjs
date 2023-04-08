@@ -1,4 +1,4 @@
-import { EnvelopeIcon, UserIcon } from '@heroicons/react/20/solid'
+import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/20/solid'
 import { Input } from '@/components/forms/input'
 
 import Head from 'next/head'
@@ -27,10 +27,10 @@ export default function Profile() {
           </div>
           {/* profile */}
           <div className="bg-brand-50 mt-7 mx-16 py-5 h-max w-fit flex flex-col gap-4 md:gap-0">
-            <div className=" text-brand-700 text-sm md:text-base pl-3">Profile</div>
+            <div className="hidden md:block text-brand-700 text-sm md:text-base pl-3">Profile</div>
             {/* first name last name */}
 
-            <div className="flex flex-row gap-2 md:gap-44 lg:gap-80 px-3 md:xl-5">
+            <div className="flex flex-row  gap-2 md:gap-44 lg:gap-80 px-3 md:xl-5">
               <Input
                 label={'First Name'}
                 placeholder="John"
@@ -40,7 +40,7 @@ export default function Profile() {
               />
               <Input label={'Last Name'} placeholder="Smith" StartIcon={UserIcon} name={''} />
             </div>
-            <div className="flex flex-row gap-2 md:gap-44 lg:gap-80 px-3 md:xl-5">
+            <div className="flex flex-row  gap-2 md:gap-44 lg:gap-80 px-3 md:xl-5">
               <Input
                 label="Date Of Birth"
                 placeholder={'DD/MM/YYYY'}
@@ -48,6 +48,27 @@ export default function Profile() {
                 name={''}
               />
               <Input label="Email" placeholder={'Email'} StartIcon={EnvelopeIcon} name={''} />
+            </div>
+          </div>
+          <div className="bg-brand-50 mt-7 mx-16 py-5 h-max w-fit flex flex-col gap-4 md:gap-0">
+            <div className=" hidden md:block text-brand-700 text-sm md:text-base pl-3">
+              Change Password
+            </div>
+            <div className="flex flex-row gap-2 md:gap-44 lg:gap-80 px-3 md:xl-5">
+              <Input
+                type="password"
+                label={'Password'}
+                placeholder={'Password'}
+                StartIcon={LockClosedIcon}
+                name={''}
+              />
+              <Input
+                type="password"
+                label={'Confirm Password'}
+                placeholder={'Confirm Password'}
+                StartIcon={LockClosedIcon}
+                name={''}
+              />
             </div>
           </div>
         </div>
