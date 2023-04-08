@@ -41,7 +41,6 @@ const Signin = (props: ServerProps) => {
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors },
   } = useForm<SignInFormDataType>({
     resolver: yupResolver(SignInFormSchema),

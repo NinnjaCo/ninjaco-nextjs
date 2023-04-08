@@ -51,8 +51,6 @@ const ResetPassword = (props: ServerProps) => {
   const {
     register,
     handleSubmit,
-    control,
-
     formState: { errors, isSubmitted },
   } = useForm<ResetPasswordFormDataType>({
     resolver: yupResolver(ResetPasswordFormSchema),

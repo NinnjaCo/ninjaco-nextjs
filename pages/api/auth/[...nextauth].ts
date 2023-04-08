@@ -1,6 +1,5 @@
 import { AuthApi } from '@/utils/api/auth'
 import { AuthError } from '@/models/shared/error'
-import { error } from 'console'
 import { isAxiosError, isError, unWrapAuthError } from '@/utils/errors'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import NextAuth, { AuthOptions } from 'next-auth'

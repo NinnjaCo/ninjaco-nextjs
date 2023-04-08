@@ -147,7 +147,6 @@ const Signup = () => {
             <DatePickerWithHookForm
               control={control}
               name={register('dateOfBirth').name} // we only need the "name" prop
-              placeholder="Date of Birth"
               label="Date of Birth"
               error={errors.dateOfBirth?.message}
             />

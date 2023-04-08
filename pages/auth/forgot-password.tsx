@@ -35,7 +35,6 @@ const ForgotPassword = () => {
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors },
   } = useForm<ForgotPasswordFormDataType>({
     resolver: yupResolver(ForgotPasswordFormSchema),

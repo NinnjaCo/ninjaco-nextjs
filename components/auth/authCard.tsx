@@ -4,7 +4,9 @@ import React from 'react'
 type AuthCardProps = {
   children: React.ReactNode
   title: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   underLineImage: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   titleImage: any
 }
 const AuthCard: React.FC<AuthCardProps> = ({ children, title, underLineImage, titleImage }) => {
