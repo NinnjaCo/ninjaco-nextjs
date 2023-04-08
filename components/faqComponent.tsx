@@ -16,11 +16,11 @@ const FAQComponent: React.FC<{ question: string; answer: string }> = ({ question
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex flex-col gap-3">
-          <div className="flex justify-between">
-            <div className="text-base md:text-lg ml-3 text-brand font-medium">{question}</div>
+          <div className="flex justify-between px-2">
+            <div className="text-base md:text-lg text-brand font-medium">{question}</div>
             <ChevronDownIcon
               className={clsx(
-                'w-5 h-5 mr-3 text-brand transform transition-transform duration-200',
+                'w-5 h-5 text-brand transform transition-transform duration-200',
                 isOpen && 'rotate-180'
               )}
             />

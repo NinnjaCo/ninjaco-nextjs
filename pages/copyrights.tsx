@@ -84,62 +84,64 @@ export default function Home() {
           startWithBottomBorder: true,
         }}
       />
-      <div className="mt-24 md:mt-44 lg:mt-80 ml-8 md:ml-12 lg:ml-16 text-4xl / font-bold">
-        {t.Copyright.privacy}
-      </div>
-      <div className="m-8 md:m-12 lg:m-12 ml-8 md:ml-12 lg:ml-16 text-lg font-bold">
-        {t.Copyright.updated}
-      </div>
-      <div className="mx-12 md:mx-12 lg:mx-16 text-s md:text-base">
-        {t.Copyright.agreement}
-        <div className="my-8">
-          {t.Copyright.collectInformation}
-          <br></br>
-          <div className=" md:ml-8">
-            {collectInfo.map((item, index) => (
-              <ul className="mb-2 ml-4" key={index}>
-                {item.title}
-              </ul>
-            ))}
-          </div>
+      <div className="text-brand">
+        <div className="mt-24 md:mt-44 lg:mt-80 ml-8 md:ml-12 lg:ml-16 text-4xl / font-bold">
+          {t.Copyright.privacy}
         </div>
-        <div className="my-8">
-          {t.Copyright.useInformation}
-          <br></br>
-          <div className=" md:ml-8">
-            {useInfo.map((item, index) => (
-              <ul className="mb-2 ml-4" key={index}>
-                {item.title}
-              </ul>
-            ))}
-          </div>
+        <div className="m-8 md:m-12 lg:m-12 ml-8 md:ml-12 lg:ml-16 text-lg font-bold">
+          {t.Copyright.updated}
         </div>
-        <div className="my-8">
-          {t.Copyright.shareInformation}
-          <br></br>
-          <div className=" md:ml-8">
-            {shareInfo.map((item, index) => (
-              <ul className="mb-2 ml-4" key={index}>
-                {item.title}
-              </ul>
-            ))}
+        <div className="mx-12 md:mx-12 lg:mx-16 text-s md:text-base">
+          {t.Copyright.agreement}
+          <div className="my-8">
+            {t.Copyright.collectInformation}
+            <br></br>
+            <div className=" md:ml-8">
+              {collectInfo.map((item, index) => (
+                <ul className="mb-2 ml-4" key={index}>
+                  {item.title}
+                </ul>
+              ))}
+            </div>
           </div>
-        </div>
-        <div className="my-8">
-          {t.Copyright.rights}
-          <br></br>
-          <div className=" md:ml-8">
-            {rightsArr.map((item, index) => (
-              <ul className="mb-2 ml-4" key={index}>
-                {item.title}
-              </ul>
-            ))}
+          <div className="my-8">
+            {t.Copyright.useInformation}
+            <br></br>
+            <div className=" md:ml-8">
+              {useInfo.map((item, index) => (
+                <ul className="mb-2 ml-4" key={index}>
+                  {item.title}
+                </ul>
+              ))}
+            </div>
           </div>
+          <div className="my-8">
+            {t.Copyright.shareInformation}
+            <br></br>
+            <div className=" md:ml-8">
+              {shareInfo.map((item, index) => (
+                <ul className="mb-2 ml-4" key={index}>
+                  {item.title}
+                </ul>
+              ))}
+            </div>
+          </div>
+          <div className="my-8">
+            {t.Copyright.rights}
+            <br></br>
+            <div className=" md:ml-8">
+              {rightsArr.map((item, index) => (
+                <ul className="mb-2 ml-4" key={index}>
+                  {item.title}
+                </ul>
+              ))}
+            </div>
+          </div>
+          <div className="my-8">{t.Copyright.security}</div>
+          <div className="my-8">{t.Copyright.childrenPrivacy}</div>
+          <div className="my-8">{t.Copyright.changes}</div>
+          <div className="mt-8 pb-16">{t.Copyright.questions}</div>
         </div>
-        <div className="my-8">{t.Copyright.security}</div>
-        <div className="my-8">{t.Copyright.childrenPrivacy}</div>
-        <div className="my-8">{t.Copyright.changes}</div>
-        <div className="mt-8 pb-16">{t.Copyright.questions}</div>
       </div>
       <Footer></Footer>
     </>
