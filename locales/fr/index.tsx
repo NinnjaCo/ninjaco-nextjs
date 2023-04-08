@@ -278,5 +278,16 @@ const frenchTranslations: WebsiteTranslations = {
     forgotPassword: 'Mot de passe oublié?',
     signUp: 'Inscrivez-vous',
   },
+  forgetPassword: {
+    Title: 'Mot de passe oublié',
+    invalidEmail: 'Email invalide',
+    EmailRequired: "L'e-mail est requis",
+    wrong: "Quelque chose s'est mal passé",
+    checkEmail: 'Vérifiez votre e-mail pour un lien pour réinitialiser votre mot de passe',
+    Label: 'E-mail',
+    sendResetLink: 'Envoyer le lien de réinitialisation',
+    backTohome: "Retour à la page d'accueil",
+    Signin: "S'identifier",
+  },
 }
 export default frenchTranslations

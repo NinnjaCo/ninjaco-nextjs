@@ -17,6 +17,7 @@ import Menu from '@/components/layout/menu'
 import React from 'react'
 import lightlyWavedLine from '@/images/lightlyWavedLine.svg'
 import logoPointingDown from '@/images/logoPointingYellowBand.svg'
+import useTranslation from '@/hooks/useTranslation'
 
 type ForgotPasswordFormDataType = {
   email: string
@@ -30,6 +31,7 @@ const ForgotPasswordFormSchema = yup
   .required()
 
 const ForgotPassword = () => {
+  const t = useTranslation()
   const authApi = useAuthApi()
 
   const {
@@ -62,7 +64,7 @@ const ForgotPassword = () => {
 
       if (!res.payload) {
         setAlertData({
-          message: 'Something went wrong',
+          message: t.forgetPassword.wrong as string,
           variant: 'error',
           open: true,
         })
@@ -70,7 +72,7 @@ const ForgotPassword = () => {
       }
 
       setAlertData({
-        message: 'Check your email for a link to reset your password',
+        message: t.forgetPassword.checkEmail as string,
         variant: 'success',
         open: true,
       })
@@ -78,7 +80,7 @@ const ForgotPassword = () => {
       if (isAxiosError<AuthError>(error)) {
         const errors = unWrapAuthError(error)
         setAlertData({
-          message: errors[0].message || 'Something went wrong',
+          message: errors[0].message || (t.forgetPassword.wrong as string),
           variant: 'error',
           open: true,
         })
@@ -89,7 +91,7 @@ const ForgotPassword = () => {
   return (
     <>
       <Head>
-        <title>NinjaCo | Forgot Password</title>
+        <title> {t.forgetPassword.Title}</title>
         <meta name="description" content="Reset Password with NinjaCo" />
       </Head>
       <main className="relative w-full h-screen">
@@ -104,7 +106,7 @@ const ForgotPassword = () => {
           }}
         ></Menu>
         <AuthCard
-          title="Forgot Password"
+          title={t.forgetPassword.Title as string}
           titleImage={logoPointingDown}
           underLineImage={lightlyWavedLine}
         >
@@ -118,7 +120,7 @@ const ForgotPassword = () => {
           <form onSubmit={handleSubmit(onSubmitHandler)} className="flex flex-col gap-4" id="form">
             <Input
               {...register('email')}
-              label={'Email'}
+              label={t.forgetPassword.Label as string}
               placeholder={'John.smith@email.com'}
               StartIcon={EnvelopeIcon}
               error={errors.email?.message}
@@ -129,15 +131,15 @@ const ForgotPassword = () => {
               value="Submit"
               className="w-full btn bg-brand-200 hover:bg-brand text-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500"
             >
-              Send Reset Link
+              {t.forgetPassword.sendResetLink}
             </button>
           </form>
           <div className="w-full flex justify-between text-xs mt-6">
             <Link className="cursor-pointer text-brand-500" href="/">
-              Back to Home
+              {t.forgetPassword.backTohome}
             </Link>
             <Link href="/auth/signin" className="cursor-pointer text-brand font-semibold">
-              Sign In
+              {t.forgetPassword.Signin}
             </Link>
           </div>
         </AuthCard>

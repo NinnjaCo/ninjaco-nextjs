@@ -267,6 +267,18 @@ const englishTranslations: WebsiteTranslations = {
     forgotPassword: 'Forgot Password?',
     signUp: 'Sign Up',
   },
+
+  forgetPassword: {
+    Title: 'Forgot Password',
+    invalidEmail: 'Invalid email',
+    EmailRequired: 'Email is required',
+    wrong: 'Something went wrong',
+    checkEmail: 'Check your email for a link to reset your password',
+    Label: 'Email',
+    sendResetLink: 'Send Reset Link',
+    backTohome: 'Back to Home',
+    Signin: 'Sign In',
+  },
 }
 
 export default englishTranslations

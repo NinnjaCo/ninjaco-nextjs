@@ -110,6 +110,17 @@ export interface WebsiteTranslations {
     forgotPassword: translationElement
     signUp: translationElement
   }
+  forgetPassword: {
+    Title: translationElement
+    invalidEmail: translationElement
+    EmailRequired: translationElement
+    wrong: translationElement
+    checkEmail: translationElement
+    Label: translationElement
+    sendResetLink: translationElement
+    backTohome: translationElement
+    Signin: translationElement
+  }
 }
 
 // Create locale type support en | fr
