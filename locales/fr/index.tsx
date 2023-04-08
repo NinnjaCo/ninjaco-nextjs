@@ -285,7 +285,7 @@ const frenchTranslations: WebsiteTranslations = {
     wrong: "Quelque chose s'est mal passé",
     checkEmail: 'Vérifiez votre e-mail pour un lien pour réinitialiser votre mot de passe',
     label: 'E-mail',
-    sendResetLink: 'Envoyer le lien de réinitialisation',
+    sendResetLink: 'Envoyer lien reset',
     backToHome: "Retour à la page d'accueil",
     signIn: "S'identifier",
   },
