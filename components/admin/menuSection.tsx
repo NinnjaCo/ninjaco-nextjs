@@ -41,10 +41,6 @@ const MenuSection = () => {
       icon: profile_icon,
       text: 'PROFILE',
     },
-    {
-      icon: logout,
-      text: 'LOGOUT',
-    },
   ]
 
   return (
@@ -69,6 +65,12 @@ const MenuSection = () => {
               <MenuButton text={item.text} icon={item.icon} />
             </div>
           ))}
+          <div className="bg-brand-300 h-px opacity-25" />
+          <div className="-mt-3">
+            <Link href={'/admin/logout'}>
+              <MenuButton text="LOGOUT" icon={logout} />
+            </Link>
+          </div>
         </div>
       </div>
       {/* Menu before MD */}
