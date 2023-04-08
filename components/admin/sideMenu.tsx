@@ -78,8 +78,8 @@ const SideMenu = (props: SideMenuProps) => {
       {/* Menu before MD */}
       <div
         className={clsx(
-          'flex md:hidden bg-brand h-screen flex-col justify-start items-center py-4 gap-8',
-          open && 'w-40 absolute',
+          'flex md:hidden bg-brand self-stretch flex-1 flex-col justify-start py-4 gap-8',
+          open && 'w-40 absolute min-h-full',
           !open && 'w-16',
           'duration-300 z-10'
         )}

@@ -65,7 +65,7 @@ export default function AdminDashboard() {
               <Image src={leaderboard} alt="image" />
               <div className="text-brand font-semibold text-xl"> Leaderboard </div>
             </div>
-            <div className="w-full overflow-auto pr-8">
+            <div className="w-full overflow-auto pr-8 sm:pr-0">
               <table className="text-[0.5rem] md:text-xs text-left text-brand w-full">
                 <thead className="text-brand uppercase bg-brand-200">
                   <tr>
