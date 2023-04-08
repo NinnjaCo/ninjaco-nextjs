@@ -9,6 +9,7 @@ const englishTranslations: WebsiteTranslations = {
     startCoding: 'Start Coding',
     signIn: 'Sign In',
     register: 'Register',
+    signOut: 'Sign Out',
   },
   fourOhFour: {
     headTitle: 'Ninja Co | Page Not Found',
