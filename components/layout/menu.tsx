@@ -121,7 +121,7 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
   }
 
   const isSessionOn = () => {
-    return session?.status === 'authenticated'
+    return session?.status === 'authenticated' && session.data.id
   }
 
   return (
@@ -250,7 +250,7 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
                         </Link>
                       ) : (
                         <>
-                          <Link className="btn btn-brand" href="/auth/signin">
+                          <Link className="btn btn-brand mr-8" href="/auth/signin">
                             {t.Menu.signIn}
                           </Link>
                           <Link className="btn btn-secondary" href="/auth/signup">
