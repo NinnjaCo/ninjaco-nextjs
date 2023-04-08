@@ -25,6 +25,7 @@ export default function AdminDashboard() {
             <Image src={statistics} alt="image" />
             <div className="text-brand-700 font-semibold text-xl"> Statistics </div>
           </div>
+
           <div className=" bg-brand-50 py-5 mx-16 rounded-2xl flex flex-wrap justify-around ">
             <div className="h-32 relative">
               <Image src={total_users} alt="image" className="w-full h-full relative " />
@@ -42,13 +43,13 @@ export default function AdminDashboard() {
             </div>
           </div>
           {/* leaderboard */}
-          {/* 
-          <div className="flex gap-3 items-start pl-16  mt-5">
+
+          <div className="flex gap-3 items-start pl-16 mt-5 ">
             <Image src={leaderboard} alt="image" />
             <div className="text-brand-700 font-semibold text-xl"> Leaderboard </div>
           </div>
           <div className="relative overflow-x-auto ">
-            <table className=" text-sm text-left text-brand rounded-t-2xl ml-16">
+            <table className="text-sm text-left text-brand ml-16 w-[88%]">
               <thead className="text-brand w-max uppercase bg-brand-200 ">
                 <tr>
                   <th scope="col" className="px-6 py-3">
@@ -69,7 +70,7 @@ export default function AdminDashboard() {
                 </tr>
               </thead>
               <tbody>
-                <tr className="bg-brand-50">
+                <tr className="bg-brand-50 ">
                   <th scope="row" className="px-6 py-4  text-brand">
                     <Image src={profile_photo} alt="image" />
                   </th>
@@ -107,7 +108,7 @@ export default function AdminDashboard() {
                 </tr>
               </tbody>
             </table>
-          </div> */}
+          </div>
         </div>
       </main>
     </>
