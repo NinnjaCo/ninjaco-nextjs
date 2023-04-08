@@ -136,7 +136,7 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
 
 export default AdminUserView
 
-const getServerSideProps = async (context) => {
+export const getServerSideProps = async (context) => {
   const session = await getSession(context)
   if (!session) {
     return {
