@@ -3,6 +3,8 @@ import Image from 'next/image'
 import MenuSection from '@/components/admin/menuSection'
 import React, { Fragment } from 'react'
 
+import pen_logo from '@/images/pen_logo.svg'
+
 export default function AdminUserView() {
   return (
     <>
@@ -52,6 +54,9 @@ export default function AdminUserView() {
                 <td className="px-6 py-4">raghid@gmail.commmm</td>
                 <td className="px-6 py-4">1/1/1000</td>
                 <td className="px-6 py-4">20/2/2003</td>
+                <td className="px-6 py-4">
+                  <div className="btn">hello</div>
+                </td>
               </tr>
               <tr className="bg-brand-50">
                 <th scope="row" className="px-6 py-4  text-brand">
