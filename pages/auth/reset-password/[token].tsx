@@ -1,44 +1,34 @@
 import * as yup from 'yup'
 import { AuthError } from '@/models/shared'
-import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/outline'
 import { Input } from '@/components/forms/input'
-import { authOptions } from '../api/auth/[...nextauth]'
+import { LockClosedIcon } from '@heroicons/react/24/outline'
+import { authOptions } from '../../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
-import { signIn } from 'next-auth/react'
 import { useAuthApi } from '@/utils/api/auth'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Alert from '@/components/auth/alert'
 import AuthCard from '@/components/auth/authCard'
-import DatePickerWithHookForm from '@/components/forms/datePickerWithHookForm'
 import Footer from '@/components/layout/footer'
 import Head from 'next/head'
 import Link from 'next/link'
 import Menu from '@/components/layout/menu'
-import React from 'react'
-import heavilyWavedLine from '@/images/heavilyWavedLine.svg'
+import React, { useEffect } from 'react'
+import clsx from 'clsx'
+import jwt from 'jsonwebtoken'
+import lightlyWavedLine from '@/images/lightlyWavedLine.svg'
 import logoPointingDown from '@/images/logoPointingYellowBand.svg'
+import useTranslation from '@/hooks/useTranslation'
 
-type SignUpFormDataType = {
-  firstName: string
-  lastName: string
-  dateOfBirth: Date
-  email: string
+type ResetPasswordFormDataType = {
   password: string
   passwordConfirmation: string
 }
 
-const SignUpFormSchema = yup
+const ResetPasswordFormSchema = yup
   .object()
   .shape({
-    firstName: yup.string().required('First Name is required'),
-    lastName: yup.string().required('Last Name is required'),
-    dateOfBirth: yup
-      .date()
-      .max(new Date(), 'Date of Birth cannot be in the future')
-      .required('Date of Birth is required'),
-    email: yup.string().email('Invalid email').required('Email is required'),
     password: yup
       .string()
       .min(8, 'Password must be at least 8 characters')
@@ -50,17 +40,26 @@ const SignUpFormSchema = yup
   })
   .required()
 
-const Signup = () => {
+interface ServerProps {
+  token: string
+  errorMessage: string
+  decodedUserId: string
+}
+
+const ResetPassword = (props: ServerProps) => {
   const authApi = useAuthApi()
 
   const {
     register,
     handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<SignUpFormDataType>({
-    resolver: yupResolver(SignUpFormSchema),
+    formState: { errors, isSubmitted },
+  } = useForm<ResetPasswordFormDataType>({
+    resolver: yupResolver(ResetPasswordFormSchema),
   })
+
+  const closeAlert = () => {
+    setAlertData({ ...alertData, open: false })
+  }
   const [alertData, setAlertData] = React.useState<{
     message: string
     variant: 'success' | 'info' | 'warning' | 'error'
@@ -70,30 +69,30 @@ const Signup = () => {
     variant: 'info',
     open: false,
   })
-  const closeAlert = () => {
-    setAlertData({ ...alertData, open: false })
-  }
 
-  const onSubmitHandler = async (data: SignUpFormDataType) => {
+  const onSubmitHandler = async (data: ResetPasswordFormDataType) => {
     try {
       closeAlert()
-      await authApi.signUp({
-        firstName: data.firstName,
-        lastName: data.lastName,
-        dateOfBirth: data.dateOfBirth.toISOString(),
-        email: data.email,
+      // Send a secret link to the user's email and save the token in the database
+      const res = await authApi.resetPassword({
         password: data.password,
+        token: props.token,
+        userId: props.decodedUserId,
       })
+
+      if (!res.payload) {
+        setAlertData({
+          message: 'Something went wrong',
+          variant: 'error',
+          open: true,
+        })
+        return
+      }
+
       setAlertData({
-        message: 'Account Created Successfully',
+        message: 'Password Reset Successful',
         variant: 'success',
         open: true,
-      })
-      // sign in the user using next-auth
-      await signIn('credentials', {
-        redirect: true,
-        email: data.email,
-        password: data.password,
       })
     } catch (error) {
       if (isAxiosError<AuthError>(error)) {
@@ -107,11 +106,22 @@ const Signup = () => {
     }
   }
 
+  useEffect(() => {
+    if (props.errorMessage) {
+      setAlertData({
+        message: props.errorMessage,
+        variant: 'error',
+        open: true,
+      })
+    }
+  }, [props.errorMessage, alertData.open])
+
+  const t = useTranslation()
   return (
     <>
       <Head>
-        <title>NinjaCo | Sign Up</title>
-        <meta name="description" content="Sign Up to NinjaCo" />
+        <title>NinjaCo | Reset Your Password</title>
+        <meta name="description" content="Reset Password with NinjaCo" />
       </Head>
       <main className="relative w-full h-screen">
         <Menu
@@ -124,7 +134,11 @@ const Signup = () => {
             startButtonDark: true,
           }}
         ></Menu>
-        <AuthCard title="Sign Up" titleImage={logoPointingDown} underLineImage={heavilyWavedLine}>
+        <AuthCard
+          title={t.resetPassword.title as string}
+          titleImage={logoPointingDown}
+          underLineImage={lightlyWavedLine}
+        >
           <Alert
             className="my-3"
             message={alertData.message}
@@ -134,63 +148,45 @@ const Signup = () => {
           />
           <form onSubmit={handleSubmit(onSubmitHandler)} className="flex flex-col gap-4" id="form">
             <Input
-              {...register('firstName')}
-              label={'First Name'}
-              placeholder="John"
-              StartIcon={UserIcon}
-              error={errors.firstName?.message}
-            />
-            <Input
-              {...register('lastName')}
-              label={'Last Name'}
-              placeholder="Smith"
-              StartIcon={UserIcon}
-              error={errors.lastName?.message}
-            />
-            <DatePickerWithHookForm
-              control={control}
-              name={register('dateOfBirth').name} // we only need the "name" prop
-              label="Date of Birth"
-              error={errors.dateOfBirth?.message}
-            />
-            <Input
-              {...register('email')}
-              label={'Email'}
-              placeholder={'Email'}
-              StartIcon={EnvelopeIcon}
-              error={errors.email?.message}
-            />
-            <Input
               {...register('password')}
               type="password"
-              label={'Password'}
-              placeholder={'Password'}
+              label={t.resetPassword.newPassword as string}
+              placeholder={t.resetPassword.password as string}
               StartIcon={LockClosedIcon}
               error={errors.password?.message}
+              disabled={props.errorMessage !== undefined}
             />
             <Input
               {...register('passwordConfirmation')}
               type="password"
-              label={'Confirm Password'}
-              placeholder={'Confirm Password'}
+              label={t.resetPassword.confirmPassword as string}
+              placeholder={t.resetPassword.confirmPassword1 as string}
               StartIcon={LockClosedIcon}
               error={errors.passwordConfirmation?.message}
+              disabled={props.errorMessage !== undefined}
             />
             <button
               type="submit"
               form="form"
               value="Submit"
-              className="w-full btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500"
+              disabled={isSubmitted || props.errorMessage !== undefined}
+              className={clsx(
+                'w-full btn bg-brand-200 hover:bg-brand text-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500',
+                {
+                  'cursor-not-allowed hover:bg-brand-200 hover:text-brand':
+                    isSubmitted || props.errorMessage,
+                }
+              )}
             >
-              Sign Up
+              {t.resetPassword.changePassword}
             </button>
           </form>
           <div className="w-full flex justify-between text-xs mt-6">
             <Link className="cursor-pointer text-brand-500" href="/">
-              Back to Home
+              {t.resetPassword.backToHome}
             </Link>
             <Link href="/auth/signin" className="cursor-pointer text-brand font-semibold">
-              Sign In
+              {t.resetPassword.signIn}
             </Link>
           </div>
         </AuthCard>
@@ -202,6 +198,35 @@ const Signup = () => {
 
 export const getServerSideProps = async (context) => {
   const { query, req, res } = context
+  const { token } = query
+
+  const auth_secret = process.env.JWT_ACCESS_SECRET
+  if (!auth_secret) {
+    return {
+      props: {
+        token: null,
+        errorMessage: 'Something went wrong',
+      },
+    }
+  }
+  // check if token is a valid jwt token and did not expire
+  let error = false
+  let decodedUserId
+  jwt.verify(token, auth_secret, (err, decoded) => {
+    if (err) {
+      error = true
+    } else {
+      decodedUserId = decoded?.sub
+    }
+  })
+  if (error || !decodedUserId) {
+    return {
+      props: {
+        token: null,
+        errorMessage: 'Invalid or Expired Token Provided',
+      },
+    }
+  }
 
   const session = await getServerSession(req, res, authOptions)
   if (session) {
@@ -213,7 +238,7 @@ export const getServerSideProps = async (context) => {
     }
   }
   return {
-    props: {},
+    props: { token, decodedUserId },
   }
 }
-export default Signup
+export default ResetPassword

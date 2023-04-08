@@ -39,18 +39,18 @@ export class AuthApi extends CoreApi {
   async signUp(data: {
     firstName: string
     lastName: string
+    dateOfBirth: string
     email: string
     password: string
   }): Promise<ApiResponse<AuthResponse>> {
-    const res = await this.client.post<ApiResponse<AuthResponse>>(`${this.path}/signUp`, data)
+    const res = await this.client.post<ApiResponse<AuthResponse>>(`${this.path}/signup`, data)
     return res.data
   }
 
-  async resetpassword(data: {
+  async resetPassword(data: {
     password: string
-    passwordConfirmation: string
-    code: string
-    email: string
+    token: string
+    userId: string
   }): Promise<ApiResponse<AuthResponse>> {
     const res = await this.client.post<ApiResponse<AuthResponse>>(
       `${this.path2}/reset-password`,
@@ -59,7 +59,7 @@ export class AuthApi extends CoreApi {
     return res.data
   }
 
-  async forgotpassword(data: { email: string }): Promise<ApiResponse<AuthResponse>> {
+  async forgotPassword(data: { email: string }): Promise<ApiResponse<AuthResponse>> {
     const res = await this.client.post<ApiResponse<AuthResponse>>(
       `${this.path2}/forgot-password`,
       data
