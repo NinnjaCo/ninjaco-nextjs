@@ -46,7 +46,7 @@ const MenuSection = () => {
   ]
   return (
     <>
-      <div className="hidden md:block bg-brand  w-1/5 ">
+      <div className="hidden md:block bg-brand  w-1/5">
         <div className="flex flex-col gap-20 justify-between items-center">
           <Link href={'/'}>
             <Image
@@ -108,11 +108,7 @@ const MenuSection = () => {
         {/* +++++++++++++++++++++++ */}
         <div className="flex flex-col pt-36">
           <div
-            className={clsx(
-              'relative flex flex-col  w-2/3 ',
-              open && 'left-10 gap-3',
-              !open && 'left-3'
-            )}
+            className={clsx('relative flex flex-col  w-2/3 ', open && ' gap-3', !open && 'left-3')}
           >
             {menuSection.map((item) => (
               <>
@@ -122,12 +118,12 @@ const MenuSection = () => {
                     !open && 'pl-3 mt-4'
                   )}
                 />
-                <div key={item.text} className="flex gap-3 mb-4">
+                <div key={item.text} className="flex gap-3 mb-4 right-0">
                   <button>
                     <Image
                       src={item.icon}
                       alt="image"
-                      className={clsx('inline-flex duration-500', open && 'rotate-[360deg]')}
+                      className={clsx('inline-flex duration-500 ', open && 'hidden ')}
                     ></Image>
                   </button>
 
@@ -153,7 +149,7 @@ const MenuSection = () => {
                       <Image
                         src={item.icon}
                         alt="image"
-                        className={clsx('inline-flex duration-500', open && 'rotate-[360deg]')}
+                        className={clsx('inline-flex duration-500', open && 'hidden ')}
                       ></Image>
                     </button>
 
