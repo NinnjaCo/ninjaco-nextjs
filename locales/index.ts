@@ -107,9 +107,8 @@ export interface WebsiteTranslations {
     email: translationElement
     password: translationElement
     signIn: translationElement
-    backToHome: translationElement
+    forgotPassword: translationElement
     signUp: translationElement
-    dontHaveAccount: translationElement
   }
 }
 

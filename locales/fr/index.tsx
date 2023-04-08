@@ -271,12 +271,11 @@ const frenchTranslations: WebsiteTranslations = {
       "Vous devriez être en mesure de vous inscrire aux cours sur le site web qui offre des cours de codage à l'aide de blocs visuels et d'Arduino. Recherchez un bouton ou un lien « Commencer à coder » ou « Commencer » sur la page d'accueil ou le menu de navigation du site web. En cliquant sur ce bouton ou lien, vous devriez être dirigé vers une page d'inscription où vous pouvez fournir vos informations et vous inscrire aux cours.",
   },
   signin: {
-    signIn: 'Connectez-vous',
+    signIn: 'Connectez vous',
     headTitle: 'Ninja Co | Connecion',
-    email: 'e-mail',
-    password: 'mot de passe',
-    backToHome: "Retour à la page d'accueil ",
-    dontHaveAccount: "Vous n'avez pas de compte ?",
+    email: 'Email',
+    password: 'Mot de Passe',
+    forgotPassword: 'Mot de passe oublié?',
     signUp: 'Inscrivez-vous',
   },
 }
