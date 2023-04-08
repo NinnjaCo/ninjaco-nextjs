@@ -279,6 +279,16 @@ const englishTranslations: WebsiteTranslations = {
     backToHome: 'Back to Home',
     signIn: 'Sign In',
   },
+  resetPassword: {
+    title: 'Reset Password',
+    newPassword: 'New Password',
+    password: 'Password',
+    confirmPassword: 'Confirm Password',
+    confirmPassword1: 'Confirm Password',
+    changePassword: 'Change Your Password',
+    backToHome: 'Back to Home',
+    signIn: 'Sign In',
+  },
 }
 
 export default englishTranslations
