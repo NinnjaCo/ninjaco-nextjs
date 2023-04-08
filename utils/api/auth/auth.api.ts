@@ -67,11 +67,10 @@ export class AuthApi extends CoreApi {
     return res.data
   }
 
-  async confirmEmail(data: { code: string }): Promise<ApiResponse<AuthResponse>> {
-    const res = await this.client.post<ApiResponse<AuthResponse>>(
-      `${this.path2}/verify-email`,
-      data
-    )
+  async confirmEmail(token: string): Promise<ApiResponse<AuthResponse>> {
+    const res = await this.client.post<ApiResponse<AuthResponse>>(`${this.path2}/verify-email`, {
+      token,
+    })
     return res.data
   }
 }
