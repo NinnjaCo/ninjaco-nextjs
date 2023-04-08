@@ -121,6 +121,16 @@ export interface WebsiteTranslations {
     backToHome: translationElement
     signIn: translationElement
   }
+  resetPassword: {
+    title: translationElement
+    newPassword: translationElement
+    password: translationElement
+    confirmPassword: translationElement
+    confirmPassword1: translationElement
+    changePassword: translationElement
+    backToHome: translationElement
+    signIn: translationElement
+  }
 }
 
 // Create locale type support en | fr

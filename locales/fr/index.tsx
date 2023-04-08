@@ -289,5 +289,15 @@ const frenchTranslations: WebsiteTranslations = {
     backToHome: "Retour à la page d'accueil",
     signIn: "S'identifier",
   },
+  resetPassword: {
+    title: 'Réinitialiser le Mot de Passe',
+    newPassword: 'Nouveau Mot de Passe',
+    password: 'Mot de Passe',
+    confirmPassword: 'Confirmez le Mot de Passe',
+    confirmPassword1: 'Confirmez le Mot de Pass',
+    changePassword: 'Changer Votre Mot de Passe',
+    backToHome: "Retourner à la Page d'Entrée",
+    signIn: 'Sign-In',
+  },
 }
 export default frenchTranslations
