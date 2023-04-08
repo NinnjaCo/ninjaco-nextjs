@@ -1,12 +1,19 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import MenuSection from '@/components/admin/menuSection'
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import filter_logo from '@/images/filter_logo.svg'
 
+import { User } from '@/models/crud/user.model'
+import { UserApi } from '@/utils/api/user'
+import { getSession, useSession } from 'next-auth/react'
 import pen_logo from '@/images/pen_logo.svg'
 
-export default function AdminUserView() {
+const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
+  //   const api = new UserApi(session.data)
+  //   const users = api.find()
+  // use the same approach but in useEffect
+
   return (
     <>
       <Head>
@@ -17,6 +24,7 @@ export default function AdminUserView() {
       <main className=" flex h-screen">
         <MenuSection />
         {/* leaderboard */}
+
         <div className="flex flex-col ">
           <div className="flex justify justify-between">
             <div className="text-brand-700 text-3xl font-semibold ml-24 mt-10">users</div>
@@ -30,7 +38,7 @@ export default function AdminUserView() {
             <Image src={filter_logo} alt={'filter'}></Image>
             Filter
           </div>
-          <div className="relative overflow-x-auto h-fit">
+          <div className="relative overflow-x-auto h-fit mb-16">
             <table className="w-5/6 ml-24 text-sm text-left text-brand rounded-t-2xl ">
               <thead className="text-brand w-max uppercase bg-brand-200 ">
                 <tr>
@@ -50,7 +58,7 @@ export default function AdminUserView() {
                     Date of Birth
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Createt At
+                    Created At
                   </th>
                   <th scope="col" className="px-6 py-3"></th>
                 </tr>
@@ -61,7 +69,7 @@ export default function AdminUserView() {
                     <td className=" py-4">1</td>
                   </th>
 
-                  <td className="px-6 py-4">Raghid</td>
+                  <td className="px-6 py-4">{users[0].firstName}</td>
                   <td className="px-6 py-4">khoury</td>
                   <td className="px-6 py-4">raghid@gmail.commmm</td>
                   <td className="px-6 py-4">1/1/1000</td>
@@ -76,7 +84,7 @@ export default function AdminUserView() {
                   <th scope="row" className="px-6 py-4  text-brand">
                     <td className=" py-4">2</td>
                   </th>
-                  <td className="px-6 py-4">Raghid</td>
+                  <td className="px-6 py-4"></td>
                   <td className="px-6 py-4">khoury</td>
                   <td className="px-6 py-4">raghid@gmail.commmm</td>
                   <td className="px-6 py-4">1/1/1000</td>
@@ -124,4 +132,24 @@ export default function AdminUserView() {
       </main>
     </>
   )
+}
+
+export default AdminUserView
+
+const getServerSideProps = async (context) => {
+  const session = await getSession(context)
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/signin',
+        permanent: false,
+      },
+    }
+  }
+  const api = new UserApi(session)
+  const users = await api.find()
+  console.log(users)
+  return {
+    props: { users },
+  }
 }
