@@ -1,6 +1,8 @@
+import { Bars3Icon } from '@heroicons/react/24/outline'
 import { ChevronLeftIcon } from '@heroicons/react/20/solid'
 import Image from 'next/image'
 import Link from 'next/link'
+import MenuButton from './menuButton'
 import React, { useState } from 'react'
 import clsx from 'clsx'
 import creators from '@/images/creators.svg'
@@ -13,7 +15,7 @@ import profile_icon from '@/images/profile_icon.svg'
 import user_group from '@/images/user_group.svg'
 
 const MenuSection = () => {
-  const [open, setIsOpen] = useState(true)
+  const [open, setIsOpen] = useState(false)
 
   const menuSection = [
     {
@@ -34,7 +36,7 @@ const MenuSection = () => {
     },
   ]
 
-  const profile_logout = [
+  const profileLogout = [
     {
       icon: profile_icon,
       text: 'PROFILE',
@@ -44,86 +46,97 @@ const MenuSection = () => {
       text: 'LOGOUT',
     },
   ]
+
   return (
     <>
-      <div className="hidden md:block bg-brand  w-1/5">
-        <div className="flex flex-col gap-20 justify-between items-center">
-          <Link href={'/'}>
-            <Image
-              src={logo_white}
-              alt="Hero Image"
-              width={150}
-              height={50}
-              className=" mt-7"
-            ></Image>
-          </Link>
-          <div className="relative flex flex-col gap-3 w-2/3 ">
-            {menuSection.map((item) => (
-              <>
-                <div className="bg-brand-300 h-px opacity-25" />
-                <div key={item.text} className="flex gap-3 mb-4">
-                  <Image src={item.icon} alt="image"></Image>
-                  <button className="text-brand-300 font-semibold text-sm">{item.text}</button>
-                </div>
-              </>
-            ))}
-          </div>
-          <div className="relative flex flex-col gap-3 w-2/3 ">
-            {profile_logout.map((item) => (
-              <>
-                <div className="bg-brand-300  h-px opacity-25" />
-                <div key={item.text} className="flex gap-3 mb-4">
-                  <Image src={item.icon} alt="image"></Image>
-                  <button className="text-brand-300 font-semibold text-sm">{item.text}</button>
-                </div>
-              </>
-            ))}
-          </div>
+      <div className="hidden md:flex bg-brand w-1/5 h-screen flex-col gap-20 justify-between items-center py-8 px-1 lg:px-4">
+        <Link href={'/'}>
+          <Image src={logo_white} alt="Hero Image" width={150} height={50}></Image>
+        </Link>
+        <div className="relative flex flex-col gap-2 w-full">
+          {menuSection.map((item) => (
+            <>
+              <div className="bg-brand-300 h-px opacity-25" />
+              <MenuButton text={item.text} icon={item.icon} />
+            </>
+          ))}
+        </div>
+        <div className="relative flex flex-col gap-3 w-full">
+          {profileLogout.map((item, index) => (
+            <>
+              {index !== 0 && <div className="bg-brand-300 h-px opacity-25" />}
+              <MenuButton text={item.text} icon={item.icon} />
+            </>
+          ))}
         </div>
       </div>
       <div
         className={clsx(
-          'block md:hidden bg-brand h-screen flex-col justify-between items-center',
-          open && 'w-40',
+          'flex md:hidden bg-brand h-screen flex-col justify-start items-center gap-20 py-8',
+          open && 'w-40 absolute',
           !open && 'w-16',
-          'duration-300 relative'
+          'duration-300 z-10'
         )}
       >
-        <ChevronLeftIcon
-          className={clsx('h-10 w-10 text-brand-300 absolute right-2 top-2', !open && 'rotate-180')}
-          onClick={() => setIsOpen(!open)}
-        ></ChevronLeftIcon>
-
         <div
           className={clsx(
-            'absolute top-12 inline-flex ',
-            open && 'left-10',
-            !open && 'left-2 mt-4'
+            'flex w-full',
+            open && 'items-center justify-between px-4',
+            !open && 'flex-col pl-2 gap-4'
           )}
         >
-          <Link href={'/'}>
-            <Image src={logo_head} alt="Hero Image"></Image>
+          <Link href={'/'} className={clsx(open && 'w-16', !open && 'w-8')}>
+            <Image src={open ? logo_white : logo_head} alt="Hero Image"></Image>
           </Link>
+
+          {open ? (
+            <ChevronLeftIcon
+              className={clsx('h-8 w-8 cursor-pointer text-brand-300', !open && 'rotate-180')}
+              onClick={() => setIsOpen(!open)}
+            ></ChevronLeftIcon>
+          ) : (
+            <Bars3Icon
+              className={clsx('w-8 h-8 cursor-pointer text-brand-300')}
+              onClick={() => setIsOpen(!open)}
+            />
+          )}
         </div>
         {/* +++++++++++++++++++++++ */}
-        <div className="flex flex-col pt-36">
-          <div
-            className={clsx('relative flex flex-col  w-2/3 ', open && ' gap-3', !open && 'left-3')}
-          >
-            {menuSection.map((item) => (
+        <div
+          className={clsx('relative flex flex-col w-full gap-1', open && 'gap-2', !open && 'px-3')}
+        >
+          {menuSection.map((item) => (
+            <>
+              <div className={clsx('bg-brand-300 h-px opacity-25 inline-flex ', !open && 'pl-3')} />
+              <div key={item.text} className="flex gap-3 hover:bg-brand-500 py-2">
+                <button>
+                  <Image
+                    src={item.icon}
+                    alt="image"
+                    className={clsx('inline-flex duration-500 ', open && 'hidden ')}
+                  ></Image>
+                </button>
+
+                <button
+                  className={clsx('text-brand-300 font-semibold text-xs ', !open && 'hidden ')}
+                >
+                  {item.text}
+                </button>
+              </div>
+            </>
+          ))}
+          <div className={clsx('relative flex flex-col gap-1', open && 'gap-2')}>
+            {profileLogout.map((item) => (
               <>
                 <div
-                  className={clsx(
-                    'bg-brand-300 h-px opacity-25 inline-flex ',
-                    !open && 'pl-3 mt-4'
-                  )}
+                  className={clsx('bg-brand-300 h-px opacity-25 inline-flex ', !open && 'pl-3')}
                 />
-                <div key={item.text} className="flex gap-3 mb-4 right-0">
+                <div key={item.text} className="flex gap-3 hover:bg-brand-500 py-2">
                   <button>
                     <Image
                       src={item.icon}
                       alt="image"
-                      className={clsx('inline-flex duration-500 ', open && 'hidden ')}
+                      className={clsx('inline-flex duration-500', open && 'hidden ')}
                     ></Image>
                   </button>
 
@@ -135,33 +148,6 @@ const MenuSection = () => {
                 </div>
               </>
             ))}
-            <div className={clsx('relative flex flex-col ', open && 'gap-3')}>
-              {profile_logout.map((item) => (
-                <>
-                  <div
-                    className={clsx(
-                      'bg-brand-300 h-px opacity-25 inline-flex ',
-                      !open && 'pl-3 mt-4'
-                    )}
-                  />
-                  <div key={item.text} className="flex gap-3 mb-4">
-                    <button>
-                      <Image
-                        src={item.icon}
-                        alt="image"
-                        className={clsx('inline-flex duration-500', open && 'hidden ')}
-                      ></Image>
-                    </button>
-
-                    <button
-                      className={clsx('text-brand-300 font-semibold text-xs ', !open && 'hidden ')}
-                    >
-                      {item.text}
-                    </button>
-                  </div>
-                </>
-              ))}
-            </div>
           </div>
         </div>
       </div>
