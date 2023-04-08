@@ -55,7 +55,9 @@ export default function AdminUserView() {
                 <td className="px-6 py-4">1/1/1000</td>
                 <td className="px-6 py-4">20/2/2003</td>
                 <td className="px-6 py-4">
-                  <div className="btn">hello</div>
+                  <button className="bg-brand-200 rounded-full w-6 h-6">
+                    <Image className="rounded" src={pen_logo} alt={'pen logo'}></Image>
+                  </button>
                 </td>
               </tr>
               <tr className="bg-brand-50">
@@ -67,6 +69,11 @@ export default function AdminUserView() {
                 <td className="px-6 py-4">raghid@gmail.commmm</td>
                 <td className="px-6 py-4">1/1/1000</td>
                 <td className="px-6 py-4">20/2/2003</td>
+                <td className="px-6 py-4">
+                  <button className="bg-brand-200 rounded-full w-6 h-6">
+                    <Image className="rounded" src={pen_logo} alt={'pen logo'}></Image>
+                  </button>
+                </td>
               </tr>
               <tr className="bg-brand-50">
                 <th scope="row" className="px-6 py-4  text-brand">
@@ -77,6 +84,11 @@ export default function AdminUserView() {
                 <td className="px-6 py-4">raghid@gmail.commmm</td>
                 <td className="px-6 py-4">1/1/1000</td>
                 <td className="px-6 py-4">20/2/2003</td>
+                <td className="px-6 py-4">
+                  <button className="bg-brand-200 rounded-full w-6 h-6">
+                    <Image className="rounded" src={pen_logo} alt={'pen logo'}></Image>
+                  </button>
+                </td>
               </tr>
               <tr className="bg-brand-50">
                 <th scope="row" className="px-6 py-4  text-brand">
@@ -87,6 +99,11 @@ export default function AdminUserView() {
                 <td className="px-6 py-4">raghid@gmail.commmm</td>
                 <td className="px-6 py-4">1/1/1000</td>
                 <td className="px-6 py-4">20/2/2003</td>
+                <td className="px-6 py-4">
+                  <button className="bg-brand-200 rounded-full w-6 h-6">
+                    <Image className="rounded" src={pen_logo} alt={'pen logo'}></Image>
+                  </button>
+                </td>
               </tr>
             </tbody>
           </table>
