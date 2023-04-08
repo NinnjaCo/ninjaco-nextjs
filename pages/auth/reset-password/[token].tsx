@@ -19,6 +19,7 @@ import clsx from 'clsx'
 import jwt from 'jsonwebtoken'
 import lightlyWavedLine from '@/images/lightlyWavedLine.svg'
 import logoPointingDown from '@/images/logoPointingYellowBand.svg'
+import useTranslation from '@/hooks/useTranslation'
 
 type ResetPasswordFormDataType = {
   password: string
@@ -51,8 +52,6 @@ const ResetPassword = (props: ServerProps) => {
   const {
     register,
     handleSubmit,
-    control,
-
     formState: { errors, isSubmitted },
   } = useForm<ResetPasswordFormDataType>({
     resolver: yupResolver(ResetPasswordFormSchema),
@@ -106,6 +105,7 @@ const ResetPassword = (props: ServerProps) => {
       }
     }
   }
+
   useEffect(() => {
     if (props.errorMessage) {
       setAlertData({
@@ -116,6 +116,7 @@ const ResetPassword = (props: ServerProps) => {
     }
   }, [props.errorMessage, alertData.open])
 
+  const t = useTranslation()
   return (
     <>
       <Head>
@@ -134,7 +135,7 @@ const ResetPassword = (props: ServerProps) => {
           }}
         ></Menu>
         <AuthCard
-          title="Reset Password"
+          title={t.resetPassword.title as string}
           titleImage={logoPointingDown}
           underLineImage={lightlyWavedLine}
         >
@@ -149,8 +150,8 @@ const ResetPassword = (props: ServerProps) => {
             <Input
               {...register('password')}
               type="password"
-              label={'New Password'}
-              placeholder={'Password'}
+              label={t.resetPassword.newPassword as string}
+              placeholder={t.resetPassword.password as string}
               StartIcon={LockClosedIcon}
               error={errors.password?.message}
               disabled={props.errorMessage !== undefined}
@@ -158,8 +159,8 @@ const ResetPassword = (props: ServerProps) => {
             <Input
               {...register('passwordConfirmation')}
               type="password"
-              label={'Confirm Password'}
-              placeholder={'Confirm Password'}
+              label={t.resetPassword.confirmPassword as string}
+              placeholder={t.resetPassword.confirmPassword1 as string}
               StartIcon={LockClosedIcon}
               error={errors.passwordConfirmation?.message}
               disabled={props.errorMessage !== undefined}
@@ -177,15 +178,15 @@ const ResetPassword = (props: ServerProps) => {
                 }
               )}
             >
-              Change Your Password
+              {t.resetPassword.changePassword}
             </button>
           </form>
           <div className="w-full flex justify-between text-xs mt-6">
             <Link className="cursor-pointer text-brand-500" href="/">
-              Back to Home
+              {t.resetPassword.backToHome}
             </Link>
             <Link href="/auth/signin" className="cursor-pointer text-brand font-semibold">
-              Sign In
+              {t.resetPassword.signIn}
             </Link>
           </div>
         </AuthCard>

@@ -37,7 +37,7 @@ const frenchTranslations: WebsiteTranslations = {
     },
 
     Testimonials: {
-      title: 'Ce que disent les autres',
+      title: "l'opinion des autres",
       reviews: {
         review1:
           "Mon fils a toujours été intéressé par les robots, mais nous ne vivons à proximité d'aucune des succursales de Ninja Co. Grâce à leur nouvelle plateforme en ligne, il peut enfin suivre des cours et s'initier à la robotique dans le confort de sa maison.",
@@ -48,7 +48,7 @@ const frenchTranslations: WebsiteTranslations = {
       },
     },
     About: {
-      title: 'Pourquoi choisit notre plateforme?',
+      title: 'Pourquoi nous choisir ?',
       courses: 'Cours',
       coursesDescription: 'Tous types de cours adaptés à vos besoins',
       playForms: 'Formes ludiques',
@@ -271,6 +271,35 @@ const frenchTranslations: WebsiteTranslations = {
     question4: "Où puis-je m'inscrire aux cours?",
     answer4:
       "Vous devriez être en mesure de vous inscrire aux cours sur le site web qui offre des cours de codage à l'aide de blocs visuels et d'Arduino. Recherchez un bouton ou un lien « Commencer à coder » ou « Commencer » sur la page d'accueil ou le menu de navigation du site web. En cliquant sur ce bouton ou lien, vous devriez être dirigé vers une page d'inscription où vous pouvez fournir vos informations et vous inscrire aux cours.",
+  },
+  signin: {
+    signIn: 'Connectez vous',
+    headTitle: 'Ninja Co | Connecion',
+    email: 'Email',
+    password: 'Mot de Passe',
+    forgotPassword: 'Mot de passe oublié?',
+    signUp: 'Inscrivez-vous',
+  },
+  forgetPassword: {
+    title: 'Mot de passe oublié',
+    invalidEmail: 'Email invalide',
+    emailRequired: "L'e-mail est requis",
+    wrong: "Quelque chose s'est mal passé",
+    checkEmail: 'Vérifiez votre e-mail pour un lien pour réinitialiser votre mot de passe',
+    label: 'E-mail',
+    sendResetLink: 'Envoyer lien reset',
+    backToHome: "Retour à la page d'accueil",
+    signIn: "S'identifier",
+  },
+  resetPassword: {
+    title: 'Réinitialiser le Mot de Passe',
+    newPassword: 'Nouveau Mot de Passe',
+    password: 'Mot de Passe',
+    confirmPassword: 'Confirmez le Mot de Passe',
+    confirmPassword1: 'Confirmez le Mot de Pass',
+    changePassword: 'Changer Votre Mot de Passe',
+    backToHome: "Retourner à la Page d'Entrée",
+    signIn: 'Sign-In',
   },
 }
 export default frenchTranslations

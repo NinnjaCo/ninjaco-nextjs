@@ -1,30 +1,16 @@
-import {
-  BaseSingleInputFieldProps,
-  DatePicker,
-  DesktopDatePicker,
-  FieldSection,
-} from '@mui/x-date-pickers'
 import { CalendarIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { CircularProgress, TextField } from '@mui/material'
-import { Control, Controller, useFormContext } from 'react-hook-form'
-import { Input } from './input'
+import { Control, Controller } from 'react-hook-form'
+import { DesktopDatePicker } from '@mui/x-date-pickers'
 import clsx from 'clsx'
-import dayjs, { Dayjs } from 'dayjs'
 
 interface DatePickerProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<any>
   name: string
-  placeholder: string
   label: string
   error: string | undefined
 }
-const DatePickerWithHookForm: React.FC<DatePickerProps> = ({
-  control,
-  placeholder,
-  name,
-  label,
-  error,
-}) => {
+const DatePickerWithHookForm: React.FC<DatePickerProps> = ({ control, name, label, error }) => {
   return (
     <div className="flex flex-col gap-2">
       {label && (
@@ -50,7 +36,7 @@ const DatePickerWithHookForm: React.FC<DatePickerProps> = ({
                     border: '1px solid',
                   },
                   className: clsx(
-                    'w-full text-brand-300 placeholder-brand-400 border border-brand-300 rounded-md focus:outline-none focus:ring-brand focus:border-brand sm:text-sm',
+                    'w-full bg-white text-brand-300 placeholder-brand-400 border border-brand-100 rounded-md focus:outline-none focus:ring-brand focus:border-brand sm:text-sm',
                     {
                       'border-error-dark text-error placeholder-error': error,
                     }

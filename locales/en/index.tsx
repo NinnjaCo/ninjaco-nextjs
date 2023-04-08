@@ -260,6 +260,36 @@ const englishTranslations: WebsiteTranslations = {
     answer4:
       "You should be able to register for the courses on the website that offers the coding courses using visual blocks and Arduino. Look for a « Start coding » or « Get started » button/link on the website's landing page or navigation menu. Clicking on that button/link should take you to a registration page where you can provide your information and enroll in the courses.",
   },
+  signin: {
+    headTitle: 'Ninja Co | Sign In',
+    signIn: 'Sign In',
+    email: 'Email',
+    password: 'Password',
+    forgotPassword: 'Forgot Password?',
+    signUp: 'Sign Up',
+  },
+
+  forgetPassword: {
+    title: 'Forgot Password',
+    invalidEmail: 'Invalid email',
+    emailRequired: 'Email is required',
+    wrong: 'Something went wrong',
+    checkEmail: 'Check your email for a link to reset your password',
+    label: 'Email',
+    sendResetLink: 'Send Reset Link',
+    backToHome: 'Back to Home',
+    signIn: 'Sign In',
+  },
+  resetPassword: {
+    title: 'Reset Password',
+    newPassword: 'New Password',
+    password: 'Password',
+    confirmPassword: 'Confirm Password',
+    confirmPassword1: 'Confirm Password',
+    changePassword: 'Change Your Password',
+    backToHome: 'Back to Home',
+    signIn: 'Sign In',
+  },
 }
 
 export default englishTranslations
