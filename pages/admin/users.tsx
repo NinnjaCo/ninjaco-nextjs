@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import MenuSection from '@/components/admin/menuSection'
 import React, { Fragment } from 'react'
+import filter_logo from '@/images/filter_logo.svg'
 
 import pen_logo from '@/images/pen_logo.svg'
 
@@ -19,14 +20,18 @@ export default function AdminUserView() {
         <div className="flex flex-col ">
           <div className="flex justify justify-between">
             <div className="text-brand-700 text-3xl font-semibold ml-24 mt-10">users</div>
-            <div className="mt-10 btn w-32 h-10 rounded-xl border-x-2 border-y-2 border-brand text-lg font-semibold text-brand flex gap-2 max-w-fit">
+            <div className="mt-10 mr-14 btn w-32 h-10 rounded-xl border-x-2 border-y-2 border-brand text-lg font-semibold text-brand   ">
               Add user
             </div>
           </div>
-          <div className="ml-24 mt-1 ">number of users</div>
-          <div className="ml-24 mt-10">Filter</div>
+          <div className="ml-24 mt-1 text-sm text-brand "> 1234 entries found</div>
+          <div className="ml-24 mt-10 mb-2 btn w-32 h-8 rounded-lg border-x-1 border-y-1 bg-brand-200 border-brand text-lg font-semibold text-brand flex gap-2 max-w-fit">
+            {/* add filter_logo image */}
+            <Image src={filter_logo} alt={'filter'}></Image>
+            Filter
+          </div>
           <div className="relative overflow-x-auto h-fit">
-            <table className="w-5/6 ml-24 text-sm text-left text-brand rounded-t-2xl">
+            <table className="w-5/6 ml-24 text-sm text-left text-brand rounded-t-2xl ">
               <thead className="text-brand w-max uppercase bg-brand-200 ">
                 <tr>
                   <th scope="col" className="px-6 py-3">
