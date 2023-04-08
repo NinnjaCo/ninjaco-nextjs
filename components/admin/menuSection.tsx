@@ -40,33 +40,41 @@ const MenuSection = () => {
     },
   ]
   return (
-    <div className=" bg-brand h-screen w-1/5 flex flex-col justify-between items-center">
-      <Link href={'/'}>
-        <Image src={logo_white} alt="Hero Image" width={150} height={50} className=" mt-7"></Image>
-      </Link>
-      <div className="relative flex flex-col gap-3 w-2/3 ">
-        {menuSection.map((item) => (
-          <>
-            <div className="bg-brand-300 h-px opacity-25" />
-            <div key={item.text} className="flex gap-3 mb-4">
-              <Image src={item.icon} alt="image"></Image>
-              <button className="text-brand-300 font-semibold text-sm">{item.text}</button>
-            </div>
-          </>
-        ))}
+    <>
+      <div className=" bg-brand h-screen w-1/5 flex flex-col justify-between items-center">
+        <Link href={'/'}>
+          <Image
+            src={logo_white}
+            alt="Hero Image"
+            width={150}
+            height={50}
+            className=" mt-7"
+          ></Image>
+        </Link>
+        <div className="relative flex flex-col gap-3 w-2/3 ">
+          {menuSection.map((item) => (
+            <>
+              <div className="bg-brand-300 h-px opacity-25" />
+              <div key={item.text} className="flex gap-3 mb-4">
+                <Image src={item.icon} alt="image"></Image>
+                <button className="text-brand-300 font-semibold text-sm">{item.text}</button>
+              </div>
+            </>
+          ))}
+        </div>
+        <div className="relative flex flex-col gap-3 w-2/3 ">
+          {profile_logout.map((item) => (
+            <>
+              <div className="bg-brand-300  h-px opacity-25" />
+              <div key={item.text} className="flex gap-3 mb-4">
+                <Image src={item.icon} alt="image"></Image>
+                <button className="text-brand-300 font-semibold text-sm">{item.text}</button>
+              </div>
+            </>
+          ))}
+        </div>
       </div>
-      <div className="relative flex flex-col gap-3 w-2/3 ">
-        {profile_logout.map((item) => (
-          <>
-            <div className="bg-brand-300  h-px opacity-25" />
-            <div key={item.text} className="flex gap-3 mb-4">
-              <Image src={item.icon} alt="image"></Image>
-              <button className="text-brand-300 font-semibold text-sm">{item.text}</button>
-            </div>
-          </>
-        ))}
-      </div>
-    </div>
+    </>
   )
 }
 

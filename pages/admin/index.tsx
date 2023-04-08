@@ -25,18 +25,20 @@ export default function AdminDashboard() {
             <Image src={statistics} alt="image" />
             <div className="text-brand-700 font-semibold text-3xl"> Statistics </div>
           </div>
-          <div className=" bg-brand-50 ml-24 md:w-5/6 h-full md:h-3/4 lg:h-1/2 rounded-2xl flex flex-wrap gap-32 md:gap-28 lg:gap-5 justify-around pt-10 relative">
-            <div>
-              <Image src={total_users} alt="image" />
-              <div className="ml-14 text-brand-100 font-semibold text-xl -mt-[134px]">2560</div>
+          <div className=" bg-brand-50 ml-24 md:w-5/6 h-full md:h-3/4 rounded-2xl flex flex-wrap gap-32 md:gap-28 lg:gap-5 justify-around pt-10 relative">
+            <div className="h-32 relative">
+              <Image src={total_users} alt="image" className="w-full h-full" />
+              <div className="text-brand-100 font-semibold text-xl absolute top-3 left-12">
+                2560
+              </div>
             </div>
-            <div>
-              <Image src={total_courses} alt="image" />
-              <div className="ml-14 text-brand-100 font-semibold text-xl -mt-[134px]">10</div>
+            <div className="h-32 relative">
+              <Image src={total_courses} alt="image" className="w-full h-full" />
+              <div className="text-brand-100 font-semibold text-xl absolute top-3 left-12">10</div>
             </div>
-            <div>
-              <Image src={total_creators} alt="image" />
-              <div className="ml-14 text-brand-100 font-semibold text-xl -mt-[134px]">210</div>
+            <div className="h-32 relative">
+              <Image src={total_creators} alt="image" className="w-full h-full" />
+              <div className="text-brand-100 font-semibold text-xl absolute top-3 left-12">20</div>
             </div>
           </div>
           {/* leaderboard */}
