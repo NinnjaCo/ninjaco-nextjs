@@ -27,7 +27,7 @@ export default function FAP_page() {
   return (
     <>
       <Head>
-        <title>{t.LandingPage.headTitle}</title>
+        <title>{t.Faq.headTitle}</title>
         <meta name="description" content="Leading online platform for visual programming" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
@@ -43,7 +43,7 @@ export default function FAP_page() {
           }}
         />
         <div className="mt-32 px-7 md:px-14 font-bold text-lg md:text-xl lg:text-2xl text-brand">
-          <h1>{t.Faq.headTitle}</h1>
+          <h1>{t.Faq.title}</h1>
         </div>
         <div className="px-7 md:px-14 mt-14 mb-24 flex flex-col gap-10">
           {/* map through faq array and display the three component */}

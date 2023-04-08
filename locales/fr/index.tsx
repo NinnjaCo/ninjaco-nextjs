@@ -66,6 +66,7 @@ const frenchTranslations: WebsiteTranslations = {
     },
   },
   Copyright: {
+    headTitle: "Ninja Co | Droits d'Auteur",
     privacy: 'Politique de confidentialité',
     updated: 'Dernière mise à jour: 03 MARS 2023',
     agreement: (
@@ -254,7 +255,8 @@ const frenchTranslations: WebsiteTranslations = {
     Terms: 'Politique de confidentialité',
   },
   Faq: {
-    headTitle: 'Questions Fréquemment Posées',
+    headTitle: 'Ninja Co | FAQ',
+    title: 'Foire Aux Questions',
     question1: 'Dois-je avoir des connaissances préalables en programmation ?',
     answer1:
       "Non, une connaissance préalable en programmation n'est pas nécessaire pour s'inscrire aux cours de NinjaCo ou utiliser la plateforme en ligne. La plateforme inclura une interface conviviale avec un guide étape par étape pour construire des robots, permettant aux étudiants de suivre à leur propre rythme. La plateforme inclura également des options de programmation visuelle et de codage par blocs, rendant le processus d'apprentissage encore plus interactif.",
@@ -267,6 +269,15 @@ const frenchTranslations: WebsiteTranslations = {
     question4: "Où puis-je m'inscrire aux cours?",
     answer4:
       "Vous devriez être en mesure de vous inscrire aux cours sur le site web qui offre des cours de codage à l'aide de blocs visuels et d'Arduino. Recherchez un bouton ou un lien « Commencer à coder » ou « Commencer » sur la page d'accueil ou le menu de navigation du site web. En cliquant sur ce bouton ou lien, vous devriez être dirigé vers une page d'inscription où vous pouvez fournir vos informations et vous inscrire aux cours.",
+  },
+  signin: {
+    signIn: 'Connectez-vous',
+    headTitle: 'Ninja Co | Connecion',
+    email: 'e-mail',
+    password: 'mot de passe',
+    backToHome: "Retour à la page d'accueil ",
+    dontHaveAccount: "Vous n'avez pas de compte ?",
+    signUp: 'Inscrivez-vous',
   },
 }
 export default frenchTranslations

@@ -1,6 +1,7 @@
 import Footer from '@/components/layout/footer'
 import Menu from '@/components/layout/menu'
 
+import Head from 'next/head'
 import useTranslation from '@/hooks/useTranslation'
 
 export default function Home() {
@@ -68,6 +69,11 @@ export default function Home() {
 
   return (
     <>
+      <Head>
+        <title>{t.Copyright.headTitle}</title>
+        <meta name="description" content="Leading online platform for visual programming" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
       <Menu
         menuOption={{
           isSticky: false,
