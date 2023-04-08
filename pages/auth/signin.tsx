@@ -145,8 +145,8 @@ const Signin = (props: ServerProps) => {
               {t.signin.signIn}
             </button>
           </form>
-          <div className="w-full flex justify-between text-xs mt-6">
-            <Link className="cursor-pointer text-brand-500" href="/auth/forgot-password">
+          <div className="w-full flex justify-between text-xs mt-6 flex-wrap gap-4">
+            <Link className="cursor-pointer text-brand font-semibold" href="/auth/forgot-password">
               {t.signin.forgotPassword}
             </Link>
             <Link href="/auth/signup" className="cursor-pointer text-brand font-semibold">

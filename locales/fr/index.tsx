@@ -35,7 +35,7 @@ const frenchTranslations: WebsiteTranslations = {
     },
 
     Testimonials: {
-      title: 'Ce que disent les autres',
+      title: "l'opinion des autres",
       reviews: {
         review1:
           "Mon fils a toujours été intéressé par les robots, mais nous ne vivons à proximité d'aucune des succursales de Ninja Co. Grâce à leur nouvelle plateforme en ligne, il peut enfin suivre des cours et s'initier à la robotique dans le confort de sa maison.",
@@ -46,7 +46,7 @@ const frenchTranslations: WebsiteTranslations = {
       },
     },
     About: {
-      title: 'Pourquoi choisit notre plateforme?',
+      title: 'Pourquoi nous choisir ?',
       courses: 'Cours',
       coursesDescription: 'Tous types de cours adaptés à vos besoins',
       playForms: 'Formes ludiques',

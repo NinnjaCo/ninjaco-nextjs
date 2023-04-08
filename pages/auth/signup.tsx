@@ -34,7 +34,10 @@ const SignUpFormSchema = yup
   .shape({
     firstName: yup.string().required('First Name is required'),
     lastName: yup.string().required('Last Name is required'),
-    dateOfBirth: yup.date().required('Date of Birth is required'),
+    dateOfBirth: yup
+      .date()
+      .max(new Date(), 'Date of Birth cannot be in the future')
+      .required('Date of Birth is required'),
     email: yup.string().email('Invalid email').required('Email is required'),
     password: yup
       .string()
