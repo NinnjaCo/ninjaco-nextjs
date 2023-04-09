@@ -59,7 +59,7 @@ export default function Profile() {
         <meta name="description" content="Leading online platform for visual programming" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <main className="flex h-full">
+      <main className="flex w-full h-screen overflow-hidden">
         <SideMenu higlightProfile={true} />
         <form
           id="form"

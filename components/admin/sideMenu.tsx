@@ -67,7 +67,7 @@ const SideMenu = (props: SideMenuProps) => {
   return (
     <>
       {/* Menu after MD */}
-      <div className="hidden md:flex bg-brand w-1/5 h-screen flex-col justify-between items-center py-4 px-1 lg:px-4">
+      <div className="hidden md:flex bg-brand w-full max-w-[12rem] h-screen flex-col justify-between items-center py-4 px-1 lg:px-4">
         <Link href={'/'}>
           <Image src={logo_white} alt="Hero Image" width={150} height={50} priority></Image>
         </Link>
