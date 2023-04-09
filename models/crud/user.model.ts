@@ -7,6 +7,8 @@ export interface User {
   email: string
   dateOfBirth: string
   role: Role
+  createdAt: string
+  updatedAt: string
 }
 
 export interface UserRequest {

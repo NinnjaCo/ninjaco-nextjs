@@ -42,5 +42,4 @@ const MenuButton: React.FC<{
     </div>
   )
 }
-
 export default MenuButton

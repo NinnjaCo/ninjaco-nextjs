@@ -44,5 +44,4 @@ const MenuSection = (props: MenuSectionProps) => {
     </div>
   )
 }
-
 export default MenuSection

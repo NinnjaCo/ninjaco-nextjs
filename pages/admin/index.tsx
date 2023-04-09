@@ -13,7 +13,7 @@ export default function AdminDashboard() {
   return (
     <>
       <Head>
-        <title>Ninja Co | Admin Dashboard</title>
+        <title>NinjaCo | Admin Dashboard</title>
         <meta name="description" content="Leading online platform for visual programming" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
