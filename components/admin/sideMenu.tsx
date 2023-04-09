@@ -9,6 +9,7 @@ import {
   UsersIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronLeftIcon } from '@heroicons/react/20/solid'
+import { useRouter } from 'next/router'
 import Image from 'next/image'
 import Link from 'next/link'
 import MenuSection from './menuSection'
@@ -30,6 +31,7 @@ const SideMenu = (props: SideMenuProps) => {
   const [open, setIsOpen] = useState(false)
 
   const [openLogout, setOpenLogout] = React.useState(false)
+  const router = useRouter()
   const preformLogout = () => {
     console.log('logout')
   }
@@ -44,16 +46,25 @@ const SideMenu = (props: SideMenuProps) => {
       Icon: BookOpenIcon,
       text: 'COURSES',
       isHighlighted: props.higlightCourses ?? false,
+      actionOnClick: () => {
+        router.push('/admin/courses')
+      },
     },
     {
       Icon: UserGroupIcon,
       text: 'USERS',
       isHighlighted: props.higlightUsers ?? false,
+      actionOnClick: () => {
+        router.push('/admin/users')
+      },
     },
     {
       Icon: UsersIcon,
       text: 'CREATORS',
       isHighlighted: props.higlightCreators ?? false,
+      actionOnClick: () => {
+        router.push('/admin/creators')
+      },
     },
   ]
 
@@ -62,7 +73,11 @@ const SideMenu = (props: SideMenuProps) => {
       Icon: UserIcon,
       text: 'PROFILE',
       isHighlighted: props.higlightProfile ?? false,
+      actionOnClick: () => {
+        router.push('/admin/profile')
+      },
     },
+
     {
       Icon: ArrowRightOnRectangleIcon,
       text: 'LOGOUT',
