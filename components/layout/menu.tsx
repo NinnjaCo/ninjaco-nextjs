@@ -120,12 +120,12 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
     }
   }
 
-  const isSessionOn = () => {
+  const isUserLoggedIn = () => {
     return session?.status === 'authenticated' && session.data.id
   }
 
   const clickSignOut = () => {
-    signOut({ callbackUrl: '/' })
+    signOut()
   }
 
   return (
@@ -248,9 +248,9 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
                       ))}
                     </div>
                     <div className="bg-brand-100 p-4 flex justify-center items-center">
-                      {isSessionOn() ? (
+                      {isUserLoggedIn() ? (
                         <button
-                          className="btn btn-warning justify-items-center"
+                          className="btn btn-warning justify-self-start flex-1"
                           onClick={clickSignOut}
                         >
                           {t.Menu.signOut}
