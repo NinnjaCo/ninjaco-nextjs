@@ -41,6 +41,9 @@ const SideMenu = (props: SideMenuProps) => {
       Icon: HomeIcon,
       text: 'DASHBOARD',
       isHighlighted: props.higlightDashboard ?? false,
+      actionOnClick: () => {
+        router.push('/admin')
+      },
     },
     {
       Icon: BookOpenIcon,
