@@ -8,6 +8,7 @@ import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { signIn } from 'next-auth/react'
 import { useAuthApi } from '@/utils/api/auth'
 import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/router'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Alert from '@/components/shared/alert'
 import AuthCard from '@/components/auth/authCard'
@@ -16,7 +17,7 @@ import Footer from '@/components/layout/footer'
 import Head from 'next/head'
 import Link from 'next/link'
 import Menu from '@/components/layout/menu'
-import React, { useEffect, useTransition } from 'react'
+import React, { useEffect } from 'react'
 import heavilyWavedLine from '@/images/heavilyWavedLine.svg'
 import logoPointingDown from '@/images/logoPointingYellowBand.svg'
 import useTranslation from '@/hooks/useTranslation'
@@ -55,9 +56,10 @@ interface ServerProps {
   error: string | null
   callbackUrl: string | null
 }
-const Signup = (props) => {
+const Signup = (props: ServerProps) => {
   const authApi = useAuthApi()
   const t = useTranslation()
+  const router = useRouter()
   const [signUpButtonDisabled, setSignUpButtonDisabled] = React.useState(false)
 
   const {
@@ -96,12 +98,17 @@ const Signup = (props) => {
       await signIn('credentials', {
         email: data.email,
         password: data.password,
+        redirect: false,
       })
       setAlertData({
         message: 'Check your email to confirm your account',
         variant: 'success',
         open: true,
       })
+
+      setTimeout(() => {
+        router.push(props.callbackUrl || '/')
+      }, 3000)
     } catch (error) {
       setSignUpButtonDisabled(false)
       if (isAxiosError<AuthError>(error)) {
