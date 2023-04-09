@@ -1,11 +1,5 @@
 import * as React from 'react'
-import {
-  DataGrid,
-  GridColDef,
-  GridRowsProp,
-  GridToolbar,
-  GridToolbarExport,
-} from '@mui/x-data-grid'
+import { GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import { PencilIcon } from '@heroicons/react/24/solid'
 import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
@@ -58,15 +52,16 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
         headerClassName: 'bg-brand-200',
       },
       {
-        field: 'role',
-        headerName: 'Role',
-        width: 110,
-        minWidth: 110,
-        headerClassName: 'bg-brand-200',
-      },
-      {
         field: 'createdAt',
         headerName: 'Created At',
+        width: 160,
+        minWidth: 160,
+        headerClassName: 'bg-brand-200',
+        flex: 1,
+      },
+      {
+        field: 'updatedAt',
+        headerName: 'Updated At',
         width: 160,
         minWidth: 160,
         headerClassName: 'bg-brand-200',
@@ -106,8 +101,8 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
         dob: getReadableDateFromISO(user.dateOfBirth),
         firstName: user.firstName,
         lastName: user.lastName,
-        role: user.role,
         createdAt: getReadableDateFromISO(user.createdAt),
+        updatedAt: getReadableDateFromISO(user.updatedAt),
         action: user._id,
       })),
     [users]
@@ -129,7 +124,7 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
               <div className="text-sm text-brand  ">{users.length} entries found</div>
             </div>
             <button className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-400 hover:text-white py-2">
-              Add user
+              Add User
             </button>
           </div>
           <Table columns={columns} rows={rows} width={'100%'} height={700} className="mr-4" />
@@ -153,7 +148,8 @@ export const getServerSideProps = async (context) => {
   }
   const api = new UserApi(session)
   const response = await api.find()
+  const users = response.payload.filter((user) => user.role.role === 'user')
   return {
-    props: { users: response.payload },
+    props: { users },
   }
 }
