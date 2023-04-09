@@ -21,6 +21,7 @@ import clsx from 'clsx'
 import jwt from 'jsonwebtoken'
 import lightlyWavedLine from '@/images/lightlyWavedLine.svg'
 import logoPointingDown from '@/images/logoPointingYellowBand.svg'
+import useTranslation from '@/hooks/useTranslation'
 
 type VerifyEmailFormDataType = {
   code: string
@@ -39,9 +40,10 @@ interface ServerProps {
   decodedUserId: string
 }
 
-const ResetPassword = (props: ServerProps) => {
+const VerifyEmail = (props: ServerProps) => {
   const authApi = useAuthApi()
   const router = useRouter()
+  const t = useTranslation()
 
   const {
     register,
@@ -146,8 +148,8 @@ const ResetPassword = (props: ServerProps) => {
             <Input
               {...register('code')}
               type="text"
-              label={'Code'}
-              placeholder={'Code'}
+              label={t.verifyEmail.code}
+              placeholder={t.verifyEmail.code as string}
               StartIcon={LockClosedIcon}
               error={errors.code?.message}
               disabled={props.errorMessage !== undefined}
@@ -165,15 +167,15 @@ const ResetPassword = (props: ServerProps) => {
                 }
               )}
             >
-              Verify Your Email
+              {t.verifyEmail.verify}
             </button>
           </form>
           <div className="w-full flex justify-between text-xs mt-6">
             <Link className="cursor-pointer text-brand-500" href="/">
-              Back to Home
+              {t.verifyEmail.backToHome}
             </Link>
             <Link href="/auth/signin" className="cursor-pointer text-brand font-semibold">
-              Sign Up
+              {t.verifyEmail.signIn}
             </Link>
           </div>
         </AuthCard>
@@ -256,4 +258,4 @@ export const getServerSideProps = async (context) => {
     props: { token, decodedUserId },
   }
 }
-export default ResetPassword
+export default VerifyEmail
