@@ -9,6 +9,7 @@ const frenchTranslations: WebsiteTranslations = {
     startCoding: 'Commencer à coder',
     signIn: 'Connecter',
     register: <>S&apos;inscrire</>,
+    signOut: 'Se déconnecter',
   },
   fourOhFour: {
     headTitle: 'NinjaCo | Page introuvable',
@@ -26,9 +27,10 @@ const frenchTranslations: WebsiteTranslations = {
       ),
       description: (
         <>
-          Discover the fun and excitement of robotics and coding with NinjaCo&apos;s online
-          platform! Our step-by-step guide and interactive courses will help you unleash your inner
-          ninja and master these essential skills from the comfort of your own home.
+          Découvrez le plaisir et l&apos;excitation de la robotique et de la programmation avec la
+          plateforme en ligne de Ninja Co! Notre guide étape par étape et nos cours interactifs vous
+          aideront à libérer votre ninja intérieur et à maîtriser ces compétences essentielles
+          depuis le confort de votre foyer.
         </>
       ),
       getStarted: 'Commencer',
