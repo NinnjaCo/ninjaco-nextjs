@@ -11,6 +11,7 @@ export interface User {
   createdAt: string
   updatedAt: string
   points: number
+  level: number
 }
 
 export interface UserRequest {
