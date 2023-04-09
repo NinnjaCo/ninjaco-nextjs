@@ -16,7 +16,7 @@ import Footer from '@/components/layout/footer'
 import Head from 'next/head'
 import Link from 'next/link'
 import Menu from '@/components/layout/menu'
-import React, { useTransition } from 'react'
+import React, { useEffect, useTransition } from 'react'
 import heavilyWavedLine from '@/images/heavilyWavedLine.svg'
 import logoPointingDown from '@/images/logoPointingYellowBand.svg'
 import useTranslation from '@/hooks/useTranslation'
@@ -51,9 +51,14 @@ const SignUpFormSchema = yup
   })
   .required()
 
-const Signup = () => {
+interface ServerProps {
+  error: string | null
+  callbackUrl: string | null
+}
+const Signup = (props) => {
   const authApi = useAuthApi()
   const t = useTranslation()
+  const [signUpButtonDisabled, setSignUpButtonDisabled] = React.useState(false)
 
   const {
     register,
@@ -79,6 +84,7 @@ const Signup = () => {
   const onSubmitHandler = async (data: SignUpFormDataType) => {
     try {
       closeAlert()
+      setSignUpButtonDisabled(true)
       await authApi.signUp({
         firstName: data.firstName,
         lastName: data.lastName,
@@ -86,18 +92,18 @@ const Signup = () => {
         email: data.email,
         password: data.password,
       })
-      setAlertData({
-        message: 'Account Created Successfully',
-        variant: 'success',
-        open: true,
-      })
       // sign in the user using next-auth
       await signIn('credentials', {
-        redirect: true,
         email: data.email,
         password: data.password,
       })
+      setAlertData({
+        message: 'Check your email to confirm your account',
+        variant: 'success',
+        open: true,
+      })
     } catch (error) {
+      setSignUpButtonDisabled(false)
       if (isAxiosError<AuthError>(error)) {
         const errors = unWrapAuthError(error)
         setAlertData({
@@ -108,6 +114,16 @@ const Signup = () => {
       }
     }
   }
+
+  useEffect(() => {
+    if (props.error) {
+      setAlertData({
+        message: props.error,
+        variant: 'error',
+        open: true,
+      })
+    }
+  }, [props.error])
 
   return (
     <>
@@ -182,7 +198,8 @@ const Signup = () => {
               type="submit"
               form="form"
               value="Submit"
-              className="w-full btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500"
+              className="w-full btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-600"
+              disabled={signUpButtonDisabled}
             >
               {t.signUp.signUp}
             </button>
@@ -205,6 +222,9 @@ const Signup = () => {
 export const getServerSideProps = async (context) => {
   const { query, req, res } = context
 
+  const error = query.error as string | null
+  const callbackUrl = query.callbackUrl as string | null
+
   const session = await getServerSession(req, res, authOptions)
   if (session) {
     return {
@@ -215,7 +235,10 @@ export const getServerSideProps = async (context) => {
     }
   }
   return {
-    props: {},
+    props: {
+      error: error || null,
+      callbackUrl: callbackUrl || null,
+    },
   }
 }
 export default Signup

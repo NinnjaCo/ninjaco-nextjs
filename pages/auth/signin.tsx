@@ -39,6 +39,8 @@ interface ServerProps {
   callbackUrl: string | null
 }
 const Signin = (props: ServerProps) => {
+  const [signInButtonDisabled, setSignInButtonDisabled] = React.useState(false)
+
   const {
     register,
     handleSubmit,
@@ -62,7 +64,7 @@ const Signin = (props: ServerProps) => {
   const onSubmitHandler = async (data: SignInFormDataType) => {
     try {
       closeAlert()
-
+      setSignInButtonDisabled(true)
       // sign in the user using next-auth
       await signIn('credentials', {
         email: data.email,
@@ -70,6 +72,7 @@ const Signin = (props: ServerProps) => {
         callbackUrl: props.callbackUrl || '/',
       })
     } catch (error) {
+      setSignInButtonDisabled(false)
       if (isAxiosError<AuthError>(error)) {
         const errors = unWrapAuthError(error)
         setAlertData({
@@ -141,7 +144,8 @@ const Signin = (props: ServerProps) => {
               type="submit"
               form="form"
               value="Submit"
-              className="w-full btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500"
+              className="w-full btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-600"
+              disabled={signInButtonDisabled}
             >
               {t.signin.signIn}
             </button>

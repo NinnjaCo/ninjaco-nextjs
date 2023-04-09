@@ -7,7 +7,9 @@ import clsx from 'clsx'
 const LocaleMenu: React.FC<{ colorClassName: string }> = ({ colorClassName }) => {
   const router = useRouter()
   const changeLocale = (locale: Locale) => {
-    router.push(router.pathname, router.pathname, { locale })
+    const { pathname, asPath, query } = router
+    // change just the locale and maintain all other route information including href's query
+    router.push({ pathname, query }, asPath, { locale: locale })
   }
   return (
     <Menu as="div" className="relative inline-block text-left z-20">

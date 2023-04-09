@@ -218,7 +218,8 @@ export const getServerSideProps = async (context) => {
   if (!session) {
     return {
       redirect: {
-        destination: (query.redirectTo as string | undefined) || '/auth/signup',
+        destination:
+          (query.redirectTo as string | undefined) || '/auth/signup?error=Token%20Expired',
         permanent: false,
       },
     }
