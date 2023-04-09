@@ -1,5 +1,4 @@
 import * as React from 'react'
-import * as qs from 'qs'
 import { GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import { PencilIcon } from '@heroicons/react/24/solid'
 import { User } from '@/models/crud'
