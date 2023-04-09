@@ -35,7 +35,10 @@ const SignUpFormSchema = yup
   .object()
   .shape({
     firstName: yup.string().required('First Name is required'),
-    lastName: yup.string().required('Last Name is required'),
+    lastName: yup
+      .string()
+      .required('Last Name is required')
+      .matches(/^[a-zA-Z\s]*$/, 'Name can only contain letters and spaces'),
     dateOfBirth: yup
       .date()
       .max(new Date(), 'Date of Birth cannot be in the future')
