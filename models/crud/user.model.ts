@@ -7,6 +7,7 @@ export interface User {
   email: string
   dateOfBirth: string
   role: Role
+  isVerified: boolean
   createdAt: string
   updatedAt: string
 }

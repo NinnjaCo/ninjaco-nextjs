@@ -2,6 +2,7 @@ import * as yup from 'yup'
 import { AuthError } from '@/models/shared'
 import { Input } from '@/components/forms/input'
 import { LockClosedIcon } from '@heroicons/react/24/outline'
+import { UserApi } from '@/utils/api/user'
 import { authOptions } from '../../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
@@ -221,6 +222,32 @@ export const getServerSideProps = async (context) => {
         destination:
           (query.redirectTo as string | undefined) || '/auth/signup?error=Token%20Expired',
         permanent: false,
+      },
+    }
+  }
+  if (session.id !== decodedUserId) {
+    return {
+      props: {
+        token: null,
+        errorMessage: 'Invalid Token Provided for this User',
+      },
+    }
+  }
+
+  const response = await new UserApi(session).findOne(decodedUserId)
+  if (!response || !response.payload?._id) {
+    return {
+      props: {
+        token: null,
+        errorMessage: 'User not found',
+      },
+    }
+  }
+  if (response.payload.isVerified) {
+    return {
+      props: {
+        token: null,
+        errorMessage: 'User is already verified',
       },
     }
   }
