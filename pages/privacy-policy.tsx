@@ -85,7 +85,7 @@ export default function Home() {
         }}
       />
       <div className="text-brand">
-        <div className="mt-24 md:mt-44 lg:mt-80 ml-8 md:ml-12 lg:ml-16 text-4xl / font-bold">
+        <div className="mt-12 md:mt-24 lg:mt-32 ml-8 md:ml-12 lg:ml-16 text-4xl / font-bold">
           {t.Copyright.privacy}
         </div>
         <div className="m-8 md:m-12 lg:m-12 ml-8 md:ml-12 lg:ml-16 text-lg font-bold">
