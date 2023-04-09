@@ -1,3 +1,4 @@
+import { AuthApi } from '@/utils/api/auth'
 import { Bars3Icon } from '@heroicons/react/20/solid'
 import { Popover, Transition } from '@headlessui/react'
 import { signOut, useSession } from 'next-auth/react'
@@ -124,8 +125,14 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
     return session?.status === 'authenticated' && session.data.id
   }
 
-  const clickSignOut = () => {
-    signOut()
+  const clickSignOut = async () => {
+    // Delete the refresh token from the database
+    const res = await new AuthApi(session.data).logout()
+
+    // dont signout if there is an error
+    if (!res || !res.payload) return
+
+    signOut({ callbackUrl: '/auth/signin' })
   }
 
   return (
