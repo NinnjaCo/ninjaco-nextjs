@@ -13,7 +13,7 @@ export default function AdminDashboard() {
   return (
     <>
       <Head>
-        <title>Ninja Co | Admin Dashboard</title>
+        <title>NinjaCo | Admin Dashboard</title>
         <meta name="description" content="Leading online platform for visual programming" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
@@ -30,7 +30,7 @@ export default function AdminDashboard() {
             <div className=" bg-brand-50 p-4 rounded-2xl justify-between w-fit sm:w-full grid grid-cols-1 sm:grid-cols-3 gap-6 place-self-center sm:place-self-auto">
               <div className="h-24 md:h-auto relative">
                 <Image src={total_users} alt="image" className="w-full h-full relative " priority />
-                <div className="text-brand-100 font-semibold text-base md:text-lg lg:text-xl absolute top-1 lg:top-3 xl:top-6 left-8 md:left-10 lg:left-12 xl:left-16">
+                <div className="text-brand-100 font-semibold text-base md:text-lg lg:text-2xl xl:text-3xl absolute top-1 lg:top-3 xl:top-6 left-8 md:left-10 lg:left-14 xl:left-24">
                   2560
                 </div>
               </div>
@@ -41,7 +41,7 @@ export default function AdminDashboard() {
                   className="w-full h-full relative "
                   priority
                 />
-                <div className="text-brand-100 font-semibold text-base md:text-lg lg:text-xl absolute top-1 lg:top-3 xl:top-6 left-8 md:left-10 lg:left-12 xl:left-16">
+                <div className="text-brand-100 font-semibold text-base md:text-lg lg:text-2xl xl:text-3xl absolute top-1 lg:top-3 xl:top-6 left-8 md:left-10 lg:left-14 xl:left-24">
                   10
                 </div>
               </div>
@@ -52,7 +52,7 @@ export default function AdminDashboard() {
                   className="w-full h-full relative "
                   priority
                 />
-                <div className="text-brand-100 font-semibold text-base md:text-lg lg:text-xl absolute top-1 lg:top-3 xl:top-6 left-8 md:left-10 lg:left-12 xl:left-16">
+                <div className="text-brand-100 font-semibold text-base md:text-lg lg:text-2xl xl:text-3xl absolute top-1 lg:top-3 xl:top-6 left-8 md:left-10 lg:left-14 xl:left-24">
                   20
                 </div>
               </div>

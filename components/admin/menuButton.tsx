@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 import clsx from 'clsx'
 
@@ -11,7 +12,8 @@ const MenuButton: React.FC<{
   >
   isHighlighted?: boolean
   hideText?: boolean
-}> = ({ text, Icon, isHighlighted, hideText }) => {
+  link?: string
+}> = ({ text, Icon, isHighlighted, hideText, link }) => {
   return (
     <div
       key={text}
@@ -27,17 +29,17 @@ const MenuButton: React.FC<{
           })}
         />
       )}
-
-      <button
-        className={clsx('text-brand-300 font-semibold text-xs lg:text-sm', {
-          'text-secondary': isHighlighted,
-          hidden: hideText,
-        })}
-      >
-        {text}
-      </button>
+      <Link href={link ?? ''}>
+        <button
+          className={clsx('text-brand-300 font-semibold text-xs lg:text-sm', {
+            'text-secondary': isHighlighted,
+            hidden: hideText,
+          })}
+        >
+          {text}
+        </button>
+      </Link>
     </div>
   )
 }
-
 export default MenuButton

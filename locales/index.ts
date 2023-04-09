@@ -12,6 +12,7 @@ export interface WebsiteTranslations {
     startCoding: translationElement
     signIn: translationElement
     register: translationElement
+    signOut: translationElement
   }
   fourOhFour: {
     headTitle: translationElement
