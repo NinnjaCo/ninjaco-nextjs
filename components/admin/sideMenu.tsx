@@ -61,6 +61,7 @@ const SideMenu = (props: SideMenuProps) => {
       Icon: ArrowRightOnRectangleIcon,
       text: 'LOGOUT',
       isHighlighted: props.higlightLogout ?? false,
+      link: '/admin/logout',
     },
   ]
 
