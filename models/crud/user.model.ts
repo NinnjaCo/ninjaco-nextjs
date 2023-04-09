@@ -1,4 +1,4 @@
-import { Role } from './role.model'
+import { Role, RoleEnum } from './role.model'
 
 export interface User {
   _id: string
@@ -10,6 +10,7 @@ export interface User {
   isVerified: boolean
   createdAt: string
   updatedAt: string
+  points: number
 }
 
 export interface UserRequest {

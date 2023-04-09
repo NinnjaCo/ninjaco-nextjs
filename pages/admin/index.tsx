@@ -1,3 +1,5 @@
+import { UserApi } from '@/utils/api/user'
+import { getSession } from 'next-auth/react'
 import Head from 'next/head'
 import Image from 'next/image'
 import React from 'react'
@@ -131,4 +133,25 @@ export default function AdminDashboard() {
       </main>
     </>
   )
+}
+export const getServerSideProps = async (context) => {
+  const session = await getSession(context)
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/signin',
+        permanent: false,
+      },
+    }
+  }
+  const api = new UserApi(session)
+  const users = await api.find()
+  console.log(users)
+
+  const role = await api.find({ query: { role: 'admin' } })
+  console.log(role)
+
+  return {
+    props: { users: users.payload },
+  }
 }
