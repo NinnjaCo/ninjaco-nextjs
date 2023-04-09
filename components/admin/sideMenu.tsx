@@ -8,7 +8,9 @@ import {
   UserIcon,
   UsersIcon,
 } from '@heroicons/react/24/outline'
+import { AuthApi } from '@/utils/api/auth'
 import { ChevronLeftIcon } from '@heroicons/react/20/solid'
+import { signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -29,11 +31,18 @@ interface SideMenuProps {
 
 const SideMenu = (props: SideMenuProps) => {
   const [open, setIsOpen] = useState(false)
+  const session = useSession()
 
   const [openLogout, setOpenLogout] = React.useState(false)
   const router = useRouter()
-  const preformLogout = () => {
-    console.log('logout')
+  const preformLogout = async () => {
+    // Delete the refresh token from the database
+    const res = await new AuthApi(session.data).logout()
+
+    // dont signout if there is an error
+    if (!res || !res.payload) return
+
+    signOut({ callbackUrl: '/auth/signin' })
   }
 
   const menuSection = [
