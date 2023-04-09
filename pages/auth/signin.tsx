@@ -145,16 +145,13 @@ const Signin = (props: ServerProps) => {
               {t.signin.signIn}
             </button>
           </form>
-          <div className="w-full flex justify-between text-xs mt-6">
-            <Link className="cursor-pointer text-brand-500" href="/">
-              {t.signin.backToHome}
+          <div className="w-full flex justify-between text-xs mt-6 flex-wrap gap-4">
+            <Link className="cursor-pointer text-brand font-semibold" href="/auth/forgot-password">
+              {t.signin.forgotPassword}
             </Link>
-            <div className="text-brand-500">
-              {t.signin.dontHaveAccount}
-              <span className="ml-2  cursor-pointer text-brand font-semibold">
-                <Link href="/auth/signup">{t.signin.signUp}</Link>
-              </span>
-            </div>
+            <Link href="/auth/signup" className="cursor-pointer text-brand font-semibold">
+              {t.signin.signUp}
+            </Link>
           </div>
         </AuthCard>
         <Footer />

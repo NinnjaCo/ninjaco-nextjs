@@ -12,6 +12,7 @@ export interface WebsiteTranslations {
     startCoding: translationElement
     signIn: translationElement
     register: translationElement
+    signOut: translationElement
   }
   fourOhFour: {
     headTitle: translationElement
@@ -107,9 +108,40 @@ export interface WebsiteTranslations {
     email: translationElement
     password: translationElement
     signIn: translationElement
-    backToHome: translationElement
+    forgotPassword: translationElement
     signUp: translationElement
-    dontHaveAccount: translationElement
+  }
+  forgetPassword: {
+    title: translationElement
+    invalidEmail: translationElement
+    emailRequired: translationElement
+    wrong: translationElement
+    checkEmail: translationElement
+    label: translationElement
+    sendResetLink: translationElement
+    backToHome: translationElement
+    signIn: translationElement
+  }
+  resetPassword: {
+    title: translationElement
+    newPassword: translationElement
+    password: translationElement
+    confirmPassword: translationElement
+    confirmPassword1: translationElement
+    changePassword: translationElement
+    backToHome: translationElement
+    signIn: translationElement
+  }
+  signUp: {
+    firstName: translationElement
+    lastName: translationElement
+    dateOfBirth: translationElement
+    email: translationElement
+    password: translationElement
+    confirmPassword: translationElement
+    signUp: translationElement
+    backToHome: translationElement
+    signIn: translationElement
   }
 }
 

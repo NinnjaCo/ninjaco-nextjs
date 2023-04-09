@@ -1,6 +1,7 @@
 import { Bars3Icon } from '@heroicons/react/20/solid'
 import { Popover, Transition } from '@headlessui/react'
 import { useRouter } from 'next/router'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import LocaleMenu from '@/components/layout/localeMenu'
@@ -27,6 +28,7 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
   const t = useTranslation()
   const router = useRouter()
   const scrollPosition = useScrollPosition()
+  const session = useSession()
   const linksForMobileMenu = [
     {
       name: t.Menu.about,
@@ -116,6 +118,10 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
         block: 'start',
       })
     }
+  }
+
+  const isSessionOn = () => {
+    return session?.status === 'authenticated' && session.data.id
   }
 
   return (
@@ -237,13 +243,21 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
                         </Link>
                       ))}
                     </div>
-                    <div className="bg-brand-100 p-4 flex items-center justify-between gap-8">
-                      <Link className="btn btn-brand" href="/auth/signin">
-                        {t.Menu.signIn}
-                      </Link>
-                      <Link className="btn btn-secondary" href="/auth/signup">
-                        {t.Menu.register}
-                      </Link>
+                    <div className="bg-brand-100 p-4 flex justify-center items-center">
+                      {isSessionOn() ? (
+                        <Link className="btn btn-warning justify-items-center" href="/auth/signin">
+                          {t.Menu.signOut}
+                        </Link>
+                      ) : (
+                        <>
+                          <Link className="btn btn-brand mr-8" href="/auth/signin">
+                            {t.Menu.signIn}
+                          </Link>
+                          <Link className="btn btn-secondary" href="/auth/signup">
+                            {t.Menu.register}
+                          </Link>
+                        </>
+                      )}
                     </div>
                   </div>
                 </Popover.Panel>
