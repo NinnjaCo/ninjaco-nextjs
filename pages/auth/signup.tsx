@@ -16,9 +16,10 @@ import Footer from '@/components/layout/footer'
 import Head from 'next/head'
 import Link from 'next/link'
 import Menu from '@/components/layout/menu'
-import React from 'react'
+import React, { useTransition } from 'react'
 import heavilyWavedLine from '@/images/heavilyWavedLine.svg'
 import logoPointingDown from '@/images/logoPointingYellowBand.svg'
+import useTranslation from '@/hooks/useTranslation'
 
 type SignUpFormDataType = {
   firstName: string
@@ -52,6 +53,7 @@ const SignUpFormSchema = yup
 
 const Signup = () => {
   const authApi = useAuthApi()
+  const t = useTranslation()
 
   const {
     register,
@@ -135,14 +137,14 @@ const Signup = () => {
           <form onSubmit={handleSubmit(onSubmitHandler)} className="flex flex-col gap-4" id="form">
             <Input
               {...register('firstName')}
-              label={'First Name'}
+              label={t.signUp.firstName}
               placeholder="John"
               StartIcon={UserIcon}
               error={errors.firstName?.message}
             />
             <Input
               {...register('lastName')}
-              label={'Last Name'}
+              label={t.signUp.lastName}
               placeholder="Smith"
               StartIcon={UserIcon}
               error={errors.lastName?.message}
@@ -150,29 +152,29 @@ const Signup = () => {
             <DatePickerWithHookForm
               control={control}
               name={register('dateOfBirth').name} // we only need the "name" prop
-              label="Date of Birth"
+              label={t.signUp.dateOfBirth as string}
               error={errors.dateOfBirth?.message}
             />
             <Input
               {...register('email')}
-              label={'Email'}
-              placeholder={'Email'}
+              label={t.signUp.email}
+              placeholder={t.signUp.email as string}
               StartIcon={EnvelopeIcon}
               error={errors.email?.message}
             />
             <Input
               {...register('password')}
               type="password"
-              label={'Password'}
-              placeholder={'Password'}
+              label={t.signUp.password}
+              placeholder={t.signUp.password as string}
               StartIcon={LockClosedIcon}
               error={errors.password?.message}
             />
             <Input
               {...register('passwordConfirmation')}
               type="password"
-              label={'Confirm Password'}
-              placeholder={'Confirm Password'}
+              label={t.signUp.confirmPassword}
+              placeholder={t.signUp.confirmPassword as string}
               StartIcon={LockClosedIcon}
               error={errors.passwordConfirmation?.message}
             />
@@ -182,15 +184,15 @@ const Signup = () => {
               value="Submit"
               className="w-full btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500"
             >
-              Sign Up
+              {t.signUp.signUp}
             </button>
           </form>
           <div className="w-full flex justify-between text-xs mt-6">
             <Link className="cursor-pointer text-brand-500" href="/">
-              Back to Home
+              {t.signUp.backToHome}
             </Link>
             <Link href="/auth/signin" className="cursor-pointer text-brand font-semibold">
-              Sign In
+              {t.signUp.signIn}
             </Link>
           </div>
         </AuthCard>

@@ -131,6 +131,17 @@ export interface WebsiteTranslations {
     backToHome: translationElement
     signIn: translationElement
   }
+  signUp: {
+    firstName: translationElement
+    lastName: translationElement
+    dateOfBirth: translationElement
+    email: translationElement
+    password: translationElement
+    confirmPassword: translationElement
+    signUp: translationElement
+    backToHome: translationElement
+    signIn: translationElement
+  }
 }
 
 // Create locale type support en | fr

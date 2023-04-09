@@ -1,4 +1,5 @@
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
+import { translationElement } from '@/locales'
 import React from 'react'
 import clsx from 'clsx'
 
@@ -6,7 +7,7 @@ type InputProps = React.DetailedHTMLProps<
   React.InputHTMLAttributes<HTMLInputElement>,
   HTMLInputElement
 > & {
-  label?: string
+  label?: string | translationElement
   error?: string | undefined
   classes?: { root: string }
   name: string

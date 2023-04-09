@@ -299,5 +299,16 @@ const frenchTranslations: WebsiteTranslations = {
     backToHome: "Retourner à la Page d'Entrée",
     signIn: 'Sign-In',
   },
+  signUp: {
+    firstName: 'Prénom',
+    lastName: 'Nom de Famille',
+    dateOfBirth: 'Date de Naissance',
+    email: 'Email',
+    password: 'Mot de Passe',
+    confirmPassword: 'Confirmez le Mot de Passe',
+    signUp: 'Inscrivez-vous',
+    backToHome: "Retour à la page d'accueil",
+    signIn: 'Connectez-vous',
+  },
 }
 export default frenchTranslations

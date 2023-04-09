@@ -289,6 +289,17 @@ const englishTranslations: WebsiteTranslations = {
     backToHome: 'Back to Home',
     signIn: 'Sign In',
   },
+  signUp: {
+    firstName: 'First Name',
+    lastName: 'Last Name',
+    dateOfBirth: 'Date of Birth',
+    email: 'Email',
+    password: 'Password',
+    confirmPassword: 'Confirm Password',
+    signUp: 'Sign Up',
+    backToHome: 'Back to Home',
+    signIn: 'Sign In',
+  },
 }
 
 export default englishTranslations
