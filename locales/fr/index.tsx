@@ -312,5 +312,11 @@ const frenchTranslations: WebsiteTranslations = {
     backToHome: "Retour à la page d'accueil",
     signIn: 'Connectez-vous',
   },
+  verifyEmail: {
+    code: 'Code',
+    verify: 'Vérifier',
+    backToHome: "Retour à la page d'accueil",
+    signIn: 'Connectez-vous',
+  },
 }
 export default frenchTranslations

@@ -301,6 +301,12 @@ const englishTranslations: WebsiteTranslations = {
     backToHome: 'Back to Home',
     signIn: 'Sign In',
   },
+  verifyEmail: {
+    code: 'Code',
+    verify: 'Verify',
+    backToHome: 'Back to Home',
+    signIn: 'Sign In',
+  },
 }
 
 export default englishTranslations

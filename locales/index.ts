@@ -143,6 +143,12 @@ export interface WebsiteTranslations {
     backToHome: translationElement
     signIn: translationElement
   }
+  verifyEmail: {
+    code: translationElement
+    verify: translationElement
+    backToHome: translationElement
+    signIn: translationElement
+  }
 }
 
 // Create locale type support en | fr
