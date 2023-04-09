@@ -55,7 +55,7 @@ export default function Profile() {
   return (
     <>
       <Head>
-        <title>Ninja Co | Admin Profile</title>
+        <title>NinjaCo | Admin Profile</title>
         <meta name="description" content="Leading online platform for visual programming" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

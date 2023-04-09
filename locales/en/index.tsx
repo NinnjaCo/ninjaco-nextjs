@@ -11,12 +11,12 @@ const englishTranslations: WebsiteTranslations = {
     register: 'Register',
   },
   fourOhFour: {
-    headTitle: 'Ninja Co | Page Not Found',
+    headTitle: 'NinjaCo | Page Not Found',
     title: 'Page Not Found',
     goBackHome: 'Go back home',
   },
   LandingPage: {
-    headTitle: 'Ninja Co | Start Coding',
+    headTitle: 'NinjaCo | Start Coding',
     Hero: {
       title: (
         <>
@@ -25,7 +25,7 @@ const englishTranslations: WebsiteTranslations = {
       ),
       description: (
         <>
-          Discover the fun and excitement of robotics and coding with Ninja Co&apos;s online
+          Discover the fun and excitement of robotics and coding with NinjaCo&apos;s online
           platform! Our step-by-step guide and interactive courses will help you unleash your inner
           ninja and master these essential skills from the comfort of your own home.
         </>
@@ -37,11 +37,11 @@ const englishTranslations: WebsiteTranslations = {
       title: 'What others say',
       reviews: {
         review1:
-          "My son has always been interested in robots, but we don't live near any of the Ninja Co branches. Thanks to their new online platform, he can finally take classes and learn about robotics from the comfort of our own home.",
+          "My son has always been interested in robots, but we don't live near any of the NinjaCo branches. Thanks to their new online platform, he can finally take classes and learn about robotics from the comfort of our own home.",
         review2:
-          "I've been an instructor at Ninja Co for two years, and I was initially skeptical about the move to an online platform. However, I've been blown away by the capabilities of the new software.",
+          "I've been an instructor at NinjaCo for two years, and I was initially skeptical about the move to an online platform. However, I've been blown away by the capabilities of the new software.",
         review3:
-          "I've always been fascinated by robots, but I never thought I could build one myself. Thanks to Ninja Co's online platform, I'm now able to take classes and learn how to create my own robot step-by-step!",
+          "I've always been fascinated by robots, but I never thought I could build one myself. Thanks to NinjaCo's online platform, I'm now able to take classes and learn how to create my own robot step-by-step!",
       },
     },
     About: {
@@ -60,11 +60,11 @@ const englishTranslations: WebsiteTranslations = {
         'Make STEM education fun and interactive for children and teens through the use of LEGO kits and iPad coding sessions. The company is committed to enhancing STEM education and providing top-grade opportunities for the youth of Lebanon to learn about robotics and programming.',
       soFar: 'So Far',
       soFarDescription:
-        "Ninja Co has established over 20 education centers across Lebanon, offering an engaging and interactive curriculum in robotics that is constantly updated. The company's traditional in-person class model has proven successful, but to expand its reach and drive growth, We developed this online platform that will transform the company's offerings",
+        "NinjaCo has established over 20 education centers across Lebanon, offering an engaging and interactive curriculum in robotics that is constantly updated. The company's traditional in-person class model has proven successful, but to expand its reach and drive growth, We developed this online platform that will transform the company's offerings",
     },
   },
   Copyright: {
-    headTitle: 'Ninja Co | Copyright',
+    headTitle: 'NinjaCo | Copyright',
     privacy: 'Privacy Policy',
     updated: 'Last updated: 03 MARCH 2023',
     agreement: (
@@ -244,7 +244,7 @@ const englishTranslations: WebsiteTranslations = {
     Terms: 'Privacy Policy',
   },
   Faq: {
-    headTitle: 'Ninja Co | FAQ',
+    headTitle: 'NinjaCo | FAQ',
     title: 'Frequently Asked Questions',
     question1: 'Should I have previous knowledge in programming?',
     answer1:
@@ -260,7 +260,7 @@ const englishTranslations: WebsiteTranslations = {
       "You should be able to register for the courses on the website that offers the coding courses using visual blocks and Arduino. Look for a « Start coding » or « Get started » button/link on the website's landing page or navigation menu. Clicking on that button/link should take you to a registration page where you can provide your information and enroll in the courses.",
   },
   signin: {
-    headTitle: 'Ninja Co | Sign In',
+    headTitle: 'NinjaCo | Sign In',
     signIn: 'Sign In',
     email: 'Email',
     password: 'Password',
