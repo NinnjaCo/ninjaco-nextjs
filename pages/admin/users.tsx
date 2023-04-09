@@ -95,9 +95,8 @@ export const getServerSideProps = async (context) => {
     }
   }
   const api = new UserApi(session)
-  const users = await api.find()
-  console.log(users)
+  const response = await api.find()
   return {
-    props: { users: users.payload },
+    props: { users: response.payload },
   }
 }
