@@ -80,7 +80,7 @@ const Footer = () => {
       <div className="flex flex-col justify-center gap-4">
         <p className="text-brand-50 font-bold text-sm md:text-base">{t.Footer.Links}</p>
         <div className="flex flex-col text-xs md:text-base">
-          <Link href="/copyrights" className="text-brand-50">
+          <Link href="/privacy-policy" className="text-brand-50">
             {t.Footer.Terms}
           </Link>
           <Link href={'/faq'} className=" text-brand-50 ">
