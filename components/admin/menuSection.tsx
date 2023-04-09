@@ -11,7 +11,7 @@ interface SideMenuTabProps {
     } & React.RefAttributes<SVGSVGElement>
   >
   isHighlighted: boolean
-  link?: string
+  actionOnClick?: () => void
 }
 
 interface MenuSectionProps {
@@ -37,7 +37,7 @@ const MenuSection = (props: MenuSectionProps) => {
             Icon={item.Icon}
             isHighlighted={item.isHighlighted}
             hideText={props.hideText}
-            link={item.link}
+            actionOnClick={item.actionOnClick}
           />
         </div>
       ))}

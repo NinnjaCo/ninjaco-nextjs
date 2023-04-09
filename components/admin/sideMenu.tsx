@@ -1,3 +1,4 @@
+import { AlertDialog } from '../shared/alertDialog'
 import {
   ArrowRightOnRectangleIcon,
   Bars3Icon,
@@ -27,6 +28,11 @@ interface SideMenuProps {
 
 const SideMenu = (props: SideMenuProps) => {
   const [open, setIsOpen] = useState(false)
+
+  const [openLogout, setOpenLogout] = React.useState(false)
+  const preformLogout = () => {
+    console.log('logout')
+  }
 
   const menuSection = [
     {
@@ -61,12 +67,27 @@ const SideMenu = (props: SideMenuProps) => {
       Icon: ArrowRightOnRectangleIcon,
       text: 'LOGOUT',
       isHighlighted: props.higlightLogout ?? false,
-      link: '/admin/logout',
+      actionOnClick: () => {
+        setOpenLogout(true)
+      },
     },
   ]
 
   return (
     <>
+      {
+        <AlertDialog
+          title="Are you sure you want to logout?"
+          close={() => {
+            setOpenLogout(false)
+          }}
+          open={openLogout}
+          confirm={preformLogout}
+          message="You will be logged out of your account."
+          confirmButtonText="Logout"
+          backButtonText="Cancel"
+        />
+      }
       {/* Menu after MD */}
       <div className="hidden md:flex bg-brand w-full max-w-[12rem] h-screen flex-col justify-between items-center py-4 px-1 lg:px-4">
         <Link href={'/'}>

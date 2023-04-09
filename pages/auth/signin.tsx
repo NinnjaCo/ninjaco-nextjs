@@ -8,7 +8,7 @@ import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { signIn } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import Alert from '@/components/auth/alert'
+import Alert from '@/components/shared/alert'
 import AuthCard from '@/components/auth/authCard'
 import Footer from '@/components/layout/footer'
 import Head from 'next/head'
@@ -36,6 +36,7 @@ const SignInFormSchema = yup
 
 interface ServerProps {
   error: string | null
+  callbackUrl: string | null
 }
 const Signin = (props: ServerProps) => {
   const {
@@ -66,7 +67,7 @@ const Signin = (props: ServerProps) => {
       await signIn('credentials', {
         email: data.email,
         password: data.password,
-        callbackUrl: '/',
+        callbackUrl: props.callbackUrl || '/',
       })
     } catch (error) {
       if (isAxiosError<AuthError>(error)) {
@@ -164,6 +165,7 @@ export const getServerSideProps = async (context) => {
   const { query, req, res } = context
 
   const error = query.error as string | null
+  const callbackUrl = query.callbackUrl as string | null
 
   const session = await getServerSession(req, res, authOptions)
   if (session) {
@@ -177,6 +179,7 @@ export const getServerSideProps = async (context) => {
   return {
     props: {
       error: error || null,
+      callbackUrl: callbackUrl || null,
     },
   }
 }
