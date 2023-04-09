@@ -24,7 +24,7 @@ export default function AdminDashboard() {
           <div className="w-full flex flex-col">
             <div className="flex gap-3 items-start w-full">
               <Image src={statistics} alt="image" />
-              <div className="text-brand font-semibold text-xl"> Statistics </div>
+              <div className="text-brand font-semibold text-xl">Statistics</div>
             </div>
 
             <div className=" bg-brand-50 p-4 rounded-2xl justify-between w-fit sm:w-full grid grid-cols-1 sm:grid-cols-3 gap-6 place-self-center sm:place-self-auto">
@@ -63,7 +63,7 @@ export default function AdminDashboard() {
           <div className="w-full flex flex-col overflow-auto">
             <div className="flex gap-3 items-start">
               <Image src={leaderboard} alt="image" />
-              <div className="text-brand font-semibold text-xl"> Leaderboard </div>
+              <div className="text-brand font-semibold text-xl">Leaderboard</div>
             </div>
             <div className="w-full overflow-auto pr-8 sm:pr-0">
               <table className="text-[0.5rem] md:text-xs text-left text-brand w-full">
