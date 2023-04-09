@@ -1,3 +1,5 @@
+import { NextURL } from 'next/dist/server/web/next-url'
+
 export const getReadableDateFromISO = (date: string) => {
   const dateObj = new Date(date)
   const year = dateObj.getFullYear()
@@ -6,9 +8,10 @@ export const getReadableDateFromISO = (date: string) => {
   return `${day}/${month}/${year}`
 }
 
-export const addErrorParamToUrl = (url: string, error: string) => {
-  // replace all spaces with %20
-  error = error.replace(/ /g, '+')
-  console.log('error', error)
-  return `${url}?error=${error}`
+export const addErrorParamToUrl = (url: NextURL, error: string | undefined) => {
+  if (!error) {
+    return url
+  }
+  url.searchParams.set('error', error)
+  return url
 }
