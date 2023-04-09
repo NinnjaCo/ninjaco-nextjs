@@ -19,6 +19,7 @@ interface TableProps {
   footerHexColor?: string
   hidePagination?: boolean
   className?: string
+  density?: 'compact' | 'standard' | 'comfortable'
 }
 const Table = ({
   width,
@@ -32,6 +33,7 @@ const Table = ({
   footerHexColor = '#DBE4EE',
   hidePagination = false,
   className = '',
+  density = 'comfortable',
 }: TableProps) => {
   return (
     <div style={{ height: height, width: width }} className={className}>
@@ -41,8 +43,12 @@ const Table = ({
         autoPageSize={autoPageSize}
         hideFooterPagination={hidePagination}
         pageSizeOptions={[5, 10, 20, 50, 100]}
+        density={density}
         getRowClassName={(params) => {
           return rowClassName
+        }}
+        slotProps={{
+          cell: { className: 'font-quicksand' },
         }}
         sx={{
           '& .MuiDataGrid-row:hover': {
