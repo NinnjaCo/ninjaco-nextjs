@@ -8,15 +8,16 @@ import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { signIn } from 'next-auth/react'
 import { useAuthApi } from '@/utils/api/auth'
 import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/router'
 import { yupResolver } from '@hookform/resolvers/yup'
-import Alert from '@/components/auth/alert'
+import Alert from '@/components/shared/alert'
 import AuthCard from '@/components/auth/authCard'
 import DatePickerWithHookForm from '@/components/forms/datePickerWithHookForm'
 import Footer from '@/components/layout/footer'
 import Head from 'next/head'
 import Link from 'next/link'
 import Menu from '@/components/layout/menu'
-import React from 'react'
+import React, { useEffect } from 'react'
 import heavilyWavedLine from '@/images/heavilyWavedLine.svg'
 import logoPointingDown from '@/images/logoPointingYellowBand.svg'
 import useTranslation from '@/hooks/useTranslation'
@@ -34,7 +35,10 @@ const SignUpFormSchema = yup
   .object()
   .shape({
     firstName: yup.string().required('First Name is required'),
-    lastName: yup.string().required('Last Name is required'),
+    lastName: yup
+      .string()
+      .required('Last Name is required')
+      .matches(/^[a-zA-Z\s]*$/, 'Name can only contain letters and spaces'),
     dateOfBirth: yup
       .date()
       .max(new Date(), 'Date of Birth cannot be in the future')
@@ -51,9 +55,15 @@ const SignUpFormSchema = yup
   })
   .required()
 
-const Signup = () => {
+interface ServerProps {
+  error: string | null
+  callbackUrl: string | null
+}
+const Signup = (props: ServerProps) => {
   const authApi = useAuthApi()
   const t = useTranslation()
+  const router = useRouter()
+  const [signUpButtonDisabled, setSignUpButtonDisabled] = React.useState(false)
 
   const {
     register,
@@ -79,6 +89,7 @@ const Signup = () => {
   const onSubmitHandler = async (data: SignUpFormDataType) => {
     try {
       closeAlert()
+      setSignUpButtonDisabled(true)
       await authApi.signUp({
         firstName: data.firstName,
         lastName: data.lastName,
@@ -86,18 +97,23 @@ const Signup = () => {
         email: data.email,
         password: data.password,
       })
+      // sign in the user using next-auth
+      await signIn('credentials', {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      })
       setAlertData({
-        message: 'Account Created Successfully',
+        message: 'Check your email to confirm your account',
         variant: 'success',
         open: true,
       })
-      // sign in the user using next-auth
-      await signIn('credentials', {
-        redirect: true,
-        email: data.email,
-        password: data.password,
-      })
+
+      setTimeout(() => {
+        router.push(props.callbackUrl || '/')
+      }, 3000)
     } catch (error) {
+      setSignUpButtonDisabled(false)
       if (isAxiosError<AuthError>(error)) {
         const errors = unWrapAuthError(error)
         setAlertData({
@@ -108,6 +124,16 @@ const Signup = () => {
       }
     }
   }
+
+  useEffect(() => {
+    if (props.error) {
+      setAlertData({
+        message: props.error,
+        variant: 'error',
+        open: true,
+      })
+    }
+  }, [props.error])
 
   return (
     <>
@@ -182,7 +208,8 @@ const Signup = () => {
               type="submit"
               form="form"
               value="Submit"
-              className="w-full btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500"
+              className="w-full btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-600"
+              disabled={signUpButtonDisabled}
             >
               {t.signUp.signUp}
             </button>
@@ -205,6 +232,9 @@ const Signup = () => {
 export const getServerSideProps = async (context) => {
   const { query, req, res } = context
 
+  const error = query.error as string | null
+  const callbackUrl = query.callbackUrl as string | null
+
   const session = await getServerSession(req, res, authOptions)
   if (session) {
     return {
@@ -215,7 +245,10 @@ export const getServerSideProps = async (context) => {
     }
   }
   return {
-    props: {},
+    props: {
+      error: error || null,
+      callbackUrl: callbackUrl || null,
+    },
   }
 }
 export default Signup

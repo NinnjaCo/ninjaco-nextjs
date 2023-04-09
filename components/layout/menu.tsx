@@ -1,7 +1,7 @@
 import { Bars3Icon } from '@heroicons/react/20/solid'
 import { Popover, Transition } from '@headlessui/react'
+import { signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import LocaleMenu from '@/components/layout/localeMenu'
@@ -122,6 +122,10 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
 
   const isSessionOn = () => {
     return session?.status === 'authenticated' && session.data.id
+  }
+
+  const clickSignOut = () => {
+    signOut({ callbackUrl: '/' })
   }
 
   return (
@@ -245,9 +249,12 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
                     </div>
                     <div className="bg-brand-100 p-4 flex justify-center items-center">
                       {isSessionOn() ? (
-                        <Link className="btn btn-warning justify-items-center" href="/auth/signin">
+                        <button
+                          className="btn btn-warning justify-items-center"
+                          onClick={clickSignOut}
+                        >
                           {t.Menu.signOut}
-                        </Link>
+                        </button>
                       ) : (
                         <>
                           <Link className="btn btn-brand mr-8" href="/auth/signin">

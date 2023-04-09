@@ -8,7 +8,7 @@ import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { signIn } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import Alert from '@/components/auth/alert'
+import Alert from '@/components/shared/alert'
 import AuthCard from '@/components/auth/authCard'
 import Footer from '@/components/layout/footer'
 import Head from 'next/head'
@@ -36,8 +36,11 @@ const SignInFormSchema = yup
 
 interface ServerProps {
   error: string | null
+  callbackUrl: string | null
 }
 const Signin = (props: ServerProps) => {
+  const [signInButtonDisabled, setSignInButtonDisabled] = React.useState(false)
+
   const {
     register,
     handleSubmit,
@@ -61,14 +64,15 @@ const Signin = (props: ServerProps) => {
   const onSubmitHandler = async (data: SignInFormDataType) => {
     try {
       closeAlert()
-
+      setSignInButtonDisabled(true)
       // sign in the user using next-auth
       await signIn('credentials', {
         email: data.email,
         password: data.password,
-        callbackUrl: '/',
+        callbackUrl: props.callbackUrl || '/',
       })
     } catch (error) {
+      setSignInButtonDisabled(false)
       if (isAxiosError<AuthError>(error)) {
         const errors = unWrapAuthError(error)
         setAlertData({
@@ -140,7 +144,8 @@ const Signin = (props: ServerProps) => {
               type="submit"
               form="form"
               value="Submit"
-              className="w-full btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500"
+              className="w-full btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-600"
+              disabled={signInButtonDisabled}
             >
               {t.signin.signIn}
             </button>
@@ -164,6 +169,7 @@ export const getServerSideProps = async (context) => {
   const { query, req, res } = context
 
   const error = query.error as string | null
+  const callbackUrl = query.callbackUrl as string | null
 
   const session = await getServerSession(req, res, authOptions)
   if (session) {
@@ -177,6 +183,7 @@ export const getServerSideProps = async (context) => {
   return {
     props: {
       error: error || null,
+      callbackUrl: callbackUrl || null,
     },
   }
 }

@@ -9,7 +9,7 @@ import { useAuthApi } from '@/utils/api/auth'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { yupResolver } from '@hookform/resolvers/yup'
-import Alert from '@/components/auth/alert'
+import Alert from '@/components/shared/alert'
 import AuthCard from '@/components/auth/authCard'
 import Footer from '@/components/layout/footer'
 import Head from 'next/head'
@@ -220,7 +220,8 @@ export const getServerSideProps = async (context) => {
   if (!session) {
     return {
       redirect: {
-        destination: (query.redirectTo as string | undefined) || '/auth/signup',
+        destination:
+          (query.redirectTo as string | undefined) || '/auth/signup?error=Token%20Expired',
         permanent: false,
       },
     }

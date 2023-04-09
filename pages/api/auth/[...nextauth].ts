@@ -39,7 +39,6 @@ export const authOptions: AuthOptions = {
   ],
   pages: {
     signIn: '/auth/signin',
-    newUser: '/',
     error: '/auth/signin',
   },
   callbacks: {

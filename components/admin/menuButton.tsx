@@ -12,14 +12,19 @@ const MenuButton: React.FC<{
   >
   isHighlighted?: boolean
   hideText?: boolean
-  link?: string
-}> = ({ text, Icon, isHighlighted, hideText, link }) => {
+  actionOnClick?: () => void
+}> = ({ text, Icon, isHighlighted, hideText, actionOnClick }) => {
   return (
-    <div
+    <button
       key={text}
-      className={clsx('flex gap-2 hover:bg-brand-500 pl-1 py-1 xs:py-2 rounded', {
+      className={clsx('flex gap-2 hover:bg-brand-500 pl-1 py-1 xs:py-2 rounded w-full', {
         'bg-brand-500 border-l-secondary border-l-2': isHighlighted,
       })}
+      onClick={actionOnClick}
+      tabIndex={0}
+      aria-label={text}
+      aria-hidden={hideText}
+      aria-pressed={isHighlighted}
     >
       {Icon && (
         <Icon
@@ -29,17 +34,15 @@ const MenuButton: React.FC<{
           })}
         />
       )}
-      <Link href={link ?? ''}>
-        <button
-          className={clsx('text-brand-300 font-semibold text-xs lg:text-sm', {
-            'text-secondary': isHighlighted,
-            hidden: hideText,
-          })}
-        >
-          {text}
-        </button>
-      </Link>
-    </div>
+      <div
+        className={clsx('text-brand-300 font-semibold text-xs lg:text-sm', {
+          'text-secondary': isHighlighted,
+          hidden: hideText,
+        })}
+      >
+        {text}
+      </div>
+    </button>
   )
 }
 export default MenuButton
