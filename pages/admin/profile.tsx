@@ -110,10 +110,7 @@ export default function Profile({ user }: ServerProps) {
     }
 
     try {
-      // create a new object that conatins all the old data, but the dirty fields are updated
-      const updatedUser = { ...user, ...dirtyData }
-
-      const response = await new UserApi(session.data).update(user._id, updatedUser)
+      const response = await new UserApi(session.data).update(user._id, dirtyData)
       user = response.payload
       setAlertData({
         message: 'Profile updated successfully',
