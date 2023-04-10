@@ -1,15 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react'
+import * as yup from 'yup'
 import { AdminAlertDialog } from '@/components/admin/dialog'
 import { Alert } from '@/components/shared/alert'
 import { AuthError } from '@/models/shared'
 import { ChevronRightIcon, PencilIcon } from '@heroicons/react/24/solid'
+import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/outline'
 import {
   GridColDef,
   GridRenderCellParams,
   GridRowsProp,
   GridTreeNodeWithRender,
 } from '@mui/x-data-grid'
+import { Input } from '@/components/forms/input'
 import { Popover, Transition } from '@headlessui/react'
 import { RoleEnum } from '@/models/crud/role.model'
 import { User } from '@/models/crud'
@@ -19,16 +22,94 @@ import { getReadableDateFromISO } from '@/utils/shared'
 import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { useCallback, useMemo } from 'react'
+import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
+import { yupResolver } from '@hookform/resolvers/yup'
+import DatePickerWithHookForm from '@/components/forms/datePickerWithHookForm'
 import Head from 'next/head'
 import SideMenu from '@/components/admin/sideMenu'
 import Table from '@/components/table'
 import clsx from 'clsx'
 
+type AddUserFormDataType = {
+  firstName: string
+  lastName: string
+  dateOfBirth: Date
+  email: string
+  password: string
+  passwordConfirmation: string
+}
+
+const AddUserFormSchema = yup
+  .object()
+  .shape({
+    firstName: yup.string().required('First Name is required'),
+    lastName: yup
+      .string()
+      .required('Last Name is required')
+      .matches(/^[a-zA-Z\s]*$/, 'Name can only contain letters and spaces'),
+    dateOfBirth: yup
+      .date()
+      .max(new Date(), 'Date of Birth cannot be in the future')
+      .required('Date of Birth is required'),
+    email: yup.string().email('Invalid email').required('Email is required'),
+    password: yup
+      .string()
+      .min(8, 'Password must be at least 8 characters')
+      .required('Password is required'),
+    passwordConfirmation: yup
+      .string()
+      .oneOf([yup.ref('password')], 'Passwords must match')
+      .required('Password Confirmation is required'),
+  })
+  .required()
+
 const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
   const session = useSession()
   const router = useRouter()
+
+  const [openAddUserDialog, setOpenAddUserDialog] = React.useState(false)
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<AddUserFormDataType>({
+    resolver: yupResolver(AddUserFormSchema),
+  })
+
+  const onSubmitHandler = async (data: AddUserFormDataType) => {
+    try {
+      closeAlert()
+
+      await new UserApi(session.data).create({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        dateOfBirth: data.dateOfBirth.toISOString(),
+        email: data.email,
+        password: data.password,
+      })
+
+      setOpenAddUserDialog(false)
+
+      setAlertData({
+        message: 'User Created Successfully',
+        variant: 'success',
+        open: true,
+      })
+    } catch (error) {
+      if (isAxiosError<AuthError>(error)) {
+        const errors = unWrapAuthError(error)
+        setAlertData({
+          message: errors[0].message || 'Something went wrong',
+          variant: 'error',
+          open: true,
+        })
+      }
+    }
+  }
 
   const [alertData, setAlertData] = React.useState<{
     message: string
@@ -513,6 +594,78 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
         <meta name="description" content="Leading online platform for visual programming" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
+
+      <AdminAlertDialog
+        title="Add User"
+        open={openAddUserDialog}
+        confirm={() => {}} // Confirmation is done inside the form body
+        close={() => setOpenAddUserDialog(false)}
+        backButtonText="Cancel"
+        backButtonClassName="bg-brand-200 text-brand-500 hover:bg-brand-300 hover:text-brand hidden"
+        confirmButtonText="Add User"
+        confirmButtonClassName="bg-brand-500 text-brand-50 hover:bg-brand-700 hidden"
+      >
+        <form onSubmit={handleSubmit(onSubmitHandler)} className="flex flex-col gap-4" id="form">
+          <Input
+            {...register('firstName')}
+            label={'First Name'}
+            placeholder="John"
+            StartIcon={UserIcon}
+            error={errors.firstName?.message}
+          />
+          <Input
+            {...register('lastName')}
+            label={'Last Name'}
+            placeholder="Smith"
+            StartIcon={UserIcon}
+            error={errors.lastName?.message}
+          />
+          <DatePickerWithHookForm
+            control={control}
+            name={register('dateOfBirth').name} // we only need the "name" prop
+            label={'Date of Birth'}
+            error={errors.dateOfBirth?.message}
+          />
+          <Input
+            {...register('email')}
+            label="Email"
+            placeholder="Email"
+            StartIcon={EnvelopeIcon}
+            error={errors.email?.message}
+          />
+          <Input
+            {...register('password')}
+            type="password"
+            label="Password"
+            placeholder="Password"
+            StartIcon={LockClosedIcon}
+            error={errors.password?.message}
+          />
+          <Input
+            {...register('passwordConfirmation')}
+            type="password"
+            label="Confirm Password"
+            placeholder="Confirm Password"
+            StartIcon={LockClosedIcon}
+            error={errors.passwordConfirmation?.message}
+          />
+          <button
+            type="submit"
+            form="form"
+            value="Submit"
+            className="w-full btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+          >
+            Add User
+          </button>
+          <button
+            onClick={() => setOpenAddUserDialog(false)}
+            className="w-full btn bg-brand-50 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+          >
+            Cancel
+          </button>
+        </form>
+      </AdminAlertDialog>
+
       <AdminAlertDialog
         title={alertDiaglogState.title}
         detailsRows={alertDiaglogState.detailsRows}
@@ -529,6 +682,7 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
       >
         {getDialogBody()}
       </AdminAlertDialog>
+
       <main className="flex w-full h-screen overflow-hidden">
         <SideMenu higlightUsers={true} />
         <div className="flex flex-col flex-grow w-3/4 h-full gap-12 py-8 px-4">
@@ -537,7 +691,12 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
               <p className="text-brand-700 text-xl md:text-2xl lg:text-3xl font-semibold">Users</p>
               <div className="text-sm text-brand  ">{users.length} entries found</div>
             </div>
-            <button className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-400 hover:text-white py-2">
+            <button
+              className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-400 hover:text-white py-2"
+              onClick={() => {
+                setOpenAddUserDialog(true)
+              }}
+            >
               Add User
             </button>
           </div>
