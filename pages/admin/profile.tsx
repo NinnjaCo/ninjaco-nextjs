@@ -17,6 +17,7 @@ import React, { use } from 'react'
 import SideMenu from '@/components/admin/sideMenu'
 import dayjs, { Dayjs } from 'dayjs'
 import jwt from 'jsonwebtoken'
+import useTranslation from '@/hooks/useTranslation'
 
 interface ServerProps {
   user: User
@@ -32,6 +33,7 @@ type AdminProfileFormDataType = {
 }
 export default function Profile({ user }: ServerProps) {
   const session = useSession()
+  const t = useTranslation()
   const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false)
 
   const [alertData, setAlertData] = React.useState<{
@@ -143,106 +145,108 @@ export default function Profile({ user }: ServerProps) {
         <meta name="description" content="Leading online platform for visual programming" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <main className="flex w-full h-screen overflow-y-scroll lg:overflow-hidden">
+      <div className="flex w-full h-screen ">
         <SideMenu higlightProfile={true} />
-        <form
-          id="form"
-          onSubmit={handleSubmit(submitHandler)}
-          className="flex flex-col w-full h-full gap-6 md:gap-12 py-8 px-4"
-        >
-          <div className="flex w-full justify-between items-center">
-            <div className="text-brand text-lg md:text-xl lg:text-2xl font-semibold">
-              {user.firstName} {user.lastName}
-            </div>
-            <button
-              type="submit"
-              form="form"
-              value="Submit"
-              className="btn btn-secondary rounded-lg px-4 sm:pr-6 py-2 hover:bg-brand-500 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-              disabled={saveButtonDisabled}
-            >
-              SAVE
-            </button>
-          </div>
-          <Alert
-            open={alertData.open}
-            message={alertData.message}
-            variant={alertData.variant}
-            close={closeAlert}
-          />
-          <div className="bg-brand-50 p-4 rounded w-full flex flex-col gap-4">
-            <div className="hidden md:block text-brand font-semibold text-sm md:text-base">
-              Profile
-            </div>
-            <div className="flex flex-col md:flex-row flex-wrap w-full gap-2 md:gap-4">
-              <div className="flex-1 flex-shrink">
-                <Input
-                  {...register('firstName')}
-                  label={'First Name'}
-                  placeholder="John"
-                  StartIcon={UserIcon}
-                  error={errors.firstName?.message}
-                />
+        <main className="flex w-full h-screen overflow-y-scroll lg:overflow-hidden">
+          <form
+            id="form"
+            onSubmit={handleSubmit(submitHandler)}
+            className="flex flex-col w-full h-full gap-6 md:gap-12 py-8 px-4"
+          >
+            <div className="flex w-full justify-between items-center">
+              <div className="text-brand text-lg md:text-xl lg:text-2xl font-semibold">
+                {user.firstName} {user.lastName}
               </div>
-              <div className="flex-1 flex-shrink">
-                <Input
-                  {...register('lastName')}
-                  label={'Last Name'}
-                  placeholder="Smith"
-                  StartIcon={UserIcon}
-                  error={errors.lastName?.message}
-                />
-              </div>
+              <button
+                type="submit"
+                form="form"
+                value="Submit"
+                className="btn btn-secondary rounded-lg px-4 sm:pr-6 py-2 hover:bg-brand-500 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                disabled={saveButtonDisabled}
+              >
+                {t.profile.save}
+              </button>
             </div>
-            <div className="flex flex-col md:flex-row flex-wrap w-full gap-4">
-              <div className="flex-1 flex-shrink">
-                <DatePickerWithHookForm
-                  control={control}
-                  name={register('dateOfBirth').name} // we only need the "name" prop
-                  label="Date of Birth"
-                  error={errors.dateOfBirth?.message}
-                />
+            <Alert
+              open={alertData.open}
+              message={alertData.message}
+              variant={alertData.variant}
+              close={closeAlert}
+            />
+            <div className="bg-brand-50 p-4 rounded w-full flex flex-col gap-4">
+              <div className="hidden md:block text-brand font-semibold text-sm md:text-base">
+                {t.profile.profile}
               </div>
-              <div className="flex-1 flex-shrink">
-                <Input
-                  {...register('email')}
-                  label="Email"
-                  placeholder={'Email'}
-                  StartIcon={EnvelopeIcon}
-                  error={errors.email?.message}
-                />
+              <div className="flex flex-col md:flex-row flex-wrap w-full gap-2 md:gap-4">
+                <div className="flex-1 flex-shrink">
+                  <Input
+                    {...register('firstName')}
+                    label={t.profile.firstName}
+                    placeholder="John"
+                    StartIcon={UserIcon}
+                    error={errors.firstName?.message}
+                  />
+                </div>
+                <div className="flex-1 flex-shrink">
+                  <Input
+                    {...register('lastName')}
+                    label={t.profile.lastName}
+                    placeholder="Smith"
+                    StartIcon={UserIcon}
+                    error={errors.lastName?.message}
+                  />
+                </div>
               </div>
-            </div>
-          </div>
-          <div className="bg-brand-50 p-4 rounded w-full flex flex-col gap-4 ">
-            <div className="hidden md:block text-brand font-semibold text-sm md:text-base">
-              Change Password
-            </div>
-            <div className="flex flex-col md:flex-row flex-wrap w-full gap-2 md:gap-4 ">
-              <div className="flex-1 flex-shrink ">
-                <Input
-                  {...register('password')}
-                  label={'Password'}
-                  placeholder="Password"
-                  type="password"
-                  StartIcon={LockClosedIcon}
-                  error={errors.password?.message}
-                />
-              </div>
-              <div className="flex-1 flex-shrink">
-                <Input
-                  {...register('passwordConfirmation')}
-                  label={'Confirm Password'}
-                  type="password"
-                  placeholder="Confirm Password"
-                  StartIcon={LockClosedIcon}
-                  error={errors.passwordConfirmation?.message}
-                />
+              <div className="flex flex-col md:flex-row flex-wrap w-full gap-4">
+                <div className="flex-1 flex-shrink">
+                  <DatePickerWithHookForm
+                    control={control}
+                    name={register('dateOfBirth').name} // we only need the "name" prop
+                    label={t.profile.dateOfBirth as string}
+                    error={errors.dateOfBirth?.message}
+                  />
+                </div>
+                <div className="flex-1 flex-shrink">
+                  <Input
+                    {...register('email')}
+                    label="Email"
+                    placeholder={'Email'}
+                    StartIcon={EnvelopeIcon}
+                    error={errors.email?.message}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        </form>
-      </main>
+            <div className="bg-brand-50 p-4 rounded w-full flex flex-col gap-4 ">
+              <div className="hidden md:block text-brand font-semibold text-sm md:text-base">
+                {t.profile.changePassword}
+              </div>
+              <div className="flex flex-col md:flex-row flex-wrap w-full gap-2 md:gap-4 ">
+                <div className="flex-1 flex-shrink ">
+                  <Input
+                    {...register('password')}
+                    label={t.profile.password}
+                    placeholder="Password"
+                    type="password"
+                    StartIcon={LockClosedIcon}
+                    error={errors.password?.message}
+                  />
+                </div>
+                <div className="flex-1 flex-shrink">
+                  <Input
+                    {...register('passwordConfirmation')}
+                    label={t.profile.confirmPassword}
+                    type="password"
+                    placeholder="Confirm Password"
+                    StartIcon={LockClosedIcon}
+                    error={errors.passwordConfirmation?.message}
+                  />
+                </div>
+              </div>
+            </div>
+          </form>
+        </main>
+      </div>
     </>
   )
 }
