@@ -132,7 +132,7 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
     }
   }, [
     alertDiaglogState.dialogType,
-    deleteUserState.rowParams.row.id,
+    deleteUserState,
     notifyMessage,
     resetPasswordState,
     router,
