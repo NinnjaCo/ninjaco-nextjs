@@ -19,4 +19,5 @@ export interface UserRequest {
   email: string
   password: string
   dateOfBirth: string
+  role?: RoleEnum
 }
