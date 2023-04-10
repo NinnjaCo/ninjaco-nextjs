@@ -85,6 +85,13 @@ const Signup = (props: ServerProps) => {
   const closeAlert = () => {
     setAlertData({ ...alertData, open: false })
   }
+  //use the scroll position to show the message
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 25,
+      behavior: 'smooth',
+    })
+  }
 
   const onSubmitHandler = async (data: SignUpFormDataType) => {
     try {
@@ -103,6 +110,7 @@ const Signup = (props: ServerProps) => {
         password: data.password,
         redirect: false,
       })
+      scrollToTop()
       setAlertData({
         message: 'Check your email to confirm your account',
         variant: 'success',
