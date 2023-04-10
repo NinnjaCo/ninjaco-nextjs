@@ -86,7 +86,7 @@ export default function Profile(props: ServerProps) {
         const res = await new UserApi(session.data).update(session.data?.id as string, {
           firstName: data.firstName,
           lastName: data.lastName,
-          dateOfBirth: dayjs(data.dateOfBirth),
+          dateOfBirth: data.dateOfBirth.toISOString(),
           email: data.email,
         })
       }
