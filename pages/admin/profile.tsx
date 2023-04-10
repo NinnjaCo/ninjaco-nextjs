@@ -17,6 +17,7 @@ import React, { use } from 'react'
 import SideMenu from '@/components/admin/sideMenu'
 import dayjs, { Dayjs } from 'dayjs'
 import jwt from 'jsonwebtoken'
+import useTranslation from '@/hooks/useTranslation'
 
 interface ServerProps {
   user: User
@@ -32,6 +33,7 @@ type AdminProfileFormDataType = {
 }
 export default function Profile({ user }: ServerProps) {
   const session = useSession()
+  const t = useTranslation()
   const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false)
 
   const [alertData, setAlertData] = React.useState<{
@@ -161,7 +163,7 @@ export default function Profile({ user }: ServerProps) {
               className="btn btn-secondary rounded-lg px-4 sm:pr-6 py-2 hover:bg-brand-500 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
               disabled={saveButtonDisabled}
             >
-              SAVE
+              {t.profile.save}
             </button>
           </div>
           <Alert
@@ -172,13 +174,13 @@ export default function Profile({ user }: ServerProps) {
           />
           <div className="bg-brand-50 p-4 rounded w-full flex flex-col gap-4">
             <div className="hidden md:block text-brand font-semibold text-sm md:text-base">
-              Profile
+              {t.profile.profile}
             </div>
             <div className="flex flex-col md:flex-row flex-wrap w-full gap-2 md:gap-4">
               <div className="flex-1 flex-shrink">
                 <Input
                   {...register('firstName')}
-                  label={'First Name'}
+                  label={t.profile.firstName}
                   placeholder="John"
                   StartIcon={UserIcon}
                   error={errors.firstName?.message}
@@ -187,7 +189,7 @@ export default function Profile({ user }: ServerProps) {
               <div className="flex-1 flex-shrink">
                 <Input
                   {...register('lastName')}
-                  label={'Last Name'}
+                  label={t.profile.lastName}
                   placeholder="Smith"
                   StartIcon={UserIcon}
                   error={errors.lastName?.message}
@@ -199,7 +201,7 @@ export default function Profile({ user }: ServerProps) {
                 <DatePickerWithHookForm
                   control={control}
                   name={register('dateOfBirth').name} // we only need the "name" prop
-                  label="Date of Birth"
+                  label={t.profile.dateOfBirth as string}
                   error={errors.dateOfBirth?.message}
                 />
               </div>
@@ -216,13 +218,13 @@ export default function Profile({ user }: ServerProps) {
           </div>
           <div className="bg-brand-50 p-4 rounded w-full flex flex-col gap-4 ">
             <div className="hidden md:block text-brand font-semibold text-sm md:text-base">
-              Change Password
+              {t.profile.changePassword}
             </div>
             <div className="flex flex-col md:flex-row flex-wrap w-full gap-2 md:gap-4 ">
               <div className="flex-1 flex-shrink ">
                 <Input
                   {...register('password')}
-                  label={'Password'}
+                  label={t.profile.password}
                   placeholder="Password"
                   type="password"
                   StartIcon={LockClosedIcon}
@@ -232,7 +234,7 @@ export default function Profile({ user }: ServerProps) {
               <div className="flex-1 flex-shrink">
                 <Input
                   {...register('passwordConfirmation')}
-                  label={'Confirm Password'}
+                  label={t.profile.confirmPassword}
                   type="password"
                   placeholder="Confirm Password"
                   StartIcon={LockClosedIcon}
