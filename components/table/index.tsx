@@ -1,10 +1,4 @@
-import {
-  DataGrid,
-  GridColDef,
-  GridRowsProp,
-  GridToolbar,
-  GridToolbarExport,
-} from '@mui/x-data-grid'
+import { DataGrid, GridColDef, GridRowsProp, GridToolbar } from '@mui/x-data-grid'
 import React from 'react'
 
 interface TableProps {
@@ -67,12 +61,7 @@ const Table = ({
         }}
         rowSelection={rowSelection}
         slots={{
-          toolbar: () =>
-            includeToolbar ? (
-              <GridToolbar>
-                <GridToolbarExport />
-              </GridToolbar>
-            ) : null,
+          toolbar: includeToolbar ? GridToolbar : null,
         }}
       />
     </div>
