@@ -111,7 +111,7 @@ const Signup = (props: ServerProps) => {
 
       setTimeout(() => {
         router.push(props.callbackUrl || '/')
-      }, 3000)
+      }, 4000)
     } catch (error) {
       setSignUpButtonDisabled(false)
       if (isAxiosError<AuthError>(error)) {
