@@ -369,14 +369,12 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
             {() => (
               <>
                 <Popover.Button
-                  className="group flex items-center bg-brand-300 w-8 h-8 justify-center rounded hover:bg-brand-500"
+                  className="group flex items-center text-brand-500 bg-brand-300 w-8 h-8 justify-center rounded hover:bg-brand-500 hover:text-brand-300"
                   role="button"
                   tabIndex={0}
                   aria-label="Edit User"
                 >
-                  <PencilIcon
-                    className={clsx('w-4 h-4 cursor-pointer text-brand-500 hover:text-brand-300')}
-                  />
+                  <PencilIcon className={clsx('w-4 h-4 cursor-pointer')} />
                 </Popover.Button>
                 <Transition
                   as={React.Fragment}
