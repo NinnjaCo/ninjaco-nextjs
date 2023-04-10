@@ -8,10 +8,9 @@ export interface User {
   dateOfBirth: string
   role: Role
   isVerified: boolean
+  points: number
   createdAt: string
   updatedAt: string
-  points: number
-  level: number
 }
 
 export interface UserRequest {

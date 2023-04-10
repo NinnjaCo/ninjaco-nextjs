@@ -15,3 +15,11 @@ export const addErrorParamToUrl = (url: NextURL, error: string | undefined) => {
   url.searchParams.set('error', error)
   return url
 }
+
+export const getLevelFromPoints = (points: number | undefined) => {
+  if (!points) {
+    return 1
+  }
+
+  return Math.floor((25 + Math.sqrt(625 + 100 * points)) / 50)
+}
