@@ -13,7 +13,7 @@ import DatePickerWithHookForm from '@/components/forms/datePickerWithHookForm'
 import Head from 'next/head'
 import React, { use } from 'react'
 import SideMenu from '@/components/admin/sideMenu'
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import jwt from 'jsonwebtoken'
 
 interface ServerProps {
@@ -66,7 +66,7 @@ export default function Profile(props: ServerProps) {
     defaultValues: {
       firstName: props.firstName,
       lastName: props.lastName,
-      dateOfBirth: dayjs(props.dateOfBirth),
+      dateOfBirth: new Date(dayjs(props.dateOfBirth).toDate()),
       email: props.email,
       password: '',
       passwordConfirmation: '',
@@ -86,7 +86,7 @@ export default function Profile(props: ServerProps) {
         const res = await new UserApi(session.data).update(session.data?.id as string, {
           firstName: data.firstName,
           lastName: data.lastName,
-          dateOfBirth: dayjs(data.dateOfBirth),
+          dateOfBirth: data.dateOfBirth.toISOString(),
           email: data.email,
         })
       }
@@ -95,8 +95,6 @@ export default function Profile(props: ServerProps) {
 
   return (
     <>
-      {console.log(session)}
-      {console.log(props)}
       <Head>
         <title>NinjaCo | Admin Profile</title>
         <meta name="description" content="Leading online platform for visual programming" />
