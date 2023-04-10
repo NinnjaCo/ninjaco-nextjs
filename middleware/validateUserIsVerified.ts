@@ -34,26 +34,34 @@ export const checkIfUserIsVerified = async (
 ): Promise<VerifiedResponse> => {
   const { token } = req.nextauth
   if (token && token.sub) {
-    const verificationData: CheckIfUserIsVerifiedRequest = await checkIfUserIsVerifiedRequest(
-      token.jwt,
-      token.sub
-    )
+    try {
+      const verificationData: CheckIfUserIsVerifiedRequest = await checkIfUserIsVerifiedRequest(
+        token.jwt,
+        token.sub
+      )
+      console.log(verificationData)
 
-    console.log(verificationData)
+      // If the user does not have the correct role, redirect them to the home page
+      if (!verificationData || !verificationData.payload.isVerified) {
+        console.log('Unverified User Trying to access a page')
+        return {
+          isVerified: false,
+          rewriteUrl: '/auth/unauthorized',
+          error:
+            'Verify your email to access this page, check your spam folder if you do not see it in your inbox',
+        }
+      }
 
-    // If the user does not have the correct role, redirect them to the home page
-    if (!verificationData || !verificationData.payload.isVerified) {
-      console.log('Unverified User Trying to access a page')
+      return {
+        isVerified: true,
+      }
+    } catch (error) {
+      console.log(error)
       return {
         isVerified: false,
-        rewriteUrl: '/auth/unauthorized',
-        error:
-          'Verify your email to access this page, check your spam folder if you do not see it in your inbox',
+        rewriteUrl: '/auth/signin',
+        error: 'You must be signed in to access this page',
       }
-    }
-
-    return {
-      isVerified: true,
     }
   } else {
     // A non signedin user should not be able to access the admin page
