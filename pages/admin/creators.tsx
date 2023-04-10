@@ -111,23 +111,31 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
   return (
     <>
       <Head>
-        <title>NinjaCo | Admin View Users</title>
+        <title>NinjaCo | Admin View Creators</title>
         <meta name="description" content="Leading online platform for visual programming" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main className="flex w-full h-screen overflow-hidden">
-        <SideMenu higlightUsers={true} />
+        <SideMenu higlightCreators={true} />
         <div className="flex flex-col flex-grow w-3/4 h-full gap-12 py-8 px-4">
-          <div className="flex items-center justify-between w-full">
+          <div className="flex items-center justify-between w-full flex-wrap">
             <div className="flex flex-col gap-2">
-              <p className="text-brand-700 text-xl md:text-2xl lg:text-3xl font-semibold">Users</p>
+              <p className="text-brand-700 text-xl md:text-2xl lg:text-3xl font-semibold">
+                Creators
+              </p>
               <div className="text-sm text-brand  ">{users.length} entries found</div>
             </div>
-            <button className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-400 hover:text-white py-2">
-              Add User
+            <button className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-400 hover:text-white py-2 px-4">
+              Add Creator
             </button>
           </div>
-          <Table columns={columns} rows={rows} width={'100%'} height={700} className="mr-4" />
+          <Table
+            columns={columns}
+            rows={rows}
+            width={'100%'}
+            height={700}
+            className="mr-4 relative"
+          />
         </div>
       </main>
     </>
@@ -148,8 +156,10 @@ export const getServerSideProps = async (context) => {
   }
   const api = new UserApi(session)
   const response = await api.find()
-  const users = response.payload.filter((user) => user.role.role === 'user')
+
+  const creators = response.payload.filter((user) => user.role.role === 'creator')
+
   return {
-    props: { users },
+    props: { users: creators },
   }
 }
