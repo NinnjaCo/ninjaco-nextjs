@@ -75,7 +75,8 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ['var(--font-inter)', ...fontFamily.sans],
+        sans: ['var(--font-quicksand)', ...fontFamily.sans],
+        quicksand: ['var(--font-quicksand)', ...fontFamily.sans],
       },
     },
   },
