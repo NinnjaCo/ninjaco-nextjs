@@ -57,7 +57,6 @@ export default function Profile({ serverUser }: ServerProps) {
       },
     }
   )
-  useEffect(() => {}, [user])
 
   const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false)
 
@@ -145,12 +144,12 @@ export default function Profile({ serverUser }: ServerProps) {
       // update user using react-query
       // refetch the user data
       await queryClient.invalidateQueries('user')
-
       setAlertData({
         message: 'Profile updated successfully',
         variant: 'success',
         open: true,
       })
+      setSaveButtonDisabled(false)
     } catch (error) {
       setSaveButtonDisabled(false)
       if (isAxiosError<AuthError>(error)) {
