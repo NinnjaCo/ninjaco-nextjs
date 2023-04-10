@@ -1,3 +1,4 @@
+import { User } from 'next-auth'
 import { UserApi } from '@/utils/api/user'
 import { getSession } from 'next-auth/react'
 import Head from 'next/head'
@@ -11,7 +12,11 @@ import total_courses from '@/images/total_courses.svg'
 import total_creators from '@/images/total_creators.svg'
 import total_users from '@/images/total_users.svg'
 
-export default function AdminDashboard() {
+const AdminDashboard: React.FC<{ users: User[]; countUsers: number; countCreators: number }> = ({
+  users,
+  countUsers,
+  countCreators,
+}) => {
   return (
     <>
       <Head>
@@ -33,7 +38,7 @@ export default function AdminDashboard() {
               <div className="h-24 md:h-auto relative">
                 <Image src={total_users} alt="image" className="w-full h-full relative " priority />
                 <div className="text-brand-100 font-semibold text-base md:text-lg lg:text-2xl xl:text-3xl absolute top-1 lg:top-3 xl:top-6 left-8 md:left-10 lg:left-14 xl:left-24">
-                  2560
+                  {countUsers}
                 </div>
               </div>
               <div className="h-24 md:h-auto relative">
@@ -55,7 +60,7 @@ export default function AdminDashboard() {
                   priority
                 />
                 <div className="text-brand-100 font-semibold text-base md:text-lg lg:text-2xl xl:text-3xl absolute top-1 lg:top-3 xl:top-6 left-8 md:left-10 lg:left-14 xl:left-24">
-                  20
+                  {countCreators}
                 </div>
               </div>
             </div>
@@ -89,42 +94,17 @@ export default function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="bg-brand-50">
-                    <td className="pl-4 py-2 text-brand w-32">
-                      <Image src={profile_photo} alt="image" className="w-8" />
-                    </td>
-                    <td className="pl-4 py-2">Raghid</td>
-                    <td className="pl-4 py-2">Raghidkhoury123@gmail.com</td>
-                    <td className="pl-4 py-2">27</td>
-                    <td className="pl-4 py-2">65</td>
-                  </tr>
-                  <tr className="bg-brand-50">
-                    <td className="pl-4 py-2 text-brand w-32">
-                      <Image src={profile_photo} alt="image" className="w-8" />
-                    </td>
-                    <td className="pl-4 py-2">Raghid</td>
-                    <td className="pl-4 py-2">Raghidkhoury123@gmail.com</td>
-                    <td className="pl-4 py-2">27</td>
-                    <td className="pl-4 py-2">65</td>
-                  </tr>
-                  <tr className="bg-brand-50">
-                    <td className="pl-4 py-2 text-brand w-32">
-                      <Image src={profile_photo} alt="image" className="w-8" />
-                    </td>
-                    <td className="pl-4 py-2">Raghid</td>
-                    <td className="pl-4 py-2">Raghidkhoury123@gmail.com</td>
-                    <td className="pl-4 py-2">27</td>
-                    <td className="pl-4 py-2">65</td>
-                  </tr>
-                  <tr className="bg-brand-50">
-                    <td className="pl-4 py-2 text-brand w-32">
-                      <Image src={profile_photo} alt="image" className="w-8" />
-                    </td>
-                    <td className="pl-4 py-2">Raghid</td>
-                    <td className="pl-4 py-2">Raghidkhoury123@gmail.com</td>
-                    <td className="pl-4 py-2">27</td>
-                    <td className="pl-4 py-2">65</td>
-                  </tr>
+                  {users.map((user, index) => (
+                    <tr className="bg-brand-50" key={index}>
+                      <td className="pl-4 py-2 text-brand w-32">
+                        <Image src={profile_photo} alt="image" className="w-8" />
+                      </td>
+                      <td className="pl-4 py-4">{user.firstName}</td>
+                      <td className="pl-4 py-4">{user.email}</td>
+                      <td className="pl-4 py-4">{user.level}</td>
+                      <td className="pl-4 py-4">{user.points}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -134,6 +114,9 @@ export default function AdminDashboard() {
     </>
   )
 }
+
+export default AdminDashboard
+
 export const getServerSideProps = async (context) => {
   const session = await getSession(context)
   if (!session) {
@@ -146,12 +129,21 @@ export const getServerSideProps = async (context) => {
   }
   const api = new UserApi(session)
   const users = await api.find()
-  console.log(users)
 
-  const role = await api.find({ query: { role: 'admin' } })
-  console.log(role)
+  console.log(users.payload)
+
+  let countUsers = 0
+  let countCreators = 0
+  for (let i = 0; i < users.payload.length; i++) {
+    if (users.payload[i].role.role === 'user') {
+      countUsers = countUsers + 1
+    }
+    if (users.payload[i].role.role === 'creator') {
+      countCreators = countCreators + 1
+    }
+  }
 
   return {
-    props: { users: users.payload },
+    props: { users: users.payload, countUsers, countCreators },
   }
 }
