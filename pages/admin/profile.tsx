@@ -91,6 +91,7 @@ export default function Profile({ user }: ServerProps) {
   const submitHandler = async (data: AdminProfileFormDataType) => {
     // check the dirty fields and only send the data that has been changed
     setSaveButtonDisabled(true)
+
     const dirtyFieldsArray = Object.keys(dirtyFields)
     const dirtyData = {}
     dirtyFieldsArray.forEach((field) => {
@@ -109,10 +110,7 @@ export default function Profile({ user }: ServerProps) {
     }
 
     try {
-      // create a new object that conatins all the old data, but the dirty fields are updated
-      const updatedUser = { ...user, ...dirtyData }
-
-      const response = await new UserApi(session.data).update(user._id, updatedUser)
+      const response = await new UserApi(session.data).update(user._id, dirtyData)
       user = response.payload
       setAlertData({
         message: 'Profile updated successfully',
@@ -160,7 +158,7 @@ export default function Profile({ user }: ServerProps) {
               type="submit"
               form="form"
               value="Submit"
-              className="btn btn-secondary px-4 sm:pr-6 py-2 hover:bg-brand-500 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              className="btn btn-secondary rounded-lg px-4 sm:pr-6 py-2 hover:bg-brand-500 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
               disabled={saveButtonDisabled}
             >
               SAVE

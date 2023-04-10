@@ -1,21 +1,378 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react'
-import { GridColDef, GridRowsProp } from '@mui/x-data-grid'
-import { PencilIcon } from '@heroicons/react/24/solid'
+import { AdminAlertDialog } from '@/components/admin/dialog'
+import { Alert } from '@/components/shared/alert'
+import { AuthError } from '@/models/shared'
+import { ChevronRightIcon, PencilIcon } from '@heroicons/react/24/solid'
+import {
+  GridColDef,
+  GridRenderCellParams,
+  GridRowsProp,
+  GridTreeNodeWithRender,
+} from '@mui/x-data-grid'
+import { Popover, Transition } from '@headlessui/react'
 import { RoleEnum } from '@/models/crud/role.model'
 import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
 import { authOptions } from '../api/auth/[...nextauth]'
 import { getReadableDateFromISO } from '@/utils/shared'
 import { getServerSession } from 'next-auth'
-import { useMemo } from 'react'
+import { isAxiosError, unWrapAuthError } from '@/utils/errors'
+import { useCallback, useMemo } from 'react'
+import { useRouter } from 'next/router'
+import { useSession } from 'next-auth/react'
 import Head from 'next/head'
 import SideMenu from '@/components/admin/sideMenu'
 import Table from '@/components/table'
+import clsx from 'clsx'
 
 const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
-  const clickEditButtonOnUserId = (params) => {
-    console.log(params.row.id)
+  const session = useSession()
+  const router = useRouter()
+
+  const [alertData, setAlertData] = React.useState<{
+    message: string
+    variant: 'success' | 'info' | 'warning' | 'error'
+    open: boolean
+  }>({
+    message: '',
+    variant: 'info',
+    open: false,
+  })
+  const closeAlert = () => {
+    setAlertData({ ...alertData, open: false })
   }
+
+  const [alertDiaglogState, setAlertDialogState] = React.useState<{
+    open: boolean
+    title: string
+    detailsRows?: { label: string; value: string }[]
+    backButtonText?: string
+    backButtonClassName?: string
+    confirmButtonText?: string
+    confirmButtonClassName?: string
+    dialogType: 'notify' | 'resetPassword' | 'delete'
+  }>({
+    open: false,
+    title: '',
+    detailsRows: [],
+    backButtonText: 'Back',
+    confirmButtonText: 'Confirm',
+    dialogType: 'notify',
+  })
+
+  const [notifyMessage, setNotifyMessage] = React.useState<{
+    message: string
+    rowParams: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>
+  }>({
+    message: '',
+    rowParams: {} as GridRenderCellParams<any, any, any, GridTreeNodeWithRender>,
+  })
+
+  const [resetPasswordState, setResetPasswordState] = React.useState<{
+    password: string
+    notifyUser: boolean
+    rowParams: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>
+  }>({
+    password: '',
+    notifyUser: false,
+    rowParams: {} as GridRenderCellParams<any, any, any, GridTreeNodeWithRender>,
+  })
+
+  const [deleteUserState, setDeleteUserState] = React.useState<{
+    message: string
+    notifyUser: boolean
+    rowParams: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>
+  }>({
+    message: '',
+    notifyUser: false,
+    rowParams: {} as GridRenderCellParams<any, any, any, GridTreeNodeWithRender>,
+  })
+
+  const preformDialogConfirmAction = useCallback(async () => {
+    switch (alertDiaglogState.dialogType) {
+      case 'notify': {
+        // send email to user
+        console.log('Notify User', notifyMessage)
+        break
+      }
+      case 'resetPassword': {
+        try {
+          if (resetPasswordState.password.length < 8) {
+            setAlertData({
+              message: 'Password must be at least 8 characters long',
+              variant: 'error',
+              open: true,
+            })
+            return
+          }
+
+          await new UserApi(session.data).update(resetPasswordState.rowParams.row.id, {
+            password: resetPasswordState.password,
+          })
+          if (resetPasswordState.notifyUser) {
+            // send email to user
+          }
+          // reload the page
+          router.reload()
+          setAlertData({
+            message: 'Password reset successfully',
+            variant: 'success',
+            open: true,
+          })
+        } catch (error) {
+          if (isAxiosError<AuthError>(error)) {
+            const errors = unWrapAuthError(error)
+            setAlertData({
+              message: errors[0].message || 'Something went wrong',
+              variant: 'error',
+              open: true,
+            })
+          } else {
+            setAlertData({
+              message: 'Error resetting password',
+              variant: 'error',
+              open: true,
+            })
+          }
+        }
+        break
+      }
+      case 'delete': {
+        try {
+          await new UserApi(session.data).delete(deleteUserState.rowParams.row.id)
+
+          if (deleteUserState.notifyUser) {
+            // send email to user
+          }
+
+          // reload the page
+          router.reload()
+          setAlertData({
+            message: 'User deleted successfully',
+            variant: 'success',
+            open: true,
+          })
+        } catch (error) {
+          console.error(error)
+          if (isAxiosError<AuthError>(error)) {
+            const errors = unWrapAuthError(error)
+            setAlertData({
+              message: errors[0].message || 'Something went wrong',
+              variant: 'error',
+              open: true,
+            })
+          } else {
+            setAlertData({
+              message: 'Error deleting user',
+              variant: 'error',
+              open: true,
+            })
+          }
+        }
+        break
+      }
+    }
+  }, [
+    alertDiaglogState.dialogType,
+    deleteUserState,
+    notifyMessage,
+    resetPasswordState,
+    router,
+    session.data,
+  ])
+
+  const getDialogBody = useCallback(() => {
+    switch (alertDiaglogState.dialogType) {
+      case 'notify':
+        return (
+          <div className="flex flex-col" key="1">
+            <label htmlFor="message" className="mb-2 text-sm font-medium text-brand">
+              Message
+            </label>
+            <textarea
+              id="message"
+              rows={4}
+              className="block p-2.5 w-full text-sm text-brand-500 bg-gray-50 rounded-lg border border-gray-300 focus:ring-brand-500 focus:border-brand-500"
+              placeholder="Write your message here..."
+              onChange={(e) => {
+                setNotifyMessage({ ...notifyMessage, message: e.target.value })
+              }}
+              value={notifyMessage.message}
+            ></textarea>
+          </div>
+        )
+      case 'resetPassword':
+        return (
+          <div className="flex flex-col" key="1">
+            <div className="flex items-center my-4">
+              <input
+                name="notify-user"
+                type="checkbox"
+                id="notify-user"
+                checked={resetPasswordState.notifyUser}
+                onChange={(e) => {
+                  setResetPasswordState({ ...resetPasswordState, notifyUser: e.target.checked })
+                }}
+                className="w-4 h-4 accent-brand-500 bg-brand-100 border-brand-300 rounded focus:ring-brand-500 dark:focus:ring-brand-600 focus:ring-2"
+              />
+              <label htmlFor="notify-user" className="ml-2 block text-sm text-brand">
+                Notify them by sending an email
+              </label>
+            </div>
+            <label htmlFor="message" className="mb-2 text-sm font-medium text-brand">
+              New Password
+            </label>
+            <input
+              id="password"
+              className="block w-full px-4 py-2 text-brand-700 placeholder-brand-400 border border-brand-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+              placeholder="Password"
+              onChange={(e) => {
+                setResetPasswordState({ ...resetPasswordState, password: e.target.value })
+              }}
+              value={resetPasswordState.password}
+            ></input>
+          </div>
+        )
+      case 'delete':
+        return (
+          <div className="flex flex-col" key="1">
+            <div className="flex items-center my-4">
+              <input
+                name="notify-user"
+                type="checkbox"
+                id="notify-user"
+                checked={deleteUserState.notifyUser}
+                onChange={(e) => {
+                  setDeleteUserState({ ...deleteUserState, notifyUser: e.target.checked })
+                }}
+                className="w-4 h-4 accent-brand-500 bg-brand-100 border-brand-300 rounded focus:ring-brand-500 dark:focus:ring-brand-600 focus:ring-2"
+              />
+              <label htmlFor="notify-user" className="ml-2 block text-sm text-brand">
+                Notify them by sending an email
+              </label>
+            </div>
+            <label htmlFor="message" className="mb-2 text-sm font-medium text-brand">
+              Message
+            </label>
+            <textarea
+              id="message"
+              rows={4}
+              className="block p-2.5 w-full text-sm text-brand-500 bg-gray-50 rounded-lg border border-gray-300 focus:ring-brand-500 focus:border-brand-500"
+              placeholder="Write your message here..."
+              onChange={(e) => {
+                setDeleteUserState({ ...deleteUserState, message: e.target.value })
+              }}
+              value={deleteUserState.message}
+            ></textarea>
+          </div>
+        )
+    }
+  }, [alertDiaglogState.dialogType, notifyMessage, resetPasswordState, deleteUserState])
+
+  const editActions = useMemo(
+    () => [
+      {
+        id: 1,
+        text: 'Notify',
+        onClick: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
+          setAlertDialogState({
+            title: 'Notify User',
+            detailsRows: [
+              {
+                label: 'ID',
+                value: params.row.id,
+              },
+              {
+                label: 'Name',
+                value: `${params.row.firstName} ${params.row.lastName}`,
+              },
+              {
+                label: 'Email',
+                value: params.row.email,
+              },
+            ],
+            backButtonText: 'Cancel',
+            confirmButtonText: 'Send',
+            confirmButtonClassName: 'bg-brand hover:bg-brand-500 text-white',
+            open: true,
+            dialogType: 'notify',
+          })
+          setNotifyMessage({
+            ...notifyMessage,
+            rowParams: params,
+          })
+        },
+      },
+      {
+        id: 2,
+        text: 'Reset Password',
+        onClick: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
+          setAlertDialogState({
+            title: 'Reset Password',
+            detailsRows: [
+              {
+                label: 'ID',
+                value: params.row.id,
+              },
+              {
+                label: 'Name',
+                value: `${params.row.firstName} ${params.row.lastName}`,
+              },
+              {
+                label: 'Email',
+                value: params.row.email,
+              },
+            ],
+            backButtonText: 'Cancel',
+            confirmButtonText: 'Reset',
+            confirmButtonClassName: 'bg-brand hover:bg-brand-500 text-white',
+            open: true,
+            dialogType: 'resetPassword',
+          })
+          setResetPasswordState({
+            ...resetPasswordState,
+            rowParams: params,
+          })
+        },
+      },
+      {
+        id: 3,
+        text: 'Delete',
+        textClassName: 'text-red-500',
+        onClick: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
+          setAlertDialogState({
+            title: 'Delete User',
+            detailsRows: [
+              {
+                label: 'ID',
+                value: params.row.id,
+              },
+              {
+                label: 'Name',
+                value: `${params.row.firstName} ${params.row.lastName}`,
+              },
+              {
+                label: 'Email',
+                value: params.row.email,
+              },
+            ],
+            backButtonText: 'Cancel',
+            confirmButtonText: 'Delete',
+            confirmButtonClassName: 'bg-error-dark hover:bg-error text-white',
+            open: true,
+            dialogType: 'delete',
+          })
+          setDeleteUserState({
+            ...deleteUserState,
+            rowParams: params,
+          })
+        },
+      },
+    ],
+    [deleteUserState, notifyMessage, resetPasswordState]
+  )
+
   const columns: GridColDef[] = useMemo(
     () => [
       {
@@ -49,6 +406,8 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
       {
         field: 'dob',
         headerName: 'Date of Birth',
+        type: 'date',
+        renderCell: (params) => getReadableDateFromISO(params.value as string),
         width: 140,
         minWidth: 140,
         headerClassName: 'bg-brand-200',
@@ -56,6 +415,8 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
       {
         field: 'createdAt',
         headerName: 'Created At',
+        type: 'date',
+        renderCell: (params) => getReadableDateFromISO(params.value as string),
         width: 160,
         minWidth: 160,
         headerClassName: 'bg-brand-200',
@@ -64,6 +425,8 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
       {
         field: 'updatedAt',
         headerName: 'Updated At',
+        type: 'date',
+        renderCell: (params) => getReadableDateFromISO(params.value as string),
         width: 160,
         minWidth: 160,
         headerClassName: 'bg-brand-200',
@@ -73,16 +436,49 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
         field: 'action',
         headerName: 'Action',
         width: 70,
-        renderCell: (params) => (
-          <button
-            className="bg-brand-200 z-10 rounded w-6 h-6 flex items-center justify-center"
-            onClick={() => {
-              clickEditButtonOnUserId(params)
-            }}
-            tabIndex={-1}
-          >
-            <PencilIcon className="h-3 font-bold text-brand" />
-          </button>
+        renderCell: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => (
+          <Popover>
+            {() => (
+              <>
+                <Popover.Button
+                  className="group flex items-center text-brand-500 bg-brand-300 w-8 h-8 justify-center rounded hover:bg-brand-500 hover:text-brand-300"
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Edit User"
+                >
+                  <PencilIcon className={clsx('w-4 h-4 cursor-pointer')} />
+                </Popover.Button>
+                <Transition
+                  as={React.Fragment}
+                  enter="transition ease-out duration-200"
+                  enterFrom="opacity-0 translate-y-1"
+                  enterTo="opacity-100 translate-y-0"
+                  leave="transition ease-in duration-150"
+                  leaveFrom="opacity-100 translate-y-0"
+                  leaveTo="opacity-0 translate-y-1"
+                >
+                  <Popover.Panel className="absolute z-20 right-8">
+                    <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-brand ring-opacity-5">
+                      <div className="relative flex flex-col bg-brand-50">
+                        {editActions.map((action) => {
+                          return (
+                            <button
+                              key={action.id}
+                              className="w-full flex justify-between px-4 py-2 items-center gap-4 text-brand hover:bg-brand-200 font-medium"
+                              onClick={() => action.onClick(params)}
+                            >
+                              <p className={clsx(action.textClassName)}>{action.text}</p>
+                              <ChevronRightIcon className="w-4 h-4" />
+                            </button>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  </Popover.Panel>
+                </Transition>
+              </>
+            )}
+          </Popover>
         ),
         headerClassName: 'bg-brand-200',
         sortable: false,
@@ -92,7 +488,7 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
         flex: 1,
       },
     ],
-    []
+    [editActions]
   )
 
   const rows: GridRowsProp = useMemo(
@@ -100,11 +496,11 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
       users.map((user) => ({
         id: user._id,
         email: user.email,
-        dob: getReadableDateFromISO(user.dateOfBirth),
+        dob: new Date(user.dateOfBirth),
         firstName: user.firstName,
         lastName: user.lastName,
-        createdAt: getReadableDateFromISO(user.createdAt),
-        updatedAt: getReadableDateFromISO(user.updatedAt),
+        createdAt: new Date(user.createdAt),
+        updatedAt: new Date(user.updatedAt),
         action: user._id,
       })),
     [users]
@@ -117,6 +513,22 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
         <meta name="description" content="Leading online platform for visual programming" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
+      <AdminAlertDialog
+        title={alertDiaglogState.title}
+        detailsRows={alertDiaglogState.detailsRows}
+        open={alertDiaglogState.open}
+        confirm={() => {
+          preformDialogConfirmAction()
+          setAlertDialogState({ ...alertDiaglogState, open: false })
+        }}
+        close={() => setAlertDialogState({ ...alertDiaglogState, open: false })}
+        backButtonText={alertDiaglogState.backButtonText}
+        backButtonClassName={alertDiaglogState.backButtonClassName}
+        confirmButtonText={alertDiaglogState.confirmButtonText}
+        confirmButtonClassName={alertDiaglogState.confirmButtonClassName}
+      >
+        {getDialogBody()}
+      </AdminAlertDialog>
       <main className="flex w-full h-screen overflow-hidden">
         <SideMenu higlightUsers={true} />
         <div className="flex flex-col flex-grow w-3/4 h-full gap-12 py-8 px-4">
@@ -129,6 +541,12 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
               Add User
             </button>
           </div>
+          <Alert
+            open={alertData.open}
+            message={alertData.message}
+            variant={alertData.variant}
+            close={closeAlert}
+          />
           <Table columns={columns} rows={rows} width={'100%'} height={700} className="mr-4" />
         </div>
       </main>
