@@ -37,6 +37,8 @@ const AdminDashboard: React.FC<{ users: User[]; countUsers: number; countCreator
           </div>
         ),
         flex: 1,
+        sortable: false,
+        filterable: false,
       },
       {
         field: 'firstName',
@@ -70,6 +72,8 @@ const AdminDashboard: React.FC<{ users: User[]; countUsers: number; countCreator
         headerClassName: 'bg-brand-200',
         renderCell: (params) => <LevelIndicator points={params.value} />,
         flex: 1,
+        sortable: false,
+        filterable: false,
       },
       {
         field: 'points',
