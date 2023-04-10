@@ -83,13 +83,55 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
   const preformDialogConfirmAction = useCallback(async () => {
     switch (alertDiaglogState.dialogType) {
       case 'resetPassword': {
-        console.log('Reset Password', resetPasswordState)
+        try {
+          if (resetPasswordState.password.length < 8) {
+            setAlertData({
+              message: 'Password must be at least 8 characters long',
+              variant: 'error',
+              open: true,
+            })
+            return
+          }
+
+          await new UserApi(session.data).update(resetPasswordState.rowParams.row.id, {
+            password: resetPasswordState.password,
+          })
+
+          if (resetPasswordState.notifyUser) {
+            // send email to user
+          }
+
+          // reload the page
+          router.reload()
+          setAlertData({
+            message: 'Password reset successfully',
+            variant: 'success',
+            open: true,
+          })
+        } catch (error) {
+          if (isAxiosError<AuthError>(error)) {
+            const errors = unWrapAuthError(error)
+            setAlertData({
+              message: errors[0].message || 'Something went wrong',
+              variant: 'error',
+              open: true,
+            })
+          } else {
+            setAlertData({
+              message: 'Error resetting password',
+              variant: 'error',
+              open: true,
+            })
+          }
+        }
         break
       }
       case 'delete': {
         try {
-          await new UserApi(session.data).delete(resetPasswordState.rowParams.row.id)
-
+          await new UserApi(session.data).delete(deleteUserState.rowParams.row.id)
+          if (deleteUserState.notifyUser) {
+            // send email to user
+          }
           // reload the page
           router.reload()
           setAlertData({
@@ -116,14 +158,14 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
         break
       }
     }
-  }, [alertDiaglogState.dialogType, resetPasswordState, router, session.data])
+  }, [alertDiaglogState.dialogType, deleteUserState, resetPasswordState, router, session.data])
 
   const getDialogBody = useCallback(() => {
     switch (alertDiaglogState.dialogType) {
       case 'resetPassword':
         return (
           <div className="flex flex-col" key="1">
-            <div className="flex items-center mt-4">
+            <div className="flex items-center my-4">
               <input
                 name="notify-user"
                 type="checkbox"
@@ -144,7 +186,7 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
             <input
               id="password"
               className="block w-full px-4 py-2 text-brand-700 placeholder-brand-400 border border-brand-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
-              placeholder="Write your message here..."
+              placeholder="Password"
               onChange={(e) => {
                 setResetPasswordState({ ...resetPasswordState, password: e.target.value })
               }}
@@ -155,7 +197,7 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
       case 'delete':
         return (
           <div className="flex flex-col" key="1">
-            <div className="flex items-center mt-4">
+            <div className="flex items-center my-4">
               <input
                 name="notify-user"
                 type="checkbox"
@@ -293,12 +335,16 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
         field: 'dob',
         headerName: 'Date of Birth',
         width: 140,
+        renderCell: (params) => getReadableDateFromISO(params.value as string),
         minWidth: 140,
+        type: 'date',
         headerClassName: 'bg-brand-200',
       },
       {
         field: 'createdAt',
         headerName: 'Created At',
+        type: 'date',
+        renderCell: (params) => getReadableDateFromISO(params.value as string),
         width: 160,
         minWidth: 160,
         headerClassName: 'bg-brand-200',
@@ -307,6 +353,8 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
       {
         field: 'updatedAt',
         headerName: 'Updated At',
+        type: 'date',
+        renderCell: (params) => getReadableDateFromISO(params.value as string),
         width: 160,
         minWidth: 160,
         headerClassName: 'bg-brand-200',
@@ -378,11 +426,11 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
       users.map((user) => ({
         id: user._id,
         email: user.email,
-        dob: getReadableDateFromISO(user.dateOfBirth),
+        dob: new Date(user.dateOfBirth),
         firstName: user.firstName,
         lastName: user.lastName,
-        createdAt: getReadableDateFromISO(user.createdAt),
-        updatedAt: getReadableDateFromISO(user.updatedAt),
+        createdAt: new Date(user.createdAt),
+        updatedAt: new Date(user.updatedAt),
         action: user._id,
       })),
     [users]
