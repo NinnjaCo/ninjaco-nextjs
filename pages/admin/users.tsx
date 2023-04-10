@@ -1,14 +1,113 @@
-import { FunnelIcon } from '@heroicons/react/24/outline'
+import * as React from 'react'
+import { GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import { PencilIcon } from '@heroicons/react/24/solid'
-import { User } from '@/models/crud/user.model'
+import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
 import { getReadableDateFromISO } from '@/utils/shared'
 import { getSession } from 'next-auth/react'
+import { useMemo } from 'react'
 import Head from 'next/head'
-import React from 'react'
 import SideMenu from '@/components/admin/sideMenu'
+import Table from '@/components/table'
 
 const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
+  const clickEditButtonOnUserId = (params) => {
+    console.log(params.row.id)
+  }
+  const columns: GridColDef[] = useMemo(
+    () => [
+      {
+        field: 'id',
+        headerName: 'ID',
+        width: 260,
+        minWidth: 140,
+        headerClassName: 'bg-brand-200',
+      },
+      {
+        field: 'email',
+        headerName: 'Email',
+        width: 200,
+        minWidth: 140,
+        headerClassName: 'bg-brand-200',
+      },
+      {
+        field: 'firstName',
+        headerName: 'First Name',
+        width: 140,
+        minWidth: 140,
+        headerClassName: 'bg-brand-200',
+      },
+      {
+        field: 'lastName',
+        headerName: 'Last Name',
+        width: 140,
+        minWidth: 140,
+        headerClassName: 'bg-brand-200',
+      },
+      {
+        field: 'dob',
+        headerName: 'Date of Birth',
+        width: 140,
+        minWidth: 140,
+        headerClassName: 'bg-brand-200',
+      },
+      {
+        field: 'createdAt',
+        headerName: 'Created At',
+        width: 160,
+        minWidth: 160,
+        headerClassName: 'bg-brand-200',
+        flex: 1,
+      },
+      {
+        field: 'updatedAt',
+        headerName: 'Updated At',
+        width: 160,
+        minWidth: 160,
+        headerClassName: 'bg-brand-200',
+        flex: 1,
+      },
+      {
+        field: 'action',
+        headerName: 'Action',
+        width: 70,
+        renderCell: (params) => (
+          <button
+            className="bg-brand-200 z-10 rounded w-6 h-6 flex items-center justify-center"
+            onClick={() => {
+              clickEditButtonOnUserId(params)
+            }}
+            tabIndex={-1}
+          >
+            <PencilIcon className="h-3 font-bold text-brand" />
+          </button>
+        ),
+        headerClassName: 'bg-brand-200',
+        sortable: false,
+        filterable: false,
+        hideable: false,
+        minWidth: 70,
+        flex: 1,
+      },
+    ],
+    []
+  )
+
+  const rows: GridRowsProp = useMemo(
+    () =>
+      users.map((user) => ({
+        id: user._id,
+        email: user.email,
+        dob: getReadableDateFromISO(user.dateOfBirth),
+        firstName: user.firstName,
+        lastName: user.lastName,
+        createdAt: getReadableDateFromISO(user.createdAt),
+        updatedAt: getReadableDateFromISO(user.updatedAt),
+        action: user._id,
+      })),
+    [users]
+  )
+
   return (
     <>
       <Head>
@@ -25,57 +124,10 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
               <div className="text-sm text-brand  ">{users.length} entries found</div>
             </div>
             <button className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-400 hover:text-white py-2">
-              Add user
+              Add User
             </button>
           </div>
-          <button className="hidden md:flex btn max-w-fit gap-2 text-brand bg-brand-200 rounded-md hover:bg-brand-400 py-2">
-            <FunnelIcon className="h-4 font-bold" />
-            Filter
-          </button>
-          <div className="w-full overflow-scroll">
-            <table className="text-[0.5rem] md:text-xs text-left text-brand w-full rounded-t-2xl">
-              <thead className="text-brand uppercase bg-brand-200 ">
-                <tr>
-                  <th scope="col" className="pl-4 py-3">
-                    ID
-                  </th>
-                  <th scope="col" className="pl-4 py-3">
-                    First Name
-                  </th>
-                  <th scope="col" className="pl-4 py-3">
-                    Last Name
-                  </th>
-                  <th scope="col" className="pl-4 py-3">
-                    Email
-                  </th>
-                  <th scope="col" className="pl-4 py-3">
-                    Date of Birth
-                  </th>
-                  <th scope="col" className="pl-4 py-3">
-                    Created At
-                  </th>
-                  <th scope="col" className="pl-4 py-3"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user, index) => (
-                  <tr className="bg-brand-50" key={index}>
-                    <td className="pl-4 py-4">{user._id}</td>
-                    <td className="pl-4 py-4">{user.firstName}</td>
-                    <td className="pl-4 py-4">{user.lastName}</td>
-                    <td className="pl-4 py-4">{user.email}</td>
-                    <td className="pl-4 py-4">{getReadableDateFromISO(user.dateOfBirth)}</td>
-                    <td className="pl-4 py-4">{getReadableDateFromISO(user.createdAt)}</td>
-                    <td className="pl-4 py-4">
-                      <button className="bg-brand-200 rounded w-6 h-6 flex items-center justify-center">
-                        <PencilIcon className="h-3 font-bold text-brand" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <Table columns={columns} rows={rows} width={'100%'} height={700} className="mr-4" />
         </div>
       </main>
     </>
@@ -96,7 +148,8 @@ export const getServerSideProps = async (context) => {
   }
   const api = new UserApi(session)
   const response = await api.find()
+  const users = response.payload.filter((user) => user.role.role === 'user')
   return {
-    props: { users: response.payload },
+    props: { users },
   }
 }

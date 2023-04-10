@@ -1,23 +1,41 @@
 import * as yup from 'yup'
+import { AuthApi } from '@/utils/api/auth'
 import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/20/solid'
 import { Input } from '@/components/forms/input'
+import { UserApi } from '@/utils/api/user'
+import { authOptions } from '../api/auth/[...nextauth]'
+import { getServerSession } from 'next-auth'
 import { useForm } from 'react-hook-form'
+import { useSession } from 'next-auth/react'
 import { yupResolver } from '@hookform/resolvers/yup'
+import CrudApi from '@/utils/api/crud/crud.api'
 import DatePickerWithHookForm from '@/components/forms/datePickerWithHookForm'
 import Head from 'next/head'
-import React from 'react'
+import React, { use } from 'react'
 import SideMenu from '@/components/admin/sideMenu'
+import dayjs from 'dayjs'
+import jwt from 'jsonwebtoken'
 
-type AdminProfileFormDataType = {
+interface ServerProps {
   firstName: string
   lastName: string
   dateOfBirth: Date
   email: string
-  password: string
-  passwordConfirmation: string
+  errorMessage: string
+  decodedUserId: string
 }
 
-export default function Profile() {
+export default function Profile(props: ServerProps) {
+  const session = useSession()
+
+  type AdminProfileFormDataType = {
+    firstName: string
+    lastName: string
+    dateOfBirth: Date
+    email: string
+    password: string
+    passwordConfirmation: string
+  }
   const AdminProfileFormSchema = yup
     .object()
     .shape({
@@ -45,15 +63,40 @@ export default function Profile() {
     formState: { errors },
   } = useForm<AdminProfileFormDataType>({
     resolver: yupResolver(AdminProfileFormSchema),
+    defaultValues: {
+      firstName: props.firstName,
+      lastName: props.lastName,
+      dateOfBirth: dayjs(props.dateOfBirth),
+      email: props.email,
+      password: '',
+      passwordConfirmation: '',
+    },
   })
 
   // Handle form submission
-  const submitHandler = (data: AdminProfileFormDataType) => {
-    console.log(data)
+  const submitHandler = async (data: AdminProfileFormDataType) => {
+    const res = await new UserApi(session.data).findOne(session.data?.id as string)
+    if (res) {
+      if (
+        props.firstName !== data.firstName ||
+        props.lastName !== data.lastName ||
+        props.dateOfBirth !== data.dateOfBirth ||
+        props.email !== data.email
+      ) {
+        const res = await new UserApi(session.data).update(session.data?.id as string, {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          dateOfBirth: dayjs(data.dateOfBirth),
+          email: data.email,
+        })
+      }
+    }
   }
 
   return (
     <>
+      {console.log(session)}
+      {console.log(props)}
       <Head>
         <title>NinjaCo | Admin Profile</title>
         <meta name="description" content="Leading online platform for visual programming" />
@@ -154,4 +197,85 @@ export default function Profile() {
       </main>
     </>
   )
+}
+export const getServerSideProps = async (context) => {
+  const { query, req, res } = context
+  const { token } = query
+
+  const auth_secret = process.env.JWT_ACCESS_SECRET
+  if (!auth_secret) {
+    return {
+      props: {
+        token: null,
+        errorMessage: 'Something went wrong',
+      },
+    }
+  }
+  // check if token is a valid jwt token and did not expire
+  // let error = false
+  // let decodedUserId
+  // jwt.verify(token, auth_secret, (err, decoded) => {
+  //   if (err) {
+  //     error = true
+  //   } else {
+  //     decodedUserId = decoded?.sub
+  //   }
+  // })
+  // if (error || !decodedUserId) {
+  //   return {
+  //     props: {
+  //       token: null,
+  //       errorMessage: 'Invalid or Expired Token Provided',
+  //     },
+  //   }
+  // }
+
+  const session = await getServerSession(req, res, authOptions)
+  if (!session) {
+    return {
+      redirect: {
+        destination:
+          (query.redirectTo as string | undefined) || '/auth/signup?error=Token%20Expired',
+        permanent: false,
+      },
+    }
+  }
+  // if (session.id !== decodedUserId) {
+  //   return {
+  //     props: {
+  //       token: null,
+  //       errorMessage: 'Invalid Token Provided for this User',
+  //     },
+  //   }
+  // }
+
+  const response = await new UserApi(session).findOne(session.id)
+  if (!response || !response.payload?._id) {
+    return {
+      props: {
+        errorMessage: 'User not found',
+      },
+    }
+  }
+  // if (response.payload.isVerified) {
+  //   return {
+  //     props: {
+  //       token: null,
+  //       errorMessage: 'User is already verified',
+  //     },
+  //   }
+  // }
+
+  // const dateOfBirthString = response.payload.dateOfBirth
+  // const dateOfBirthObject = new Date(dateOfBirthString)
+  // const dateOfBirthISO = new Date(response.payload.dateOfBirth).toISOString()
+
+  return {
+    props: {
+      firstName: response.payload.firstName,
+      lastName: response.payload.lastName,
+      dateOfBirth: response.payload.dateOfBirth,
+      email: response.payload.email,
+    },
+  }
 }

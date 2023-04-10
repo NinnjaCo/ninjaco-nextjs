@@ -12,7 +12,7 @@ import type { AppProps } from 'next/app'
 
 const quick_sand = Quicksand({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-quicksand',
 })
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -20,7 +20,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <TranslationsProvider initialLocale={pageProps.initialLocale}>
         <SessionManager serverSession={pageProps.session}>
-          <main className={`${quick_sand.variable} font-sans`}>
+          <main className={`${quick_sand.variable} font-quicksand`}>
             <Component {...pageProps} />
           </main>
         </SessionManager>
