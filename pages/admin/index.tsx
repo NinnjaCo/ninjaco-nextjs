@@ -101,7 +101,6 @@ const AdminDashboard: React.FC<{ users: User[]; countUsers: number; countCreator
     [users]
   )
 
-  console.log(users)
   return (
     <>
       <Head>
