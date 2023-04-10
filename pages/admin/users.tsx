@@ -92,6 +92,7 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
   const preformDialogConfirmAction = useCallback(async () => {
     switch (alertDiaglogState.dialogType) {
       case 'notify': {
+        // send email to user
         console.log('Notify User', notifyMessage)
         break
       }
