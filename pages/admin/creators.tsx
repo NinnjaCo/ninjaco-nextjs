@@ -4,6 +4,7 @@ import * as yup from 'yup'
 import { AdminAlertDialog } from '@/components/admin/dialog'
 import { Alert } from '@/components/shared/alert'
 import { AuthError } from '@/models/shared'
+import { AxiosError } from 'axios'
 import { ChevronRightIcon, PencilIcon } from '@heroicons/react/24/solid'
 import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/outline'
 import {
@@ -23,7 +24,7 @@ import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { useCallback, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import { useRouter } from 'next/router'
+import { useQuery, useQueryClient } from 'react-query'
 import { useSession } from 'next-auth/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import DatePickerWithHookForm from '@/components/forms/datePickerWithHookForm'
@@ -65,10 +66,30 @@ const AddCreatorFormSchema = yup
   })
   .required()
 
-const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
+const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
   const session = useSession()
-  const router = useRouter()
+  const queryClient = useQueryClient()
 
+  const { data: users } = useQuery<User[], Error>(
+    'users',
+    async () => {
+      const res = await new UserApi(session.data).find()
+      return res.payload.filter((user) => user.role.role === RoleEnum.CREATOR)
+    },
+    {
+      initialData: serverUsers,
+      onError: (error) => {
+        if (isAxiosError(error)) {
+          const errors = unWrapAuthError(error as AxiosError<AuthError> | undefined)
+          setAlertData({
+            message: errors[0].message || 'Something went wrong',
+            variant: 'error',
+            open: true,
+          })
+        }
+      },
+    }
+  )
   const [openCreatorAddDialog, setOpenCreatorAddDialog] = React.useState(false)
 
   const {
@@ -94,7 +115,7 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
       })
 
       setOpenCreatorAddDialog(false)
-
+      queryClient.invalidateQueries('users')
       setAlertData({
         message: 'Creator Created Successfully',
         variant: 'success',
@@ -184,8 +205,7 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
             // send email to user
           }
 
-          // reload the page
-          router.reload()
+          queryClient.invalidateQueries('users')
           setAlertData({
             message: 'Password reset successfully',
             variant: 'success',
@@ -215,8 +235,7 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
           if (deleteUserState.notifyUser) {
             // send email to user
           }
-          // reload the page
-          router.reload()
+          queryClient.invalidateQueries('users')
           setAlertData({
             message: 'User deleted successfully',
             variant: 'success',
@@ -241,7 +260,7 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
         break
       }
     }
-  }, [alertDiaglogState.dialogType, deleteUserState, resetPasswordState, router, session.data])
+  }, [alertDiaglogState.dialogType, deleteUserState, resetPasswordState, session.data, queryClient])
 
   const getDialogBody = useCallback(() => {
     switch (alertDiaglogState.dialogType) {
@@ -504,7 +523,7 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
 
   const rows: GridRowsProp = useMemo(
     () =>
-      users.map((user) => ({
+      (users ?? serverUsers).map((user) => ({
         id: user._id,
         email: user.email,
         dob: new Date(user.dateOfBirth),
@@ -514,7 +533,7 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
         updatedAt: new Date(user.updatedAt),
         action: user._id,
       })),
-    [users]
+    [serverUsers, users]
   )
 
   return (
@@ -620,7 +639,9 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
               <p className="text-brand-700 text-xl md:text-2xl lg:text-3xl font-semibold">
                 Creators
               </p>
-              <div className="text-sm text-brand  ">{users.length} entries found</div>
+              <div className="text-sm text-brand  ">
+                {(users ?? serverUsers).length} entries found
+              </div>
             </div>
             <button
               className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-400 hover:text-white py-2 px-4"
@@ -663,12 +684,11 @@ export const getServerSideProps = async (context) => {
       },
     }
   }
+
   const api = new UserApi(session)
   const response = await api.find()
-
-  const creators = response.payload.filter((user) => user.role.role === RoleEnum.CREATOR)
-
+  const users = response.payload.filter((user) => user.role.role === RoleEnum.CREATOR)
   return {
-    props: { users: creators },
+    props: { serverUsers: users },
   }
 }
