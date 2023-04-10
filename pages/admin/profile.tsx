@@ -1,5 +1,4 @@
 import * as yup from 'yup'
-import { AuthApi } from '@/utils/api/auth'
 import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/20/solid'
 import { Input } from '@/components/forms/input'
 import { UserApi } from '@/utils/api/user'
@@ -8,7 +7,6 @@ import { getServerSession } from 'next-auth'
 import { useForm } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
 import { yupResolver } from '@hookform/resolvers/yup'
-import CrudApi from '@/utils/api/crud/crud.api'
 import DatePickerWithHookForm from '@/components/forms/datePickerWithHookForm'
 import Head from 'next/head'
 import React, { use } from 'react'
@@ -19,7 +17,7 @@ import jwt from 'jsonwebtoken'
 interface ServerProps {
   firstName: string
   lastName: string
-  dateOfBirth: Date
+  dateOfBirth: string
   email: string
   errorMessage: string
   decodedUserId: string
@@ -46,14 +44,8 @@ export default function Profile(props: ServerProps) {
         .max(new Date(), 'Date of Birth cannot be in the future')
         .required('Date of Birth is required'),
       email: yup.string().email('Invalid email').required('Email is required'),
-      password: yup
-        .string()
-        .min(8, 'Password must be at least 8 characters')
-        .required('Password is required'),
-      passwordConfirmation: yup
-        .string()
-        .oneOf([yup.ref('password')], 'Passwords must match')
-        .required('Password Confirmation is required'),
+      password: yup.string().min(8, 'Password must be at least 8 characters'),
+      passwordConfirmation: yup.string().oneOf([yup.ref('password')], 'Passwords must match'),
     })
     .required()
   const {
@@ -80,14 +72,15 @@ export default function Profile(props: ServerProps) {
       if (
         props.firstName !== data.firstName ||
         props.lastName !== data.lastName ||
-        props.dateOfBirth !== data.dateOfBirth ||
+        props.dateOfBirth !== data.dateOfBirth.toISOString() ||
         props.email !== data.email
       ) {
         const res = await new UserApi(session.data).update(session.data?.id as string, {
           firstName: data.firstName,
           lastName: data.lastName,
-          dateOfBirth: dayjs(data.dateOfBirth),
+          dateOfBirth: data.dateOfBirth.toISOString(),
           email: data.email,
+          password: data.password,
         })
       }
     }
@@ -95,8 +88,6 @@ export default function Profile(props: ServerProps) {
 
   return (
     <>
-      {console.log(session)}
-      {console.log(props)}
       <Head>
         <title>NinjaCo | Admin Profile</title>
         <meta name="description" content="Leading online platform for visual programming" />
@@ -111,7 +102,7 @@ export default function Profile(props: ServerProps) {
         >
           <div className="flex w-full justify-between items-center">
             <div className="text-brand text-lg md:text-xl lg:text-2xl font-semibold">
-              Raghid Khoury
+              {props.firstName} {props.lastName}
             </div>
             <button
               type="submit"
@@ -200,35 +191,6 @@ export default function Profile(props: ServerProps) {
 }
 export const getServerSideProps = async (context) => {
   const { query, req, res } = context
-  const { token } = query
-
-  const auth_secret = process.env.JWT_ACCESS_SECRET
-  if (!auth_secret) {
-    return {
-      props: {
-        token: null,
-        errorMessage: 'Something went wrong',
-      },
-    }
-  }
-  // check if token is a valid jwt token and did not expire
-  // let error = false
-  // let decodedUserId
-  // jwt.verify(token, auth_secret, (err, decoded) => {
-  //   if (err) {
-  //     error = true
-  //   } else {
-  //     decodedUserId = decoded?.sub
-  //   }
-  // })
-  // if (error || !decodedUserId) {
-  //   return {
-  //     props: {
-  //       token: null,
-  //       errorMessage: 'Invalid or Expired Token Provided',
-  //     },
-  //   }
-  // }
 
   const session = await getServerSession(req, res, authOptions)
   if (!session) {
@@ -240,14 +202,6 @@ export const getServerSideProps = async (context) => {
       },
     }
   }
-  // if (session.id !== decodedUserId) {
-  //   return {
-  //     props: {
-  //       token: null,
-  //       errorMessage: 'Invalid Token Provided for this User',
-  //     },
-  //   }
-  // }
 
   const response = await new UserApi(session).findOne(session.id)
   if (!response || !response.payload?._id) {
@@ -257,18 +211,6 @@ export const getServerSideProps = async (context) => {
       },
     }
   }
-  // if (response.payload.isVerified) {
-  //   return {
-  //     props: {
-  //       token: null,
-  //       errorMessage: 'User is already verified',
-  //     },
-  //   }
-  // }
-
-  // const dateOfBirthString = response.payload.dateOfBirth
-  // const dateOfBirthObject = new Date(dateOfBirthString)
-  // const dateOfBirthISO = new Date(response.payload.dateOfBirth).toISOString()
 
   return {
     props: {
