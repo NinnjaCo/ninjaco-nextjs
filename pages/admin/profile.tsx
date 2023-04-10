@@ -95,8 +95,6 @@ export default function Profile(props: ServerProps) {
 
   return (
     <>
-      {console.log(session)}
-      {console.log(props)}
       <Head>
         <title>NinjaCo | Admin Profile</title>
         <meta name="description" content="Leading online platform for visual programming" />

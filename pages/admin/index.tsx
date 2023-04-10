@@ -68,11 +68,7 @@ const AdminDashboard: React.FC<{ users: User[]; countUsers: number; countCreator
         width: 120,
         minWidth: 120,
         headerClassName: 'bg-brand-200',
-        renderCell: (params) => (
-          <div className="flex items-center justify-center">
-            <LevelIndicator level={params.value as number} />
-          </div>
-        ),
+        renderCell: (params) => <LevelIndicator points={params.value} />,
         flex: 1,
       },
       {
@@ -95,7 +91,7 @@ const AdminDashboard: React.FC<{ users: User[]; countUsers: number; countCreator
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        level: getLevelFromPoints(user.points),
+        level: user.points,
         points: user.points || 0,
       })),
     [users]
