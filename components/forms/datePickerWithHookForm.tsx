@@ -2,6 +2,7 @@ import { CalendarIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline
 import { Control, Controller } from 'react-hook-form'
 import { DesktopDatePicker } from '@mui/x-date-pickers'
 import clsx from 'clsx'
+import dayjs from 'dayjs'
 
 interface DatePickerProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,7 +29,7 @@ const DatePickerWithHookForm: React.FC<DatePickerProps> = ({ control, name, labe
                 field.onChange(event)
               }}
               // use || null, because otherwise this component will be uncontrolled, thus we needed to provide a default value
-              value={field.value || null}
+              value={field.value ? dayjs(field.value) : null}
               format="DD/MM/YYYY"
               slotProps={{
                 textField: {
