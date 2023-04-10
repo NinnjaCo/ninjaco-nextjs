@@ -24,7 +24,7 @@ const Unauthorized = ({ error }: ServerProps) => {
         role="dialog"
         aria-modal="true"
       >
-        <div className="fixed inset-0 bg-brand-100 bg-opacity-75 transition-opacity"></div>
+        <div className="fixed inset-0 bg-brand-200 bg-opacity-75 transition-opacity"></div>
 
         <div className="fixed z-10 inset-0 overflow-y-auto">
           <div className="flex items-center justify-center min-h-full p-4 text-center sm:p-0">

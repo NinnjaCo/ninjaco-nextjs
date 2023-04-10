@@ -11,7 +11,7 @@ import DatePickerWithHookForm from '@/components/forms/datePickerWithHookForm'
 import Head from 'next/head'
 import React, { use } from 'react'
 import SideMenu from '@/components/admin/sideMenu'
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import jwt from 'jsonwebtoken'
 
 interface ServerProps {
@@ -58,7 +58,7 @@ export default function Profile(props: ServerProps) {
     defaultValues: {
       firstName: props.firstName,
       lastName: props.lastName,
-      dateOfBirth: dayjs(props.dateOfBirth),
+      dateOfBirth: new Date(dayjs(props.dateOfBirth).toDate()),
       email: props.email,
       password: '',
       passwordConfirmation: '',

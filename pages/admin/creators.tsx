@@ -1,10 +1,12 @@
 import * as React from 'react'
 import { GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import { PencilIcon } from '@heroicons/react/24/solid'
+import { RoleEnum } from '@/models/crud/role.model'
 import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
+import { authOptions } from '../api/auth/[...nextauth]'
 import { getReadableDateFromISO } from '@/utils/shared'
-import { getSession } from 'next-auth/react'
+import { getServerSession } from 'next-auth'
 import { useMemo } from 'react'
 import Head from 'next/head'
 import SideMenu from '@/components/admin/sideMenu'
@@ -145,7 +147,8 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
 export default AdminUserView
 
 export const getServerSideProps = async (context) => {
-  const session = await getSession(context)
+  const { req, res } = context
+  const session = await getServerSession(req, res, authOptions)
   if (!session) {
     return {
       redirect: {
@@ -157,7 +160,7 @@ export const getServerSideProps = async (context) => {
   const api = new UserApi(session)
   const response = await api.find()
 
-  const creators = response.payload.filter((user) => user.role.role === 'creator')
+  const creators = response.payload.filter((user) => user.role.role === RoleEnum.CREATOR)
 
   return {
     props: { users: creators },
