@@ -145,7 +145,7 @@ export default function Profile({ user }: ServerProps) {
         <meta name="description" content="Leading online platform for visual programming" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <main className="flex w-full h-screen overflow-hidden">
+      <main className="flex w-full h-screen overflow-y-scroll lg:overflow-hidden">
         <SideMenu higlightProfile={true} />
         <form
           id="form"
@@ -216,12 +216,12 @@ export default function Profile({ user }: ServerProps) {
               </div>
             </div>
           </div>
-          <div className="bg-brand-50 p-4 rounded w-full flex flex-col gap-4">
+          <div className="bg-brand-50 p-4 rounded w-full flex flex-col gap-4 ">
             <div className="hidden md:block text-brand font-semibold text-sm md:text-base">
               Change Password
             </div>
-            <div className="flex flex-col md:flex-row flex-wrap w-full gap-2 md:gap-4">
-              <div className="flex-1 flex-shrink">
+            <div className="flex flex-col md:flex-row flex-wrap w-full gap-2 md:gap-4 ">
+              <div className="flex-1 flex-shrink ">
                 <Input
                   {...register('password')}
                   label={'Password'}
