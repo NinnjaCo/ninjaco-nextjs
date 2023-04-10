@@ -1,5 +1,6 @@
 import * as yup from 'yup'
 import { AuthError } from '@/models/shared'
+import { AxiosError } from 'axios'
 import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/20/solid'
 import { Input } from '@/components/forms/input'
 import { User } from '@/models/crud'
@@ -14,7 +15,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import Alert from '@/components/shared/alert'
 import DatePickerWithHookForm from '@/components/forms/datePickerWithHookForm'
 import Head from 'next/head'
-import React, { useEffect } from 'react'
+import React from 'react'
 import SideMenu from '@/components/admin/sideMenu'
 import useTranslation from '@/hooks/useTranslation'
 
@@ -31,7 +32,6 @@ type AdminProfileFormDataType = {
   passwordConfirmation: string
 }
 export default function Profile({ serverUser }: ServerProps) {
-  // use react-query to get the user data
   const queryClient = useQueryClient()
   const session = useSession()
   const t = useTranslation()
@@ -47,7 +47,7 @@ export default function Profile({ serverUser }: ServerProps) {
       initialData: serverUser,
       onError: (error) => {
         if (isAxiosError(error)) {
-          const errors = unWrapAuthError(error as any)
+          const errors = unWrapAuthError(error as AxiosError<AuthError> | undefined)
           setAlertData({
             message: errors[0].message || 'Something went wrong',
             variant: 'error',
