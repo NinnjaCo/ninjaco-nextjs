@@ -72,7 +72,7 @@ const CreatorMenu = () => {
         </div>
       </div>
       <div className="sm:block hidden">
-        <div className=" flex gap-5  items-center">
+        <div className=" flex gap-5  items-center mr-8">
           {/* add profile pic */}
           <LocaleMenu colorClassName="text-brand-700" />
           <Image src={creator_profile} alt="Hero Image " width={30}></Image>
