@@ -80,7 +80,7 @@ export const Alert: FC<AlertProps> = ({
                   'text-sm font-medium text-justify align-middle',
                   variant === 'info' && 'text-brand-700',
                   variant === 'success' && 'text-success-dark',
-                  variant === 'warning' && 'text-warning-dark',
+                  variant === 'warning' && 'text-yellow-700',
                   variant === 'error' && 'text-error-dark'
                 )}
               >

@@ -143,6 +143,23 @@ export interface WebsiteTranslations {
     backToHome: translationElement
     signIn: translationElement
   }
+  verifyEmail: {
+    code: translationElement
+    verify: translationElement
+    backToHome: translationElement
+    signIn: translationElement
+  }
+  profile: {
+    firstName: translationElement
+    lastName: translationElement
+    dateOfBirth: translationElement
+    email: translationElement
+    password: translationElement
+    confirmPassword: translationElement
+    profile: translationElement
+    save: translationElement
+    changePassword: translationElement
+  }
 }
 
 // Create locale type support en | fr

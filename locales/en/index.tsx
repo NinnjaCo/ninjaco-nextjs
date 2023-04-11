@@ -301,6 +301,23 @@ const englishTranslations: WebsiteTranslations = {
     backToHome: 'Back to Home',
     signIn: 'Sign In',
   },
+  verifyEmail: {
+    code: 'Code',
+    verify: 'Verify',
+    backToHome: 'Back to Home',
+    signIn: 'Sign In',
+  },
+  profile: {
+    firstName: 'First Name',
+    lastName: 'Last Name',
+    dateOfBirth: 'Date of Birth',
+    email: 'Email',
+    password: 'Password',
+    confirmPassword: 'Confirm Password',
+    profile: 'Profile',
+    save: 'SAVE',
+    changePassword: 'Change Password',
+  },
 }
 
 export default englishTranslations

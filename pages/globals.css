@@ -39,14 +39,14 @@ a {
   .btn-secondary {
     @apply text-brand-800 font-semibold rounded-xl border-2 border-brand-700 bg-transparent;
   }
-  .btn-warning{
-    @apply text-white font-semibold rounded-xl border-2 bg-red-700;
+  .btn-warning {
+    @apply text-white font-semibold rounded-xl border-2 bg-error-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-error focus:ring-white;
   }
 }
 
 /* Used to changee the background color of MUI datepicker component (day selected) */
 .Mui-selected {
-  background-color: #212c49 !important;
+  background-color: #465b81 !important;
 }
 
 .hover-underline-animation {

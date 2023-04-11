@@ -23,8 +23,8 @@ export const authOptions: AuthOptions = {
           )
           return {
             id: res.payload.user._id,
-            jwt: res.payload.access_token,
-            refresh: res.payload.refresh_token,
+            accessToken: res.payload.access_token,
+            refreshToken: res.payload.refresh_token,
           }
         } catch (e) {
           if (isAxiosError<AuthError>(e)) {
@@ -39,51 +39,82 @@ export const authOptions: AuthOptions = {
   ],
   pages: {
     signIn: '/auth/signin',
-    newUser: '/',
     error: '/auth/signin',
   },
   callbacks: {
-    session: async ({ session, token }) => {
-      session.jwt = token.jwt
-      session.refresh = token.refreshToken
-      session.id = token.sub ?? token.id
-      const { exp } = jwt.decode(token.jwt) as jwt.JwtPayload
-      session.expires = new Date((exp as number) * 1000).toISOString()
-      return session
-    },
-    jwt: async ({ token, user, account }) => {
-      if (!user || !account) {
-        const decoded = jwt.decode(token.jwt)
-        if (!decoded || typeof decoded === 'string' || !decoded.exp)
-          throw new Error('Invalid token')
+    async jwt({ user, token, account }) {
+      // User is what is returned from the authorize function
+      // Token is what is returned from the session function
+      // Account is what is returned from the provider callback
 
-        if (decoded.exp < Math.floor(Date.now() / 1000)) {
-          try {
-            const res = await new AuthApi().refresh(token.refreshToken)
-            return {
-              ...token,
-              jwt: res.payload.access_token,
-              refreshToken: res.payload.refresh_token,
-              id: res.payload.user._id,
+      // console.log('IN JWT CALLBACK')
+      // console.log('user', user)
+      // console.log('token', token)
+      // console.log('account', account)
+
+      if (user) {
+        // If user is returned, it means that the user is signing in just now
+        return {
+          id: user.id,
+          accessToken: user.accessToken,
+          refreshToken: user.refreshToken,
+        }
+      } else {
+        // If user is not returned, it means that the user is already signed in
+        // Check if token is expired
+        if (token) {
+          const decoded = jwt.decode(token.accessToken) as jwt.JwtPayload
+          // console.log('decoded', decoded)
+          const exp = decoded.exp
+          if (!exp)
+            throw new Error('Something went wrong, expiration date is not defined in jwt callback')
+
+          console.log('exp', new Date(exp * 1000).toString())
+          // console.log('Date.now()', Date.now())
+          if (exp * 1000 < Date.now()) {
+            console.log('TOKEN IS EXPIRED')
+            try {
+              const res = await new AuthApi().refresh(token.refreshToken)
+              return {
+                id: res.payload.user._id,
+                accessToken: res.payload.access_token,
+                refreshToken: res.payload.refresh_token,
+              }
+            } catch (e) {
+              throw new Error('Something went wrong', {
+                cause: e,
+              })
             }
-          } catch (e) {
-            throw new Error('Invalid token')
+          }
+          // If token is not expired, return it
+          else {
+            console.log("TOKEN ISN'T EXPIRED")
+            return {
+              id: token.id,
+              accessToken: token.accessToken,
+              refreshToken: token.refreshToken,
+            }
           }
         }
 
-        return {
-          ...token,
-          id: decoded.id,
-        }
+        throw new Error(
+          'Something went wrong, neither token nor user was not defined in jwt callback'
+        )
       }
+    },
+    session: async ({ session, token }) => {
+      console.log('IN SESSION CALLBACK')
+      // console.log('session', session)
+      // console.log('token', token)
+      session.accessToken = token.accessToken
+      session.refreshToken = token.refreshToken
+      session.id = token.sub ?? token.id
+      const decoded = jwt.decode(token.accessToken) as jwt.JwtPayload
+      if (!decoded || !decoded.exp)
+        throw new Error('Something went wrong, jwt is not defined in session callback')
 
-      // Credential based auth
-      return {
-        ...token,
-        jwt: user.jwt,
-        id: user.id,
-        refreshToken: user.refresh,
-      }
+      session.expires = new Date(decoded.exp * 1000).toString()
+      return session
     },
   },
 }

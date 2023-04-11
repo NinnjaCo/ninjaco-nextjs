@@ -3,7 +3,6 @@ import * as React from 'react'
 import * as yup from 'yup'
 import { AdminAlertDialog } from '@/components/admin/dialog'
 import { Alert } from '@/components/shared/alert'
-import { AuthApi } from '@/utils/api/auth/auth.api'
 import { AuthError } from '@/models/shared'
 import { AxiosError } from 'axios'
 import { ChevronRightIcon, PencilIcon } from '@heroicons/react/24/solid'
@@ -28,6 +27,7 @@ import { useCallback, useMemo } from 'react'
 import { useEmailApi } from '@/utils/api/email/email.api'
 import { useForm } from 'react-hook-form'
 import { useQuery, useQueryClient } from 'react-query'
+import { useRouter } from 'next-router-mock'
 import { useSession } from 'next-auth/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import DatePickerWithHookForm from '@/components/forms/datePickerWithHookForm'
@@ -35,7 +35,8 @@ import Head from 'next/head'
 import SideMenu from '@/components/admin/sideMenu'
 import Table from '@/components/table'
 import clsx from 'clsx'
-type AddUserFormDataType = {
+
+type AddCreatorFormDataType = {
   firstName: string
   lastName: string
   dateOfBirth: Date
@@ -44,7 +45,7 @@ type AddUserFormDataType = {
   passwordConfirmation: string
 }
 
-const AddUserFormSchema = yup
+const AddCreatorFormSchema = yup
   .object()
   .shape({
     firstName: yup.string().required('First Name is required'),
@@ -70,14 +71,14 @@ const AddUserFormSchema = yup
 
 const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
   const { data: session } = useSession()
-  const emailApi = useEmailApi(session)
   const queryClient = useQueryClient()
+  const emailApi = useEmailApi(session)
 
   const { data: users } = useQuery<User[], Error>(
     ['users', session],
     async () => {
       const res = await new UserApi(session).find()
-      return res.payload.filter((user) => user.role.role === RoleEnum.USER)
+      return res.payload.filter((user) => user.role.role === RoleEnum.CREATOR)
     },
     {
       initialData: serverUsers,
@@ -94,19 +95,18 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
       },
     }
   )
-
-  const [openAddUserDialog, setOpenAddUserDialog] = React.useState(false)
+  const [openCreatorAddDialog, setOpenCreatorAddDialog] = React.useState(false)
 
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<AddUserFormDataType>({
-    resolver: yupResolver(AddUserFormSchema),
+  } = useForm<AddCreatorFormDataType>({
+    resolver: yupResolver(AddCreatorFormSchema),
   })
 
-  const onSubmitHandler = async (data: AddUserFormDataType) => {
+  const onSubmitHandler = async (data: AddCreatorFormDataType) => {
     try {
       closeAlert()
 
@@ -116,18 +116,19 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
         dateOfBirth: data.dateOfBirth.toISOString(),
         email: data.email,
         password: data.password,
+        role: RoleEnum.CREATOR,
         isVerified: true,
       })
 
-      setOpenAddUserDialog(false)
+      setOpenCreatorAddDialog(false)
       queryClient.invalidateQueries('users')
       setAlertData({
-        message: 'User Created Successfully',
+        message: 'Creator Created Successfully',
         variant: 'success',
         open: true,
       })
     } catch (error) {
-      setOpenAddUserDialog(false)
+      setOpenCreatorAddDialog(false)
       if (isAxiosError<AuthError>(error)) {
         const errors = unWrapAuthError(error)
         setAlertData({
@@ -160,22 +161,14 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
     backButtonClassName?: string
     confirmButtonText?: string
     confirmButtonClassName?: string
-    dialogType: 'notify' | 'resetPassword' | 'delete'
+    dialogType: 'resetPassword' | 'delete'
   }>({
     open: false,
     title: '',
     detailsRows: [],
     backButtonText: 'Back',
     confirmButtonText: 'Confirm',
-    dialogType: 'notify',
-  })
-
-  const [notifyMessage, setNotifyMessage] = React.useState<{
-    message: string
-    rowParams: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>
-  }>({
-    message: '',
-    rowParams: {} as GridRenderCellParams<any, any, any, GridTreeNodeWithRender>,
+    dialogType: 'resetPassword',
   })
 
   const [resetPasswordState, setResetPasswordState] = React.useState<{
@@ -200,15 +193,6 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
 
   const preformDialogConfirmAction = useCallback(async () => {
     switch (alertDiaglogState.dialogType) {
-      case 'notify': {
-        // send email to user
-        await emailApi.sendEmail({
-          emailType: EmailEnum.NOTIFY,
-          receiverEmail: notifyMessage.rowParams.row.email,
-          message: notifyMessage.message,
-        })
-        break
-      }
       case 'resetPassword': {
         try {
           if (resetPasswordState.password.length < 8) {
@@ -223,6 +207,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
           await new UserApi(session).update(resetPasswordState.rowParams.row.id, {
             password: resetPasswordState.password,
           })
+
           if (resetPasswordState.notifyUser) {
             // send email to user
             await emailApi.sendEmail({
@@ -260,7 +245,6 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
       case 'delete': {
         try {
           await new UserApi(session).delete(deleteUserState.rowParams.row.id)
-
           if (deleteUserState.notifyUser) {
             // send email to user
             await emailApi.sendEmail({
@@ -286,7 +270,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
             })
           } else {
             setAlertData({
-              message: 'Error deleting user',
+              message: 'Error updating profile',
               variant: 'error',
               open: true,
             })
@@ -295,35 +279,10 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
         break
       }
     }
-  }, [
-    alertDiaglogState.dialogType,
-    deleteUserState,
-    notifyMessage,
-    resetPasswordState,
-    queryClient,
-    session,
-  ])
+  }, [alertDiaglogState.dialogType, deleteUserState, resetPasswordState, session, queryClient])
 
   const getDialogBody = useCallback(() => {
     switch (alertDiaglogState.dialogType) {
-      case 'notify':
-        return (
-          <div className="flex flex-col" key="1">
-            <label htmlFor="message" className="mb-2 text-sm font-medium text-brand">
-              Message
-            </label>
-            <textarea
-              id="message"
-              rows={4}
-              className="block p-2.5 w-full text-sm text-brand-500 bg-gray-50 rounded-lg border border-gray-300 focus:ring-brand-500 focus:border-brand-500"
-              placeholder="Write your message here..."
-              onChange={(e) => {
-                setNotifyMessage({ ...notifyMessage, message: e.target.value })
-              }}
-              value={notifyMessage.message}
-            ></textarea>
-          </div>
-        )
       case 'resetPassword':
         return (
           <div className="flex flex-col" key="1">
@@ -390,44 +349,12 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
           </div>
         )
     }
-  }, [alertDiaglogState.dialogType, notifyMessage, resetPasswordState, deleteUserState])
+  }, [alertDiaglogState.dialogType, resetPasswordState, deleteUserState])
 
   const editActions = useMemo(
     () => [
       {
         id: 1,
-        text: 'Notify',
-        onClick: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-          setAlertDialogState({
-            title: 'Notify User',
-            detailsRows: [
-              {
-                label: 'ID',
-                value: params.row.id,
-              },
-              {
-                label: 'Name',
-                value: `${params.row.firstName} ${params.row.lastName}`,
-              },
-              {
-                label: 'Email',
-                value: params.row.email,
-              },
-            ],
-            backButtonText: 'Cancel',
-            confirmButtonText: 'Send',
-            confirmButtonClassName: 'bg-brand hover:bg-brand-500 text-white',
-            open: true,
-            dialogType: 'notify',
-          })
-          setNotifyMessage({
-            ...notifyMessage,
-            rowParams: params,
-          })
-        },
-      },
-      {
-        id: 2,
         text: 'Reset Password',
         onClick: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
           setAlertDialogState({
@@ -459,7 +386,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
         },
       },
       {
-        id: 3,
+        id: 2,
         text: 'Delete',
         textClassName: 'text-red-500',
         onClick: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
@@ -492,7 +419,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
         },
       },
     ],
-    [deleteUserState, notifyMessage, resetPasswordState]
+    [deleteUserState, resetPasswordState]
   )
 
   const columns: GridColDef[] = useMemo(
@@ -528,10 +455,10 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
       {
         field: 'dob',
         headerName: 'Date of Birth',
-        type: 'date',
-        renderCell: (params) => getReadableDateFromISO(params.value as string),
         width: 140,
+        renderCell: (params) => getReadableDateFromISO(params.value as string),
         minWidth: 140,
+        type: 'date',
         headerClassName: 'bg-brand-200',
       },
       {
@@ -558,7 +485,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
         field: 'action',
         headerName: 'Action',
         width: 70,
-        renderCell: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => (
+        renderCell: (params) => (
           <Popover>
             {() => (
               <>
@@ -631,16 +558,16 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
   return (
     <>
       <Head>
-        <title>NinjaCo | Admin View Users</title>
+        <title>NinjaCo | Admin View Creators</title>
         <meta name="description" content="Leading online platform for visual programming" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
       <AdminAlertDialog
-        title="Add User"
-        open={openAddUserDialog}
+        title="Add Creator"
+        open={openCreatorAddDialog}
         confirm={() => {}} // Confirmation is done inside the form body
-        close={() => setOpenAddUserDialog(false)}
+        close={() => setOpenCreatorAddDialog(false)}
         backButtonText="Cancel"
         backButtonClassName="bg-brand-200 text-brand-500 hover:bg-brand-300 hover:text-brand hidden"
         confirmButtonText="Add User"
@@ -696,10 +623,10 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
             value="Submit"
             className="w-full btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
           >
-            Add User
+            Add Creator
           </button>
           <button
-            onClick={() => setOpenAddUserDialog(false)}
+            onClick={() => setOpenCreatorAddDialog(false)}
             className="w-full btn bg-brand-50 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
           >
             Cancel
@@ -723,24 +650,25 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
       >
         {getDialogBody()}
       </AdminAlertDialog>
-
       <main className="flex w-full h-screen overflow-hidden">
-        <SideMenu higlightUsers={true} />
+        <SideMenu higlightCreators={true} />
         <div className="flex flex-col flex-grow w-3/4 h-full gap-4 py-8 px-4">
-          <div className="flex items-center justify-between w-full">
+          <div className="flex items-center justify-between w-full flex-wrap">
             <div className="flex flex-col gap-2">
-              <p className="text-brand-700 text-xl md:text-2xl lg:text-3xl font-semibold">Users</p>
+              <p className="text-brand-700 text-xl md:text-2xl lg:text-3xl font-semibold">
+                Creators
+              </p>
               <div className="text-sm text-brand  ">
                 {(users ?? serverUsers).length} entries found
               </div>
             </div>
             <button
-              className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-400 hover:text-white py-2"
+              className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-400 hover:text-white py-2 px-4"
               onClick={() => {
-                setOpenAddUserDialog(true)
+                setOpenCreatorAddDialog(true)
               }}
             >
-              Add User
+              Add Creator
             </button>
           </div>
           <Alert
@@ -749,7 +677,13 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
             variant={alertData.variant}
             close={closeAlert}
           />
-          <Table columns={columns} rows={rows} width={'100%'} height={700} className="mr-4" />
+          <Table
+            columns={columns}
+            rows={rows}
+            width={'100%'}
+            height={700}
+            className="mr-4 relative"
+          />
         </div>
       </main>
     </>
@@ -773,7 +707,7 @@ export const getServerSideProps = async (context) => {
   const api = new UserApi(session)
   try {
     const response = await api.find()
-    const users = response.payload.filter((user) => user.role.role === RoleEnum.USER)
+    const users = response.payload.filter((user) => user.role.role === RoleEnum.CREATOR)
     return {
       props: { serverUsers: users },
     }
