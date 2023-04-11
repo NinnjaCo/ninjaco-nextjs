@@ -16,9 +16,9 @@ export default function Home({ user }: { user: User }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main className="relative w-full">
-        <CreatorMenu isOnCoursePage={false} creator={user} />
+        <CreatorMenu isOnCoursePage={true} creator={user} />
 
-        <div className="grid grid-cols-5 gap-4 ">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 w-full  items-center mt-12 ml-10">
           <div>
             <CoursesComponent
               image={

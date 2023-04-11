@@ -56,7 +56,7 @@ const CreatorMenu = ({ isOnCoursePage, creator }: CreatorMenuPros) => {
       className={clsx(
         'flex justify-between items-center w-full h-fit px-6 py-6 bg-brand z-10  border-b-2 border-secondary-700',
         {
-          'fixed top-0': true,
+          'fixed top-0': false,
         }
       )}
       style={{
