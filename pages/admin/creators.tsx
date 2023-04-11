@@ -113,6 +113,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
         email: data.email,
         password: data.password,
         role: RoleEnum.CREATOR,
+        isVerified: true,
       })
 
       setOpenCreatorAddDialog(false)

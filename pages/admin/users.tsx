@@ -113,6 +113,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
         dateOfBirth: data.dateOfBirth.toISOString(),
         email: data.email,
         password: data.password,
+        isVerified: true,
       })
 
       setOpenAddUserDialog(false)
