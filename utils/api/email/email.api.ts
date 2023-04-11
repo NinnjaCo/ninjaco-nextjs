@@ -11,22 +11,35 @@ export class EmailApi extends CoreApi {
   constructor(param?: ApiParam) {
     super(param)
   }
-  async sendDeleteUserEmail(email: string, message: string): Promise<ApiResponse<EmailResponse>> {
-    console.log('in AuthApi.sendEmail the message is:', message)
-    const res = await this.client.post<ApiResponse<EmailResponse>>(`${this.path}/delete-user`, {
+  async sendDeleteUserEmail(
+    emailEnum: EmailEnum,
+    email: string,
+    message: string
+  ): Promise<ApiResponse<EmailResponse>> {
+    const res = await this.client.post<ApiResponse<EmailResponse>>(`${this.path}`, {
+      emailEnum,
       email,
       message,
     })
     return res.data
   }
-  async sendResetPasswordEmail(email: string): Promise<ApiResponse<EmailResponse>> {
-    const res = await this.client.post<ApiResponse<EmailResponse>>(`${this.path}/reset-password`, {
+  async sendResetPasswordEmail(
+    emailEnum: EmailEnum,
+    email: string
+  ): Promise<ApiResponse<EmailResponse>> {
+    const res = await this.client.post<ApiResponse<EmailResponse>>(`${this.path}`, {
+      emailEnum,
       email,
     })
     return res.data
   }
-  async sendNotifyUserEmail(email: string, message: string): Promise<ApiResponse<EmailResponse>> {
-    const res = await this.client.post<ApiResponse<EmailResponse>>(`${this.path}/notify-user`, {
+  async sendNotifyUserEmail(
+    emailEnum: EmailEnum,
+    email: string,
+    message: string
+  ): Promise<ApiResponse<EmailResponse>> {
+    const res = await this.client.post<ApiResponse<EmailResponse>>(`${this.path}`, {
+      emailEnum,
       email,
       message,
     })
@@ -40,4 +53,9 @@ export function useEmailApi(param?: ApiParam): EmailApi {
     ref.current = new EmailApi(param)
   }, [param])
   return ref.current
+}
+export enum EmailEnum {
+  DELETE = 'delete',
+  RESET = 'reset',
+  NOTIFY = 'notify',
 }

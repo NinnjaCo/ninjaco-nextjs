@@ -6,6 +6,7 @@ import { Alert } from '@/components/shared/alert'
 import { AuthApi } from '@/utils/api/auth/auth.api'
 import { AuthError } from '@/models/shared'
 import { ChevronRightIcon, PencilIcon } from '@heroicons/react/24/solid'
+import { EmailEnum } from '@/utils/api/email/email.api'
 import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/outline'
 import {
   GridColDef,
@@ -33,7 +34,6 @@ import Head from 'next/head'
 import SideMenu from '@/components/admin/sideMenu'
 import Table from '@/components/table'
 import clsx from 'clsx'
-
 type AddUserFormDataType = {
   firstName: string
   lastName: string
@@ -177,8 +177,11 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
     switch (alertDiaglogState.dialogType) {
       case 'notify': {
         // send email to user
-        await emailApi.sendNotifyUserEmail(notifyMessage.rowParams.row.email, notifyMessage.message)
-        console.log('Notify User', notifyMessage)
+        await emailApi.sendNotifyUserEmail(
+          EmailEnum.NOTIFY,
+          notifyMessage.rowParams.row.email,
+          notifyMessage.message
+        )
         break
       }
       case 'resetPassword': {
@@ -197,7 +200,10 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
           })
           if (resetPasswordState.notifyUser) {
             // send email to user
-            await emailApi.sendResetPasswordEmail(resetPasswordState.rowParams.row.email)
+            await emailApi.sendResetPasswordEmail(
+              EmailEnum.RESET,
+              resetPasswordState.rowParams.row.email
+            )
           }
           // reload the page
           router.reload()
@@ -230,8 +236,8 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
 
           if (deleteUserState.notifyUser) {
             // send email to user
-            console.log('In users.tsx the message is', deleteUserState.message)
             await emailApi.sendDeleteUserEmail(
+              EmailEnum.DELETE,
               deleteUserState.rowParams.row.email,
               deleteUserState.message
             )
@@ -245,7 +251,6 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
             open: true,
           })
         } catch (error) {
-          console.error(error)
           if (isAxiosError<AuthError>(error)) {
             const errors = unWrapAuthError(error)
             setAlertData({

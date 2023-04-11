@@ -5,6 +5,7 @@ import { AdminAlertDialog } from '@/components/admin/dialog'
 import { Alert } from '@/components/shared/alert'
 import { AuthError } from '@/models/shared'
 import { ChevronRightIcon, PencilIcon } from '@heroicons/react/24/solid'
+import { EmailEnum } from '@/utils/api/email/email.api'
 import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/outline'
 import {
   GridColDef,
@@ -184,7 +185,10 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
 
           if (resetPasswordState.notifyUser) {
             // send email to user
-            await emailApi.sendResetPasswordEmail(resetPasswordState.rowParams.row.email)
+            await emailApi.sendResetPasswordEmail(
+              EmailEnum.RESET,
+              resetPasswordState.rowParams.row.email
+            )
           }
 
           // reload the page
@@ -218,6 +222,7 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
           if (deleteUserState.notifyUser) {
             // send email to user
             await emailApi.sendDeleteUserEmail(
+              EmailEnum.DELETE,
               deleteUserState.rowParams.row.email,
               deleteUserState.message
             )
