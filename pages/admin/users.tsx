@@ -28,7 +28,6 @@ import { useCallback, useMemo } from 'react'
 import { useEmailApi } from '@/utils/api/email/email.api'
 import { useForm } from 'react-hook-form'
 import { useQuery, useQueryClient } from 'react-query'
-import { useRouter } from 'next-router-mock'
 import { useSession } from 'next-auth/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import DatePickerWithHookForm from '@/components/forms/datePickerWithHookForm'
@@ -203,11 +202,11 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
     switch (alertDiaglogState.dialogType) {
       case 'notify': {
         // send email to user
-        await emailApi.sendNotifyUserEmail(
-          EmailEnum.NOTIFY,
-          notifyMessage.rowParams.row.email,
-          notifyMessage.message
-        )
+        await emailApi.sendEmail({
+          emailType: EmailEnum.NOTIFY,
+          receiverEmail: notifyMessage.rowParams.row.email,
+          message: notifyMessage.message,
+        })
         break
       }
       case 'resetPassword': {
@@ -226,10 +225,12 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
           })
           if (resetPasswordState.notifyUser) {
             // send email to user
-            await emailApi.sendResetPasswordEmail(
-              EmailEnum.RESET,
-              resetPasswordState.rowParams.row.email
-            )
+            await emailApi.sendEmail({
+              emailType: EmailEnum.RESET,
+              receiverEmail: resetPasswordState.rowParams.row.email,
+              message:
+                'An admin has reset your password, please get in touch with them for more information',
+            })
           }
 
           queryClient.invalidateQueries('users')
@@ -262,11 +263,11 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
 
           if (deleteUserState.notifyUser) {
             // send email to user
-            await emailApi.sendDeleteUserEmail(
-              EmailEnum.DELETE,
-              deleteUserState.rowParams.row.email,
-              deleteUserState.message
-            )
+            await emailApi.sendEmail({
+              emailType: EmailEnum.DELETE,
+              receiverEmail: deleteUserState.rowParams.row.email,
+              message: deleteUserState.message,
+            })
           }
 
           queryClient.invalidateQueries('users')

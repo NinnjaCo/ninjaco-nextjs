@@ -210,10 +210,12 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
 
           if (resetPasswordState.notifyUser) {
             // send email to user
-            await emailApi.sendResetPasswordEmail(
-              EmailEnum.RESET,
-              resetPasswordState.rowParams.row.email
-            )
+            await emailApi.sendEmail({
+              emailType: EmailEnum.RESET,
+              receiverEmail: resetPasswordState.rowParams.row.email,
+              message:
+                'An admin has reset your password, please get in touch with them for more information',
+            })
           }
 
           queryClient.invalidateQueries('users')
@@ -245,12 +247,13 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
           await new UserApi(session).delete(deleteUserState.rowParams.row.id)
           if (deleteUserState.notifyUser) {
             // send email to user
-            await emailApi.sendDeleteUserEmail(
-              EmailEnum.DELETE,
-              deleteUserState.rowParams.row.email,
-              deleteUserState.message
-            )
+            await emailApi.sendEmail({
+              emailType: EmailEnum.DELETE,
+              receiverEmail: deleteUserState.rowParams.row.email,
+              message: deleteUserState.message,
+            })
           }
+
           queryClient.invalidateQueries('users')
           setAlertData({
             message: 'User deleted successfully',
