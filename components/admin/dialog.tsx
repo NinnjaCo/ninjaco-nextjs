@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { ReactElement } from 'react'
 import { XMarkIcon } from '@heroicons/react/24/solid'
 import clsx from 'clsx'
 
