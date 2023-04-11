@@ -707,7 +707,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
 
       <main className="flex w-full h-screen overflow-hidden">
         <SideMenu higlightUsers={true} />
-        <div className="flex flex-col flex-grow w-3/4 h-full gap-12 py-8 px-4">
+        <div className="flex flex-col flex-grow w-3/4 h-full gap-4 py-8 px-4">
           <div className="flex items-center justify-between w-full">
             <div className="flex flex-col gap-2">
               <p className="text-brand-700 text-xl md:text-2xl lg:text-3xl font-semibold">Users</p>
