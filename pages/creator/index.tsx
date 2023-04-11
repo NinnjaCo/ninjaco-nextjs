@@ -17,7 +17,12 @@ export default function Home({ user }: { user: User }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main className="relative h-screen w-full">
-        <CreatorMenu />
+        <CreatorMenu
+          {...{
+            isOnCoursePage: true,
+            creator: user,
+          }}
+        />
 
         <div className="flex flex-row mt-32 justify-between">
           <div className="flex flex-col ml-14 gap-6">
