@@ -3,15 +3,16 @@ import React from 'react'
 import clsx from 'clsx'
 
 interface SideMenuTabProps {
-  text: string
-  Icon: React.ForwardRefExoticComponent<
+  text?: string
+  Icon?: React.ForwardRefExoticComponent<
     React.PropsWithoutRef<React.SVGProps<SVGSVGElement>> & {
       title?: string
       titleId?: string
     } & React.RefAttributes<SVGSVGElement>
   >
-  isHighlighted: boolean
+  isHighlighted?: boolean
   actionOnClick?: () => void
+  Body?: any
 }
 
 interface MenuSectionProps {
@@ -38,6 +39,7 @@ const MenuSection = (props: MenuSectionProps) => {
             isHighlighted={item.isHighlighted}
             hideText={props.hideText}
             actionOnClick={item.actionOnClick}
+            Body={item.Body}
           />
         </div>
       ))}
