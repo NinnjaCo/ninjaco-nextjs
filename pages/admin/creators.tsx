@@ -214,7 +214,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
               emailType: EmailEnum.RESET,
               receiverEmail: resetPasswordState.rowParams.row.email,
               message:
-                'An admin has reset your password, please get in touch with them for more information',
+                'An administrator has reset your password. Please contact them or the support team for more information.',
             })
           }
 
