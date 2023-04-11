@@ -63,14 +63,14 @@ enum Tools {
 const GameViewAndEditPage = ({ user }: { user: User }) => {
   const [gameTitle, setGameTitle] = React.useState('')
   const MIN_COLUMNS = 5
-  const MAX_COLUMNS = 25
+  const MAX_COLUMNS = 20
   const [numberOfColumns, setNumberOfColumns] = React.useState(15)
   const [gameGrid, setGameGrid] = React.useState<GridCell[][]>(
     createGrid(numberOfColumns, numberOfColumns)
   )
 
   const [selectedTool, setSelectedTool] = React.useState<Tools>(Tools.NONE)
-  const [cellSize, setCellSize] = React.useState(30)
+  const [cellSize, setCellSize] = React.useState(25)
 
   const toolboxTools: ToolsElments[] = [
     {
@@ -218,10 +218,10 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
                 setGameTitle(e.target.value)
               }}
             />
-            <div className="w-full flex bg-white justify-center gap-12">
+            <div className="w-full flex bg-white justify-evenly gap-12 flex-col lg:flex-row">
               {/* Draw Grid */}
               <div
-                className="grid gap-px transition-all"
+                className="grid gap-px transition-all w-fit"
                 style={{
                   gridTemplateColumns: `repeat(${gameGrid[0].length}, minmax(0, 1fr))`,
                 }}
