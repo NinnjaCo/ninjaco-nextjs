@@ -15,13 +15,13 @@ export class CoreApi {
   client: AxiosInstance
 
   constructor(param?: ApiParam) {
-    if (typeof param === 'undefined' || param === null) {
-      this.client = createClient()
-    } else if (typeof param === 'object' && 'defaults' in param) {
-      // default in param is a hack to check if it is an axios instance
-      this.client = <AxiosInstance>(<unknown>param)
-    } else {
+    // check if property request exists on param
+    if (param && 'request' in param) {
+      this.client = <AxiosInstance>param
+    } else if (param != null) {
       this.client = createClient(<Session>param)
+    } else {
+      this.client = createClient()
     }
   }
 }

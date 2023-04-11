@@ -14,7 +14,7 @@ export function createClient(session?: Session): AxiosInstance {
     config = {
       ...config,
       headers: {
-        Authorization: `Bearer ${<string>session.jwt}`,
+        Authorization: `Bearer ${<string>session.accessToken}`,
       },
     }
   }

@@ -47,10 +47,10 @@ export const authOptions: AuthOptions = {
       // Token is what is returned from the session function
       // Account is what is returned from the provider callback
 
-      console.log('IN JWT CALLBACK')
-      console.log('user', user)
-      console.log('token', token)
-      console.log('account', account)
+      // console.log('IN JWT CALLBACK')
+      // console.log('user', user)
+      // console.log('token', token)
+      // console.log('account', account)
 
       if (user) {
         // If user is returned, it means that the user is signing in just now
@@ -64,14 +64,15 @@ export const authOptions: AuthOptions = {
         // Check if token is expired
         if (token) {
           const decoded = jwt.decode(token.accessToken) as jwt.JwtPayload
-          console.log('decoded', decoded)
+          // console.log('decoded', decoded)
           const exp = decoded.exp
-          console.log('exp', exp)
           if (!exp)
             throw new Error('Something went wrong, expiration date is not defined in jwt callback')
 
-          console.log('Date.now()', Date.now())
+          console.log('exp', new Date(exp * 1000).toString())
+          // console.log('Date.now()', Date.now())
           if (exp * 1000 < Date.now()) {
+            console.log('TOKEN IS EXPIRED')
             try {
               const res = await new AuthApi().refresh(token.refreshToken)
               return {
@@ -87,6 +88,7 @@ export const authOptions: AuthOptions = {
           }
           // If token is not expired, return it
           else {
+            console.log("TOKEN ISN'T EXPIRED")
             return {
               id: token.id,
               accessToken: token.accessToken,
@@ -102,8 +104,8 @@ export const authOptions: AuthOptions = {
     },
     session: async ({ session, token }) => {
       console.log('IN SESSION CALLBACK')
-      console.log('session', session)
-      console.log('token', token)
+      // console.log('session', session)
+      // console.log('token', token)
       session.accessToken = token.accessToken
       session.refreshToken = token.refreshToken
       session.id = token.sub ?? token.id
