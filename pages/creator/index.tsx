@@ -11,6 +11,71 @@ import Image from 'next/image'
 import filter from '@/images/filterIcon.svg'
 
 export default function Home({ user }: { user: User }) {
+  const courseComponent = [
+    {
+      image:
+        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png',
+      name: 'Robotics 101',
+      mission: '12',
+      age: '7 - 12',
+    },
+    {
+      image:
+        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png',
+      name: 'Robotics 101',
+      mission: '12',
+      age: '7 - 12',
+    },
+    {
+      image:
+        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png',
+      name: 'Robotics 101',
+      mission: '12',
+      age: '7 - 12',
+    },
+    {
+      image:
+        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png',
+      name: 'Robotics 101',
+      mission: '12',
+      age: '7 - 12',
+    },
+    {
+      image:
+        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png',
+      name: 'Robotics 101',
+      mission: '12',
+      age: '7 - 12',
+    },
+    {
+      image:
+        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png',
+      name: 'Robotics 101',
+      mission: '12',
+      age: '7 - 12',
+    },
+    {
+      image:
+        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png',
+      name: 'Robotics 101',
+      mission: '12',
+      age: '7 - 12',
+    },
+    {
+      image:
+        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png',
+      name: 'Robotics 101',
+      mission: '12',
+      age: '7 - 12',
+    },
+    {
+      image:
+        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png',
+      name: 'Robotics 101',
+      mission: '12',
+      age: '7 - 12',
+    },
+  ]
   return (
     <>
       <Head>
@@ -46,76 +111,15 @@ export default function Home({ user }: { user: User }) {
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center mt-7 px-10 place-items-center">
-          <div>
+          {courseComponent.map((course) => (
             <CoursesComponent
-              image={
-                'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png'
-              }
-              name={'Robotics 101'}
-              mission={'12'}
-              age={'7 - 12'}
+              key={course.name}
+              image={course.image}
+              name={course.name}
+              mission={course.mission}
+              age={course.age}
             />
-          </div>
-          <div>
-            <CoursesComponent
-              image={
-                'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png'
-              }
-              name={'Robotics 101'}
-              mission={'12'}
-              age={'7 - 12'}
-            />
-          </div>
-          <div>
-            <CoursesComponent
-              image={
-                'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png'
-              }
-              name={'Robotics 101'}
-              mission={'12'}
-              age={'7 - 12'}
-            />
-          </div>
-          <div>
-            <CoursesComponent
-              image={
-                'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png'
-              }
-              name={'Robotics 101'}
-              mission={'12'}
-              age={'7 - 12'}
-            />
-          </div>
-          <div>
-            <CoursesComponent
-              image={
-                'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png'
-              }
-              name={'Robotics 101'}
-              mission={'12'}
-              age={'7 - 12'}
-            />
-          </div>
-          <div>
-            <CoursesComponent
-              image={
-                'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png'
-              }
-              name={'Robotics 101'}
-              mission={'12'}
-              age={'7 - 12'}
-            />
-          </div>
-          <div>
-            <CoursesComponent
-              image={
-                'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png'
-              }
-              name={'Robotics 101'}
-              mission={'12'}
-              age={'7 - 12'}
-            />
-          </div>
+          ))}
         </div>
       </main>
     </>
