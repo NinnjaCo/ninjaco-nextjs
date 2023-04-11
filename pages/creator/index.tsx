@@ -18,7 +18,7 @@ export default function Home({ user }: { user: User }) {
       <main className="relative w-full">
         <CreatorMenu isOnCoursePage={true} creator={user} />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 w-full  items-center mt-12 ml-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center mt-12 px-10 place-items-center">
           <div>
             <CoursesComponent
               image={
