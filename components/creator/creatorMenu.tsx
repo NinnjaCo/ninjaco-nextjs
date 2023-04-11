@@ -10,7 +10,10 @@ import creator_profile from '@/images/creator_profile.svg'
 import logo_black from '@/images/logo_black.svg'
 import seperator from '@/images/seperator.svg'
 
-const CreatorMenu = () => {
+interface CreatorMenuPros {
+  isOnCoursePage: boolean
+}
+const CreatorMenu = ({ isOnCoursePage }: CreatorMenuPros) => {
   const router = useRouter()
 
   const linkForMenu = [
@@ -27,7 +30,7 @@ const CreatorMenu = () => {
   return (
     <div
       className={clsx(
-        'flex justify-between items-center w-full h-fit px-4 md:pl-8 lg:pl-12 pt-2 md:pt-9 pb-2 bg-brand z-10  border-b-2 border-secondary-700',
+        'flex justify-between items-center w-full h-fit px-6 py-6 bg-brand z-10  border-b-2 border-secondary-700',
         {
           'fixed top-0': true,
         }
@@ -52,9 +55,14 @@ const CreatorMenu = () => {
         <Image src={logo_black} alt="Hero Image" fill></Image>
       </div>
       <div className="sm:block hidden">
-        <div className="flex gap-2 sm:gap-4 md:gap-8 lg:gap-16 justify-evenly mr-4 md:mr-8 lg:mr-14">
+        <div className="flex gap-6 justify-between">
           <button className="hover-underline-animation">
-            <Link href={'/creator'} className={clsx('md:text-xl lg:text-2xl  "text-brand-700 ')}>
+            <Link
+              href={'/creator'}
+              className={clsx('md:text-xl lg:text-2xl text-brand-400', {
+                'text-brand-700 font-medium border-b-2 border-secondary-500': isOnCoursePage,
+              })}
+            >
               Courses
             </Link>
           </button>
@@ -64,7 +72,9 @@ const CreatorMenu = () => {
           <button className="hover-underline-animation">
             <Link
               href={'/creator/games'}
-              className={clsx('md:text-xl lg:text-2xl  "text-brand-700')}
+              className={clsx('md:text-xl lg:text-2xl text-brand-400', {
+                'text-brand-700 font-semibold': !isOnCoursePage,
+              })}
             >
               Games
             </Link>
@@ -72,9 +82,9 @@ const CreatorMenu = () => {
         </div>
       </div>
       <div className="sm:block hidden">
-        <div className=" flex gap-5  items-center">
+        <div className=" flex gap-5 items-center justify-center">
           {/* add profile pic */}
-          <LocaleMenu colorClassName="text-brand-700" />
+          <LocaleMenu colorClassName="text-brand-500" />
           <Image src={creator_profile} alt="Hero Image " width={30}></Image>
         </div>
       </div>
