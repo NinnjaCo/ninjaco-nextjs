@@ -11,6 +11,8 @@
     "ci": "npm install && npm run build"
   },
   "dependencies": {
+    "@dicebear/collection": "^6.0.2",
+    "@dicebear/core": "^6.0.2",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@headlessui/react": "^1.7.13",
