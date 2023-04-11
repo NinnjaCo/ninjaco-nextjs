@@ -2,6 +2,7 @@ import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
 import { authOptions } from '../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
+import { use } from 'react'
 import CoursesComponent from '@/components/creator/coursesComponent'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import Head from 'next/head'
@@ -42,6 +43,69 @@ export default function Home({ user }: { user: User }) {
             <button className="bg-secondary hover:bg-secondary-300 text-base md:text-lg lg:text-xl font-semibold w-28 h-8 md:w-32 md:h-9 lg:w-40 lg:h-10 rounded-xl text-brand-700 border-x-2 border-y-2 border-brand-700">
               Create course
             </button>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center mt-12 px-10 place-items-center">
+              <div>
+                <CoursesComponent
+                  image={
+                    'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png'
+                  }
+                  name={'Robotics 101'}
+                  mission={'12'}
+                  age={'7 - 12'}
+                />
+              </div>
+              <div>
+                <CoursesComponent
+                  image={
+                    'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png'
+                  }
+                  name={'Robotics 101'}
+                  mission={'12'}
+                  age={'7 - 12'}
+                />
+              </div>
+              <div>
+                <CoursesComponent
+                  image={
+                    'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png'
+                  }
+                  name={'Robotics 101'}
+                  mission={'12'}
+                  age={'7 - 12'}
+                />
+              </div>
+              <div>
+                <CoursesComponent
+                  image={
+                    'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png'
+                  }
+                  name={'Robotics 101'}
+                  mission={'12'}
+                  age={'7 - 12'}
+                />
+              </div>
+              <div>
+                <CoursesComponent
+                  image={
+                    'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png'
+                  }
+                  name={'Robotics 101'}
+                  mission={'12'}
+                  age={'7 - 12'}
+                />
+              </div>
+              <div>
+                <CoursesComponent
+                  image={
+                    'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png'
+                  }
+                  name={'Robotics 101'}
+                  mission={'12'}
+                  age={'7 - 12'}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </main>
