@@ -2,52 +2,43 @@ import { Bars3Icon } from '@heroicons/react/20/solid'
 import { Fragment } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { useRouter } from 'next-router-mock'
-import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import LocaleMenu from '../layout/localeMenu'
 import clsx from 'clsx'
 import creator_profile from '@/images/creator_profile.svg'
-import logo_white from '@/images/logo_white.svg'
+import logo_black from '@/images/logo_black.svg'
+import seperator from '@/images/seperator.svg'
 
-export type MenuStyleOptions = {
-  logoToUse: 'light'
-  startBackgroundDark: boolean
-  startTextWhite: boolean
-  isSticky: boolean
-  startWithBottomBorder: boolean
-  startButtonDark: boolean
+interface CreatorMenuPros {
+  isOnCoursePage: boolean
 }
-
-const CreatorMenu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
+const CreatorMenu = ({ isOnCoursePage }: CreatorMenuPros) => {
   const router = useRouter()
-  const session = useSession()
 
   const linkForMenu = [
     {
       name: 'Courses',
-      href: '/creator/courses',
+      href: '/creator',
     },
     {
       name: 'Games',
       href: '/creator/games',
     },
   ]
-  const isUserLoggedIn = () => {
-    return session?.status === 'authenticated' && session.data.id
-  }
 
   return (
     <div
       className={clsx(
-        'flex justify-between items-center w-full h-fit px-4 md:pl-8 lg:pl-12 pt-2 md:pt-9 pb-2 bg-brand z-10  border-b-2 border-secondary-700',
+        'flex justify-between items-center w-full h-fit px-6 py-6 bg-brand z-10  border-b-2 border-secondary-700',
         {
           'fixed top-0': true,
         }
       )}
       style={{
-        // backgroundColor is  white
         backgroundColor: '#ffffff',
+
+        borderBottomColor: ' #C0D2E6',
       }}
     >
       <div
@@ -61,38 +52,46 @@ const CreatorMenu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption })
           router.push('/')
         }}
       >
-        {/* add iamge for the white_logo using <Image></Image>*/}
-        <Image src={logo_white} alt="Hero Image" fill></Image>
+        <Image src={logo_black} alt="Hero Image" fill></Image>
+      </div>
+      <div className="sm:block hidden">
+        <div className="flex gap-6 justify-between">
+          <button className="hover-underline-animation">
+            <Link
+              href={'/creator'}
+              className={clsx('md:text-xl lg:text-2xl text-brand-400', {
+                'text-brand-700 font-medium border-b-2 border-secondary-500': isOnCoursePage,
+              })}
+            >
+              Courses
+            </Link>
+          </button>
+
+          <Image src={seperator} alt="seperator"></Image>
+
+          <button className="hover-underline-animation">
+            <Link
+              href={'/creator/games'}
+              className={clsx('md:text-xl lg:text-2xl text-brand-400', {
+                'text-brand-700 font-semibold': !isOnCoursePage,
+              })}
+            >
+              Games
+            </Link>
+          </button>
+        </div>
+      </div>
+      <div className="sm:block hidden">
+        <div className=" flex gap-5 items-center justify-center">
+          {/* add profile pic */}
+          <LocaleMenu colorClassName="text-brand-500" />
+          <Image src={creator_profile} alt="Hero Image " width={30}></Image>
+        </div>
       </div>
 
-      <div className="hidden md:flex justify-evenly md:gap-6 lg:gap-16 items-center">
-        <button
-          onClick={() => {
-            router.push('/creator/courses')
-          }}
-        >
-          {' '}
-          Courses
-        </button>
-        <button
-          onClick={() => {
-            router.push('/creator/games')
-          }}
-        >
-          {' '}
-          Games
-        </button>
-
-        <LocaleMenu colorClassName="text-brand-50" />
-        {/* add profile pic */}
-        <button>
-          {/* add image from creator_profile */}
-          <Image src={creator_profile} alt="Hero Image" fill></Image>
-        </button>
-      </div>
       {/* Mobile menu */}
-      <div className="flex md:hidden items-center gap-2">
-        <LocaleMenu colorClassName="text-brand-50" />
+      <div className="flex sm:hidden items-center gap-2">
+        <LocaleMenu colorClassName="text-brand-700" />
         <Popover>
           {() => (
             <>
@@ -102,7 +101,7 @@ const CreatorMenu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption })
                 tabIndex={0}
                 aria-label="Change language"
               >
-                <Bars3Icon className={clsx('w-8 h-8 cursor-pointer text-brand-50')} />
+                <Bars3Icon className={clsx('w-8 h-8 cursor-pointer text-brand-700')} />
               </Popover.Button>
               <Transition
                 as={Fragment}

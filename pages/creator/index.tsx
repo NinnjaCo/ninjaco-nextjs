@@ -6,21 +6,12 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Creator dashboard</title>
+        <title>NinjaCo | Creator Dashboard</title>
         <meta name="description" content="Leading online platform for visual programming" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main className="relative w-full">
-        <CreatorMenu
-          menuOption={{
-            logoToUse: 'light',
-            startBackgroundDark: true,
-            startTextWhite: false,
-            isSticky: true,
-            startWithBottomBorder: true,
-            startButtonDark: true,
-          }}
-        />
+        <CreatorMenu />
         <CoursesComponent
           image={
             'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png'
@@ -29,6 +20,7 @@ export default function Home() {
           mission={'12'}
           age={'7 - 12'}
         />
+        <CreatorMenu isOnCoursePage={true} />
       </main>
     </>
   )
