@@ -122,6 +122,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
         open: true,
       })
     } catch (error) {
+      setOpenCreatorAddDialog(false)
       if (isAxiosError<AuthError>(error)) {
         const errors = unWrapAuthError(error)
         setAlertData({
