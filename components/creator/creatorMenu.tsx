@@ -2,7 +2,6 @@ import { Bars3Icon } from '@heroicons/react/20/solid'
 import { Fragment } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { useRouter } from 'next-router-mock'
-import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import LocaleMenu from '../layout/localeMenu'
@@ -11,32 +10,19 @@ import creator_profile from '@/images/creator_profile.svg'
 import logo_black from '@/images/logo_black.svg'
 import seperator from '@/images/seperator.svg'
 
-export type MenuStyleOptions = {
-  logoToUse: 'light'
-  startBackgroundDark: boolean
-  startTextWhite: boolean
-  isSticky: boolean
-  startWithBottomBorder: boolean
-  startButtonDark: boolean
-}
-
-const CreatorMenu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
+const CreatorMenu = () => {
   const router = useRouter()
-  const session = useSession()
 
   const linkForMenu = [
     {
       name: 'Courses',
-      href: '/creator/courses',
+      href: '/creator',
     },
     {
       name: 'Games',
       href: '/creator/games',
     },
   ]
-  const isUserLoggedIn = () => {
-    return session?.status === 'authenticated' && session.data.id
-  }
 
   return (
     <div

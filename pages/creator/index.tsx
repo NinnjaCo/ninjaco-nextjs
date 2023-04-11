@@ -10,16 +10,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main className="relative w-full">
-        <CreatorMenu
-          menuOption={{
-            logoToUse: 'light',
-            startBackgroundDark: true,
-            startTextWhite: false,
-            isSticky: true,
-            startWithBottomBorder: true,
-            startButtonDark: true,
-          }}
-        />
+        <CreatorMenu />
       </main>
     </>
   )
