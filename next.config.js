@@ -13,6 +13,7 @@ module.exports = withBundleAnalyzer({
   images: {
     domains: [
       // TODO ADD S3 BUCKETs here
+      's3-us-west-2.amazonaws.com',
       'localhost',
     ],
     minimumCacheTTL: 604800, // 3600 * 24 * 7 = 1 week

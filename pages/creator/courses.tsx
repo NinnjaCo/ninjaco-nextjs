@@ -1,3 +1,4 @@
+import CoursesComponent from '@/components/creator/coursesComponent'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import Head from 'next/head'
 
@@ -19,6 +20,14 @@ export default function Home() {
             startWithBottomBorder: true,
             startButtonDark: true,
           }}
+        />
+        <CoursesComponent
+          image={
+            'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png'
+          }
+          name={'Robotics 101'}
+          mission={'12'}
+          age={'7 - 12'}
         />
       </main>
     </>
