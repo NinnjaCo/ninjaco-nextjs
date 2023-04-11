@@ -1,4 +1,5 @@
 import { Input } from '@/components/forms/input'
+import { Switch } from '@headlessui/react'
 import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
@@ -10,7 +11,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import Player from '@/components/creator/game/player'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Wall from '@/components/creator/game/wall'
 import clsx from 'clsx'
 import underLineImage from '@/images/lightlyWavedLine.svg'
@@ -71,6 +72,9 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
 
   const [selectedTool, setSelectedTool] = React.useState<Tools>(Tools.NONE)
   const [cellSize, setCellSize] = React.useState(25)
+
+  const [toogleLimitedBlocks, setToogleLimitedBlocks] = React.useState(false)
+  const [numberOfBlocks, setNumberOfBlocks] = React.useState<number | undefined>(undefined)
 
   const toolboxTools: ToolsElments[] = [
     {
@@ -255,35 +259,69 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
                 })}
               </div>
               <div className="flex flex-col h-full justify-between">
-                <div className="flex flex-col">
-                  <label
-                    htmlFor="default-range"
-                    className="block mb-2 text-sm font-medium text-brand"
-                  >
-                    Size of the grid {numberOfColumns} x {numberOfColumns}
-                  </label>
-                  <div className="flex gap-2 items-center">
-                    <span className="text-brand-500">{MIN_COLUMNS}</span>
-                    <input
-                      id="default-range"
-                      type="range"
-                      max={MAX_COLUMNS}
-                      min={MIN_COLUMNS}
-                      step={1}
+                <div className="flex flex-col gap-8 justify-normal">
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="default-range" className="block text-sm font-medium text-brand">
+                      Size of the grid {numberOfColumns} x {numberOfColumns}
+                    </label>
+                    <div className="flex gap-2 items-center">
+                      <span className="text-brand-500">{MIN_COLUMNS}</span>
+                      <input
+                        id="default-range"
+                        type="range"
+                        max={MAX_COLUMNS}
+                        min={MIN_COLUMNS}
+                        step={1}
+                        onChange={(e) => {
+                          const newNumberOfColumns = parseInt(e.target.value, 10)
+                          setNumberOfColumns(newNumberOfColumns)
+                          // update the grid
+                          const newGrid = createGrid(newNumberOfColumns, newNumberOfColumns)
+                          setGameGrid(newGrid)
+                        }}
+                        value={numberOfColumns}
+                        className="w-full h-2 rounded-lg appearance-none cursor-pointer bg-secondary accent-brand"
+                      ></input>
+                      <span className="text-brand-500">{MAX_COLUMNS}</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex gap-2 items-center">
+                      <Switch
+                        checked={toogleLimitedBlocks}
+                        onChange={(isChecked) => {
+                          setToogleLimitedBlocks(isChecked)
+                          setNumberOfBlocks(undefined)
+                        }}
+                        className={`${toogleLimitedBlocks ? 'bg-brand-700' : 'bg-brand-500'}
+                      relative inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+                      >
+                        <span className="sr-only">toogle Limited Blocks</span>
+                        <span
+                          aria-hidden="true"
+                          className={`${toogleLimitedBlocks ? 'translate-x-7' : 'translate-x-0'}
+                        pointer-events-none inline-block h-[34px] w-[34px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                        />
+                      </Switch>
+                      <div className="text-brand font-medium">Limited number of blocks</div>
+                    </div>
+                    <Input
+                      name="limitedBlocks"
+                      placeholder="Number of Allowed Blocks"
+                      type="number"
+                      disabled={!toogleLimitedBlocks}
+                      value={numberOfBlocks}
                       onChange={(e) => {
-                        const newNumberOfColumns = parseInt(e.target.value, 10)
-                        setNumberOfColumns(newNumberOfColumns)
-                        // update the grid
-                        const newGrid = createGrid(newNumberOfColumns, newNumberOfColumns)
-                        setGameGrid(newGrid)
+                        const newNumberOfBlocks = parseInt(e.target.value, 10)
+                        setNumberOfBlocks(newNumberOfBlocks)
                       }}
-                      value={numberOfColumns}
-                      className="w-full h-2 rounded-lg appearance-none cursor-pointer bg-secondary accent-brand"
-                    ></input>
-                    <span className="text-brand-500">{MAX_COLUMNS}</span>
+                      className={clsx({
+                        'bg-brand-50 cursor-not-allowed': !toogleLimitedBlocks,
+                      })}
+                    />
                   </div>
                 </div>
-                <div className="flex gap-4">
+                <div className="flex gap-4 pt-4">
                   <button
                     className="btn btn-brand rounded-lg hover:bg-brand-400 hover:text-white py-2 h-fit"
                     onClick={() => {
