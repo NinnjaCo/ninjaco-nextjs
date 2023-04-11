@@ -3,6 +3,7 @@ import * as React from 'react'
 import * as yup from 'yup'
 import { AdminAlertDialog } from '@/components/admin/dialog'
 import { Alert } from '@/components/shared/alert'
+import { AuthApi } from '@/utils/api/auth/auth.api'
 import { AuthError } from '@/models/shared'
 import { ChevronRightIcon, PencilIcon } from '@heroicons/react/24/solid'
 import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/outline'
@@ -22,6 +23,7 @@ import { getReadableDateFromISO } from '@/utils/shared'
 import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { useCallback, useMemo } from 'react'
+import { useEmailApi } from '@/utils/api/email/email.api'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
@@ -68,6 +70,7 @@ const AddUserFormSchema = yup
 const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
   const session = useSession()
   const router = useRouter()
+  const emailApi = useEmailApi(session.data)
 
   const [openAddUserDialog, setOpenAddUserDialog] = React.useState(false)
 
@@ -174,6 +177,7 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
     switch (alertDiaglogState.dialogType) {
       case 'notify': {
         // send email to user
+        await emailApi.sendNotifyUserEmail(notifyMessage.rowParams.row.email, notifyMessage.message)
         console.log('Notify User', notifyMessage)
         break
       }
@@ -193,6 +197,7 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
           })
           if (resetPasswordState.notifyUser) {
             // send email to user
+            await emailApi.sendResetPasswordEmail(resetPasswordState.rowParams.row.email)
           }
           // reload the page
           router.reload()
@@ -225,6 +230,11 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
 
           if (deleteUserState.notifyUser) {
             // send email to user
+            console.log('In users.tsx the message is', deleteUserState.message)
+            await emailApi.sendDeleteUserEmail(
+              deleteUserState.rowParams.row.email,
+              deleteUserState.message
+            )
           }
 
           // reload the page

@@ -22,6 +22,7 @@ import { getReadableDateFromISO } from '@/utils/shared'
 import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { useCallback, useMemo } from 'react'
+import { useEmailApi } from '@/utils/api/email/email.api'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
@@ -68,6 +69,7 @@ const AddCreatorFormSchema = yup
 const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
   const session = useSession()
   const router = useRouter()
+  const emailApi = useEmailApi(session.data)
 
   const [openCreatorAddDialog, setOpenCreatorAddDialog] = React.useState(false)
 
@@ -182,6 +184,7 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
 
           if (resetPasswordState.notifyUser) {
             // send email to user
+            await emailApi.sendResetPasswordEmail(resetPasswordState.rowParams.row.email)
           }
 
           // reload the page
@@ -214,6 +217,7 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
           await new UserApi(session.data).delete(deleteUserState.rowParams.row.id)
           if (deleteUserState.notifyUser) {
             // send email to user
+            await emailApi.sendDeleteUserEmail(deleteUserState.message)
           }
           // reload the page
           router.reload()

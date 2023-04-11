@@ -73,6 +73,13 @@ export class AuthApi extends CoreApi {
     })
     return res.data
   }
+  async sendEmail(email: string): Promise<ApiResponse<AuthResponse>> {
+    console.log('in AuthApi.sendEmail the user email is:', email)
+    const res = await this.client.post<ApiResponse<AuthResponse>>(`${this.path2}/send-email`, {
+      email,
+    })
+    return res.data
+  }
 
   async logout(): Promise<ApiResponse<AuthResponse>> {
     const res = await this.client.post<ApiResponse<AuthResponse>>(`${this.path2}/logout`)
