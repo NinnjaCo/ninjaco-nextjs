@@ -2,6 +2,7 @@ import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
 import { authOptions } from '../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
+import CoursesComponent from '@/components/creator/coursesComponent'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import Head from 'next/head'
 
@@ -15,6 +16,14 @@ export default function Home({ user }: { user: User }) {
       </Head>
       <main className="relative w-full">
         <CreatorMenu isOnCoursePage={true} creator={user} />
+        <CoursesComponent
+          image={
+            'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png'
+          }
+          name={'Robotics 101'}
+          mission={'12'}
+          age={'7 - 12'}
+        />
       </main>
     </>
   )
