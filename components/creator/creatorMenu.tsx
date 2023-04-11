@@ -1,6 +1,9 @@
-import { Bars3Icon } from '@heroicons/react/20/solid'
-import { Fragment } from 'react'
+import { BookOpenIcon, PuzzlePieceIcon, UserIcon } from '@heroicons/react/24/outline'
+import { Fragment, useMemo } from 'react'
 import { Popover, Transition } from '@headlessui/react'
+import { User } from '@/models/crud'
+import { adventurer } from '@dicebear/collection'
+import { createAvatar } from '@dicebear/core'
 import { useRouter } from 'next-router-mock'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -10,24 +13,48 @@ import creator_profile from '@/images/creator_profile.svg'
 import logo_black from '@/images/logo_black.svg'
 import seperator from '@/images/seperator.svg'
 
-const CreatorMenu = () => {
+interface CreatorMenuPros {
+  isOnCoursePage: boolean
+  creator: User
+}
+const CreatorMenu = ({ isOnCoursePage, creator }: CreatorMenuPros) => {
   const router = useRouter()
+  const profilePhoto = useMemo(() => {
+    if (creator.profilePictureUrl) {
+      return creator.profilePictureUrl
+    }
+    if (creator.firstName) {
+      return createAvatar(adventurer, {
+        seed: creator.firstName + ' ' + creator.lastName,
+        backgroundType: ['solid'],
+        backgroundColor: ['b6e3f4'],
+      }).toDataUriSync()
+    }
+    return creator_profile
+  }, [creator])
 
   const linkForMenu = [
     {
       name: 'Courses',
+      icon: BookOpenIcon,
       href: '/creator',
     },
     {
       name: 'Games',
+      icon: PuzzlePieceIcon,
       href: '/creator/games',
+    },
+    {
+      name: 'Profile',
+      icon: UserIcon,
+      href: '/creator/profile',
     },
   ]
 
   return (
     <div
       className={clsx(
-        'flex justify-between items-center w-full h-fit px-4 md:pl-8 lg:pl-12 pt-2 md:pt-9 pb-2 bg-brand z-10  border-b-2 border-secondary-700',
+        'flex justify-between items-center w-full h-fit px-6 py-6 bg-brand z-10  border-b-2 border-secondary-700',
         {
           'fixed top-0': true,
         }
@@ -38,23 +65,18 @@ const CreatorMenu = () => {
         borderBottomColor: ' #C0D2E6',
       }}
     >
-      <div
-        className="w-24 md:w-36 lg:w-40 h-12 relative cursor-pointer"
-        onClick={() => {
-          router.push('/')
-        }}
-        tabIndex={0}
-        role="button"
-        onKeyDown={() => {
-          router.push('/')
-        }}
-      >
+      <Link className="w-24 md:w-36 lg:w-40 h-12 relative cursor-pointer" href="/">
         <Image src={logo_black} alt="Hero Image" fill></Image>
-      </div>
+      </Link>
       <div className="sm:block hidden">
-        <div className="flex gap-2 sm:gap-4 md:gap-8 lg:gap-16 justify-evenly mr-4 md:mr-8 lg:mr-14">
+        <div className="flex gap-6 justify-between">
           <button className="hover-underline-animation">
-            <Link href={'/creator'} className={clsx('md:text-xl lg:text-2xl  "text-brand-700 ')}>
+            <Link
+              href={'/creator'}
+              className={clsx('md:text-xl lg:text-2xl text-brand-400', {
+                'text-brand-700 font-medium border-b-2 border-secondary-500': isOnCoursePage,
+              })}
+            >
               Courses
             </Link>
           </button>
@@ -64,7 +86,9 @@ const CreatorMenu = () => {
           <button className="hover-underline-animation">
             <Link
               href={'/creator/games'}
-              className={clsx('md:text-xl lg:text-2xl  "text-brand-700')}
+              className={clsx('md:text-xl lg:text-2xl text-brand-400', {
+                'text-brand-700 font-semibold': !isOnCoursePage,
+              })}
             >
               Games
             </Link>
@@ -72,10 +96,18 @@ const CreatorMenu = () => {
         </div>
       </div>
       <div className="sm:block hidden">
-        <div className=" flex gap-5  items-center mr-8">
+        <div className=" flex gap-5 items-center justify-center">
           {/* add profile pic */}
-          <LocaleMenu colorClassName="text-brand-700" />
-          <Image src={creator_profile} alt="Hero Image " width={30}></Image>
+          <LocaleMenu colorClassName="text-brand-500" />
+          <Link href="/creator/profile">
+            <Image
+              className="rounded-full bg-white border-2 border-brand"
+              src={profilePhoto}
+              width={45}
+              height={45}
+              alt="Profile Photo"
+            />
+          </Link>
         </div>
       </div>
 
@@ -91,7 +123,13 @@ const CreatorMenu = () => {
                 tabIndex={0}
                 aria-label="Change language"
               >
-                <Bars3Icon className={clsx('w-8 h-8 cursor-pointer text-brand-700')} />
+                <Image
+                  className="rounded-full bg-white border-2 border-brand"
+                  src={profilePhoto}
+                  width={45}
+                  height={45}
+                  alt="PP"
+                />
               </Popover.Button>
               <Transition
                 as={Fragment}
@@ -102,18 +140,17 @@ const CreatorMenu = () => {
                 leaveFrom="opacity-100 translate-y-0"
                 leaveTo="opacity-0 translate-y-1"
               >
-                <Popover.Panel className="absolute z-10 right-0">
-                  <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-brand ring-opacity-5">
-                    <div className="relative grid gap-8 bg-brand-50 p-7 lg:grid-cols-2">
+                <Popover.Panel className="absolute z-10 right-0 -translate-x-8">
+                  <div className="overflow-hidden rounded shadow-lg ring-1 ring-brand ring-opacity-5 bg-brand-50">
+                    <div className="relative flex flex-col divide-y-2 divide-brand-300">
                       {linkForMenu.map((item, i) => (
                         <Link
                           key={i}
                           href={item.href}
-                          className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
+                          className="px-4 py-4  flex gap-4 items-center transition duration-150 ease-in-out hover:bg-brand-400 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
                         >
-                          <div className="ml-4">
-                            <p className="text-sm font-medium text-brand-700">{item.name}</p>
-                          </div>
+                          <item.icon className="h-6 w-6 text-brand-700" />
+                          <p className="text-sm font-medium text-brand-700">{item.name}</p>
                         </Link>
                       ))}
                     </div>

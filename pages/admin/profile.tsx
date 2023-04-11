@@ -1,5 +1,6 @@
 import * as yup from 'yup'
 import { AuthError } from '@/models/shared'
+import { AxiosError } from 'axios'
 import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/20/solid'
 import { Input } from '@/components/forms/input'
 import { User } from '@/models/crud'
@@ -8,6 +9,7 @@ import { authOptions } from '../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { useForm } from 'react-hook-form'
+import { useQuery, useQueryClient } from 'react-query'
 import { useSession } from 'next-auth/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Alert from '@/components/shared/alert'
@@ -18,7 +20,7 @@ import SideMenu from '@/components/admin/sideMenu'
 import useTranslation from '@/hooks/useTranslation'
 
 interface ServerProps {
-  user: User
+  serverUser: User
 }
 
 type AdminProfileFormDataType = {
@@ -29,9 +31,33 @@ type AdminProfileFormDataType = {
   password: string
   passwordConfirmation: string
 }
-export default function Profile({ user }: ServerProps) {
-  const session = useSession()
+export default function Profile({ serverUser }: ServerProps) {
+  const queryClient = useQueryClient()
+  const { data: session } = useSession()
   const t = useTranslation()
+
+  const { data: user } = useQuery<User>(
+    ['user', session],
+    async () => {
+      const response = await new UserApi(session).findOne(serverUser._id)
+      return response.payload
+    },
+    {
+      initialData: serverUser,
+      enabled: !!session,
+      onError: (error) => {
+        if (isAxiosError(error)) {
+          const errors = unWrapAuthError(error as AxiosError<AuthError> | undefined)
+          setAlertData({
+            message: errors[0].message || 'Something went wrong',
+            variant: 'error',
+            open: true,
+          })
+        }
+      },
+    }
+  )
+
   const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false)
 
   const [alertData, setAlertData] = React.useState<{
@@ -70,6 +96,7 @@ export default function Profile({ user }: ServerProps) {
       [['password', 'password']]
     )
     .required()
+
   const {
     register,
     handleSubmit,
@@ -78,10 +105,10 @@ export default function Profile({ user }: ServerProps) {
   } = useForm<AdminProfileFormDataType>({
     resolver: yupResolver(AdminProfileFormSchema),
     defaultValues: {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      dateOfBirth: new Date(user.dateOfBirth),
-      email: user.email,
+      firstName: user?.firstName || serverUser.firstName,
+      lastName: user?.lastName || serverUser.lastName,
+      dateOfBirth: new Date(user?.dateOfBirth || serverUser.dateOfBirth),
+      email: user?.email || serverUser.email,
       password: '',
       passwordConfirmation: '',
     },
@@ -89,6 +116,8 @@ export default function Profile({ user }: ServerProps) {
 
   // Handle form submission
   const submitHandler = async (data: AdminProfileFormDataType) => {
+    if (!user) return
+
     // check the dirty fields and only send the data that has been changed
     setSaveButtonDisabled(true)
 
@@ -110,13 +139,17 @@ export default function Profile({ user }: ServerProps) {
     }
 
     try {
-      const response = await new UserApi(session.data).update(user._id, dirtyData)
-      user = response.payload
+      await new UserApi(session).update(serverUser._id, dirtyData)
+
+      // update user using react-query
+      // refetch the user data
+      await queryClient.invalidateQueries('user')
       setAlertData({
         message: 'Profile updated successfully',
         variant: 'success',
         open: true,
       })
+      setSaveButtonDisabled(false)
     } catch (error) {
       setSaveButtonDisabled(false)
       if (isAxiosError<AuthError>(error)) {
@@ -153,7 +186,7 @@ export default function Profile({ user }: ServerProps) {
           >
             <div className="flex w-full justify-between items-center">
               <div className="text-brand text-lg md:text-xl lg:text-2xl font-semibold">
-                {user.firstName} {user.lastName}
+                {user?.firstName} {user?.lastName}
               </div>
               <button
                 type="submit"
@@ -276,7 +309,7 @@ export const getServerSideProps = async (context) => {
 
   return {
     props: {
-      user: response.payload,
+      serverUser: response.payload,
     },
   }
 }
