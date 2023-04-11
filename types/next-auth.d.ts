@@ -4,8 +4,8 @@ declare module 'next-auth' {
   // export default NextAuth
   interface User {
     id: string
-    jwt: string
-    refresh: string
+    accessToken: string
+    refreshToken: string
   }
 
   /**
@@ -13,17 +13,15 @@ declare module 'next-auth' {
    */
   interface Session {
     id: string
-    jwt: string
-    refresh: string
-    user: User
-    test: string
+    accessToken: string
+    refreshToken: string
   }
 }
 
 declare module 'next-auth/jwt' {
   interface JWT {
     id: string
-    jwt: string
+    accessToken: string
     refreshToken: string
   }
 }
