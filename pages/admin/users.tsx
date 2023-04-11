@@ -3,9 +3,11 @@ import * as React from 'react'
 import * as yup from 'yup'
 import { AdminAlertDialog } from '@/components/admin/dialog'
 import { Alert } from '@/components/shared/alert'
+import { AuthApi } from '@/utils/api/auth/auth.api'
 import { AuthError } from '@/models/shared'
 import { AxiosError } from 'axios'
 import { ChevronRightIcon, PencilIcon } from '@heroicons/react/24/solid'
+import { EmailEnum } from '@/utils/api/email/email.api'
 import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/outline'
 import {
   GridColDef,
@@ -23,6 +25,7 @@ import { getReadableDateFromISO } from '@/utils/shared'
 import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { useCallback, useMemo } from 'react'
+import { useEmailApi } from '@/utils/api/email/email.api'
 import { useForm } from 'react-hook-form'
 import { useQuery, useQueryClient } from 'react-query'
 import { useSession } from 'next-auth/react'
@@ -32,7 +35,6 @@ import Head from 'next/head'
 import SideMenu from '@/components/admin/sideMenu'
 import Table from '@/components/table'
 import clsx from 'clsx'
-
 type AddUserFormDataType = {
   firstName: string
   lastName: string
@@ -68,6 +70,7 @@ const AddUserFormSchema = yup
 
 const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
   const { data: session } = useSession()
+  const emailApi = useEmailApi(session)
   const queryClient = useQueryClient()
 
   const { data: users } = useQuery<User[], Error>(
@@ -199,7 +202,11 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
     switch (alertDiaglogState.dialogType) {
       case 'notify': {
         // send email to user
-        console.log('Notify User', notifyMessage)
+        await emailApi.sendEmail({
+          emailType: EmailEnum.NOTIFY,
+          receiverEmail: notifyMessage.rowParams.row.email,
+          message: notifyMessage.message,
+        })
         break
       }
       case 'resetPassword': {
@@ -218,6 +225,12 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
           })
           if (resetPasswordState.notifyUser) {
             // send email to user
+            await emailApi.sendEmail({
+              emailType: EmailEnum.RESET,
+              receiverEmail: resetPasswordState.rowParams.row.email,
+              message:
+                'An administrator has reset your password. Please contact them or the support team for more information.',
+            })
           }
 
           queryClient.invalidateQueries('users')
@@ -250,6 +263,11 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
 
           if (deleteUserState.notifyUser) {
             // send email to user
+            await emailApi.sendEmail({
+              emailType: EmailEnum.DELETE,
+              receiverEmail: deleteUserState.rowParams.row.email,
+              message: deleteUserState.message,
+            })
           }
 
           queryClient.invalidateQueries('users')
@@ -259,7 +277,6 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
             open: true,
           })
         } catch (error) {
-          console.error(error)
           if (isAxiosError<AuthError>(error)) {
             const errors = unWrapAuthError(error)
             setAlertData({

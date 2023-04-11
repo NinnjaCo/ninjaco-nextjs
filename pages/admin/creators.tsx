@@ -6,6 +6,7 @@ import { Alert } from '@/components/shared/alert'
 import { AuthError } from '@/models/shared'
 import { AxiosError } from 'axios'
 import { ChevronRightIcon, PencilIcon } from '@heroicons/react/24/solid'
+import { EmailEnum } from '@/utils/api/email/email.api'
 import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/outline'
 import {
   GridColDef,
@@ -23,8 +24,10 @@ import { getReadableDateFromISO } from '@/utils/shared'
 import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { useCallback, useMemo } from 'react'
+import { useEmailApi } from '@/utils/api/email/email.api'
 import { useForm } from 'react-hook-form'
 import { useQuery, useQueryClient } from 'react-query'
+import { useRouter } from 'next-router-mock'
 import { useSession } from 'next-auth/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import DatePickerWithHookForm from '@/components/forms/datePickerWithHookForm'
@@ -69,6 +72,7 @@ const AddCreatorFormSchema = yup
 const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
   const { data: session } = useSession()
   const queryClient = useQueryClient()
+  const emailApi = useEmailApi(session)
 
   const { data: users } = useQuery<User[], Error>(
     ['users', session],
@@ -206,6 +210,12 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
 
           if (resetPasswordState.notifyUser) {
             // send email to user
+            await emailApi.sendEmail({
+              emailType: EmailEnum.RESET,
+              receiverEmail: resetPasswordState.rowParams.row.email,
+              message:
+                'An administrator has reset your password. Please contact them or the support team for more information.',
+            })
           }
 
           queryClient.invalidateQueries('users')
@@ -237,7 +247,13 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
           await new UserApi(session).delete(deleteUserState.rowParams.row.id)
           if (deleteUserState.notifyUser) {
             // send email to user
+            await emailApi.sendEmail({
+              emailType: EmailEnum.DELETE,
+              receiverEmail: deleteUserState.rowParams.row.email,
+              message: deleteUserState.message,
+            })
           }
+
           queryClient.invalidateQueries('users')
           setAlertData({
             message: 'User deleted successfully',
