@@ -87,7 +87,7 @@ const CreatorMenu = ({ isOnCoursePage, creator }: CreatorMenuPros) => {
             <Link
               href={'/creator/games'}
               className={clsx('md:text-xl lg:text-2xl text-brand-400', {
-                'text-brand-700 font-semibold': !isOnCoursePage,
+                'text-brand-700 font-medium border-b-2 border-secondary-500': !isOnCoursePage,
               })}
             >
               Games
