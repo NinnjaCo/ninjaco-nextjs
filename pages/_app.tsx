@@ -47,22 +47,22 @@ export default function App({ Component, pageProps, router }: AppProps) {
         showOnShallow={true}
       />
 
-      <QueryClientProvider client={queryClientRef.current}>
-        <Hydrate state={dehydratedState}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <TranslationsProvider initialLocale={pageProps.initialLocale}>
-              <SessionManager serverSession={pageProps.session}>
+      <SessionManager serverSession={pageProps.session}>
+        <QueryClientProvider client={queryClientRef.current}>
+          <Hydrate state={dehydratedState}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <TranslationsProvider initialLocale={pageProps.initialLocale}>
                 <main className={`${quick_sand.variable} font-quicksand`}>
                   <PageLayout>
                     <Component {...pageProps} />
                   </PageLayout>
                 </main>
-              </SessionManager>
-            </TranslationsProvider>
-          </LocalizationProvider>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </Hydrate>
-      </QueryClientProvider>
+              </TranslationsProvider>
+            </LocalizationProvider>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </Hydrate>
+        </QueryClientProvider>
+      </SessionManager>
     </>
   )
 }

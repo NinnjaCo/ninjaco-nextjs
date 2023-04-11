@@ -33,13 +33,12 @@ export const checkIfUserIsVerified = async (
   req: NextRequestWithAuth
 ): Promise<VerifiedResponse> => {
   const { token } = req.nextauth
-  if (token && token.sub) {
+  if (token && token.id) {
     try {
       const verificationData: CheckIfUserIsVerifiedRequest = await checkIfUserIsVerifiedRequest(
-        token.jwt,
-        token.sub
+        token.accessToken,
+        token.id
       )
-      console.log(verificationData)
 
       // If the user does not have the correct role, redirect them to the home page
       if (!verificationData || !verificationData.payload.isVerified) {

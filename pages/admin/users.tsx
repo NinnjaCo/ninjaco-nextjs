@@ -67,17 +67,18 @@ const AddUserFormSchema = yup
   .required()
 
 const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
-  const session = useSession()
+  const { data: session } = useSession()
   const queryClient = useQueryClient()
 
   const { data: users } = useQuery<User[], Error>(
-    'users',
+    ['users', session],
     async () => {
-      const res = await new UserApi(session.data).find()
+      const res = await new UserApi(session).find()
       return res.payload.filter((user) => user.role.role === RoleEnum.USER)
     },
     {
       initialData: serverUsers,
+      enabled: !!session,
       onError: (error) => {
         if (isAxiosError(error)) {
           const errors = unWrapAuthError(error as AxiosError<AuthError> | undefined)
@@ -106,7 +107,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
     try {
       closeAlert()
 
-      await new UserApi(session.data).create({
+      await new UserApi(session).create({
         firstName: data.firstName,
         lastName: data.lastName,
         dateOfBirth: data.dateOfBirth.toISOString(),
@@ -123,6 +124,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
         open: true,
       })
     } catch (error) {
+      setOpenAddUserDialog(false)
       if (isAxiosError<AuthError>(error)) {
         const errors = unWrapAuthError(error)
         setAlertData({
@@ -211,7 +213,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
             return
           }
 
-          await new UserApi(session.data).update(resetPasswordState.rowParams.row.id, {
+          await new UserApi(session).update(resetPasswordState.rowParams.row.id, {
             password: resetPasswordState.password,
           })
           if (resetPasswordState.notifyUser) {
@@ -244,7 +246,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
       }
       case 'delete': {
         try {
-          await new UserApi(session.data).delete(deleteUserState.rowParams.row.id)
+          await new UserApi(session).delete(deleteUserState.rowParams.row.id)
 
           if (deleteUserState.notifyUser) {
             // send email to user
@@ -282,7 +284,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
     notifyMessage,
     resetPasswordState,
     queryClient,
-    session.data,
+    session,
   ])
 
   const getDialogBody = useCallback(() => {
@@ -707,7 +709,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
 
       <main className="flex w-full h-screen overflow-hidden">
         <SideMenu higlightUsers={true} />
-        <div className="flex flex-col flex-grow w-3/4 h-full gap-12 py-8 px-4">
+        <div className="flex flex-col flex-grow w-3/4 h-full gap-4 py-8 px-4">
           <div className="flex items-center justify-between w-full">
             <div className="flex flex-col gap-2">
               <p className="text-brand-700 text-xl md:text-2xl lg:text-3xl font-semibold">Users</p>
@@ -752,9 +754,15 @@ export const getServerSideProps = async (context) => {
   }
 
   const api = new UserApi(session)
-  const response = await api.find()
-  const users = response.payload.filter((user) => user.role.role === RoleEnum.USER)
-  return {
-    props: { serverUsers: users },
+  try {
+    const response = await api.find()
+    const users = response.payload.filter((user) => user.role.role === RoleEnum.USER)
+    return {
+      props: { serverUsers: users },
+    }
+  } catch (error) {
+    return {
+      props: { serverUsers: [] },
+    }
   }
 }

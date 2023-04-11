@@ -33,18 +33,18 @@ type AdminProfileFormDataType = {
 }
 export default function Profile({ serverUser }: ServerProps) {
   const queryClient = useQueryClient()
-  const session = useSession()
+  const { data: session } = useSession()
   const t = useTranslation()
 
   const { data: user } = useQuery<User>(
-    'user',
+    ['user', session],
     async () => {
-      const response = await new UserApi(session.data).findOne(serverUser._id)
+      const response = await new UserApi(session).findOne(serverUser._id)
       return response.payload
     },
     {
-      retry: 0,
       initialData: serverUser,
+      enabled: !!session,
       onError: (error) => {
         if (isAxiosError(error)) {
           const errors = unWrapAuthError(error as AxiosError<AuthError> | undefined)
@@ -139,7 +139,7 @@ export default function Profile({ serverUser }: ServerProps) {
     }
 
     try {
-      await new UserApi(session.data).update(serverUser._id, dirtyData)
+      await new UserApi(session).update(serverUser._id, dirtyData)
 
       // update user using react-query
       // refetch the user data
