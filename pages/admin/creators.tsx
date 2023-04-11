@@ -217,7 +217,10 @@ const AdminUserView: React.FC<{ users: User[] }> = ({ users }) => {
           await new UserApi(session.data).delete(deleteUserState.rowParams.row.id)
           if (deleteUserState.notifyUser) {
             // send email to user
-            await emailApi.sendDeleteUserEmail(deleteUserState.message)
+            await emailApi.sendDeleteUserEmail(
+              deleteUserState.rowParams.row.email,
+              deleteUserState.message
+            )
           }
           // reload the page
           router.reload()
