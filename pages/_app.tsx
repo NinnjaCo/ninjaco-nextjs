@@ -8,9 +8,8 @@ import { Quicksand } from 'next/font/google'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import { TranslationsProvider } from '@/contexts/TranslationContext'
 import { useEffect, useMemo, useRef } from 'react'
-import Head from 'next/head'
-import NProgress from 'nprogress'
 import NextNProgress from '@/components/nextNProgress'
+import PageLayout from '@/components/layout/pageLayout'
 import SessionManager from '@/components/auth/sessionManager'
 import type { AppProps } from 'next/app'
 
@@ -38,24 +37,6 @@ export default function App({ Component, pageProps, router }: AppProps) {
     return pageProps.dehydratedState
   }, [pageProps])
 
-  useEffect(() => {
-    const handleRouteChange = (url) => {
-      NProgress.done()
-    }
-
-    const handleNavStart = () => {
-      NProgress.start()
-    }
-
-    router.events.on('routeChangeStart', handleNavStart)
-    router.events.on('routeChangeComplete', handleRouteChange)
-
-    return () => {
-      router.events.off('routeChangeStart', handleNavStart)
-      router.events.off('routeChangeComplete', handleRouteChange)
-    }
-  }, [router.events])
-
   return (
     <>
       <NextNProgress
@@ -66,23 +47,22 @@ export default function App({ Component, pageProps, router }: AppProps) {
         showOnShallow={true}
       />
 
-      <QueryClientProvider client={queryClientRef.current}>
-        <Hydrate state={dehydratedState}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <TranslationsProvider initialLocale={pageProps.initialLocale}>
-              <SessionManager serverSession={pageProps.session}>
+      <SessionManager serverSession={pageProps.session}>
+        <QueryClientProvider client={queryClientRef.current}>
+          <Hydrate state={dehydratedState}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <TranslationsProvider initialLocale={pageProps.initialLocale}>
                 <main className={`${quick_sand.variable} font-quicksand`}>
-                  <Head>
-                    <meta name="description" content="Empoer your child's education" />
-                  </Head>
-                  <Component {...pageProps} />
+                  <PageLayout>
+                    <Component {...pageProps} />
+                  </PageLayout>
                 </main>
-              </SessionManager>
-            </TranslationsProvider>
-          </LocalizationProvider>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </Hydrate>
-      </QueryClientProvider>
+              </TranslationsProvider>
+            </LocalizationProvider>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </Hydrate>
+        </QueryClientProvider>
+      </SessionManager>
     </>
   )
 }

@@ -14,6 +14,7 @@ import { signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import Link from 'next/link'
+import LocaleMenuButton from './localMenuButton'
 import MenuSection from './menuSection'
 import React, { useState } from 'react'
 import clsx from 'clsx'
@@ -88,6 +89,9 @@ const SideMenu = (props: SideMenuProps) => {
       actionOnClick: () => {
         router.push('/admin/profile')
       },
+    },
+    {
+      Body: LocaleMenuButton,
     },
 
     {
