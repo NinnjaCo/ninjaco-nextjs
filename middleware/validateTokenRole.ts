@@ -35,10 +35,10 @@ export const authroizeRequest = async (req: NextRequestWithAuth): Promise<autori
     let authorizationData: ValidateTokenRoleRequest | undefined = undefined
 
     if (req.nextUrl.pathname.startsWith('/admin')) {
-      authorizationData = await validateTokenRoleRequest(RoleEnum.ADMIN, token.jwt)
+      authorizationData = await validateTokenRoleRequest(RoleEnum.ADMIN, token.accessToken)
     }
     if (req.nextUrl.pathname.startsWith('/creator')) {
-      authorizationData = await validateTokenRoleRequest(RoleEnum.CREATOR, token.jwt)
+      authorizationData = await validateTokenRoleRequest(RoleEnum.CREATOR, token.accessToken)
     }
 
     // If the user does not have the correct role, redirect them to the home page

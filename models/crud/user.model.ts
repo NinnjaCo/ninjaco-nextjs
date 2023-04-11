@@ -20,4 +20,5 @@ export interface UserRequest {
   password: string
   dateOfBirth: string
   role?: RoleEnum
+  isVerified?: boolean
 }
