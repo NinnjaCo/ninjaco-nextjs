@@ -7,6 +7,7 @@ import CoursesComponent from '@/components/creator/coursesComponent'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import Head from 'next/head'
 import Image from 'next/image'
+
 import filter from '@/images/filterIcon.svg'
 
 export default function Home({ user }: { user: User }) {
@@ -17,8 +18,14 @@ export default function Home({ user }: { user: User }) {
         <meta name="description" content="Leading online platform for visual programming" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <main className="relative w-full">
-        <CreatorMenu isOnCoursePage={true} creator={user} />
+
+      <main className="relative h-screen w-full">
+        <CreatorMenu
+          {...{
+            isOnCoursePage: true,
+            creator: user,
+          }}
+        />
         <div className="flex flex-row mt-7 justify-between">
           <div className="flex flex-col ml-14 gap-6">
             <div className="text-brand-700 font-semibold  text-sm md:text-base lg:text-xl ">
@@ -39,6 +46,16 @@ export default function Home({ user }: { user: User }) {
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center mt-7 px-10 place-items-center">
+          <div>
+            <CoursesComponent
+              image={
+                'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png'
+              }
+              name={'Robotics 101'}
+              mission={'12'}
+              age={'7 - 12'}
+            />
+          </div>
           <div>
             <CoursesComponent
               image={
