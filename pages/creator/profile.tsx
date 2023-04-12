@@ -1,14 +1,14 @@
 import * as yup from 'yup'
 import { AuthError } from '@/models/shared'
 import { AxiosError } from 'axios'
+import { CameraIcon } from '@heroicons/react/24/solid'
 import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/20/solid'
 import { Image as ImageModel } from '@/models/shared/image'
+import { ImageType } from 'react-images-uploading'
 import { Input } from '@/components/forms/input'
 import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
-import { adventurer } from '@dicebear/collection'
 import { authOptions } from '../api/auth/[...nextauth]'
-import { createAvatar } from '@dicebear/core'
 import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { useForm } from 'react-hook-form'
@@ -20,10 +20,9 @@ import CreatorMenu from '@/components/creator/creatorMenu'
 import DatePickerWithHookForm from '@/components/forms/datePickerWithHookForm'
 import Head from 'next/head'
 import Image from 'next/image'
-import ImageUploading, { ImageListType, ImageType } from 'react-images-uploading'
-import React, { useMemo, useState } from 'react'
+import ProfileImageUpload from '@/components/forms/profileImageUpload'
+import React, { useState } from 'react'
 import clsx from 'clsx'
-import creator_profile from '@/images/creator_profile.svg'
 import useTranslation from '@/hooks/useTranslation'
 
 interface ServerProps {
@@ -72,20 +71,6 @@ export default function Profile({ serverUser }: ServerProps) {
   )
 
   const user = useNonNullUser(fetchedUser, serverUser)
-
-  const profilePhoto = useMemo(() => {
-    if (user.profilePictureUrl) {
-      return user.profilePictureUrl
-    }
-    if (user.firstName) {
-      return createAvatar(adventurer, {
-        seed: user.firstName + ' ' + user.lastName,
-        backgroundType: ['solid'],
-        backgroundColor: ['b6e3f4'],
-      }).toDataUriSync()
-    }
-    return creator_profile
-  }, [user])
 
   const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false)
 
@@ -158,7 +143,7 @@ export default function Profile({ serverUser }: ServerProps) {
     })
 
     // if empty object, i.e. no changes made, return
-    if (dirtyFieldsArray.length === 0) {
+    if (dirtyFieldsArray.length === 0 && profilePic === undefined) {
       setSaveButtonDisabled(false)
       setAlertData({
         message: 'No changes made',
@@ -169,6 +154,17 @@ export default function Profile({ serverUser }: ServerProps) {
     }
 
     try {
+      setAlertData({
+        message: 'Uploading ...',
+        variant: 'info',
+        open: true,
+      })
+
+      // They change the profile pic
+      if (profilePic !== undefined) {
+        // Upload Image and get url
+        // add url to dirty data
+      }
       const res = await new UserApi(session).update(serverUser._id, dirtyData)
 
       // update user using react-query
@@ -208,18 +204,13 @@ export default function Profile({ serverUser }: ServerProps) {
     }
   }
 
-  const [proxyImages, setProxyImages] = useState([] as ImageType[])
-  const [images, setImages] = useState([] as ImageModel[])
+  // Use array because the library forces an array of ImageType
+  const [profilePic, setProfilePic] = useState<ImageType | undefined>(undefined)
 
-  const onChange = async (
-    imageList: ImageListType,
-    addUpdateIndex: number[] | undefined
-  ): Promise<void> => {
-    // data for submit
-    setImages(imageList as ImageModel[])
-    // for avatar preview
-    setProxyImages(imageList as ImageType[])
+  const callBackOnImageUpload = (image: ImageType) => {
+    setProfilePic(image)
   }
+
   return (
     <>
       <Head>
@@ -229,113 +220,10 @@ export default function Profile({ serverUser }: ServerProps) {
       </Head>
 
       <main className="relative h-screen w-full">
-        <CreatorMenu
-          {...{
-            isOnCoursePage: true,
-            creator: user || serverUser,
-          }}
-        />
-
+        <CreatorMenu isOnCoursePage={false} isOnGamesPage={false} creator={user} />
         <div className="flex items-start gap-4 w-full py-8 px-4 flex-col md:flex-row">
           <div className="px-8 w-full md:w-auto flex flex-col items-center justify-center md:justify-start">
-            <Image
-              className="rounded-full bg-white border-2 border-brand"
-              src={profilePhoto}
-              width={150}
-              height={150}
-              alt="PP"
-            />
-            <ImageUploading multiple={false} value={proxyImages} onChange={onChange}>
-              {({
-                imageList,
-                onImageUpload,
-                onImageRemoveAll,
-                onImageUpdate,
-                onImageRemove,
-                isDragging,
-                dragProps,
-              }) => (
-                <>
-                  <div
-                    {...dragProps}
-                    className={clsx(
-                      'flex flex-col',
-                      'items-center justify-center gap-2',
-                      'h-40 my-4',
-                      'border-2 border-dashed border-gray-300 rounded-sm',
-                      {
-                        'bg-brand-100': !isDragging,
-                        'border-brand-500': isDragging,
-                      }
-                    )}
-                  >
-                    <button
-                      className="upload_button multiple text-xs btn btn-primary"
-                      onClick={(e) => {
-                        e.preventDefault()
-                        onImageUpload()
-                      }}
-                      {...dragProps}
-                    >
-                      Drop image here or click to upload
-                    </button>
-                    <button className=" text-xs" onClick={onImageRemoveAll}>
-                      Remove image
-                    </button>
-                  </div>
-                  <div className="flex gap-4 mb-4 flex-wrap">
-                    {imageList.map(({ dataURL, file }, index) => (
-                      <div
-                        key={index}
-                        className="flex justify-start items-center w-40 my-2 py-1 border border-gray-100 rounded-md"
-                      >
-                        <div className="flex justify-center items-center aspect-1 max-h-20 ml-1 mr-3 bg-gray-100">
-                          {(dataURL && <img src={dataURL} alt={file?.name} />) || (
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="w-20"
-                              viewBox="100 100 300 300"
-                            >
-                              <defs>
-                                <style>
-                                  {`@keyframes hideshow{0%{opacity:1}10%{opacity:.75}15%{opacity:.5}to{opacity:0}}.cls-1{fill:#fff}`}
-                                </style>
-                              </defs>
-                              <path
-                                fill="#b3cb02"
-                                d="M180.09 221.54c2.37-5 9.87-3.19 9.95 2.38.15 10.8 3 21 12.85 22.26 18.33 2.36 36.77-13.53 54.22-39.31a5.23 5.23 0 0 1 9.6 2.5c.94 13.48 4.93 30.19 18.41 34.41 12.29 3.85 26.05-10.33 36.4-24.75 3.41-4.75 10.9-1.22 9.31 4.4-7.28 25.77-21.07 58.47-44.39 59.91 0 0-21.6 2.52-34.58-18.82a5.14 5.14 0 0 0-7.68-1.23c-10.12 8.55-34.61 26.21-56.77 18.9-22.76-7.51-21.31-30.98-7.32-60.65Z"
-                                style={{ animation: 'hideshow 3s linear infinite' }}
-                              />
-                            </svg>
-                          )}
-                        </div>
-                        <div className="flex flex-col items-start gap-1">
-                          <button
-                            className="text-xs text-primary-dark"
-                            onClick={(e) => {
-                              e.preventDefault()
-                              onImageUpdate(index)
-                            }}
-                          >
-                            Update
-                          </button>
-                          <button
-                            className="text-xs text-red-500"
-                            onClick={(e) => {
-                              e.preventDefault()
-                              onImageRemove(index)
-                              onImageRemove(index)
-                            }}
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
-            </ImageUploading>
+            <ProfileImageUpload user={user} callbackOnNewImageSet={callBackOnImageUpload} />
           </div>
           <form
             id="form"

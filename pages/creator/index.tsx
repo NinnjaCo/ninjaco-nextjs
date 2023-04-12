@@ -82,12 +82,7 @@ export default function Home({ user }: { user: User }) {
       </Head>
 
       <main className="relative h-screen w-full">
-        <CreatorMenu
-          {...{
-            isOnCoursePage: true,
-            creator: user,
-          }}
-        />
+        <CreatorMenu isOnCoursePage={true} isOnGamesPage={false} creator={user} />
         <div className="flex flex-row mt-7 justify-between">
           <div className="flex flex-col ml-14 gap-6">
             <div className="text-brand-700 font-semibold  text-sm md:text-base lg:text-2xl">

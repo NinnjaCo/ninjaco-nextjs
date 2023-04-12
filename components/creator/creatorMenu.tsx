@@ -15,9 +15,10 @@ import seperator from '@/images/seperator.svg'
 
 interface CreatorMenuPros {
   isOnCoursePage: boolean
+  isOnGamesPage: boolean
   creator: User
 }
-const CreatorMenu = ({ isOnCoursePage, creator }: CreatorMenuPros) => {
+const CreatorMenu = ({ isOnCoursePage, creator, isOnGamesPage }: CreatorMenuPros) => {
   const router = useRouter()
   const profilePhoto = useMemo(() => {
     if (creator.profilePictureUrl) {
@@ -74,7 +75,8 @@ const CreatorMenu = ({ isOnCoursePage, creator }: CreatorMenuPros) => {
             <Link
               href={'/creator'}
               className={clsx('md:text-xl lg:text-2xl text-brand-400', {
-                'text-brand-700 font-medium border-b-2 border-secondary-500': isOnCoursePage,
+                'text-brand-700 font-medium border-b-2 border-secondary-500':
+                  isOnCoursePage && !isOnGamesPage,
               })}
             >
               Courses
@@ -87,7 +89,8 @@ const CreatorMenu = ({ isOnCoursePage, creator }: CreatorMenuPros) => {
             <Link
               href={'/creator/games'}
               className={clsx('md:text-xl lg:text-2xl text-brand-400', {
-                'text-brand-700 font-medium border-b-2 border-secondary-500': !isOnCoursePage,
+                'text-brand-700 font-medium border-b-2 border-secondary-500':
+                  isOnGamesPage && !isOnCoursePage,
               })}
             >
               Games
