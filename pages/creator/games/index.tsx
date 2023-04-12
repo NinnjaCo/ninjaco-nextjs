@@ -77,7 +77,7 @@ export default function Home({ user }: { user: User }) {
             </div>
           </div>
           <div className="text-brand-700 font-semibold  mr-12 ">
-            <button className="btn btn-secondary bg-secondary rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 py-2 h-fit w-fit text-xs md:text-sm lg:text-base">
+            <button className="btn btn-secondary bg-secondary rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 py-2  h-fit w-fit text-2xs md:text-sm lg:text-base">
               Create Game
             </button>
           </div>
