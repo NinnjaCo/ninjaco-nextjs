@@ -1,9 +1,8 @@
 import * as yup from 'yup'
 import { AuthError } from '@/models/shared'
 import { AxiosError } from 'axios'
-import { CameraIcon } from '@heroicons/react/24/solid'
-import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/20/solid'
-import { Image as ImageModel } from '@/models/shared/image'
+import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/solid'
+import { ImageApi } from '@/utils/api/images/image-upload.api'
 import { ImageType } from 'react-images-uploading'
 import { Input } from '@/components/forms/input'
 import { User } from '@/models/crud'
@@ -19,10 +18,8 @@ import Alert from '@/components/shared/alert'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import DatePickerWithHookForm from '@/components/forms/datePickerWithHookForm'
 import Head from 'next/head'
-import Image from 'next/image'
 import ProfileImageUpload from '@/components/forms/profileImageUpload'
 import React, { useState } from 'react'
-import clsx from 'clsx'
 import useTranslation from '@/hooks/useTranslation'
 
 interface ServerProps {
@@ -137,13 +134,13 @@ export default function Profile({ serverUser }: ServerProps) {
     setSaveButtonDisabled(true)
 
     const dirtyFieldsArray = Object.keys(dirtyFields)
-    const dirtyData = {}
+    let dirtyData = {}
     dirtyFieldsArray.forEach((field) => {
       dirtyData[field] = data[field]
     })
 
     // if empty object, i.e. no changes made, return
-    if (dirtyFieldsArray.length === 0 && profilePic === undefined) {
+    if (dirtyFieldsArray.length === 0 && profilePic === undefined && !user.profilePicture) {
       setSaveButtonDisabled(false)
       setAlertData({
         message: 'No changes made',
@@ -161,10 +158,24 @@ export default function Profile({ serverUser }: ServerProps) {
       })
 
       // They change the profile pic
-      if (profilePic !== undefined) {
+      if (profilePic !== undefined && profilePic.file !== undefined) {
         // Upload Image and get url
+        const imageUploadRes = await new ImageApi(session).uploadImage({ image: profilePic.file })
+
         // add url to dirty data
+        dirtyData = {
+          ...dirtyData,
+          profilePicture: imageUploadRes.payload.image_url,
+        }
       }
+
+      if (profilePic === undefined && user.profilePicture) {
+        dirtyData = {
+          ...dirtyData,
+          profilePicture: '',
+        }
+      }
+
       const res = await new UserApi(session).update(serverUser._id, dirtyData)
 
       // update user using react-query
@@ -210,6 +221,9 @@ export default function Profile({ serverUser }: ServerProps) {
   const callBackOnImageUpload = (image: ImageType) => {
     setProfilePic(image)
   }
+  const callBackOnImageRemove = () => {
+    setProfilePic(undefined)
+  }
 
   return (
     <>
@@ -223,7 +237,11 @@ export default function Profile({ serverUser }: ServerProps) {
         <CreatorMenu isOnCoursePage={false} isOnGamesPage={false} creator={user} />
         <div className="flex items-start gap-4 w-full py-8 px-4 flex-col md:flex-row">
           <div className="px-8 w-full md:w-auto flex flex-col items-center justify-center md:justify-start">
-            <ProfileImageUpload user={user} callbackOnNewImageSet={callBackOnImageUpload} />
+            <ProfileImageUpload
+              user={user}
+              callbackOnNewImageSet={callBackOnImageUpload}
+              callBackOnImageRemove={callBackOnImageRemove}
+            />
           </div>
           <form
             id="form"

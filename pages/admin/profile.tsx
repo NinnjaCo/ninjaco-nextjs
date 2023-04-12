@@ -1,7 +1,7 @@
 import * as yup from 'yup'
 import { AuthError } from '@/models/shared'
 import { AxiosError } from 'axios'
-import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/20/solid'
+import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/solid'
 import { Input } from '@/components/forms/input'
 import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'

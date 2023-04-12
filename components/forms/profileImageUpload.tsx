@@ -1,35 +1,28 @@
 import { CameraIcon } from '@heroicons/react/24/solid'
 import { User } from '@/models/crud'
-import { adventurer } from '@dicebear/collection'
-import { createAvatar } from '@dicebear/core'
 import Image from 'next/image'
 import ImageUploading, { ErrorsType, ImageListType, ImageType } from 'react-images-uploading'
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import clsx from 'clsx'
-import creator_profile from '@/images/creator_profile.svg'
+import getGeneratedAvatar from '@/utils/shared/getGeneratedAvatar'
+import useGeneratedAvatar from '@/utils/shared/getGeneratedAvatar'
+import useUserProfilePicture from '@/hooks/useUserProfilePicture'
 
 interface ProfileImageUploadProps {
   user: User
   callbackOnNewImageSet: (image: ImageType) => void
+  callBackOnImageRemove: () => void
 }
 
-const ProfileImageUpload = ({ user, callbackOnNewImageSet }: ProfileImageUploadProps) => {
+const ProfileImageUpload = ({
+  user,
+  callbackOnNewImageSet,
+  callBackOnImageRemove,
+}: ProfileImageUploadProps) => {
   // Use array because the library forces an array of ImageType
   const [uploadedProfilePicture, setUploadedProfilePicture] = useState<ImageListType>([])
 
-  const defaultProfilePhoto = useMemo(() => {
-    if (user.profilePictureUrl) {
-      return user.profilePictureUrl
-    }
-    if (user.firstName) {
-      return createAvatar(adventurer, {
-        seed: user.firstName + ' ' + user.lastName,
-        backgroundType: ['solid'],
-        backgroundColor: ['b6e3f4'],
-      }).toDataUriSync()
-    }
-    return creator_profile
-  }, [user])
+  const [currentProfilePic, setCurrentProfilePic] = useState(useUserProfilePicture(user))
 
   const onChange = async (imageList: ImageListType): Promise<void> => {
     setUploadedProfilePicture(imageList)
@@ -84,16 +77,30 @@ const ProfileImageUpload = ({ user, callbackOnNewImageSet }: ProfileImageUploadP
                 src={
                   uploadedProfilePicture.length !== 0
                     ? uploadedProfilePicture[0].dataURL
-                    : defaultProfilePhoto
+                    : currentProfilePic.profilePic
                 }
                 width={150}
                 height={150}
                 alt="PP"
+                priority
               />
               <CameraIcon className="text-brand w-6 absolute bottom-1 right-2 bg-brand-50 rounded-full" />
             </div>
-            {uploadedProfilePicture.length !== 0 && (
-              <button className="text-xs text-error-dark font-bold" onClick={onImageRemoveAll}>
+            {(uploadedProfilePicture.length !== 0 || !currentProfilePic.nowGenerated) && (
+              <button
+                className="text-xs text-error-dark font-bold"
+                onClick={() => {
+                  if (uploadedProfilePicture.length === 0) {
+                    const generatedImage = getGeneratedAvatar(user)
+                    setCurrentProfilePic({
+                      nowGenerated: true,
+                      profilePic: generatedImage,
+                    })
+                    callBackOnImageRemove()
+                  }
+                  onImageRemoveAll()
+                }}
+              >
                 Remove image
               </button>
             )}

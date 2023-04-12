@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 
 interface ImageResponse {
   image_url: string
-  success: string
+  message: string
 }
 
 export class ImageApi extends CoreApi {
@@ -14,9 +14,9 @@ export class ImageApi extends CoreApi {
   }
 
   async uploadImage({ image }: { image: File }): Promise<ApiResponse<ImageResponse>> {
-    const res = await this.client.post<ApiResponse<ImageResponse>>(`${this.path}`, {
-      image,
-    })
+    const formData = new FormData()
+    formData.append('image', image)
+    const res = await this.client.post<ApiResponse<ImageResponse>>(`${this.path}`, formData)
     return res.data
   }
 }
