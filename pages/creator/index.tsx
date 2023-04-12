@@ -84,28 +84,28 @@ export default function Home({ user }: { user: User }) {
       <main className="relative h-screen w-full">
         <CreatorMenu isOnCoursePage={true} isOnGamesPage={false} creator={user} />
         <div className="flex flex-row mt-7 justify-between">
-          <div className="flex flex-col ml-14 gap-6">
-            <div className="text-brand-700 font-semibold  text-sm md:text-base lg:text-2xl">
-              Courses
+          <div className="flex flex-col mx-6 md:mx-8 lg:mx-14 gap-6 w-full">
+            <div className="flex w-full justify-between items-center">
+              <div className="text-brand-700 font-semibold text-xl lg:text-2xl">Courses</div>
+              <div className="text-brand-700 font-semibold">
+                <button className="btn btn-secondary bg-secondary rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 py-2 h-fit">
+                  Create Course
+                </button>
+              </div>
             </div>
-            <div className="flex flex-row gap-10 justify-center">
-              <div className="text-xs md:text-sm lg:text-base text-brand"> 210 enties</div>{' '}
+            <div className="flex gap-10 justify-start items-center">
+              <div className="text-base text-brand"> 210 entries</div>{' '}
               <button className="btn btn-secondary bg-brand-300 rounded-lg text-brand-700 border-brand-700 hover:bg-secondary-800 py-1 px-4 h-fit flex gap-3">
                 <FunnelIcon className="w-4 h-4 text-brand" />
                 Filter
               </button>
             </div>
           </div>
-          <div className="text-brand-700 font-semibold  mr-12 ">
-            <button className="btn btn-secondary bg-secondary rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 py-2 h-fit">
-              Create Course
-            </button>
-          </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center mt-7 px-10 place-items-center">
-          {courses.map((course) => (
+          {courses.map((course, index) => (
             <CourseCard
-              key={course.name}
+              key={index}
               image={course.image}
               name={course.name}
               mission={course.mission}
