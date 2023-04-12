@@ -250,15 +250,15 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
       </Head>
       <main className="relative w-full">
         <CreatorMenu isOnCoursePage={false} creator={user} />
-        <div className="grid md:hidden items-center h-screen grid-cols-1 justify-items-center pt-24 pb-20 relative flex-auto">
-          <h1 className="self-end divide-x-2 divide-black">
+        <div className="grid md:hidden items-center h-screen grid-cols-1 justify-items-center py-24 px-8 relative flex-auto">
+          <h1 className="self-end divide-x-2 divide-black text-sm ">
             <span className="px-2 font-bold">Please use your Computer to View Or Edit a Game</span>
           </h1>
           <Link href="/creator/games" className="self-start my-4 text-sm btn btn-brand">
             Go Back
           </Link>
         </div>
-        <div className="w-full h-1/2 flex justify-between items-stretch">
+        <div className="w-full h-1/2 hidden justify-between items-stretch md:flex">
           <div className="flex flex-col p-8 gap-8 w-full">
             <div className="flex justify-between">
               <div className="flex flex-col text-brand-500 font-bold">
