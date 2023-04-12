@@ -67,14 +67,17 @@ export default function Home({ user }: { user: User }) {
             </div>
             <div className="flex flex-row gap-10 justify-center">
               <div className="text-xs md:text-sm lg:text-base text-brand">10 enties</div>{' '}
-              <button className="btn btn-secondary bg-brand-300 rounded-lg text-brand-700 border-brand-700 hover:bg-secondary-800 py-1 px-4 h-fit flex gap-3">
-                <FunnelIcon className="w-4 h-4 text-brand" />
+              <button className="btn btn-secondary bg-brand-300 rounded-lg text-brand-700 border-brand-700 hover:bg-secondary-800 py-1 px-4  flex gap-3 w-24 h-6 md:w-24 md:h-8 lg:w-30 lg:h-8">
+                <FunnelIcon
+                  className="
+                md:w-3 md:h-3 lg:w-4 lg:h-4 text-brand text-xs md:text-base lg:text-lg "
+                />
                 Filter
               </button>
             </div>
           </div>
           <div className="text-brand-700 font-semibold  mr-12 ">
-            <button className="btn btn-secondary bg-secondary rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 py-2 h-fit">
+            <button className="btn btn-secondary bg-secondary rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 py-2 h-fit w-fit text-xs md:text-sm lg:text-base">
               Create Game
             </button>
           </div>
