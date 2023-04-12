@@ -44,11 +44,6 @@ const CreatorMenu = ({ isOnCoursePage, creator }: CreatorMenuPros) => {
       icon: PuzzlePieceIcon,
       href: '/creator/games',
     },
-    {
-      name: 'Profile',
-      icon: UserIcon,
-      href: '/creator/profile',
-    },
   ]
 
   return (
@@ -114,6 +109,15 @@ const CreatorMenu = ({ isOnCoursePage, creator }: CreatorMenuPros) => {
       {/* Mobile menu */}
       <div className="flex sm:hidden items-center gap-2">
         <LocaleMenu colorClassName="text-brand-700" />
+        <Link href="/creator/profile">
+          <Image
+            className="rounded-full bg-white border-2 border-brand"
+            src={profilePhoto}
+            width={45}
+            height={45}
+            alt="PP"
+          />
+        </Link>
         <Popover>
           {() => (
             <>
