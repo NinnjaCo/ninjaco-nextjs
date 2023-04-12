@@ -4,6 +4,7 @@ import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
+import Alert from '@/components/shared/alert'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import Eraser from '@/components/creator/game/eraser'
 import Flag from '@/components/creator/game/flag'
@@ -75,6 +76,26 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
 
   const [toogleLimitedBlocks, setToogleLimitedBlocks] = React.useState(false)
   const [numberOfBlocks, setNumberOfBlocks] = React.useState<number | undefined>(undefined)
+  const [gameState, setGameState] = React.useState<{
+    isPlayerSet: boolean
+    isGoalSet: boolean
+  }>({
+    isPlayerSet: false,
+    isGoalSet: false,
+  })
+
+  const [alertData, setAlertData] = React.useState<{
+    message: string
+    variant: 'success' | 'info' | 'warning' | 'error'
+    open: boolean
+  }>({
+    message: '',
+    variant: 'info',
+    open: false,
+  })
+  const closeAlert = () => {
+    setAlertData({ ...alertData, open: false })
+  }
 
   const toolboxTools: ToolsElments[] = [
     {
@@ -134,6 +155,7 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
       })
       newGrid[rowIndex][colIndex].isPlayer = true
       setGameGrid(newGrid)
+      setGameState({ ...gameState, isPlayerSet: true })
     } else if (selectedTool === Tools.GOAL) {
       // Only 1 goal allowed
       const newGrid = gameGrid.map((row) => {
@@ -146,6 +168,7 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
       })
       newGrid[rowIndex][colIndex].isGoal = true
       setGameGrid(newGrid)
+      setGameState({ ...gameState, isGoalSet: true })
     } else if (selectedTool === Tools.WALL) {
       const newGrid = gameGrid.map((row) => {
         return row.map((cell) => {
@@ -186,7 +209,36 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
   }
 
   const saveGame = async () => {
-    console.log('Saving game')
+    closeAlert()
+
+    if (!gameState.isPlayerSet) {
+      setAlertData({
+        message: 'Please set a player on the grid before saving',
+        variant: 'error',
+        open: true,
+      })
+      return
+    }
+    if (!gameState.isGoalSet) {
+      setAlertData({
+        message: 'Please set a goal on the grid before saving',
+        variant: 'error',
+        open: true,
+      })
+      return
+    }
+
+    // check if game title is valid
+    if (gameTitle === '' || gameTitle.length < 3) {
+      setAlertData({
+        message: 'Please enter a game title with at least 3 characters',
+        variant: 'error',
+        open: true,
+      })
+      return
+    }
+
+    // Save game
   }
 
   return (
@@ -208,9 +260,17 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
         </div>
         <div className="w-full h-1/2 flex justify-between items-stretch">
           <div className="flex flex-col p-8 gap-8 w-full">
-            <div className="font-bold text-brand-500 flex flex-col">
-              <p className="text-lg md:text-xl lg:text-2xl">Create game level</p>
-              <Image src={underLineImage} alt="Waved Line" className="w-40" />
+            <div className="flex justify-between">
+              <div className="flex flex-col text-brand-500 font-bold">
+                <p className="text-lg md:text-xl lg:text-2xl">Create game level</p>
+                <Image src={underLineImage} alt="Waved Line" className="w-40" />
+              </div>
+              <Alert
+                open={alertData.open}
+                message={alertData.message}
+                variant={alertData.variant}
+                close={closeAlert}
+              />
             </div>
             <Input
               name="name"
