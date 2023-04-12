@@ -2,7 +2,7 @@ import Image from 'next/image'
 import profileIcon from '@/images/profileIcon.svg'
 import suitCase from '@/images/suitCase.svg'
 
-const CoursesComponent: React.FC<{ image: string; name: string; mission: string; age: string }> = ({
+const CourseCard: React.FC<{ image: string; name: string; mission: string; age: string }> = ({
   image,
   name,
   mission,
@@ -30,4 +30,4 @@ const CoursesComponent: React.FC<{ image: string; name: string; mission: string;
   )
 }
 
-export default CoursesComponent
+export default CourseCard
