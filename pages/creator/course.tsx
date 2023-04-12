@@ -4,6 +4,7 @@ import { authOptions } from '../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import Head from 'next/head'
+import Image from 'next/image'
 
 export default function Course({ user }: { user: User }) {
   return (
@@ -20,6 +21,28 @@ export default function Course({ user }: { user: User }) {
             creator: user,
           }}
         />
+        <div className="flex  items-center ml-7 mt-10 justify-between">
+          <div className="flex justify-start gap-5">
+            <Image
+              src="https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png"
+              alt="course img "
+              width={100}
+              height={100}
+              className="rounded-xl md:block hidden"
+            />
+            <div className="flex flex-col gap-9">
+              <div className=" text-brand font-semibold text-base md:text-xl">Robotics 101</div>
+              <div className=" text-brand font-medium text-xs md:text-sm">
+                This course will lorem ipsum lorem ipsum lorem <br />
+                ipsumThis course will lorem ipsum lorem ipsum lorem ipsum
+              </div>
+            </div>
+          </div>
+
+          <button className=" text-sm md:text-base font-semibold  mr-6 md:mr-12 px-2 md:px-6 py-1 md:py-2 btn btn-secondary bg-secondary rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit">
+            Edit Course
+          </button>
+        </div>
       </main>
     </>
   )
