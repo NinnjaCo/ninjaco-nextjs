@@ -44,6 +44,21 @@ const CreatorMenu = ({ isOnCoursePage, creator }: CreatorMenuPros) => {
       icon: PuzzlePieceIcon,
       href: '/creator/games',
     },
+    {
+      name: 'Profile',
+      icon: () => {
+        return (
+          <Image
+            className="rounded-full bg-white border-2 border-brand"
+            src={profilePhoto}
+            width={45}
+            height={45}
+            alt="PP"
+          />
+        )
+      },
+      href: '/creator/profile',
+    },
   ]
 
   return (
@@ -108,7 +123,7 @@ const CreatorMenu = ({ isOnCoursePage, creator }: CreatorMenuPros) => {
 
       {/* Mobile menu */}
       <div className="flex sm:hidden items-center gap-2">
-        <LocaleMenu colorClassName="text-brand-700" />
+        <LocaleMenu colorClassName="text-brand-700" />{' '}
         <Popover>
           {() => (
             <>
@@ -118,7 +133,7 @@ const CreatorMenu = ({ isOnCoursePage, creator }: CreatorMenuPros) => {
                 tabIndex={0}
                 aria-label="Change language"
               >
-                <Bars3Icon className="w-8 h-8 cursor-pointer" />
+                <Bars3Icon className="w-9 h-9 cursor-pointer text-brand" />
               </Popover.Button>
               <Transition
                 as={Fragment}
@@ -138,7 +153,7 @@ const CreatorMenu = ({ isOnCoursePage, creator }: CreatorMenuPros) => {
                           href={item.href}
                           className="px-4 py-4  flex gap-4 items-center transition duration-150 ease-in-out hover:bg-brand-400 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
                         >
-                          <item.icon className="h-6 w-6 text-brand-700" />
+                          <item.icon className="h-7 w-7 text-brand-700" />
                           <p className="text-sm font-medium text-brand-700">{item.name}</p>
                         </Link>
                       ))}
@@ -149,15 +164,6 @@ const CreatorMenu = ({ isOnCoursePage, creator }: CreatorMenuPros) => {
             </>
           )}
         </Popover>
-        <Link href="/creator/profile">
-          <Image
-            className="rounded-full bg-white border-2 border-brand"
-            src={profilePhoto}
-            width={45}
-            height={45}
-            alt="PP"
-          />
-        </Link>
       </div>
     </div>
   )
