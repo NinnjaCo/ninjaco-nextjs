@@ -101,6 +101,7 @@ export default function Profile({ serverUser }: ServerProps) {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors, dirtyFields },
   } = useForm<AdminProfileFormDataType>({
     resolver: yupResolver(AdminProfileFormSchema),
@@ -139,7 +140,7 @@ export default function Profile({ serverUser }: ServerProps) {
     }
 
     try {
-      await new UserApi(session).update(serverUser._id, dirtyData)
+      const res = await new UserApi(session).update(serverUser._id, dirtyData)
 
       // update user using react-query
       // refetch the user data
@@ -148,6 +149,15 @@ export default function Profile({ serverUser }: ServerProps) {
         message: 'Profile updated successfully',
         variant: 'success',
         open: true,
+      })
+      // reset react hook form
+      await reset({
+        firstName: res.payload.firstName,
+        lastName: res.payload.lastName,
+        dateOfBirth: new Date(res.payload.dateOfBirth),
+        email: res.payload.email,
+        password: '',
+        passwordConfirmation: '',
       })
       setSaveButtonDisabled(false)
     } catch (error) {
