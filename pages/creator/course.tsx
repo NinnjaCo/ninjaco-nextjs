@@ -21,6 +21,7 @@ export default function Course({ user }: { user: User }) {
             creator: user,
           }}
         />
+        {/* image description and button */}
         <div className="flex  items-center ml-7 mt-10 justify-between">
           <div className="flex justify-start gap-5">
             <Image
@@ -42,6 +43,22 @@ export default function Course({ user }: { user: User }) {
           <button className=" text-sm md:text-base font-semibold  mr-6 md:mr-12 px-2 md:px-6 py-1 md:py-2 btn btn-secondary bg-secondary rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit">
             Edit Course
           </button>
+        </div>
+        <div className="flex ">
+          <div className="flex flex-col gap-5 ml-7 mt-10">
+            <div className="flex gap-3 items-center">
+              <div className=" text-brand font-medium text-xs md:text-sm">Course type:</div>
+              <div className="text-brand-800 font-semibold text-sm md:text-base">ARDUINO</div>
+            </div>
+            <div className="flex gap-3 items-center">
+              <div className=" text-brand font-medium text-xs md:text-sm">Age range:</div>
+              <div className="text-brand-800 font-semibold text-sm md:text-base">7+</div>
+            </div>
+            <div className="flex gap-3 items-center">
+              <div className=" text-brand font-medium text-xs md:text-sm">Course tags:</div>
+              <div className="bg-brand-100 px-2 py-1 rounded-lg w-fit h-fit text-sm">basics</div>
+            </div>
+          </div>
         </div>
       </main>
     </>
