@@ -2,6 +2,7 @@ import * as yup from 'yup'
 import { AuthError } from '@/models/shared'
 import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/outline'
 import { Input } from '@/components/forms/input'
+import { RoleEnum } from '@/models/crud'
 import { authOptions } from '../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
@@ -9,6 +10,7 @@ import { signIn } from 'next-auth/react'
 import { useAuthApi } from '@/utils/api/auth'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
+import { validateTokenRoleRequest } from '@/middleware/validateTokenRole'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Alert from '@/components/shared/alert'
 import AuthCard from '@/components/auth/authCard'
@@ -241,6 +243,31 @@ export const getServerSideProps = async (context) => {
 
   const session = await getServerSession(req, res, authOptions)
   if (session) {
+    const canUserAccessCreatorPage = await validateTokenRoleRequest(
+      [RoleEnum.CREATOR, RoleEnum.ADMIN],
+      session.accessToken
+    )
+    if (canUserAccessCreatorPage && canUserAccessCreatorPage.payload) {
+      const canUserAccessAdminPage = await validateTokenRoleRequest(
+        [RoleEnum.ADMIN],
+        session.accessToken
+      )
+      if (canUserAccessAdminPage && canUserAccessAdminPage.payload) {
+        return {
+          redirect: {
+            destination: '/admin',
+            permanent: false,
+          },
+        }
+      }
+      return {
+        redirect: {
+          destination: '/creator',
+          permanent: false,
+        },
+      }
+    }
+
     return {
       redirect: {
         destination: (query.redirectTo as string | undefined) || '/',

@@ -35,6 +35,9 @@
       "@/images/*": [
         "public/images/*"
       ],
+      "@/middleware/*": [
+        "middleware/*"
+      ],
     },
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
