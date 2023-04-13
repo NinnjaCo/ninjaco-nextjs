@@ -249,7 +249,7 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main className="relative w-full">
-        <CreatorMenu isOnCoursePage={false} creator={user} />
+        <CreatorMenu isOnCoursePage={false} isOnGamesPage={true} creator={user} />
         <div className="grid md:hidden items-center h-screen grid-cols-1 justify-items-center py-24 px-8 relative flex-auto">
           <h1 className="self-end divide-x-2 divide-black text-sm ">
             <span className="px-2 font-bold">Please use your Computer to View Or Edit a Game</span>

@@ -2,6 +2,8 @@ import * as yup from 'yup'
 import { AuthError } from '@/models/shared'
 import { AxiosError } from 'axios'
 import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/solid'
+import { ImageApi } from '@/utils/api/images/image-upload.api'
+import { ImageType } from 'react-images-uploading'
 import { Input } from '@/components/forms/input'
 import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
@@ -13,17 +15,18 @@ import { useQuery, useQueryClient } from 'react-query'
 import { useSession } from 'next-auth/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Alert from '@/components/shared/alert'
+import CreatorMenu from '@/components/creator/creatorMenu'
 import DatePickerWithHookForm from '@/components/forms/datePickerWithHookForm'
 import Head from 'next/head'
-import React from 'react'
-import SideMenu from '@/components/admin/sideMenu'
+import ProfileImageUpload from '@/components/forms/profileImageUpload'
+import React, { useState } from 'react'
 import useTranslation from '@/hooks/useTranslation'
 
 interface ServerProps {
   serverUser: User
 }
 
-type AdminProfileFormDataType = {
+type CreatorProfileFormDataType = {
   firstName: string
   lastName: string
   dateOfBirth: Date
@@ -31,12 +34,18 @@ type AdminProfileFormDataType = {
   password: string
   passwordConfirmation: string
 }
+
+const useNonNullUser = (user: User | undefined, serverUser: User) => {
+  if (user === undefined) return serverUser
+  return user
+}
+
 export default function Profile({ serverUser }: ServerProps) {
   const queryClient = useQueryClient()
   const { data: session } = useSession()
   const t = useTranslation()
 
-  const { data: user } = useQuery<User>(
+  const { data: fetchedUser } = useQuery<User>(
     ['user', session],
     async () => {
       const response = await new UserApi(session).findOne(serverUser._id)
@@ -58,6 +67,8 @@ export default function Profile({ serverUser }: ServerProps) {
     }
   )
 
+  const user = useNonNullUser(fetchedUser, serverUser)
+
   const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false)
 
   const [alertData, setAlertData] = React.useState<{
@@ -73,7 +84,7 @@ export default function Profile({ serverUser }: ServerProps) {
     setAlertData({ ...alertData, open: false })
   }
 
-  const AdminProfileFormSchema = yup
+  const CreatorProfileFormSchema = yup
     .object()
     .shape(
       {
@@ -103,8 +114,8 @@ export default function Profile({ serverUser }: ServerProps) {
     control,
     reset,
     formState: { errors, dirtyFields },
-  } = useForm<AdminProfileFormDataType>({
-    resolver: yupResolver(AdminProfileFormSchema),
+  } = useForm<CreatorProfileFormDataType>({
+    resolver: yupResolver(CreatorProfileFormSchema),
     defaultValues: {
       firstName: user?.firstName || serverUser.firstName,
       lastName: user?.lastName || serverUser.lastName,
@@ -116,20 +127,20 @@ export default function Profile({ serverUser }: ServerProps) {
   })
 
   // Handle form submission
-  const submitHandler = async (data: AdminProfileFormDataType) => {
+  const submitHandler = async (data: CreatorProfileFormDataType) => {
     if (!user) return
 
     // check the dirty fields and only send the data that has been changed
     setSaveButtonDisabled(true)
 
     const dirtyFieldsArray = Object.keys(dirtyFields)
-    const dirtyData = {}
+    let dirtyData = {}
     dirtyFieldsArray.forEach((field) => {
       dirtyData[field] = data[field]
     })
 
     // if empty object, i.e. no changes made, return
-    if (dirtyFieldsArray.length === 0) {
+    if (dirtyFieldsArray.length === 0 && profilePic === undefined && !user.profilePicture) {
       setSaveButtonDisabled(false)
       setAlertData({
         message: 'No changes made',
@@ -140,6 +151,32 @@ export default function Profile({ serverUser }: ServerProps) {
     }
 
     try {
+      setAlertData({
+        message: 'Uploading ...',
+        variant: 'info',
+        open: true,
+      })
+
+      // They change the profile pic
+      if (profilePic !== undefined && profilePic.file !== undefined) {
+        // Upload Image and get url
+        const imageUploadRes = await new ImageApi(session).uploadImage({ image: profilePic.file })
+
+        // add url to dirty data
+        dirtyData = {
+          ...dirtyData,
+          profilePicture: imageUploadRes.payload.image_url,
+        }
+      }
+
+      // They remove the profile pic that they uploaded brefore and revert to the default
+      if (profilePic === undefined && user.profilePicture) {
+        dirtyData = {
+          ...dirtyData,
+          profilePicture: '',
+        }
+      }
+
       const res = await new UserApi(session).update(serverUser._id, dirtyData)
 
       // update user using react-query
@@ -179,20 +216,38 @@ export default function Profile({ serverUser }: ServerProps) {
     }
   }
 
+  // Use array because the library forces an array of ImageType
+  const [profilePic, setProfilePic] = useState<ImageType | undefined>(undefined)
+
+  const callBackOnImageUpload = (image: ImageType) => {
+    setProfilePic(image)
+  }
+  const callBackOnImageRemove = () => {
+    setProfilePic(undefined)
+  }
+
   return (
     <>
       <Head>
-        <title>NinjaCo | Admin Profile</title>
+        <title>NinjaCo | Creator Profile</title>
         <meta name="description" content="Leading online platform for visual programming" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <div className="flex w-full h-screen ">
-        <SideMenu higlightProfile={true} />
-        <main className="flex w-full h-screen overflow-y-scroll lg:overflow-hidden">
+
+      <main className="relative h-screen w-full">
+        <CreatorMenu isOnCoursePage={false} isOnGamesPage={false} creator={user} />
+        <div className="flex items-start gap-4 w-full py-8 px-4 flex-col md:flex-row">
+          <div className="px-8 w-full md:w-auto flex flex-col items-center justify-center md:justify-start">
+            <ProfileImageUpload
+              user={user}
+              callbackOnNewImageSet={callBackOnImageUpload}
+              callBackOnImageRemove={callBackOnImageRemove}
+            />
+          </div>
           <form
             id="form"
             onSubmit={handleSubmit(submitHandler)}
-            className="flex flex-col w-full h-full gap-6 md:gap-12 py-8 px-4"
+            className="flex flex-col w-full gap-6 md:gap-12"
           >
             <div className="flex w-full justify-between items-center">
               <div className="text-brand text-lg md:text-xl lg:text-2xl font-semibold">
@@ -286,8 +341,8 @@ export default function Profile({ serverUser }: ServerProps) {
               </div>
             </div>
           </form>
-        </main>
-      </div>
+        </div>
+      </main>
     </>
   )
 }

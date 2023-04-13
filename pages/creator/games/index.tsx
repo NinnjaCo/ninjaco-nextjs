@@ -54,12 +54,7 @@ export default function Home({ user }: { user: User }) {
       </Head>
 
       <main className="relative h-screen w-full">
-        <CreatorMenu
-          {...{
-            isOnCoursePage: false,
-            creator: user,
-          }}
-        />
+        <CreatorMenu isOnCoursePage={false} isOnGamesPage={true} creator={user} />
         <div className="flex flex-row mt-7 justify-between">
           <div className="flex flex-col mx-6 md:mx-8 lg:mx-14 gap-6 w-full">
             <div className="flex w-full justify-between items-center">
