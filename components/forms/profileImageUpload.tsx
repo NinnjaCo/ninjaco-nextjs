@@ -5,7 +5,6 @@ import ImageUploading, { ErrorsType, ImageListType, ImageType } from 'react-imag
 import React, { useState } from 'react'
 import clsx from 'clsx'
 import getGeneratedAvatar from '@/utils/shared/getGeneratedAvatar'
-import useGeneratedAvatar from '@/utils/shared/getGeneratedAvatar'
 import useUserProfilePicture from '@/hooks/useUserProfilePicture'
 
 interface ProfileImageUploadProps {

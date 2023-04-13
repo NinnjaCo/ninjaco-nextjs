@@ -586,6 +586,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
             placeholder="John"
             StartIcon={UserIcon}
             error={errors.firstName?.message}
+            isRequired={true}
           />
           <Input
             {...register('lastName')}
@@ -593,12 +594,14 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
             placeholder="Smith"
             StartIcon={UserIcon}
             error={errors.lastName?.message}
+            isRequired={true}
           />
           <DatePickerWithHookForm
             control={control}
             name={register('dateOfBirth').name} // we only need the "name" prop
             label={'Date of Birth'}
             error={errors.dateOfBirth?.message}
+            isRequired={true}
           />
           <Input
             {...register('email')}
@@ -606,6 +609,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
             placeholder="Email"
             StartIcon={EnvelopeIcon}
             error={errors.email?.message}
+            isRequired={true}
           />
           <Input
             {...register('password')}
@@ -614,6 +618,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
             placeholder="Password"
             StartIcon={LockClosedIcon}
             error={errors.password?.message}
+            isRequired={true}
           />
           <Input
             {...register('passwordConfirmation')}
@@ -622,6 +627,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
             placeholder="Confirm Password"
             StartIcon={LockClosedIcon}
             error={errors.passwordConfirmation?.message}
+            isRequired={true}
           />
           <button
             type="submit"

@@ -155,6 +155,7 @@ const ResetPassword = (props: ServerProps) => {
               StartIcon={LockClosedIcon}
               error={errors.password?.message}
               disabled={props.errorMessage !== undefined}
+              isRequired={true}
             />
             <Input
               {...register('passwordConfirmation')}
@@ -164,6 +165,7 @@ const ResetPassword = (props: ServerProps) => {
               StartIcon={LockClosedIcon}
               error={errors.passwordConfirmation?.message}
               disabled={props.errorMessage !== undefined}
+              isRequired={true}
             />
             <button
               type="submit"

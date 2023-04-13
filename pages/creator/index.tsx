@@ -6,6 +6,7 @@ import { getServerSession } from 'next-auth'
 import CourseCard from '@/components/creator/courseCard'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import Head from 'next/head'
+import Link from 'next/link'
 
 export default function Home({ user }: { user: User }) {
   const courses = [
@@ -88,9 +89,12 @@ export default function Home({ user }: { user: User }) {
             <div className="flex w-full justify-between items-center">
               <div className="text-brand-700 font-semibold text-xl lg:text-2xl">Courses</div>
               <div className="text-brand-700 font-semibold">
-                <button className="btn btn-secondary bg-secondary rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 py-2 h-fit">
+                <Link
+                  className="btn btn-secondary bg-secondary rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 py-2 h-fit"
+                  href="/creator/create/course"
+                >
                   Create Course
-                </button>
+                </Link>
               </div>
             </div>
             <div className="flex gap-10 justify-start items-center">

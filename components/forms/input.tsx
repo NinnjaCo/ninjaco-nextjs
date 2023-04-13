@@ -23,15 +23,16 @@ type InputProps = React.DetailedHTMLProps<
       titleId?: string
     } & React.RefAttributes<SVGSVGElement>
   >
+  isRequired?: boolean
 }
 
 // eslint-disable-next-line react/display-name
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ classes, className, label, error, name, StartIcon, EndIcon, ...others }, ref) => (
+  ({ classes, className, label, error, name, StartIcon, EndIcon, isRequired, ...others }, ref) => (
     <div className={classes?.root}>
       {label && (
         <label htmlFor={name} className="text-sm font-medium text-brand-500">
-          {label}
+          {label} {isRequired && <span className="text-error">*</span>}
         </label>
       )}
       <div className="relative mt-1 rounded-md shadow-sm">

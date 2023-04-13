@@ -10,13 +10,20 @@ interface DatePickerProps {
   name: string
   label: string
   error: string | undefined
+  isRequired?: boolean
 }
-const DatePickerWithHookForm: React.FC<DatePickerProps> = ({ control, name, label, error }) => {
+const DatePickerWithHookForm: React.FC<DatePickerProps> = ({
+  control,
+  name,
+  label,
+  error,
+  isRequired,
+}) => {
   return (
     <div className="flex flex-col gap-2">
       {label && (
         <label htmlFor={name} className="text-sm font-medium text-brand-500">
-          {label}
+          {label} {isRequired && <span className="text-error">*</span>}
         </label>
       )}
       <Controller

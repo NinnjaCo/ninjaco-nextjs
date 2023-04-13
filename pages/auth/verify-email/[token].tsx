@@ -155,6 +155,7 @@ const VerifyEmail = (props: ServerProps) => {
               StartIcon={LockClosedIcon}
               error={errors.code?.message}
               disabled={props.errorMessage !== undefined}
+              isRequired={true}
             />
             <button
               type="submit"
