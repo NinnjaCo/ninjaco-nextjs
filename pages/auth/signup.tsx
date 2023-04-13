@@ -173,6 +173,7 @@ const Signup = (props: ServerProps) => {
               placeholder="John"
               StartIcon={UserIcon}
               error={errors.firstName?.message}
+              isRequired={true}
             />
             <Input
               {...register('lastName')}
@@ -180,12 +181,14 @@ const Signup = (props: ServerProps) => {
               placeholder="Smith"
               StartIcon={UserIcon}
               error={errors.lastName?.message}
+              isRequired={true}
             />
             <DatePickerWithHookForm
               control={control}
               name={register('dateOfBirth').name} // we only need the "name" prop
               label={t.signUp.dateOfBirth as string}
               error={errors.dateOfBirth?.message}
+              isRequired={true}
             />
             <Input
               {...register('email')}
@@ -193,6 +196,7 @@ const Signup = (props: ServerProps) => {
               placeholder={t.signUp.email as string}
               StartIcon={EnvelopeIcon}
               error={errors.email?.message}
+              isRequired={true}
             />
             <Input
               {...register('password')}
@@ -201,6 +205,7 @@ const Signup = (props: ServerProps) => {
               placeholder={t.signUp.password as string}
               StartIcon={LockClosedIcon}
               error={errors.password?.message}
+              isRequired={true}
             />
             <Input
               {...register('passwordConfirmation')}
@@ -209,6 +214,7 @@ const Signup = (props: ServerProps) => {
               placeholder={t.signUp.confirmPassword as string}
               StartIcon={LockClosedIcon}
               error={errors.passwordConfirmation?.message}
+              isRequired={true}
             />
             <button
               type="submit"
