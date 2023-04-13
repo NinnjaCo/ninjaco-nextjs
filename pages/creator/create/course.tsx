@@ -66,11 +66,15 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
     resolver: yupResolver(CreateCourseFormSchema),
     defaultValues: {
       courseType: CourseType.ARDUINO,
+      courseAgeRange: [],
       coursePrerequisites: [],
+      courseObjectives: [],
     },
   })
 
-  const onSubmitHandler = async (data: CreateCourseFormDataType) => {}
+  const onSubmitHandler = async (data: CreateCourseFormDataType) => {
+    console.log(data)
+  }
   return (
     <>
       <Head>
@@ -99,6 +103,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
               name={register('courseType').name}
               selectList={Object.values(CourseType)}
               isRequired={true}
+              rootClassName="w-48"
             />
             <Input
               {...register('courseTitle')}
@@ -125,6 +130,17 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
               label="Course Age Range"
               helperText="Enter a range and press enter to add it"
               placeholder="Course Age Range"
+              formatter={(ageRange) => {
+                //   should be number-number or number
+                const ageRangeArray = ageRange.split('-')
+                if (ageRangeArray.length === 2) {
+                  return `${ageRangeArray[0]} - ${ageRangeArray[1]}`
+                } else if (ageRangeArray.length === 1) {
+                  return `${ageRangeArray[0]}+`
+                } else {
+                  return ageRange
+                }
+              }}
             />
             <InputTags
               control={control}
