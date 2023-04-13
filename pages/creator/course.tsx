@@ -1,3 +1,4 @@
+import { FunnelIcon } from '@heroicons/react/20/solid'
 import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
 import { authOptions } from '../api/auth/[...nextauth]'
@@ -5,6 +6,7 @@ import { getServerSession } from 'next-auth'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import Head from 'next/head'
 import Image from 'next/image'
+import MissionCard from '@/components/creator/missionCard'
 
 export default function Course({ user }: { user: User }) {
   return (
@@ -40,12 +42,12 @@ export default function Course({ user }: { user: User }) {
             </div>
           </div>
 
-          <button className=" text-sm md:text-base font-semibold  mr-6 md:mr-12 px-2 md:px-6 py-1 md:py-2 btn btn-secondary bg-secondary rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit">
+          <button className=" text-sm md:text-base font-semibold  mr-6 md:mr-12 px-2 md:px-7 py-1 md:py-2 btn btn-secondary bg-secondary rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit">
             Edit Course
           </button>
         </div>
         {/* course type, age range, course tags, course prerequisites, course objectives */}
-        <div className="flex justify-between ml-7 mt-10 gap-10">
+        <div className="flex justify-between ml-7 mt-10 gap-20">
           <div className="flex flex-col gap-5 ">
             <div className="flex gap-3 items-center">
               <div className=" text-brand font-medium text-xs md:text-sm">Course type:</div>
@@ -60,7 +62,7 @@ export default function Course({ user }: { user: User }) {
               <div className="bg-brand-100 px-2  rounded-xl w-fit h-fit text-xs">basics</div>
             </div>
           </div>
-          <div className="flex flex-col gap-5 mr-80">
+          <div className="flex flex-col gap-5 md:mr-24 lg:mr-32 xl:mr-80">
             <div className="flex flex-col gap-2">
               <div className=" text-brand font-medium text-xs md:text-sm">
                 Course prerequisites:
@@ -76,6 +78,25 @@ export default function Course({ user }: { user: User }) {
               </div>
             </div>
           </div>
+        </div>
+        <div className="flex justify-between ml-7 mt-10 gap-10">
+          <div className="flex gap-5 items-center">
+            <div className="text-brand font-medium text-xs">10 missions</div>
+            <button className="btn btn-secondary bg-brand-300 rounded-lg text-brand-700 border-brand-700 hover:bg-secondary-800 py-1 px-4 flex gap-3">
+              <FunnelIcon className="w-4 h-4 text-brand" />
+              Filter
+            </button>
+          </div>
+          <button className=" text-sm md:text-base font-semibold  mr-6 md:mr-12 px-2 md:px-6 py-1 md:py-2 btn btn-secondary bg-secondary rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit">
+            Add mission
+          </button>
+        </div>
+        <div className="ml-7 mt-10">
+          <MissionCard
+            image="https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png"
+            name="hello"
+            levels="7"
+          />
         </div>
       </main>
     </>

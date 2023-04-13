@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import suitCase from '@/images/suitCase.svg'
 
-const CourseCard: React.FC<{ image: string; name: string; levels: string }> = ({
+const MissionCard: React.FC<{ image: string; name: string; levels: string }> = ({
   image,
   name,
   levels,
@@ -23,4 +23,4 @@ const CourseCard: React.FC<{ image: string; name: string; levels: string }> = ({
   )
 }
 
-export default CourseCard
+export default MissionCard
