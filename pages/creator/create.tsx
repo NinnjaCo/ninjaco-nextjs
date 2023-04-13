@@ -1,5 +1,4 @@
 import * as yup from 'yup'
-import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/outline'
 import { ImageType } from 'react-images-uploading'
 import { Input } from '@/components/forms/input'
 import { TextArea } from '@/components/forms/textArea'
@@ -11,7 +10,7 @@ import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Alert from '@/components/shared/alert'
-import CreateCourseOrEditCard from '@/components/creator/creationCard'
+import CreateResourceCard from '@/components/creator/creationCard'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import Head from 'next/head'
 import InputTags from '@/components/forms/inputTags'
@@ -89,7 +88,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
       </Head>
       <main className="w-full">
         <CreatorMenu creator={user} isOnCoursePage={true} isOnGamesPage={false} />
-        <CreateCourseOrEditCard
+        <CreateResourceCard
           title="Create Course"
           underLineImage={underLineImage}
           titleImage={floatingLegos}
@@ -191,7 +190,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
               </button>
             </div>
           </form>
-        </CreateCourseOrEditCard>
+        </CreateResourceCard>
       </main>
     </>
   )
