@@ -58,7 +58,6 @@ const SingleImageUpload = ({
             {({ onImageUpload, onImageRemoveAll, isDragging, dragProps, errors }) => (
               <>
                 <div
-                  {...dragProps}
                   className={clsx(
                     'flex flex-col items-center justify-center gap-4 h-fit w-fit rounded p-2 bg-brand-50',
                     {
