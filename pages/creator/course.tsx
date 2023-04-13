@@ -44,6 +44,7 @@ export default function Course({ user }: { user: User }) {
             Edit Course
           </button>
         </div>
+        {/* course type, age range, course tags, course prerequisites, course objectives */}
         <div className="flex justify-between ml-7 mt-10 gap-10">
           <div className="flex flex-col gap-5 ">
             <div className="flex gap-3 items-center">
