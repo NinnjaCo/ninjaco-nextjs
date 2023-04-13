@@ -12,6 +12,7 @@ interface SelectProps {
   label: string
   error: string | undefined
   isRequired?: boolean
+  rootClassName?: string
 }
 
 export default function Select({
@@ -21,9 +22,10 @@ export default function Select({
   error,
   selectList,
   isRequired,
+  rootClassName,
 }: SelectProps) {
   return (
-    <div className="flex flex-col gap-2 z-10">
+    <div className={clsx('flex flex-col gap-2 z-10', rootClassName)}>
       {label && (
         <label htmlFor={name} className="text-sm font-medium text-brand-500">
           {label} {isRequired && <span className="text-error">*</span>}
@@ -42,7 +44,7 @@ export default function Select({
             >
               <div className="relative mt-1">
                 <Listbox.Button className="block w-full px-4 py-2 text-brand-700 placeholder-brand-400 border border-brand-300 rounded-md focus:outline-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm">
-                  <span className="block truncate">{field.value}</span>
+                  <span className="block truncate text-left text-brand">{field.value}</span>
                   {!error && (
                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                       <ChevronUpDownIcon className="h-5 w-5 text-brand-400" aria-hidden="true" />
@@ -72,9 +74,9 @@ export default function Select({
                         {({ selected }) => (
                           <>
                             <span
-                              className={`block truncate ${
-                                selected ? 'font-medium' : 'font-normal'
-                              }`}
+                              className={clsx('block truncate font-normal', {
+                                'font-medium': selected,
+                              })}
                             >
                               {option}
                             </span>
