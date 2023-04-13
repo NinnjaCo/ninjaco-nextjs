@@ -21,12 +21,7 @@ const SessionManager: FC<{ serverSession?: Session | null; children }> = ({
   }, [serverSession])
 
   return (
-    <SessionProvider
-      key={session?.id}
-      session={session}
-      refetchInterval={15.1 * 60}
-      refetchOnWindowFocus={true}
-    >
+    <SessionProvider key={session?.id} session={session} refetchOnWindowFocus={true}>
       {children}
     </SessionProvider>
   )
