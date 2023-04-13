@@ -70,6 +70,7 @@ export const authOptions: AuthOptions = {
           const exp_safe_zone = exp - 5 * 60
           if (exp_safe_zone * 1000 < Date.now()) {
             // If token is expired, refresh it
+            console.log('REFRESHING TOKEN', token)
             try {
               const res = await new AuthApi().refresh(token.refreshToken)
               return {
@@ -99,6 +100,7 @@ export const authOptions: AuthOptions = {
       }
     },
     session: async ({ session, token }) => {
+      console.log('IN SESSION CALLBACK', session, token)
       session.accessToken = token.accessToken
       session.refreshToken = token.refreshToken
       session.id = token.sub ?? token.id

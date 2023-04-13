@@ -7,6 +7,7 @@ import Chip from '@/components/shared/chip'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import Head from 'next/head'
 import Image from 'next/image'
+import Link from 'next/link'
 import MissionCard from '@/components/creator/missionCard'
 
 export default function Course({ user }: { user: User }) {
@@ -76,9 +77,12 @@ export default function Course({ user }: { user: User }) {
         <div className="flex flex-col px-6 pb-12 pt-6 gap-6">
           <div className="flex justify-between gap-10">
             <div className="font-semibold text-2xl">Missions</div>
-            <button className=" text-xs md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit">
+            <Link
+              className=" text-xs md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit"
+              href={'/creator/blabla/create'}
+            >
               Add Mission
-            </button>
+            </Link>
           </div>
           <div className="flex gap-4 items-center">
             <div className="text-brand font-medium text-xs">10 missions</div>
