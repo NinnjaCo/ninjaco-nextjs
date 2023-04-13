@@ -44,8 +44,8 @@ export default function Course({ user }: { user: User }) {
             Edit Course
           </button>
         </div>
-        <div className="flex ">
-          <div className="flex flex-col gap-5 ml-7 mt-10">
+        <div className="flex justify-between ml-7 mt-10 gap-10">
+          <div className="flex flex-col gap-5 ">
             <div className="flex gap-3 items-center">
               <div className=" text-brand font-medium text-xs md:text-sm">Course type:</div>
               <div className="text-brand-800 font-semibold text-sm md:text-base">ARDUINO</div>
@@ -56,7 +56,23 @@ export default function Course({ user }: { user: User }) {
             </div>
             <div className="flex gap-3 items-center">
               <div className=" text-brand font-medium text-xs md:text-sm">Course tags:</div>
-              <div className="bg-brand-100 px-2 py-1 rounded-lg w-fit h-fit text-sm">basics</div>
+              <div className="bg-brand-100 px-2  rounded-xl w-fit h-fit text-xs">basics</div>
+            </div>
+          </div>
+          <div className="flex flex-col gap-5 mr-80">
+            <div className="flex flex-col gap-2">
+              <div className=" text-brand font-medium text-xs md:text-sm">
+                Course prerequisites:
+              </div>
+              <div className="bg-brand-100 px-2  rounded-xl w-fit h-fit text-xs">
+                Basic Computer Knowledge
+              </div>
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className=" text-brand font-medium text-xs md:text-sm">Course objectives:</div>
+              <div className="bg-brand-100 px-2  rounded-xl w-fit h-fit text-xs">
+                Learn about different types of encryption/decryption
+              </div>
             </div>
           </div>
         </div>
