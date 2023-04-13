@@ -3,7 +3,6 @@ import * as React from 'react'
 import * as yup from 'yup'
 import { AdminAlertDialog } from '@/components/admin/dialog'
 import { Alert } from '@/components/shared/alert'
-import { AuthApi } from '@/utils/api/auth/auth.api'
 import { AuthError } from '@/models/shared'
 import { AxiosError } from 'axios'
 import { ChevronRightIcon, PencilIcon } from '@heroicons/react/24/solid'
@@ -302,6 +301,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
     resetPasswordState,
     queryClient,
     session,
+    emailApi,
   ])
 
   const getDialogBody = useCallback(() => {

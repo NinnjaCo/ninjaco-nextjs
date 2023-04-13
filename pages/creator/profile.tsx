@@ -169,6 +169,7 @@ export default function Profile({ serverUser }: ServerProps) {
         }
       }
 
+      // They remove the profile pic that they uploaded brefore and revert to the default
       if (profilePic === undefined && user.profilePicture) {
         dirtyData = {
           ...dirtyData,

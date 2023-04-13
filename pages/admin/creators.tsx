@@ -27,7 +27,6 @@ import { useCallback, useMemo } from 'react'
 import { useEmailApi } from '@/utils/api/email/email.api'
 import { useForm } from 'react-hook-form'
 import { useQuery, useQueryClient } from 'react-query'
-import { useRouter } from 'next-router-mock'
 import { useSession } from 'next-auth/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import DatePickerWithHookForm from '@/components/forms/datePickerWithHookForm'
@@ -279,7 +278,14 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
         break
       }
     }
-  }, [alertDiaglogState.dialogType, deleteUserState, resetPasswordState, session, queryClient])
+  }, [
+    alertDiaglogState.dialogType,
+    deleteUserState,
+    resetPasswordState,
+    session,
+    queryClient,
+    emailApi,
+  ])
 
   const getDialogBody = useCallback(() => {
     switch (alertDiaglogState.dialogType) {

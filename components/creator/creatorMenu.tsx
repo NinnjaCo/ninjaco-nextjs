@@ -1,17 +1,15 @@
-import { Bars3Icon, BookOpenIcon, PuzzlePieceIcon, UserIcon } from '@heroicons/react/24/outline'
-import { Fragment, useMemo } from 'react'
+import { Bars3Icon, BookOpenIcon, PuzzlePieceIcon } from '@heroicons/react/24/outline'
+import { Fragment } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { User } from '@/models/crud'
-import { adventurer } from '@dicebear/collection'
-import { createAvatar } from '@dicebear/core'
 import { useRouter } from 'next-router-mock'
 import Image from 'next/image'
 import Link from 'next/link'
 import LocaleMenu from '../layout/localeMenu'
 import clsx from 'clsx'
-import creator_profile from '@/images/creator_profile.svg'
 import logo_black from '@/images/logo_black.svg'
 import seperator from '@/images/seperator.svg'
+import useUserProfilePicture from '@/hooks/useUserProfilePicture'
 
 interface CreatorMenuPros {
   isOnCoursePage: boolean
@@ -20,19 +18,7 @@ interface CreatorMenuPros {
 }
 const CreatorMenu = ({ isOnCoursePage, creator, isOnGamesPage }: CreatorMenuPros) => {
   const router = useRouter()
-  const profilePhoto = useMemo(() => {
-    if (creator.profilePictureUrl) {
-      return creator.profilePictureUrl
-    }
-    if (creator.firstName) {
-      return createAvatar(adventurer, {
-        seed: creator.firstName + ' ' + creator.lastName,
-        backgroundType: ['solid'],
-        backgroundColor: ['b6e3f4'],
-      }).toDataUriSync()
-    }
-    return creator_profile
-  }, [creator])
+  const profilePhoto = useUserProfilePicture(creator)
 
   const linkForMenu = [
     {
@@ -50,8 +36,8 @@ const CreatorMenu = ({ isOnCoursePage, creator, isOnGamesPage }: CreatorMenuPros
       icon: () => {
         return (
           <Image
-            className="rounded-full bg-white border-2 border-brand"
-            src={profilePhoto}
+            className="rounded-full bg-white border-2 border-brand w-9 h-9"
+            src={profilePhoto.profilePic}
             width={45}
             height={45}
             alt="PP"
@@ -93,7 +79,7 @@ const CreatorMenu = ({ isOnCoursePage, creator, isOnGamesPage }: CreatorMenuPros
             </Link>
           </button>
 
-          <Image src={seperator} alt="seperator"></Image>
+          <Image src={seperator} alt="seperator" width={3} height={3} priority></Image>
 
           <button className="hover-underline-animation">
             <Link
@@ -112,13 +98,14 @@ const CreatorMenu = ({ isOnCoursePage, creator, isOnGamesPage }: CreatorMenuPros
         <div className=" flex gap-5 items-center justify-center">
           {/* add profile pic */}
           <LocaleMenu colorClassName="text-brand-500" />
-          <Link href="/creator/profile">
+          <Link href="/creator/profile" className="w-9 h-9">
             <Image
-              className="rounded-full bg-white border-2 border-brand"
-              src={profilePhoto}
+              className="rounded-full bg-white border-2 border-brand w-9 h-9"
+              src={profilePhoto.profilePic}
               width={45}
               height={45}
               alt="Profile Photo"
+              priority
             />
           </Link>
         </div>
