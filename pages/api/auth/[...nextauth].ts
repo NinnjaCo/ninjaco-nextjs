@@ -102,7 +102,6 @@ export const authOptions: AuthOptions = {
     session: async ({ session, token }) => {
       console.log('IN SESSION CALLBACK', session, token)
       session.accessToken = token.accessToken
-      session.refreshToken = token.refreshToken
       session.id = token.sub ?? token.id
       const decoded = jwt.decode(token.accessToken) as jwt.JwtPayload
       if (!decoded || !decoded.exp)
