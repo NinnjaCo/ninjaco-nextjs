@@ -1,5 +1,6 @@
 import * as yup from 'yup'
 import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/outline'
+import { ImageType } from 'react-images-uploading'
 import { Input } from '@/components/forms/input'
 import { TextArea } from '@/components/forms/textArea'
 import { User } from '@/models/crud'
@@ -15,6 +16,7 @@ import Head from 'next/head'
 import InputTags from '@/components/forms/inputTags'
 import React from 'react'
 import Select from '@/components/forms/select'
+import SingleImageUpload from '@/components/forms/singleImageUpload'
 import floatingLegos from '@/images/floatingLegos.svg'
 import underLineImage from '@/images/lightlyWavedLine.svg'
 
@@ -25,6 +27,7 @@ enum CourseType {
 type CreateCourseFormDataType = {
   courseType: CourseType
   courseTitle: string
+  courseImage: ImageType
   courseDescription: string
   courseAgeRange?: string[]
   coursePrerequisites?: string[]
@@ -36,6 +39,7 @@ const CreateCourseFormSchema = yup
   .shape({
     courseType: yup.string().oneOf(Object.values(CourseType)).required('Course Type is required'),
     courseTitle: yup.string().required('Course Title is required'),
+    courseImage: yup.object().required('Course Image is required'),
     courseDescription: yup.string().required('Course Description is required'),
     courseAgeRange: yup.array().of(yup.string()),
     coursePrerequisites: yup.array().of(yup.string()),
@@ -104,6 +108,13 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
               selectList={Object.values(CourseType)}
               isRequired={true}
               rootClassName="w-48"
+            />
+            <SingleImageUpload
+              control={control}
+              name={register('courseImage').name}
+              error={errors.courseImage?.message as unknown as string} // Convert to string since it returned a FieldError
+              isRequired={true}
+              label="Course Banner Image"
             />
             <Input
               {...register('courseTitle')}
