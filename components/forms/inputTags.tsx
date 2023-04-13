@@ -15,6 +15,7 @@ interface InputTagsProps {
   error: string | undefined
   placeholder: string
   isRequired?: boolean
+  formatter?: (s) => string
 }
 
 export default function InputTags({
@@ -25,8 +26,10 @@ export default function InputTags({
   error,
   placeholder,
   isRequired,
+  formatter,
 }: InputTagsProps) {
   const [inputState, setInputState] = useState('')
+  const usedFormatter = formatter ? formatter : (s) => s
   return (
     <div className="flex flex-col gap-1">
       {label && (
@@ -48,12 +51,11 @@ export default function InputTags({
                 placeholder={placeholder}
                 onChange={(e) => {
                   setInputState(e.target.value)
-                  console.log(field.value)
                 }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     if (inputState === '') return
-                    field.onChange([...field.value, inputState])
+                    field.onChange([...field.value, usedFormatter(inputState)])
                     setInputState('')
                     e.preventDefault()
                   }
@@ -67,14 +69,14 @@ export default function InputTags({
                 onClick={(e) => {
                   e.preventDefault()
                   if (inputState === '') return
-                  field.onChange([...field.value, inputState])
+                  field.onChange([...field.value, usedFormatter(inputState)])
                   setInputState('')
                 }}
               >
                 +
               </button>
             </div>
-            {field.value.length > 0 && (
+            {field.value?.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {field.value.map((tag, index) => (
                   <div
