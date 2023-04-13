@@ -12,6 +12,7 @@ import Alert from '@/components/shared/alert'
 import CreateResourceCard from '@/components/creator/creationCard'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import Head from 'next/head'
+import MultipleImageUpload from '@/components/forms/multipleImageUpload'
 import React from 'react'
 import SingleImageUpload from '@/components/forms/singleImageUpload'
 import floatingLegos from '@/images/floatingLegos.svg'
@@ -22,7 +23,13 @@ type CreateLevelFormDataType = {
   stepByStepGuideImages: ImageListType
 }
 
-const CreateLevelFormSchema = yup.object().shape({}).required()
+const CreateLevelFormSchema = yup
+  .object()
+  .shape({
+    buildingPartsImages: yup.array().min(1).required(),
+    stepByStepGuideImages: yup.array().min(1).required(),
+  })
+  .required()
 
 const CreateLevel = ({ user }: { user: User }) => {
   const router = useRouter()
@@ -60,7 +67,7 @@ const CreateLevel = ({ user }: { user: User }) => {
     <>
       <Head>
         <title>NinjaCo | Create Level</title>
-        <meta name="description" content="Create or Edit Mission" />
+        <meta name="description" content="Create Level" />
       </Head>
       <main className="w-full">
         <CreatorMenu creator={user} isOnCoursePage={true} isOnGamesPage={false} />
@@ -78,14 +85,14 @@ const CreateLevel = ({ user }: { user: User }) => {
           />
           <form onSubmit={handleSubmit(onSubmitHandler)} className="flex flex-col gap-8" id="form">
             <div className="text-2xl text-brand">Creating Level Number {1}</div>
-            <SingleImageUpload
+            <MultipleImageUpload
               control={control}
               name={register('buildingPartsImages').name}
               error={errors.buildingPartsImages?.message as unknown as string} // Convert to string since it returned a FieldError
               isRequired={true}
               label="Building Parts Images"
             />
-            <SingleImageUpload
+            <MultipleImageUpload
               control={control}
               name={register('stepByStepGuideImages').name}
               error={errors.stepByStepGuideImages?.message as unknown as string} // Convert to string since it returned a FieldError
@@ -124,7 +131,7 @@ export default CreateLevel
 export const getServerSideProps = async (context) => {
   const { query, req, res } = context
 
-  const session = await getSession({ broadcast: false })
+  const session = await getServerSession(req, res, authOptions)
   if (!session) {
     return {
       redirect: {
