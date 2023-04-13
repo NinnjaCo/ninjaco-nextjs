@@ -13,6 +13,7 @@ interface SelectProps {
   error: string | undefined
   isRequired?: boolean
   rootClassName?: string
+  placeholder?: string
 }
 
 export default function Select({
@@ -22,6 +23,7 @@ export default function Select({
   error,
   selectList,
   isRequired,
+  placeholder,
   rootClassName,
 }: SelectProps) {
   return (
@@ -44,7 +46,9 @@ export default function Select({
             >
               <div className="relative mt-1">
                 <Listbox.Button className="block w-full px-4 py-2 text-brand-700 placeholder-brand-400 border border-brand-300 rounded-md focus:outline-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm">
-                  <span className="block truncate text-left text-brand">{field.value}</span>
+                  <span className="block truncate text-left text-brand">
+                    {field.value ?? placeholder}
+                  </span>
                   {!error && (
                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                       <ChevronUpDownIcon className="h-5 w-5 text-brand-400" aria-hidden="true" />
