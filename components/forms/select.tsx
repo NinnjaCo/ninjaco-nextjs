@@ -25,7 +25,7 @@ export default function Select({
   rootClassName,
 }: SelectProps) {
   return (
-    <div className={clsx('flex flex-col gap-2 z-10', rootClassName)}>
+    <div className={clsx('flex flex-col gap-2 z-20', rootClassName)}>
       {label && (
         <label htmlFor={name} className="text-sm font-medium text-brand-500">
           {label} {isRequired && <span className="text-error">*</span>}
