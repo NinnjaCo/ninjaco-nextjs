@@ -1,6 +1,7 @@
 export interface Game {
   _id: string
   title: string
+  image: string
   numOfBlocks?: number
   sizeOfGrid: number
   playerLocation: number[]
@@ -10,6 +11,7 @@ export interface Game {
 
 export interface GameRequest {
   title: string
+  image: string
   numOfBlocks?: number
   sizeOfGrid: number
   playerLocation: number[]
