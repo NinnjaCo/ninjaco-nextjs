@@ -1,4 +1,6 @@
 import * as yup from 'yup'
+import { CourseApi } from '@/utils/api/course/course.api'
+import { ImageApi } from '@/utils/api/images/image-upload.api'
 import { ImageType } from 'react-images-uploading'
 import { Input } from '@/components/forms/input'
 import { TextArea } from '@/components/forms/textArea'
@@ -8,6 +10,7 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
+import { useSession } from 'next-auth/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Alert from '@/components/shared/alert'
 import CreateResourceCard from '@/components/creator/creationCard'
@@ -49,6 +52,7 @@ const CreateCourseFormSchema = yup
 
 const CreateCourseOrEdit = ({ user }: { user: User }) => {
   const router = useRouter()
+  const session = useSession()
   const [alertData, setAlertData] = React.useState<{
     message: string
     variant: 'success' | 'info' | 'warning' | 'error'
@@ -78,7 +82,29 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
   })
 
   const onSubmitHandler = async (data: CreateCourseFormDataType) => {
+    if (!data.courseImage.file) {
+      setAlertData({
+        message: 'Please upload a course image',
+        variant: 'error',
+        open: true,
+      })
+      return
+    }
+    // Upload Image and get url
     console.log(data)
+    const imageUploadRes = await new ImageApi(session.data).uploadImage({
+      image: data.courseImage.file,
+    })
+
+    await new CourseApi(session.data).create({
+      courseType: data.courseType,
+      courseTitle: data.courseTitle,
+      courseImage: imageUploadRes.payload.image_url,
+      courseDescription: data.courseDescription,
+      courseAgeRange: data.courseAgeRange,
+      coursePrerequisites: data.coursePrerequisites,
+      courseObjectives: data.courseObjectives,
+    })
   }
   return (
     <>
