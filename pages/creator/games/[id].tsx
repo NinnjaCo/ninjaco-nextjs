@@ -38,9 +38,10 @@ interface GridCell {
   isGoal: boolean
 }
 
-const createGrid = (rows: number, cols: number, initialGameState?): GridCell[][] => {
+const createGrid = (rows: number, cols: number, initialGameState): GridCell[][] => {
   const grid: GridCell[][] = []
 
+  console.log(initialGameState)
   if (initialGameState) {
     const { playerLocation, goalLocation, wallsLocations } = initialGameState
     for (let row = 0; row < rows; row++) {
@@ -101,7 +102,6 @@ enum Tools {
 }
 
 const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
-  console.log('game', game)
   const session = useSession()
   const router = useRouter()
   const [gameTitle, setGameTitle] = React.useState(game.title)
@@ -167,7 +167,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
   }>({
     resolver: yupResolver(
       yup.object().shape({
-        gameImage: yup.mixed().required('Image is required'),
+        gameImage: yup.object().nullable(),
       })
     ),
   })
@@ -344,15 +344,6 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
       return
     }
 
-    if (!data.gameImage || !data.gameImage.file) {
-      setAlertData({
-        message: 'Please upload an image for the game',
-        variant: 'error',
-        open: true,
-      })
-      return
-    }
-
     setSaveButtonDisabled(true)
     // Save game
     try {
@@ -360,15 +351,19 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
       const goalLocation = [gameState.goalLocation.row, gameState.goalLocation.col]
       const wallsLocations = gameState.wallsLocations?.map((wall) => [wall.row, wall.col]) || []
 
-      const imageRes = await new ImageApi(session.data).uploadImage({
-        image: data.gameImage.file,
-      })
+      let image_url = game.image || ''
+      if (data.gameImage && data.gameImage.file) {
+        const imageRes = await new ImageApi(session.data).uploadImage({
+          image: data.gameImage.file,
+        })
+        image_url = imageRes.payload.image_url
+      }
 
-      await new GameApi().update(game._id, {
+      await new GameApi(session.data).update(game._id, {
         title: gameTitle,
-        image: imageRes.payload.image_url,
+        image: image_url,
         numOfBlocks: numberOfBlocks as number,
-        sizeOfGrid: gameGrid.length,
+        sizeOfGrid: numberOfColumns as number,
         playerLocation: playerLocation,
         goalLocation: goalLocation,
         wallsLocations: wallsLocations,
@@ -498,8 +493,20 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
                         onChange={(e) => {
                           const newNumberOfColumns = parseInt(e.target.value, 10)
                           setNumberOfColumns(newNumberOfColumns)
+                          setGameState({
+                            isGoalSet: false,
+                            isPlayerSet: false,
+                            playerLocation: undefined,
+                            goalLocation: undefined,
+                            wallsLocations: [],
+                          })
+
                           // update the grid
-                          const newGrid = createGrid(newNumberOfColumns, newNumberOfColumns)
+                          const newGrid = createGrid(
+                            newNumberOfColumns,
+                            newNumberOfColumns,
+                            undefined
+                          )
                           setGameGrid(newGrid)
                         }}
                         value={numberOfColumns}
@@ -551,6 +558,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
                   error={errors.gameImage?.message as unknown as string}
                   label="Game Image"
                   isRequired={true}
+                  defaultImage={game.image}
                 />
                 <div className="flex gap-4 pt-4">
                   <button
@@ -565,7 +573,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
                   <button
                     className="btn btn-secondary rounded-lg hover:bg-brand-400 hover:text-white py-2 h-fit"
                     onClick={() => {
-                      setGameGrid(createGrid(numberOfColumns, numberOfColumns))
+                      setGameGrid(createGrid(numberOfColumns, numberOfColumns, undefined))
                     }}
                   >
                     Reset Grid
