@@ -2,11 +2,13 @@ import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
+import Chip from '@/components/shared/chip'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-const levels = Array.from({ length: 20 }, (_, i) => i + 1)
+
+const levels = Array.from({ length: 7 }, (_, i) => i + 1)
 
 export default function Course({ user }: { user: User }) {
   return (
@@ -44,8 +46,11 @@ export default function Course({ user }: { user: User }) {
             </div>
           </div>
         </div>
-
-        <div className="flex flex-col px-6 pb-12 pt gap-6">
+        <div className="flex gap-3 items-center w-full flex-wrap px-6 my-8">
+          <div className=" text-brand font-medium text-xs md:text-base">Mission Category:</div>
+          <Chip text="Robotics" />
+        </div>
+        <div className="flex flex-col px-6 pb-12 gap-6">
           <div className="flex justify-between gap-10">
             <div className="font-semibold text-2xl">Levels</div>
             <Link
