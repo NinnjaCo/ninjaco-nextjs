@@ -1,14 +1,19 @@
+import * as yup from 'yup'
+import { AuthError } from '@/models/shared'
 import { GameApi } from '@/utils/api/game/game.api'
+import { ImageApi } from '@/utils/api/images/image-upload.api'
+import { ImageType } from 'react-images-uploading'
 import { Input } from '@/components/forms/input'
 import { Switch } from '@headlessui/react'
 import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
-import { isAxiosError } from '@/utils/errors'
+import { isAxiosError, unWrapAuthError } from '@/utils/errors'
+import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
-import { ImageType } from 'react-images-uploading'
-import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 import Alert from '@/components/shared/alert'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import Eraser from '@/components/creator/game/eraser'
@@ -21,9 +26,6 @@ import React, { useEffect } from 'react'
 import Wall from '@/components/creator/game/wall'
 import clsx from 'clsx'
 import underLineImage from '@/images/lightlyWavedLine.svg'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { ImageApi } from '@/utils/api/images/image-upload.api'
 
 interface GridCell {
   row: number
@@ -70,8 +72,9 @@ enum Tools {
   NONE = 'None',
 }
 
-const GameViewAndEditPage = ({ user }: { user: User }) => {
+const GameCreatePage = ({ user }: { user: User }) => {
   const session = useSession()
+  const router = useRouter()
   const [gameTitle, setGameTitle] = React.useState('')
   const MIN_COLUMNS = 5
   const MAX_COLUMNS = 20
@@ -79,7 +82,7 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
   const [gameGrid, setGameGrid] = React.useState<GridCell[][]>(
     createGrid(numberOfColumns, numberOfColumns)
   )
-
+  const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false)
   const [selectedTool, setSelectedTool] = React.useState<Tools>(Tools.NONE)
   const [cellSize, setCellSize] = React.useState(25)
 
@@ -88,9 +91,9 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
   const [gameState, setGameState] = React.useState<{
     isPlayerSet: boolean
     isGoalSet: boolean
-    playerLocation: { row: number; col: number } | undefined
-    goalLocation: { row: number; col: number } | undefined
-    wallsLocations?: { row: number; col: number }[] | undefined
+    playerLocation: GridCell | undefined
+    goalLocation: GridCell | undefined
+    wallsLocations?: GridCell[] | undefined
   }>({
     isPlayerSet: false,
     isGoalSet: false,
@@ -187,7 +190,7 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
       setGameState({
         ...gameState,
         isPlayerSet: true,
-        playerLocation: { row: rowIndex, col: colIndex },
+        playerLocation: newGrid[rowIndex][colIndex],
       })
     } else if (selectedTool === Tools.GOAL) {
       // Only 1 goal allowed
@@ -204,7 +207,7 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
       setGameState({
         ...gameState,
         isGoalSet: true,
-        goalLocation: { row: rowIndex, col: colIndex },
+        goalLocation: newGrid[rowIndex][colIndex],
       })
     } else if (selectedTool === Tools.WALL) {
       const newGrid = gameGrid.map((row) => {
@@ -224,7 +227,13 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
       setGameGrid(newGrid)
       setGameState({
         ...gameState,
-        wallsLocations: [...(gameState.wallsLocations || []), { row: rowIndex, col: colIndex }],
+        wallsLocations: newGrid.flat().filter((cell) => cell.isWall),
+      })
+    } else {
+      setAlertData({
+        message: 'Please select a tool from the toolbox',
+        variant: 'info',
+        open: true,
       })
     }
   }
@@ -249,7 +258,7 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
     setSelectedTool(tool)
   }
 
-  const saveGame = async () => {
+  const saveGame = async (data: { gameImage: ImageType }) => {
     closeAlert()
 
     if (!gameState.isPlayerSet || gameState.playerLocation === undefined) {
@@ -278,6 +287,18 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
       })
       return
     }
+
+    if (!data.gameImage || !data.gameImage.file) {
+      setAlertData({
+        message: 'Please upload an image for the game',
+        variant: 'error',
+        open: true,
+      })
+      return
+    }
+
+    setSaveButtonDisabled(true)
+
     // Save game
     try {
       const playerLocation = [gameState.playerLocation.row, gameState.playerLocation.col]
@@ -287,6 +308,7 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
       const imageRes = await new ImageApi(session.data).uploadImage({
         image: data.gameImage.file,
       })
+
       await new GameApi(session.data).create({
         title: gameTitle,
         image: imageRes.payload.image_url,
@@ -296,11 +318,26 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
         goalLocation: goalLocation,
         wallsLocations: wallsLocations,
       })
-    } catch (err) {
-      if (isAxiosError(err)) {
-        console.log(err)
+
+      setAlertData({
+        message: 'Game created successfully',
+        variant: 'success',
+        open: true,
+      })
+
+      router.push('/creator/games')
+    } catch (error) {
+      setSaveButtonDisabled(false)
+      if (isAxiosError<AuthError>(error)) {
+        const errors = unWrapAuthError(error)
         setAlertData({
-          message: 'Something went wrong, please try again',
+          message: errors[0].message || 'Something went wrong',
+          variant: 'error',
+          open: true,
+        })
+      } else {
+        setAlertData({
+          message: 'Error creating game',
           variant: 'error',
           open: true,
         })
@@ -450,9 +487,10 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
                 </div>
                 <div className="flex gap-4 pt-4">
                   <button
-                    className="btn btn-brand rounded-lg hover:bg-brand-400 hover:text-white py-2 h-fit"
+                    className="btn btn-brand rounded-lg hover:bg-brand-400 hover:text-white py-2 h-fit disabled:bg-gray-500 disabled:cursor-not-allowed disabled:text-white"
+                    disabled={saveButtonDisabled}
                     onClick={() => {
-                      saveGame()
+                      handleSubmit(saveGame)()
                     }}
                   >
                     Save Game
@@ -507,11 +545,10 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
   )
 }
 
-export default GameViewAndEditPage
+export default GameCreatePage
 
 export const getServerSideProps = async (context) => {
   const { query, req, res } = context
-  const { id: gameId } = query
 
   const session = await getServerSession(req, res, authOptions)
   if (!session) {
