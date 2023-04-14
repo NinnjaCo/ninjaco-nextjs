@@ -5,6 +5,7 @@ import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
+import { isAxiosError } from '@/utils/errors'
 import { useSession } from 'next-auth/react'
 import Alert from '@/components/shared/alert'
 import CreatorMenu from '@/components/creator/creatorMenu'
@@ -82,16 +83,12 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
   const [gameState, setGameState] = React.useState<{
     isPlayerSet: boolean
     isGoalSet: boolean
-    numberOfBlocks?: number | undefined
-    sizeOfGrid: number | undefined
     playerLocation: { row: number; col: number } | undefined
     goalLocation: { row: number; col: number } | undefined
-    wallsLocations: { row: number; col: number }[] | undefined
+    wallsLocations?: { row: number; col: number }[] | undefined
   }>({
     isPlayerSet: false,
     isGoalSet: false,
-    numberOfBlocks: undefined,
-    sizeOfGrid: undefined,
     playerLocation: undefined,
     goalLocation: undefined,
     wallsLocations: undefined,
@@ -236,7 +233,7 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
   const saveGame = async () => {
     closeAlert()
 
-    if (!gameState.isPlayerSet) {
+    if (!gameState.isPlayerSet || gameState.playerLocation === undefined) {
       setAlertData({
         message: 'Please set a player on the grid before saving',
         variant: 'error',
@@ -244,7 +241,7 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
       })
       return
     }
-    if (!gameState.isGoalSet) {
+    if (!gameState.isGoalSet || gameState.goalLocation === undefined) {
       setAlertData({
         message: 'Please set a goal on the grid before saving',
         variant: 'error',
@@ -263,21 +260,27 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
       return
     }
     // Save game
-    await new GameApi().create({
-      title: gameTitle,
-      numOfBlocks: numberOfBlocks as number,
-      sizeOfGrid: gameGrid.length,
-      playerLocation: gameState.playerLocation
-        ? [gameState.playerLocation.row, gameState.playerLocation.col]
-        : undefined,
-      goalLocation: gameState.goalLocation
-        ? [gameState.goalLocation.row, gameState.goalLocation.col]
-        : undefined,
-      wallsLocations: gameState.wallsLocations
-        ? gameState.wallsLocations.map((wall) => [wall.row, wall.col])
-        : undefined,
-    })
-    console.log('Game saved', gameState)
+    try {
+      await new GameApi().create({
+        title: gameTitle,
+        numOfBlocks: numberOfBlocks as number,
+        sizeOfGrid: gameGrid.length,
+        playerLocation: [gameState.playerLocation.row, gameState.playerLocation.col],
+        goalLocation: [gameState.goalLocation.row, gameState.goalLocation.col],
+        wallsLocations: gameState.wallsLocations
+          ? gameState.wallsLocations.map((wall) => [wall.row, wall.col])
+          : [],
+      })
+    } catch (err) {
+      if (isAxiosError(err)) {
+        console.log(err)
+        setAlertData({
+          message: 'Something went wrong, please try again',
+          variant: 'error',
+          open: true,
+        })
+      }
+    }
   }
 
   return (
@@ -377,7 +380,6 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
                           // update the grid
                           const newGrid = createGrid(newNumberOfColumns, newNumberOfColumns)
                           setGameGrid(newGrid)
-                          setGameState({ ...gameState, sizeOfGrid: newNumberOfColumns })
                         }}
                         value={numberOfColumns}
                         className="w-full h-2 rounded-lg appearance-none cursor-pointer bg-secondary accent-brand"
@@ -414,7 +416,6 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
                       onChange={(e) => {
                         const newNumberOfBlocks = parseInt(e.target.value, 10)
                         setNumberOfBlocks(newNumberOfBlocks)
-                        setGameState({ ...gameState, numberOfBlocks: newNumberOfBlocks })
                       }}
                       className={clsx({
                         'bg-brand-50 cursor-not-allowed': !toogleLimitedBlocks,
