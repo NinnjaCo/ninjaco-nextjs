@@ -1,8 +1,6 @@
-import { Game } from '@/models/crud/game.model'
 import { GameApi } from '@/utils/api/game/game.api'
 import { Input } from '@/components/forms/input'
 import { Switch } from '@headlessui/react'
-import { Uid } from '@/models/shared'
 import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
@@ -67,13 +65,12 @@ enum Tools {
   NONE = 'None',
 }
 
-const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
-  console.log('game', game)
+const GameViewAndEditPage = ({ user }: { user: User }) => {
   const session = useSession()
-  const [gameTitle, setGameTitle] = React.useState(game.title)
+  const [gameTitle, setGameTitle] = React.useState('')
   const MIN_COLUMNS = 5
   const MAX_COLUMNS = 20
-  const [numberOfColumns, setNumberOfColumns] = React.useState(game.sizeOfGrid)
+  const [numberOfColumns, setNumberOfColumns] = React.useState(15)
   const [gameGrid, setGameGrid] = React.useState<GridCell[][]>(
     createGrid(numberOfColumns, numberOfColumns)
   )
@@ -81,9 +78,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
   const [selectedTool, setSelectedTool] = React.useState<Tools>(Tools.NONE)
   const [cellSize, setCellSize] = React.useState(25)
 
-  const [toogleLimitedBlocks, setToogleLimitedBlocks] = React.useState(
-    game.numOfBlocks ? true : false
-  )
+  const [toogleLimitedBlocks, setToogleLimitedBlocks] = React.useState(false)
   const [numberOfBlocks, setNumberOfBlocks] = React.useState<number | undefined>(undefined)
   const [gameState, setGameState] = React.useState<{
     isPlayerSet: boolean
@@ -92,20 +87,11 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
     goalLocation: { row: number; col: number } | undefined
     wallsLocations?: { row: number; col: number }[] | undefined
   }>({
-    isPlayerSet: true,
-    isGoalSet: true,
-    playerLocation:
-      game && game.playerLocation
-        ? { row: game.playerLocation[0], col: game.playerLocation[1] }
-        : undefined,
-    goalLocation:
-      game && game.goalLocation
-        ? { row: game.goalLocation[0], col: game.goalLocation[1] }
-        : undefined,
-    wallsLocations:
-      game && game.wallsLocations
-        ? game.wallsLocations.map((wall) => ({ row: wall[0], col: wall[1] }))
-        : undefined,
+    isPlayerSet: false,
+    isGoalSet: false,
+    playerLocation: undefined,
+    goalLocation: undefined,
+    wallsLocations: undefined,
   })
 
   const [alertData, setAlertData] = React.useState<{
@@ -275,7 +261,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
     }
     // Save game
     try {
-      await new GameApi().update(game._id, {
+      await new GameApi().create({
         title: gameTitle,
         numOfBlocks: numberOfBlocks as number,
         sizeOfGrid: gameGrid.length,
@@ -525,20 +511,9 @@ export const getServerSideProps = async (context) => {
     }
   }
 
-  const gameResponse = await new GameApi(session).findOne(gameId)
-
-  if (!gameResponse || !gameResponse.payload) {
-    return {
-      props: {
-        redirect: {
-          destination: '/creator/games',
-          permanent: false,
-        },
-      },
-    }
-  }
-  console.log('hello', gameResponse)
   return {
-    props: { user: response.payload, game: gameResponse.payload },
+    props: {
+      user: response.payload,
+    },
   }
 }

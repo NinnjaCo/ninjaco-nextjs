@@ -6,6 +6,7 @@ import { getServerSession } from 'next-auth'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import GameCard from '@/components/creator/gameCard'
 import Head from 'next/head'
+import Link from 'next/link'
 
 export default function Home({ user }: { user: User }) {
   const games = [
@@ -76,7 +77,10 @@ export default function Home({ user }: { user: User }) {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center mt-7 px-10 place-items-center">
           {games.map((game, index) => (
-            <GameCard key={index} image={game.image} name={game.name} />
+            <>
+              <GameCard key={index} image={game.image} name={game.name} />
+              <Link href={`/creator/games/${game._id}`} />
+            </>
           ))}
         </div>
       </main>
