@@ -1,20 +1,24 @@
+enum CourseType {
+  ARDUINO = 'ARDUINO',
+  HTML = 'HTML',
+}
 export interface Course {
-  title: string
-  description: string
-  image: string
-  ageRange: string
-  preRequisites: string
-  objectives: string
-  type: string
+  courseType: CourseType
+  courseTitle: string
+  courseImage: string
+  courseDescription: string
+  courseAgeRange?: string[]
+  coursePrerequisites?: string[]
+  courseObjectives?: string[]
   //missions: Mission[]
 }
 
 export interface CourseRequest {
-  title: string
-  description: string
-  image: string
-  ageRange: string
-  preRequisites: string
-  objectives: string
-  type: string
+  courseType: CourseType
+  courseTitle: string
+  courseImage: string
+  courseDescription: string
+  courseAgeRange?: string[]
+  coursePrerequisites?: string[]
+  courseObjectives?: string[]
 }
