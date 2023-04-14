@@ -1,9 +1,11 @@
+import { GameApi } from '@/utils/api/game/game.api'
 import { Input } from '@/components/forms/input'
 import { Switch } from '@headlessui/react'
 import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
+import { useSession } from 'next-auth/react'
 import Alert from '@/components/shared/alert'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import Eraser from '@/components/creator/game/eraser'
@@ -63,6 +65,7 @@ enum Tools {
 }
 
 const GameViewAndEditPage = ({ user }: { user: User }) => {
+  const session = useSession()
   const [gameTitle, setGameTitle] = React.useState('')
   const MIN_COLUMNS = 5
   const MAX_COLUMNS = 20
@@ -79,9 +82,15 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
   const [gameState, setGameState] = React.useState<{
     isPlayerSet: boolean
     isGoalSet: boolean
+    playerLocation: { row: number; col: number } | undefined
+    goalLocation: { row: number; col: number } | undefined
+    wallsLocations: { row: number; col: number }[] | undefined
   }>({
     isPlayerSet: false,
     isGoalSet: false,
+    playerLocation: undefined,
+    goalLocation: undefined,
+    wallsLocations: undefined,
   })
 
   const [alertData, setAlertData] = React.useState<{
@@ -150,6 +159,7 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
           return {
             ...cell,
             isPlayer: false,
+            playerLocation: [rowIndex, colIndex],
           }
         })
       })
@@ -163,6 +173,7 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
           return {
             ...cell,
             isGoal: false,
+            goalLocation: [rowIndex, colIndex],
           }
         })
       })
@@ -179,6 +190,10 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
             return {
               ...cell,
               isWall: !cell.isWall && !cell.isPlayer && !cell.isGoal,
+              wallsLocations: [
+                ...(gameState.wallsLocations || []),
+                { row: rowIndex, col: colIndex },
+              ],
             }
           }
           return cell
@@ -237,8 +252,24 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
       })
       return
     }
+    console.log('hi', gameState)
 
     // Save game
+    await new GameApi().create({
+      title: gameTitle,
+      numOfBlocks: numberOfBlocks as number,
+      sizeOfGrid: gameGrid.length,
+      playerLocation: gameState.playerLocation
+        ? [gameState.playerLocation.row, gameState.playerLocation.col]
+        : undefined,
+      goalLocation: gameState.goalLocation
+        ? [gameState.goalLocation.row, gameState.goalLocation.col]
+        : undefined,
+      wallsLocations: gameState.wallsLocations
+        ? gameState.wallsLocations.map((wall) => [wall.row, wall.col])
+        : undefined,
+    })
+    console.log('Game saved', gameState)
   }
 
   return (
