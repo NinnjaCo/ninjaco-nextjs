@@ -97,14 +97,15 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
     })
 
     await new CourseApi(session.data).create({
-      courseType: data.courseType,
-      courseTitle: data.courseTitle,
-      courseImage: imageUploadRes.payload.image_url,
-      courseDescription: data.courseDescription,
-      courseAgeRange: data.courseAgeRange,
-      coursePrerequisites: data.coursePrerequisites,
-      courseObjectives: data.courseObjectives,
+      type: data.courseType,
+      title: data.courseTitle,
+      image: imageUploadRes.payload.image_url,
+      description: data.courseDescription,
+      ageRange: data.courseAgeRange,
+      preRequisites: data.coursePrerequisites,
+      objectives: data.courseObjectives,
     })
+    router.push('/creator')
   }
   return (
     <>
