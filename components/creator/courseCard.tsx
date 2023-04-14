@@ -4,6 +4,7 @@ import profileIcon from '@/images/profileIcon.svg'
 import suitCase from '@/images/suitCase.svg'
 
 const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
+  console.log(course)
   return (
     <div className="bg-brand-50 w-fit h-fit rounded-lg p-2 flex flex-col gap-2 relative">
       <div className="flex flex-col gap-2">
@@ -14,7 +15,7 @@ const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
         <div className=" flex gap-2">
           <Image src={suitCase} alt="suitcase" />
           <div className="text-brand-500 font-normal text-xs">missions:</div>
-          <div className="text-brand-500 font-normal text-xs">{10}</div>
+          <div className="text-brand-500 font-normal text-xs">{course.missions.length}</div>
         </div>
         <div className=" flex gap-2">
           <Image src={profileIcon} alt="suitcase" />

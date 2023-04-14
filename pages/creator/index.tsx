@@ -28,14 +28,14 @@ export default function Home({ user, courses }: { user: User; courses: Course[] 
               <div className="text-brand-700 font-semibold">
                 <Link
                   className="btn btn-secondary bg-secondary rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 py-2 h-fit"
-                  href="/creator/create/course"
+                  href="/creator/create"
                 >
                   Create Course
                 </Link>
               </div>
             </div>
             <div className="flex gap-10 justify-start items-center">
-              <div className="text-base text-brand"> 210 entries</div>{' '}
+              <div className="text-base text-brand">{courses.length} entries</div>{' '}
               <button className="btn btn-secondary bg-brand-300 rounded-lg text-brand-700 border-brand-700 hover:bg-brand hover:text-white py-1 px-4 h-fit flex gap-3">
                 <FunnelIcon className="w-4 h-4" />
                 Filter
@@ -45,7 +45,7 @@ export default function Home({ user, courses }: { user: User; courses: Course[] 
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center mt-7 px-10 place-items-center">
           {courses.map((course, index) => (
-            <Link href={`/creator/courses/${course._id}`} key={index}>
+            <Link href={`/creator/${course._id}`} key={index}>
               <CourseCard course={course} />
             </Link>
           ))}
