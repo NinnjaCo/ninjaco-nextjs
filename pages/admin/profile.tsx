@@ -113,7 +113,7 @@ export default function Profile({ serverUser }: ServerProps) {
     handleSubmit,
     control,
     reset,
-    formState: { errors, dirtyFields, touchedFields },
+    formState: { errors, dirtyFields },
   } = useForm<AdminProfileFormDataType>({
     resolver: yupResolver(AdminProfileFormSchema),
     defaultValues: {
@@ -132,11 +132,6 @@ export default function Profile({ serverUser }: ServerProps) {
 
     // check the dirty fields and only send the data that has been changed
     setSaveButtonDisabled(true)
-    console.log('data', data)
-    console.log('user', user)
-    console.log('dirtyFields', dirtyFields)
-    console.log('touchedFields', touchedFields)
-
     const dirtyFieldsArray = Object.keys(dirtyFields)
     let dirtyData = {}
     dirtyFieldsArray.forEach((field) => {
@@ -155,7 +150,6 @@ export default function Profile({ serverUser }: ServerProps) {
     }
 
     if (data.profilePictureState && data.profilePictureState.image) {
-      console.log('adding profile pic')
       dirtyData = {
         ...dirtyData,
         profilePicture: data.profilePictureState.image.dataURL,
@@ -174,14 +168,12 @@ export default function Profile({ serverUser }: ServerProps) {
     }
 
     try {
-      console.log('dirtyData', dirtyData)
       // They change the profile pic
       if (
         data.profilePictureState &&
         data.profilePictureState.image &&
         data.profilePictureState.image.file
       ) {
-        console.log('uploading image')
         // Upload Image and get url
         const imageUploadRes = await new ImageApi(session).uploadImage({
           image: data.profilePictureState.image.file,
@@ -193,8 +185,6 @@ export default function Profile({ serverUser }: ServerProps) {
           profilePicture: imageUploadRes.payload.image_url,
         }
       }
-
-      console.log('dirtyData', dirtyData)
       const res = await new UserApi(session).update(serverUser._id, dirtyData)
 
       // update user using react-query
