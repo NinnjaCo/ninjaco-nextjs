@@ -1,3 +1,4 @@
+import * as yup from 'yup'
 import { AuthError } from '@/models/shared'
 import { Game } from '@/models/crud/game.model'
 import { GameApi } from '@/utils/api/game/game.api'
@@ -37,8 +38,33 @@ interface GridCell {
   isGoal: boolean
 }
 
-const createGrid = (rows: number, cols: number): GridCell[][] => {
+const createGrid = (rows: number, cols: number, initialGameState?): GridCell[][] => {
   const grid: GridCell[][] = []
+
+  if (initialGameState) {
+    const { playerLocation, goalLocation, wallsLocations } = initialGameState
+    for (let row = 0; row < rows; row++) {
+      grid.push([])
+      for (let col = 0; col < cols; col++) {
+        // if it is a border cell, make it a wall
+        grid[row].push({
+          row,
+          col,
+          isWall: false,
+          isPlayer: playerLocation && playerLocation.row === row && playerLocation.col === col,
+          isGoal: goalLocation && goalLocation.row === row && goalLocation.col === col,
+        })
+      }
+    }
+
+    if (wallsLocations) {
+      wallsLocations.forEach((wall) => {
+        grid[wall.row][wall.col] = wall
+      })
+    }
+    return grid
+  }
+
   for (let row = 0; row < rows; row++) {
     grid.push([])
     for (let col = 0; col < cols; col++) {
@@ -82,9 +108,6 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
   const MIN_COLUMNS = 5
   const MAX_COLUMNS = 20
   const [numberOfColumns, setNumberOfColumns] = React.useState(game.sizeOfGrid)
-  const [gameGrid, setGameGrid] = React.useState<GridCell[][]>(
-    createGrid(numberOfColumns, numberOfColumns)
-  )
 
   const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false)
   const [selectedTool, setSelectedTool] = React.useState<Tools>(Tools.NONE)
@@ -97,24 +120,56 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
   const [gameState, setGameState] = React.useState<{
     isPlayerSet: boolean
     isGoalSet: boolean
-    playerLocation: { row: number; col: number } | undefined
-    goalLocation: { row: number; col: number } | undefined
-    wallsLocations?: { row: number; col: number }[] | undefined
+    playerLocation: GridCell | undefined
+    goalLocation: GridCell | undefined
+    wallsLocations?: GridCell[] | undefined
   }>({
     isPlayerSet: true,
     isGoalSet: true,
     playerLocation:
       game && game.playerLocation
-        ? { row: game.playerLocation[0], col: game.playerLocation[1] }
+        ? {
+            row: game.playerLocation[0],
+            col: game.playerLocation[1],
+            isWall: false,
+            isPlayer: true,
+            isGoal: false,
+          }
         : undefined,
     goalLocation:
       game && game.goalLocation
-        ? { row: game.goalLocation[0], col: game.goalLocation[1] }
+        ? {
+            row: game.goalLocation[0],
+            col: game.goalLocation[1],
+            isWall: false,
+            isPlayer: false,
+            isGoal: true,
+          }
         : undefined,
     wallsLocations:
       game && game.wallsLocations
-        ? game.wallsLocations.map((wall) => ({ row: wall[0], col: wall[1] }))
+        ? game.wallsLocations.map((wall) => {
+            return { row: wall[0], col: wall[1], isWall: true, isPlayer: false, isGoal: false }
+          })
         : undefined,
+  })
+
+  const [gameGrid, setGameGrid] = React.useState<GridCell[][]>(
+    createGrid(numberOfColumns, numberOfColumns, gameState)
+  )
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<{
+    gameImage: ImageType
+  }>({
+    resolver: yupResolver(
+      yup.object().shape({
+        gameImage: yup.mixed().required('Image is required'),
+      })
+    ),
   })
 
   const [alertData, setAlertData] = React.useState<{
@@ -301,24 +356,34 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
     setSaveButtonDisabled(true)
     // Save game
     try {
+      const playerLocation = [gameState.playerLocation.row, gameState.playerLocation.col]
+      const goalLocation = [gameState.goalLocation.row, gameState.goalLocation.col]
+      const wallsLocations = gameState.wallsLocations?.map((wall) => [wall.row, wall.col]) || []
+
+      const imageRes = await new ImageApi(session.data).uploadImage({
+        image: data.gameImage.file,
+      })
+
       await new GameApi().update(game._id, {
         title: gameTitle,
+        image: imageRes.payload.image_url,
         numOfBlocks: numberOfBlocks as number,
         sizeOfGrid: gameGrid.length,
-        playerLocation: [gameState.playerLocation.row, gameState.playerLocation.col],
-        goalLocation: [gameState.goalLocation.row, gameState.goalLocation.col],
-        wallsLocations: gameState.wallsLocations
-          ? gameState.wallsLocations.map((wall) => [wall.row, wall.col])
-          : [],
+        playerLocation: playerLocation,
+        goalLocation: goalLocation,
+        wallsLocations: wallsLocations,
       })
 
       setAlertData({
-        message: 'Game created successfully',
+        message: 'Game updated successfully',
         variant: 'success',
         open: true,
       })
 
-      router.push('/creator/games')
+      // reload page
+      setTimeout(() => {
+        router.reload()
+      }, 2000)
     } catch (error) {
       setSaveButtonDisabled(false)
       if (isAxiosError<AuthError>(error)) {

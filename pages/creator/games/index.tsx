@@ -43,7 +43,7 @@ export default function Home({ user, games }: { user: User; games: Game[] }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center mt-7 px-10 place-items-center">
           {games.map((game, index) => (
             <Link href={`/creator/games/${game._id}`} key={index}>
-              <GameCard image={game.image} name={game.title} />
+              <GameCard game={game} />
             </Link>
           ))}
         </div>

@@ -13,7 +13,7 @@ export interface Course {
   ageRange?: string[]
   preRequisites?: string[]
   objectives?: string[]
-  //missions: Mission[]
+  missions: string[]
 }
 
 export interface CourseRequest {
