@@ -1,12 +1,20 @@
 import * as yup from 'yup'
 import { AdminAlertDialog } from '@/components/admin/dialog'
+import { AuthError } from '@/models/shared'
+import { Category } from '@/models/crud/category.model'
+import { CategoryApi } from '@/utils/api/category/category.api'
+import { Course } from '@/models/crud/course.model'
+import { CourseApi } from '@/utils/api/course/course.api'
+import { ImageApi } from '@/utils/api/images/image-upload.api'
 import { ImageType } from 'react-images-uploading'
 import { Input } from '@/components/forms/input'
+import { MissionApi } from '@/utils/api/mission/mission.api'
 import { TextArea } from '@/components/forms/textArea'
 import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
+import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
@@ -38,11 +46,17 @@ const CreateMissionFormSchema = yup
   })
   .required()
 
-const CreateMissionOrEdit = ({ user }: { user: User }) => {
+const CreateMissionOrEdit = ({
+  user,
+  course,
+  categories,
+}: {
+  user: User
+  course: Course
+  categories: Category[]
+}) => {
   const router = useRouter()
   const session = useSession()
-  console.log(session)
-  const oldCategories: string[] = ['Math', 'Science', 'English']
 
   const [alertData, setAlertData] = React.useState<{
     message: string
@@ -68,7 +82,43 @@ const CreateMissionOrEdit = ({ user }: { user: User }) => {
   })
 
   const onSubmitHandler = async (data: CreateMissionFormDataType) => {
-    console.log(data)
+    if (!data.missionImage.file) {
+      setAlertData({
+        message: 'Please upload a course image',
+        variant: 'error',
+        open: true,
+      })
+      return
+    }
+
+    const imageUploadRes = await new ImageApi(session.data).uploadImage({
+      image: data.missionImage.file,
+    })
+
+    try {
+      await new MissionApi(course._id, session.data).create({
+        title: data.missionTitle,
+        image: imageUploadRes.payload.image_url,
+        description: data.missionDescription,
+        categoryId: categories.find((c) => c.categoryName === data.missionCategory)?._id || '',
+      })
+      router.push(`/creator/${course._id}`)
+    } catch (error) {
+      if (isAxiosError<AuthError>(error)) {
+        const errors = unWrapAuthError(error)
+        setAlertData({
+          message: errors[0].message || 'Something went wrong',
+          variant: 'error',
+          open: true,
+        })
+      } else {
+        setAlertData({
+          message: 'Error creating game',
+          variant: 'error',
+          open: true,
+        })
+      }
+    }
   }
 
   const [addNewCategoryState, setAddNewCategoryState] = React.useState({
@@ -130,7 +180,7 @@ const CreateMissionOrEdit = ({ user }: { user: User }) => {
               isRequired={true}
               label="Mission Category"
               placeholder="Select a Category"
-              selectList={oldCategories}
+              selectList={categories.map((category) => category.categoryName)}
               callBackOnClickAddition={() => {
                 setAddNewCategoryState({
                   newCategoryName: '',
@@ -205,6 +255,8 @@ export default CreateMissionOrEdit
 export const getServerSideProps = async (context) => {
   const { query, req, res } = context
 
+  const { courseId } = query
+
   const session = await getServerSession(req, res, authOptions)
   if (!session) {
     return {
@@ -228,9 +280,36 @@ export const getServerSideProps = async (context) => {
     }
   }
 
+  const courseResponse = await new CourseApi(session).findOne(courseId as string)
+  if (!courseResponse || !courseResponse.payload) {
+    return {
+      props: {
+        redirect: {
+          destination: '/creator',
+          permanent: false,
+        },
+      },
+    }
+  }
+
+  const categories = await new CategoryApi(session).find()
+
+  if (!categories || !categories.payload) {
+    return {
+      props: {
+        redirect: {
+          destination: '/creator',
+          permanent: false,
+        },
+      },
+    }
+  }
+
   return {
     props: {
       user: response.payload,
+      course: courseResponse.payload,
+      categories: categories.payload,
     },
   }
 }
