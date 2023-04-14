@@ -1,3 +1,5 @@
+import { Mission } from './mission.model'
+
 enum CourseType {
   ARDUINO = 'ARDUINO',
   HTML = 'HTML',
@@ -13,7 +15,7 @@ export interface Course {
   ageRange?: string[]
   preRequisites?: string[]
   objectives?: string[]
-  missions: string[]
+  missions: Mission[]
 }
 
 export interface CourseRequest {
@@ -24,5 +26,4 @@ export interface CourseRequest {
   ageRange?: string[]
   preRequisites?: string[]
   objectives?: string[]
-  //missions: Mission[]
 }
