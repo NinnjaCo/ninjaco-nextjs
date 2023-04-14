@@ -12,6 +12,7 @@ interface SingleImageUploadProps {
   error?: string
   label?: string
   rootClassName?: string
+  defaultImage?: string
 }
 
 const SingleImageUpload = ({
@@ -21,6 +22,7 @@ const SingleImageUpload = ({
   label,
   error,
   rootClassName,
+  defaultImage,
 }: SingleImageUploadProps) => {
   // Use array because the library forces an array of ImageType
   const [uploadedPicture, setUploadedPicture] = useState<ImageListType>([])
@@ -79,10 +81,11 @@ const SingleImageUpload = ({
                       onImageUpload()
                     }}
                   >
-                    {uploadedPicture.length !== 0 && uploadedPicture[0].dataURL ? (
+                    {(uploadedPicture.length !== 0 && uploadedPicture[0].dataURL) ||
+                    defaultImage ? (
                       <Image
                         className="bg-brand-200 border-2 border-brand-400 rounded w-52 h-32"
-                        src={uploadedPicture[0].dataURL}
+                        src={uploadedPicture[0]?.dataURL ?? defaultImage ?? imagePlaceHolder}
                         style={{
                           objectFit: 'contain',
                         }}

@@ -26,9 +26,12 @@ export default function Home({ user, games }: { user: User; games: Game[] }) {
             <div className="flex w-full justify-between items-center">
               <div className="text-brand-700 font-semibold text-xl lg:text-2xl">Games</div>
               <div className="text-brand-700 font-semibold">
-                <button className="btn btn-secondary bg-secondary rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 py-2 h-fit">
+                <Link
+                  className="btn btn-secondary bg-secondary rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 py-2 h-fit"
+                  href="/creator/games/create"
+                >
                   Create Game
-                </button>
+                </Link>
               </div>
             </div>
             <div className="flex gap-10 justify-start items-center">
