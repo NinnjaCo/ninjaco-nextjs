@@ -1,3 +1,5 @@
+import { Course } from '@/models/crud/course.model'
+import { CourseApi } from '@/utils/api/course/course.api'
 import { FunnelIcon } from '@heroicons/react/24/outline'
 import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
@@ -8,72 +10,7 @@ import CreatorMenu from '@/components/creator/creatorMenu'
 import Head from 'next/head'
 import Link from 'next/link'
 
-export default function Home({ user }: { user: User }) {
-  const courses = [
-    {
-      image:
-        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png',
-      name: 'Robotics 101',
-      mission: '12',
-      age: '7 - 12',
-    },
-    {
-      image:
-        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png',
-      name: 'Robotics 101',
-      mission: '12',
-      age: '7 - 12',
-    },
-    {
-      image:
-        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png',
-      name: 'Robotics 101',
-      mission: '12',
-      age: '7 - 12',
-    },
-    {
-      image:
-        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png',
-      name: 'Robotics 101',
-      mission: '12',
-      age: '7 - 12',
-    },
-    {
-      image:
-        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png',
-      name: 'Robotics 101',
-      mission: '12',
-      age: '7 - 12',
-    },
-    {
-      image:
-        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png',
-      name: 'Robotics 101',
-      mission: '12',
-      age: '7 - 12',
-    },
-    {
-      image:
-        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png',
-      name: 'Robotics 101',
-      mission: '12',
-      age: '7 - 12',
-    },
-    {
-      image:
-        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png',
-      name: 'Robotics 101',
-      mission: '12',
-      age: '7 - 12',
-    },
-    {
-      image:
-        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png',
-      name: 'Robotics 101',
-      mission: '12',
-      age: '7 - 12',
-    },
-  ]
+export default function Home({ user, courses }: { user: User; courses: Course[] }) {
   return (
     <>
       <Head>
@@ -108,13 +45,9 @@ export default function Home({ user }: { user: User }) {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center mt-7 px-10 place-items-center">
           {courses.map((course, index) => (
-            <CourseCard
-              key={index}
-              image={course.image}
-              name={course.name}
-              mission={course.mission}
-              age={course.age}
-            />
+            <Link href={`/creator/courses/${course._id}`} key={index}>
+              <CourseCard course={course} />
+            </Link>
           ))}
         </div>
       </main>
@@ -148,9 +81,22 @@ export const getServerSideProps = async (context) => {
     }
   }
 
+  const coursesResponse = await new CourseApi(session).find()
+  if (!coursesResponse || !coursesResponse.payload) {
+    return {
+      props: {
+        redirect: {
+          destination: '/auth/signin',
+          permanent: false,
+        },
+      },
+    }
+  }
+
   return {
     props: {
       user: response.payload,
+      courses: coursesResponse.payload,
     },
   }
 }
