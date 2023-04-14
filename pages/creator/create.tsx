@@ -1,4 +1,5 @@
 import * as yup from 'yup'
+import { AuthError } from '@/models/shared'
 import { CourseApi } from '@/utils/api/course/course.api'
 import { ImageApi } from '@/utils/api/images/image-upload.api'
 import { ImageType } from 'react-images-uploading'
@@ -8,6 +9,7 @@ import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
+import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
@@ -96,16 +98,33 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
       image: data.courseImage.file,
     })
 
-    await new CourseApi(session.data).create({
-      type: data.courseType,
-      title: data.courseTitle,
-      image: imageUploadRes.payload.image_url,
-      description: data.courseDescription,
-      ageRange: data.courseAgeRange,
-      preRequisites: data.coursePrerequisites,
-      objectives: data.courseObjectives,
-    })
-    router.push('/creator')
+    try {
+      await new CourseApi(session.data).create({
+        type: data.courseType,
+        title: data.courseTitle,
+        image: imageUploadRes.payload.image_url,
+        description: data.courseDescription,
+        ageRange: data.courseAgeRange,
+        preRequisites: data.coursePrerequisites,
+        objectives: data.courseObjectives,
+      })
+      router.push('/creator')
+    } catch (error) {
+      if (isAxiosError<AuthError>(error)) {
+        const errors = unWrapAuthError(error)
+        setAlertData({
+          message: errors[0].message || 'Something went wrong',
+          variant: 'error',
+          open: true,
+        })
+      } else {
+        setAlertData({
+          message: 'Error creating game',
+          variant: 'error',
+          open: true,
+        })
+      }
+    }
   }
   return (
     <>
