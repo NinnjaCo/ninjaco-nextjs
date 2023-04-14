@@ -1,4 +1,6 @@
 import { FunnelIcon } from '@heroicons/react/24/outline'
+import { Game } from '@/models/crud/game.model'
+import { GameApi } from '@/utils/api/game/game.api'
 import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
 import { authOptions } from '../../api/auth/[...nextauth]'
@@ -8,44 +10,7 @@ import GameCard from '@/components/creator/gameCard'
 import Head from 'next/head'
 import Link from 'next/link'
 
-export default function Home({ user }: { user: User }) {
-  const games = [
-    {
-      image:
-        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/coding_smart_city.png',
-      name: 'Simple Movements',
-    },
-    {
-      image:
-        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/coding_smart_city.png',
-      name: 'Simple Movements',
-    },
-    {
-      image:
-        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/coding_smart_city.png',
-      name: 'Simple Movements',
-    },
-    {
-      image:
-        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/coding_smart_city.png',
-      name: 'Simple Movements',
-    },
-    {
-      image:
-        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/coding_smart_city.png',
-      name: 'Simple Movements',
-    },
-    {
-      image:
-        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/coding_smart_city.png',
-      name: 'Simple Movements',
-    },
-    {
-      image:
-        'https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/coding_smart_city.png',
-      name: 'Simple Movements',
-    },
-  ]
+export default function Home({ user, games }: { user: User; games: Game[] }) {
   return (
     <>
       <Head>
@@ -77,10 +42,9 @@ export default function Home({ user }: { user: User }) {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center mt-7 px-10 place-items-center">
           {games.map((game, index) => (
-            <>
-              <GameCard key={index} image={game.image} name={game.name} />
-              <Link href={`/creator/games/${game._id}`} />
-            </>
+            <Link href={`/creator/games/${game._id}`} key={index}>
+              <GameCard image={game.image} name={game.title} />
+            </Link>
           ))}
         </div>
       </main>
@@ -114,9 +78,22 @@ export const getServerSideProps = async (context) => {
     }
   }
 
+  const gamesResponse = await new GameApi(session).find()
+  if (!gamesResponse || !gamesResponse.payload) {
+    return {
+      props: {
+        redirect: {
+          destination: '/auth/signin',
+          permanent: false,
+        },
+      },
+    }
+  }
+
   return {
     props: {
       user: response.payload,
+      games: gamesResponse.payload,
     },
   }
 }

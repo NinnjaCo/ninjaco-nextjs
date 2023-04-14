@@ -14,7 +14,6 @@ declare module 'next-auth' {
   interface Session {
     id: string
     accessToken: string
-    refreshToken: string
   }
 }
 

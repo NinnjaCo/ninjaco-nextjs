@@ -2,6 +2,8 @@ import * as yup from 'yup'
 import { AuthError } from '@/models/shared'
 import { AxiosError } from 'axios'
 import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/solid'
+import { ImageApi } from '@/utils/api/images/image-upload.api'
+import { ImageType } from 'react-images-uploading'
 import { Input } from '@/components/forms/input'
 import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
@@ -15,9 +17,11 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import Alert from '@/components/shared/alert'
 import DatePickerWithHookForm from '@/components/forms/datePickerWithHookForm'
 import Head from 'next/head'
+import ProfileImageUpload from '@/components/forms/profileImageUpload'
 import React from 'react'
 import SideMenu from '@/components/admin/sideMenu'
 import useTranslation from '@/hooks/useTranslation'
+import useUserProfilePicture from '@/hooks/useUserProfilePicture'
 
 interface ServerProps {
   serverUser: User
@@ -26,17 +30,22 @@ interface ServerProps {
 type AdminProfileFormDataType = {
   firstName: string
   lastName: string
+  profilePictureState: { image: ImageType; didRemove: boolean }
   dateOfBirth: Date
   email: string
   password: string
   passwordConfirmation: string
+}
+const useNonNullUser = (user: User | undefined, serverUser: User) => {
+  if (user === undefined) return serverUser
+  return user
 }
 export default function Profile({ serverUser }: ServerProps) {
   const queryClient = useQueryClient()
   const { data: session } = useSession()
   const t = useTranslation()
 
-  const { data: user } = useQuery<User>(
+  const { data: fetchedUser } = useQuery<User>(
     ['user', session],
     async () => {
       const response = await new UserApi(session).findOne(serverUser._id)
@@ -57,6 +66,8 @@ export default function Profile({ serverUser }: ServerProps) {
       },
     }
   )
+
+  const user = useNonNullUser(fetchedUser, serverUser)
 
   const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false)
 
@@ -121,12 +132,29 @@ export default function Profile({ serverUser }: ServerProps) {
 
     // check the dirty fields and only send the data that has been changed
     setSaveButtonDisabled(true)
-
     const dirtyFieldsArray = Object.keys(dirtyFields)
-    const dirtyData = {}
+    let dirtyData = {}
     dirtyFieldsArray.forEach((field) => {
-      dirtyData[field] = data[field]
+      if (field === 'profilePictureState') {
+        return
+      } else {
+        dirtyData[field] = data[field]
+      }
     })
+
+    if (data.profilePictureState && data.profilePictureState.didRemove && user.profilePicture) {
+      dirtyData = {
+        ...dirtyData,
+        profilePicture: null,
+      }
+    }
+
+    if (data.profilePictureState && data.profilePictureState.image) {
+      dirtyData = {
+        ...dirtyData,
+        profilePicture: data.profilePictureState.image.dataURL,
+      }
+    }
 
     // if empty object, i.e. no changes made, return
     if (dirtyFieldsArray.length === 0) {
@@ -140,6 +168,23 @@ export default function Profile({ serverUser }: ServerProps) {
     }
 
     try {
+      // They change the profile pic
+      if (
+        data.profilePictureState &&
+        data.profilePictureState.image &&
+        data.profilePictureState.image.file
+      ) {
+        // Upload Image and get url
+        const imageUploadRes = await new ImageApi(session).uploadImage({
+          image: data.profilePictureState.image.file,
+        })
+
+        // add url to dirty data
+        dirtyData = {
+          ...dirtyData,
+          profilePicture: imageUploadRes.payload.image_url,
+        }
+      }
       const res = await new UserApi(session).update(serverUser._id, dirtyData)
 
       // update user using react-query
@@ -188,104 +233,114 @@ export default function Profile({ serverUser }: ServerProps) {
       </Head>
       <div className="flex w-full h-screen ">
         <SideMenu higlightProfile={true} />
-        <main className="flex w-full h-screen overflow-y-scroll lg:overflow-hidden">
-          <form
-            id="form"
-            onSubmit={handleSubmit(submitHandler)}
-            className="flex flex-col w-full h-full gap-6 md:gap-12 py-8 px-4"
-          >
-            <div className="flex w-full justify-between items-center">
-              <div className="text-brand text-lg md:text-xl lg:text-2xl font-semibold">
-                {user?.firstName} {user?.lastName}
-              </div>
-              <button
-                type="submit"
-                form="form"
-                value="Submit"
-                className="btn btn-secondary rounded-lg px-4 sm:pr-6 py-2 hover:bg-brand-500 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-                disabled={saveButtonDisabled}
-              >
-                {t.profile.save}
-              </button>
+        <main className="flex w-full h-screen overflow-y-scroll ">
+          <div className="flex items-start gap-4 w-full py-8 px-4 flex-col md:flex-row">
+            <div className="px-8 w-full md:w-auto flex flex-col items-center justify-center md:justify-start">
+              <ProfileImageUpload
+                control={control}
+                name="profilePictureState"
+                defaultStartImage={useUserProfilePicture(user)}
+                user={user}
+              />
             </div>
-            <Alert
-              open={alertData.open}
-              message={alertData.message}
-              variant={alertData.variant}
-              close={closeAlert}
-            />
-            <div className="bg-brand-50 p-4 rounded w-full flex flex-col gap-4">
-              <div className="hidden md:block text-brand font-semibold text-sm md:text-base">
-                {t.profile.profile}
+            <form
+              id="form"
+              onSubmit={handleSubmit(submitHandler)}
+              className="flex flex-col w-full h-full gap-6 md:gap-12 py-8 px-4"
+            >
+              <div className="flex w-full justify-between items-center">
+                <div className="text-brand text-lg md:text-xl lg:text-2xl font-semibold">
+                  {user?.firstName} {user?.lastName}
+                </div>
+                <button
+                  type="submit"
+                  form="form"
+                  value="Submit"
+                  className="btn btn-secondary rounded-lg px-4 sm:pr-6 py-2 hover:bg-brand-500 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                  disabled={saveButtonDisabled}
+                >
+                  {t.profile.save}
+                </button>
               </div>
-              <div className="flex flex-col md:flex-row flex-wrap w-full gap-2 md:gap-4">
-                <div className="flex-1 flex-shrink">
-                  <Input
-                    {...register('firstName')}
-                    label={t.profile.firstName}
-                    placeholder="John"
-                    StartIcon={UserIcon}
-                    error={errors.firstName?.message}
-                  />
+              <Alert
+                open={alertData.open}
+                message={alertData.message}
+                variant={alertData.variant}
+                close={closeAlert}
+              />
+              <div className="bg-brand-50 p-4 rounded w-full flex flex-col gap-4">
+                <div className="hidden md:block text-brand font-semibold text-sm md:text-base">
+                  {t.profile.profile}
                 </div>
-                <div className="flex-1 flex-shrink">
-                  <Input
-                    {...register('lastName')}
-                    label={t.profile.lastName}
-                    placeholder="Smith"
-                    StartIcon={UserIcon}
-                    error={errors.lastName?.message}
-                  />
+                <div className="flex flex-col md:flex-row flex-wrap w-full gap-2 md:gap-4">
+                  <div className="flex-1 flex-shrink">
+                    <Input
+                      {...register('firstName')}
+                      label={t.profile.firstName}
+                      placeholder="John"
+                      StartIcon={UserIcon}
+                      error={errors.firstName?.message}
+                    />
+                  </div>
+                  <div className="flex-1 flex-shrink">
+                    <Input
+                      {...register('lastName')}
+                      label={t.profile.lastName}
+                      placeholder="Smith"
+                      StartIcon={UserIcon}
+                      error={errors.lastName?.message}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="flex flex-col md:flex-row flex-wrap w-full gap-4">
-                <div className="flex-1 flex-shrink">
-                  <DatePickerWithHookForm
-                    control={control}
-                    name={register('dateOfBirth').name} // we only need the "name" prop
-                    label={t.profile.dateOfBirth as string}
-                    error={errors.dateOfBirth?.message}
-                  />
-                </div>
-                <div className="flex-1 flex-shrink">
-                  <Input
-                    {...register('email')}
-                    label="Email"
-                    placeholder={'Email'}
-                    StartIcon={EnvelopeIcon}
-                    error={errors.email?.message}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="bg-brand-50 p-4 rounded w-full flex flex-col gap-4 ">
-              <div className="hidden md:block text-brand font-semibold text-sm md:text-base">
-                {t.profile.changePassword}
-              </div>
-              <div className="flex flex-col md:flex-row flex-wrap w-full gap-2 md:gap-4 ">
-                <div className="flex-1 flex-shrink ">
-                  <Input
-                    {...register('password')}
-                    label={t.profile.password}
-                    placeholder="Password"
-                    type="password"
-                    StartIcon={LockClosedIcon}
-                    error={errors.password?.message}
-                  />
-                </div>
-                <div className="flex-1 flex-shrink">
-                  <Input
-                    {...register('passwordConfirmation')}
-                    label={t.profile.confirmPassword}
-                    type="password"
-                    placeholder="Confirm Password"
-                    StartIcon={LockClosedIcon}
-                    error={errors.passwordConfirmation?.message}
-                  />
+                <div className="flex flex-col md:flex-row flex-wrap w-full gap-4">
+                  <div className="flex-1 flex-shrink">
+                    <DatePickerWithHookForm
+                      control={control}
+                      name={register('dateOfBirth').name} // we only need the "name" prop
+                      label={t.profile.dateOfBirth as string}
+                      error={errors.dateOfBirth?.message}
+                    />
+                  </div>
+                  <div className="flex-1 flex-shrink">
+                    <Input
+                      {...register('email')}
+                      label="Email"
+                      placeholder={'Email'}
+                      StartIcon={EnvelopeIcon}
+                      error={errors.email?.message}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          </form>
+              <div className="bg-brand-50 p-4 rounded w-full flex flex-col gap-4 ">
+                <div className="hidden md:block text-brand font-semibold text-sm md:text-base">
+                  {t.profile.changePassword}
+                </div>
+                <div className="flex flex-col md:flex-row flex-wrap w-full gap-2 md:gap-4 ">
+                  <div className="flex-1 flex-shrink ">
+                    <Input
+                      {...register('password')}
+                      label={t.profile.password}
+                      placeholder="Password"
+                      type="password"
+                      StartIcon={LockClosedIcon}
+                      error={errors.password?.message}
+                    />
+                  </div>
+                  <div className="flex-1 flex-shrink">
+                    <Input
+                      {...register('passwordConfirmation')}
+                      label={t.profile.confirmPassword}
+                      type="password"
+                      placeholder="Confirm Password"
+                      StartIcon={LockClosedIcon}
+                      error={errors.passwordConfirmation?.message}
+                    />
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
         </main>
       </div>
     </>

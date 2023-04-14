@@ -9,7 +9,7 @@ type CreationCardProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   titleImage: any
 }
-const CreateCourseOrEditCard: React.FC<CreationCardProps> = ({
+const CreateResourceCard: React.FC<CreationCardProps> = ({
   children,
   title,
   underLineImage,
@@ -36,4 +36,4 @@ const CreateCourseOrEditCard: React.FC<CreationCardProps> = ({
   )
 }
 
-export default CreateCourseOrEditCard
+export default CreateResourceCard

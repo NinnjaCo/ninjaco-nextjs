@@ -19,8 +19,9 @@ import CreatorMenu from '@/components/creator/creatorMenu'
 import DatePickerWithHookForm from '@/components/forms/datePickerWithHookForm'
 import Head from 'next/head'
 import ProfileImageUpload from '@/components/forms/profileImageUpload'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useTranslation from '@/hooks/useTranslation'
+import useUserProfilePicture from '@/hooks/useUserProfilePicture'
 
 interface ServerProps {
   serverUser: User
@@ -29,6 +30,7 @@ interface ServerProps {
 type CreatorProfileFormDataType = {
   firstName: string
   lastName: string
+  profilePictureState: { image: ImageType; didRemove: boolean }
   dateOfBirth: Date
   email: string
   password: string
@@ -90,6 +92,7 @@ export default function Profile({ serverUser }: ServerProps) {
       {
         firstName: yup.string().required('First Name is required'),
         lastName: yup.string().required('Last Name is required'),
+        profilePictureState: yup.object(),
         dateOfBirth: yup
           .date()
           .max(new Date(), 'Date of Birth cannot be in the future')
@@ -128,19 +131,35 @@ export default function Profile({ serverUser }: ServerProps) {
 
   // Handle form submission
   const submitHandler = async (data: CreatorProfileFormDataType) => {
-    if (!user) return
-
     // check the dirty fields and only send the data that has been changed
     setSaveButtonDisabled(true)
 
     const dirtyFieldsArray = Object.keys(dirtyFields)
     let dirtyData = {}
     dirtyFieldsArray.forEach((field) => {
-      dirtyData[field] = data[field]
+      if (field === 'profilePictureState') {
+        return
+      } else {
+        dirtyData[field] = data[field]
+      }
     })
 
+    if (data.profilePictureState && data.profilePictureState.didRemove && user.profilePicture) {
+      dirtyData = {
+        ...dirtyData,
+        profilePicture: null,
+      }
+    }
+
+    if (data.profilePictureState && data.profilePictureState.image) {
+      dirtyData = {
+        ...dirtyData,
+        profilePicture: data.profilePictureState.image.dataURL,
+      }
+    }
+
     // if empty object, i.e. no changes made, return
-    if (dirtyFieldsArray.length === 0 && profilePic === undefined && !user.profilePicture) {
+    if (Object.keys(dirtyData).length === 0) {
       setSaveButtonDisabled(false)
       setAlertData({
         message: 'No changes made',
@@ -151,16 +170,16 @@ export default function Profile({ serverUser }: ServerProps) {
     }
 
     try {
-      setAlertData({
-        message: 'Uploading ...',
-        variant: 'info',
-        open: true,
-      })
-
       // They change the profile pic
-      if (profilePic !== undefined && profilePic.file !== undefined) {
+      if (
+        data.profilePictureState &&
+        data.profilePictureState.image &&
+        data.profilePictureState.image.file
+      ) {
         // Upload Image and get url
-        const imageUploadRes = await new ImageApi(session).uploadImage({ image: profilePic.file })
+        const imageUploadRes = await new ImageApi(session).uploadImage({
+          image: data.profilePictureState.image.file,
+        })
 
         // add url to dirty data
         dirtyData = {
@@ -168,15 +187,6 @@ export default function Profile({ serverUser }: ServerProps) {
           profilePicture: imageUploadRes.payload.image_url,
         }
       }
-
-      // They remove the profile pic that they uploaded brefore and revert to the default
-      if (profilePic === undefined && user.profilePicture) {
-        dirtyData = {
-          ...dirtyData,
-          profilePicture: '',
-        }
-      }
-
       const res = await new UserApi(session).update(serverUser._id, dirtyData)
 
       // update user using react-query
@@ -188,7 +198,7 @@ export default function Profile({ serverUser }: ServerProps) {
         open: true,
       })
       // reset react hook form
-      await reset({
+      reset({
         firstName: res.payload.firstName,
         lastName: res.payload.lastName,
         dateOfBirth: new Date(res.payload.dateOfBirth),
@@ -216,16 +226,6 @@ export default function Profile({ serverUser }: ServerProps) {
     }
   }
 
-  // Use array because the library forces an array of ImageType
-  const [profilePic, setProfilePic] = useState<ImageType | undefined>(undefined)
-
-  const callBackOnImageUpload = (image: ImageType) => {
-    setProfilePic(image)
-  }
-  const callBackOnImageRemove = () => {
-    setProfilePic(undefined)
-  }
-
   return (
     <>
       <Head>
@@ -239,9 +239,10 @@ export default function Profile({ serverUser }: ServerProps) {
         <div className="flex items-start gap-4 w-full py-8 px-4 flex-col md:flex-row">
           <div className="px-8 w-full md:w-auto flex flex-col items-center justify-center md:justify-start">
             <ProfileImageUpload
+              control={control}
+              name="profilePictureState"
+              defaultStartImage={useUserProfilePicture(user)}
               user={user}
-              callbackOnNewImageSet={callBackOnImageUpload}
-              callBackOnImageRemove={callBackOnImageRemove}
             />
           </div>
           <form

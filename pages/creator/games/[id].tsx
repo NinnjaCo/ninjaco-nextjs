@@ -1,5 +1,8 @@
+import { AuthError } from '@/models/shared'
 import { Game } from '@/models/crud/game.model'
 import { GameApi } from '@/utils/api/game/game.api'
+import { ImageApi } from '@/utils/api/images/image-upload.api'
+import { ImageType } from 'react-images-uploading'
 import { Input } from '@/components/forms/input'
 import { Switch } from '@headlessui/react'
 import { Uid } from '@/models/shared'
@@ -7,8 +10,11 @@ import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
-import { isAxiosError } from '@/utils/errors'
+import { isAxiosError, unWrapAuthError } from '@/utils/errors'
+import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
+import { yupResolver } from '@hookform/resolvers/yup'
 import Alert from '@/components/shared/alert'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import Eraser from '@/components/creator/game/eraser'
@@ -18,6 +24,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Player from '@/components/creator/game/player'
 import React, { useEffect } from 'react'
+import SingleImageUpload from '@/components/forms/singleImageUpload'
 import Wall from '@/components/creator/game/wall'
 import clsx from 'clsx'
 import underLineImage from '@/images/lightlyWavedLine.svg'
@@ -70,6 +77,7 @@ enum Tools {
 const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
   console.log('game', game)
   const session = useSession()
+  const router = useRouter()
   const [gameTitle, setGameTitle] = React.useState(game.title)
   const MIN_COLUMNS = 5
   const MAX_COLUMNS = 20
@@ -78,6 +86,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
     createGrid(numberOfColumns, numberOfColumns)
   )
 
+  const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false)
   const [selectedTool, setSelectedTool] = React.useState<Tools>(Tools.NONE)
   const [cellSize, setCellSize] = React.useState(25)
 
@@ -182,7 +191,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
       setGameState({
         ...gameState,
         isPlayerSet: true,
-        playerLocation: { row: rowIndex, col: colIndex },
+        playerLocation: newGrid[rowIndex][colIndex],
       })
     } else if (selectedTool === Tools.GOAL) {
       // Only 1 goal allowed
@@ -199,7 +208,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
       setGameState({
         ...gameState,
         isGoalSet: true,
-        goalLocation: { row: rowIndex, col: colIndex },
+        goalLocation: newGrid[rowIndex][colIndex],
       })
     } else if (selectedTool === Tools.WALL) {
       const newGrid = gameGrid.map((row) => {
@@ -219,7 +228,13 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
       setGameGrid(newGrid)
       setGameState({
         ...gameState,
-        wallsLocations: [...(gameState.wallsLocations || []), { row: rowIndex, col: colIndex }],
+        wallsLocations: newGrid.flat().filter((cell) => cell.isWall),
+      })
+    } else {
+      setAlertData({
+        message: 'Please select a tool from the toolbox',
+        variant: 'info',
+        open: true,
       })
     }
   }
@@ -244,7 +259,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
     setSelectedTool(tool)
   }
 
-  const saveGame = async () => {
+  const saveGame = async (data: { gameImage: ImageType }) => {
     closeAlert()
 
     if (!gameState.isPlayerSet || gameState.playerLocation === undefined) {
@@ -273,6 +288,17 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
       })
       return
     }
+
+    if (!data.gameImage || !data.gameImage.file) {
+      setAlertData({
+        message: 'Please upload an image for the game',
+        variant: 'error',
+        open: true,
+      })
+      return
+    }
+
+    setSaveButtonDisabled(true)
     // Save game
     try {
       await new GameApi().update(game._id, {
@@ -285,11 +311,26 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
           ? gameState.wallsLocations.map((wall) => [wall.row, wall.col])
           : [],
       })
-    } catch (err) {
-      if (isAxiosError(err)) {
-        console.log(err)
+
+      setAlertData({
+        message: 'Game created successfully',
+        variant: 'success',
+        open: true,
+      })
+
+      router.push('/creator/games')
+    } catch (error) {
+      setSaveButtonDisabled(false)
+      if (isAxiosError<AuthError>(error)) {
+        const errors = unWrapAuthError(error)
         setAlertData({
-          message: 'Something went wrong, please try again',
+          message: errors[0].message || 'Something went wrong',
+          variant: 'error',
+          open: true,
+        })
+      } else {
+        setAlertData({
+          message: 'Error creating game',
           variant: 'error',
           open: true,
         })
@@ -332,16 +373,17 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
               name="name"
               label="Game Title"
               placeholder="Game Title"
-              className="max-w-sm"
+              className="max-w-md"
               value={gameTitle}
               onChange={(e) => {
                 setGameTitle(e.target.value)
               }}
+              isRequired={true}
             />
             <div className="w-full flex bg-white justify-evenly gap-12 flex-col lg:flex-row">
               {/* Draw Grid */}
               <div
-                className="grid gap-px transition-all w-fit"
+                className="grid gap-px transition-all w-fit h-fit"
                 style={{
                   gridTemplateColumns: `repeat(${gameGrid[0].length}, minmax(0, 1fr))`,
                 }}
@@ -437,11 +479,20 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
                     />
                   </div>
                 </div>
+
+                <SingleImageUpload
+                  control={control}
+                  name="gameImage"
+                  error={errors.gameImage?.message as unknown as string}
+                  label="Game Image"
+                  isRequired={true}
+                />
                 <div className="flex gap-4 pt-4">
                   <button
-                    className="btn btn-brand rounded-lg hover:bg-brand-400 hover:text-white py-2 h-fit"
+                    className="btn btn-brand rounded-lg hover:bg-brand-400 hover:text-white py-2 h-fit disabled:bg-gray-500 disabled:cursor-not-allowed disabled:text-white"
+                    disabled={saveButtonDisabled}
                     onClick={() => {
-                      saveGame()
+                      handleSubmit(saveGame)()
                     }}
                   >
                     Save Game

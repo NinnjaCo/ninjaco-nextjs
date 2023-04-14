@@ -7,6 +7,8 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { isAxiosError } from '@/utils/errors'
 import { useSession } from 'next-auth/react'
+import { ImageType } from 'react-images-uploading'
+import * as yup from 'yup'
 import Alert from '@/components/shared/alert'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import Eraser from '@/components/creator/game/eraser'
@@ -19,6 +21,9 @@ import React, { useEffect } from 'react'
 import Wall from '@/components/creator/game/wall'
 import clsx from 'clsx'
 import underLineImage from '@/images/lightlyWavedLine.svg'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { ImageApi } from '@/utils/api/images/image-upload.api'
 
 interface GridCell {
   row: number
@@ -91,7 +96,21 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
     isGoalSet: false,
     playerLocation: undefined,
     goalLocation: undefined,
-    wallsLocations: undefined,
+    wallsLocations: gameGrid.flat().filter((cell) => cell.isWall),
+  })
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<{
+    gameImage: ImageType
+  }>({
+    resolver: yupResolver(
+      yup.object().shape({
+        gameImage: yup.mixed().required('Image is required'),
+      })
+    ),
   })
 
   const [alertData, setAlertData] = React.useState<{
@@ -261,15 +280,21 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
     }
     // Save game
     try {
-      await new GameApi().create({
+      const playerLocation = [gameState.playerLocation.row, gameState.playerLocation.col]
+      const goalLocation = [gameState.goalLocation.row, gameState.goalLocation.col]
+      const wallsLocations = gameState.wallsLocations?.map((wall) => [wall.row, wall.col]) || []
+
+      const imageRes = await new ImageApi(session.data).uploadImage({
+        image: data.gameImage.file,
+      })
+      await new GameApi(session.data).create({
         title: gameTitle,
-        numOfBlocks: numberOfBlocks as number,
+        image: imageRes.payload.image_url,
+        numOfBlocks: numberOfBlocks,
         sizeOfGrid: gameGrid.length,
-        playerLocation: [gameState.playerLocation.row, gameState.playerLocation.col],
-        goalLocation: [gameState.goalLocation.row, gameState.goalLocation.col],
-        wallsLocations: gameState.wallsLocations
-          ? gameState.wallsLocations.map((wall) => [wall.row, wall.col])
-          : [],
+        playerLocation: playerLocation,
+        goalLocation: goalLocation,
+        wallsLocations: wallsLocations,
       })
     } catch (err) {
       if (isAxiosError(err)) {
