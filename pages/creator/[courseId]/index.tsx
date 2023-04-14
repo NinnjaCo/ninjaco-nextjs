@@ -1,3 +1,5 @@
+import { Course } from '@/models/crud/course.model'
+import { CourseApi } from '@/utils/api/course/course.api'
 import { FunnelIcon } from '@heroicons/react/24/outline'
 import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
@@ -10,7 +12,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import MissionCard from '@/components/creator/missionCard'
 
-export default function Course({ user }: { user: User }) {
+export default function CourseView({ user, course }: { user: User; course: Course }) {
   return (
     <>
       <Head>
@@ -24,7 +26,7 @@ export default function Course({ user }: { user: User }) {
           <div className="w-52 h-32 relative">
             <Image
               className="bg-brand-100 border-2 border-brand-200 rounded-xl w-52 h-32"
-              src="https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png"
+              src={course.image}
               style={{
                 objectFit: 'contain',
               }}
@@ -35,14 +37,13 @@ export default function Course({ user }: { user: User }) {
           </div>
           <div className="flex flex-col gap-9 w-full">
             <div className="flex justify-between gap-6 items-center">
-              <div className=" text-brand font-semibold text-xl md:text-3xl">Robotics 101</div>
+              <div className=" text-brand font-semibold text-xl md:text-3xl">{course.title}</div>
               <button className="text-xs  md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit">
                 Edit Course
               </button>
             </div>
             <div className=" text-brand-500 font-medium text-xs md:text-base w-full">
-              This course will lorem ipsum lorem ipsum lorem ipsumThis course will lorem ipsum lorem
-              ipsum lorem ipsum
+              {course.description}
             </div>
           </div>
         </div>
@@ -50,27 +51,31 @@ export default function Course({ user }: { user: User }) {
           <div className="flex flex-col gap-4 border-r-0 md:border-r-2 mr-0 md:mr-12 border-brand-50">
             <div className="flex gap-3 items-center">
               <div className=" text-brand font-medium text-xs md:text-base">Course type:</div>
-              <div className="text-brand font-semibold text-sm md:text-lg">ARDUINO</div>
+              <div className="text-brand font-semibold text-sm md:text-lg">{course.type}</div>
             </div>
-            <div className="flex gap-3 items-center w-full flex-wrap">
-              <div className=" text-brand font-medium text-xs md:text-base">Age range:</div>
-              <Chip text="7+" />
-            </div>
-            <div className="flex gap-3 items-center w-full flex-wrap">
-              <div className=" text-brand font-medium text-xs md:text-base">Course tags:</div>
-              <Chip text="Basics" />
-            </div>
+            {course?.ageRange && (
+              <div className="flex gap-3 items-center w-full flex-wrap">
+                <div className=" text-brand font-medium text-xs md:text-base">Age range:</div>
+                {course?.ageRange?.map((age, index) => (
+                  <Chip text={age} key={index} />
+                ))}
+              </div>
+            )}
           </div>
           <div className="flex flex-col gap-4">
             <div className="flex gap-3 items-center w-full flex-wrap">
               <div className=" text-brand font-medium text-xs md:text-base">
                 Course prerequisites:
               </div>
-              <Chip text="Basic Computer Knowledge" />
+              {course?.preRequisites?.map((prerequisite, index) => (
+                <Chip text={prerequisite} key={index} />
+              ))}
             </div>
             <div className="flex gap-3 items-center w-full flex-wrap">
               <div className=" text-brand font-medium text-xs md:text-base">Course objectives:</div>
-              <Chip text="Learn about different types of encryption/decryption" />
+              {course?.objectives?.map((objective, index) => (
+                <Chip text={objective} key={index} />
+              ))}
             </div>
           </div>
         </div>
@@ -79,60 +84,29 @@ export default function Course({ user }: { user: User }) {
             <div className="font-semibold text-2xl">Missions</div>
             <Link
               className=" text-xs md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit"
-              href={'/creator/blabla/create'}
+              href={`/creator/${course._id}/create`}
             >
               Add Mission
             </Link>
           </div>
           <div className="flex gap-4 items-center">
-            <div className="text-brand font-medium text-xs">10 missions</div>
+            <div className="text-brand font-medium text-xs">{course.missions.length} missions</div>
             <button className="btn btn-secondary bg-brand-300 rounded-lg text-brand-700 border-brand-700 hover:bg-brand hover:text-white py-1 px-4 h-fit flex gap-3">
               <FunnelIcon className="w-4 h-4" />
               Filter
             </button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center place-items-center">
-            <MissionCard
-              image="https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png"
-              name="hello"
-              levels="7"
-            />
-            <MissionCard
-              image="https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png"
-              name="hello"
-              levels="7"
-            />
-            <MissionCard
-              image="https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png"
-              name="hello"
-              levels="7"
-            />
-            <MissionCard
-              image="https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png"
-              name="hello"
-              levels="7"
-            />
-            <MissionCard
-              image="https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png"
-              name="hello"
-              levels="7"
-            />
-            <MissionCard
-              image="https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png"
-              name="hello"
-              levels="7"
-            />
-            <MissionCard
-              image="https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png"
-              name="hello"
-              levels="7"
-            />
-            <MissionCard
-              image="https://s3-us-west-2.amazonaws.com/cherpa01-static/curriculum/courses/intro_robotics_electronics.png"
-              name="hello"
-              levels="7"
-            />
-          </div>
+          {course.missions.length !== 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center place-items-center">
+              {course.missions.map((mission, index) => (
+                <Link href={`/creator/${course._id}/${mission._id}`} key={index}>
+                  <MissionCard mission={mission} />
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="text-brand font-medium text-lg">No missions yet</div>
+          )}
         </div>
       </main>
     </>
@@ -141,6 +115,7 @@ export default function Course({ user }: { user: User }) {
 
 export const getServerSideProps = async (context) => {
   const { query, req, res } = context
+  const { courseId } = query
 
   const session = await getServerSession(req, res, authOptions)
   if (!session) {
@@ -165,9 +140,23 @@ export const getServerSideProps = async (context) => {
     }
   }
 
+  const course = await new CourseApi(session).findOne(courseId)
+
+  if (!course || !course.payload) {
+    return {
+      props: {
+        redirect: {
+          destination: '/creator',
+          permanent: false,
+        },
+      },
+    }
+  }
+
   return {
     props: {
       user: response.payload,
+      course: course.payload,
     },
   }
 }
