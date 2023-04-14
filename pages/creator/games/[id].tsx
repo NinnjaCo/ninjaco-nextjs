@@ -82,12 +82,16 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
   const [gameState, setGameState] = React.useState<{
     isPlayerSet: boolean
     isGoalSet: boolean
+    numberOfBlocks?: number | undefined
+    sizeOfGrid: number | undefined
     playerLocation: { row: number; col: number } | undefined
     goalLocation: { row: number; col: number } | undefined
     wallsLocations: { row: number; col: number }[] | undefined
   }>({
     isPlayerSet: false,
     isGoalSet: false,
+    numberOfBlocks: undefined,
+    sizeOfGrid: undefined,
     playerLocation: undefined,
     goalLocation: undefined,
     wallsLocations: undefined,
@@ -159,13 +163,16 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
           return {
             ...cell,
             isPlayer: false,
-            playerLocation: [rowIndex, colIndex],
           }
         })
       })
       newGrid[rowIndex][colIndex].isPlayer = true
       setGameGrid(newGrid)
-      setGameState({ ...gameState, isPlayerSet: true })
+      setGameState({
+        ...gameState,
+        isPlayerSet: true,
+        playerLocation: { row: rowIndex, col: colIndex },
+      })
     } else if (selectedTool === Tools.GOAL) {
       // Only 1 goal allowed
       const newGrid = gameGrid.map((row) => {
@@ -173,13 +180,16 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
           return {
             ...cell,
             isGoal: false,
-            goalLocation: [rowIndex, colIndex],
           }
         })
       })
       newGrid[rowIndex][colIndex].isGoal = true
       setGameGrid(newGrid)
-      setGameState({ ...gameState, isGoalSet: true })
+      setGameState({
+        ...gameState,
+        isGoalSet: true,
+        goalLocation: { row: rowIndex, col: colIndex },
+      })
     } else if (selectedTool === Tools.WALL) {
       const newGrid = gameGrid.map((row) => {
         return row.map((cell) => {
@@ -190,16 +200,16 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
             return {
               ...cell,
               isWall: !cell.isWall && !cell.isPlayer && !cell.isGoal,
-              wallsLocations: [
-                ...(gameState.wallsLocations || []),
-                { row: rowIndex, col: colIndex },
-              ],
             }
           }
           return cell
         })
       })
       setGameGrid(newGrid)
+      setGameState({
+        ...gameState,
+        wallsLocations: [...(gameState.wallsLocations || []), { row: rowIndex, col: colIndex }],
+      })
     }
   }
 
@@ -252,8 +262,6 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
       })
       return
     }
-    console.log('hi', gameState)
-
     // Save game
     await new GameApi().create({
       title: gameTitle,
@@ -369,6 +377,7 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
                           // update the grid
                           const newGrid = createGrid(newNumberOfColumns, newNumberOfColumns)
                           setGameGrid(newGrid)
+                          setGameState({ ...gameState, sizeOfGrid: newNumberOfColumns })
                         }}
                         value={numberOfColumns}
                         className="w-full h-2 rounded-lg appearance-none cursor-pointer bg-secondary accent-brand"
@@ -383,6 +392,7 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
                         onChange={(isChecked) => {
                           setToogleLimitedBlocks(isChecked)
                           setNumberOfBlocks(undefined)
+                          setGameState({ ...gameState, numberOfBlocks: undefined })
                         }}
                         className={`${toogleLimitedBlocks ? 'bg-brand-700' : 'bg-brand-500'}
                       relative inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
@@ -405,6 +415,7 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
                       onChange={(e) => {
                         const newNumberOfBlocks = parseInt(e.target.value, 10)
                         setNumberOfBlocks(newNumberOfBlocks)
+                        setGameState({ ...gameState, numberOfBlocks: newNumberOfBlocks })
                       }}
                       className={clsx({
                         'bg-brand-50 cursor-not-allowed': !toogleLimitedBlocks,
