@@ -392,7 +392,6 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
                         onChange={(isChecked) => {
                           setToogleLimitedBlocks(isChecked)
                           setNumberOfBlocks(undefined)
-                          setGameState({ ...gameState, numberOfBlocks: undefined })
                         }}
                         className={`${toogleLimitedBlocks ? 'bg-brand-700' : 'bg-brand-500'}
                       relative inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
