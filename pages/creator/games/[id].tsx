@@ -1,9 +1,13 @@
+import { AuthError } from '@/models/shared'
+import { GameApi } from '@/utils/api/game/game.api'
 import { Input } from '@/components/forms/input'
 import { Switch } from '@headlessui/react'
 import { User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
+import { isAxiosError, unWrapAuthError } from '@/utils/errors'
+import { useSession } from 'next-auth/react'
 import Alert from '@/components/shared/alert'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import Eraser from '@/components/creator/game/eraser'
@@ -63,6 +67,7 @@ enum Tools {
 }
 
 const GameViewAndEditPage = ({ user }: { user: User }) => {
+  const session = useSession()
   const [gameTitle, setGameTitle] = React.useState('')
   const MIN_COLUMNS = 5
   const MAX_COLUMNS = 20
@@ -71,6 +76,7 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
     createGrid(numberOfColumns, numberOfColumns)
   )
 
+  const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false)
   const [selectedTool, setSelectedTool] = React.useState<Tools>(Tools.NONE)
   const [cellSize, setCellSize] = React.useState(25)
 
@@ -79,9 +85,15 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
   const [gameState, setGameState] = React.useState<{
     isPlayerSet: boolean
     isGoalSet: boolean
+    playerLocation: GridCell | undefined
+    goalLocation: GridCell | undefined
+    wallsLocations?: GridCell[] | undefined
   }>({
     isPlayerSet: false,
     isGoalSet: false,
+    playerLocation: undefined,
+    goalLocation: undefined,
+    wallsLocations: gameGrid.flat().filter((cell) => cell.isWall),
   })
 
   const [alertData, setAlertData] = React.useState<{
@@ -155,7 +167,11 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
       })
       newGrid[rowIndex][colIndex].isPlayer = true
       setGameGrid(newGrid)
-      setGameState({ ...gameState, isPlayerSet: true })
+      setGameState({
+        ...gameState,
+        isPlayerSet: true,
+        playerLocation: newGrid[rowIndex][colIndex],
+      })
     } else if (selectedTool === Tools.GOAL) {
       // Only 1 goal allowed
       const newGrid = gameGrid.map((row) => {
@@ -168,7 +184,11 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
       })
       newGrid[rowIndex][colIndex].isGoal = true
       setGameGrid(newGrid)
-      setGameState({ ...gameState, isGoalSet: true })
+      setGameState({
+        ...gameState,
+        isGoalSet: true,
+        goalLocation: newGrid[rowIndex][colIndex],
+      })
     } else if (selectedTool === Tools.WALL) {
       const newGrid = gameGrid.map((row) => {
         return row.map((cell) => {
@@ -185,6 +205,16 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
         })
       })
       setGameGrid(newGrid)
+      setGameState({
+        ...gameState,
+        wallsLocations: newGrid.flat().filter((cell) => cell.isWall),
+      })
+    } else {
+      setAlertData({
+        message: 'Please select a tool from the toolbox',
+        variant: 'info',
+        open: true,
+      })
     }
   }
 
@@ -211,7 +241,7 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
   const saveGame = async () => {
     closeAlert()
 
-    if (!gameState.isPlayerSet) {
+    if (!gameState.isPlayerSet || gameState.playerLocation === undefined) {
       setAlertData({
         message: 'Please set a player on the grid before saving',
         variant: 'error',
@@ -219,7 +249,7 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
       })
       return
     }
-    if (!gameState.isGoalSet) {
+    if (!gameState.isGoalSet || gameState.goalLocation === undefined) {
       setAlertData({
         message: 'Please set a goal on the grid before saving',
         variant: 'error',
@@ -238,7 +268,43 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
       return
     }
 
+    setSaveButtonDisabled(true)
     // Save game
+    try {
+      const playerLocation = [gameState.playerLocation.row, gameState.playerLocation.col]
+      const goalLocation = [gameState.goalLocation.row, gameState.goalLocation.col]
+      const wallsLocations = gameState.wallsLocations?.map((wall) => [wall.row, wall.col]) || []
+      await new GameApi(session.data).create({
+        title: gameTitle,
+        numOfBlocks: numberOfBlocks,
+        sizeOfGrid: gameGrid.length,
+        playerLocation: playerLocation,
+        goalLocation: goalLocation,
+        wallsLocations: wallsLocations,
+      })
+
+      setAlertData({
+        message: 'Game created successfully',
+        variant: 'success',
+        open: true,
+      })
+    } catch (error) {
+      setSaveButtonDisabled(false)
+      if (isAxiosError<AuthError>(error)) {
+        const errors = unWrapAuthError(error)
+        setAlertData({
+          message: errors[0].message || 'Something went wrong',
+          variant: 'error',
+          open: true,
+        })
+      } else {
+        setAlertData({
+          message: 'Error creating game',
+          variant: 'error',
+          open: true,
+        })
+      }
+    }
   }
 
   return (
@@ -383,7 +449,8 @@ const GameViewAndEditPage = ({ user }: { user: User }) => {
                 </div>
                 <div className="flex gap-4 pt-4">
                   <button
-                    className="btn btn-brand rounded-lg hover:bg-brand-400 hover:text-white py-2 h-fit"
+                    className="btn btn-brand rounded-lg hover:bg-brand-400 hover:text-white py-2 h-fit disabled:bg-gray-500 disabled:cursor-not-allowed disabled:text-white"
+                    disabled={saveButtonDisabled}
                     onClick={() => {
                       saveGame()
                     }}
