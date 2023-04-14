@@ -3,22 +3,26 @@ enum CourseType {
   HTML = 'HTML',
 }
 export interface Course {
-  courseType: CourseType
-  courseTitle: string
-  courseImage: string
-  courseDescription: string
-  courseAgeRange?: string[]
-  coursePrerequisites?: string[]
-  courseObjectives?: string[]
+  _id: string
+  createdAt: string
+  updatedAt: string
+  type: CourseType
+  title: string
+  description: string
+  image: string
+  ageRange?: string[]
+  preRequisites?: string[]
+  objectives?: string[]
   //missions: Mission[]
 }
 
 export interface CourseRequest {
-  courseType: CourseType
-  courseTitle: string
-  courseImage: string
-  courseDescription: string
-  courseAgeRange?: string[]
-  coursePrerequisites?: string[]
-  courseObjectives?: string[]
+  type: CourseType
+  title: string
+  description: string
+  image: string
+  ageRange?: string[]
+  preRequisites?: string[]
+  objectives?: string[]
+  //missions: Mission[]
 }
