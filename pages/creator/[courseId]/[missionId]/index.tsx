@@ -14,7 +14,7 @@ export default function Course({ user }: { user: User }) {
   return (
     <>
       <Head>
-        <title>NinjaCo | Course</title>
+        <title>NinjaCo | Mission</title>
         <meta name="description" content="Leading online platform for visual programming" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
