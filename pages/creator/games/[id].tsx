@@ -60,6 +60,7 @@ const createGrid = (rows: number, cols: number, initialGameState): GridCell[][] 
 
     if (wallsLocations) {
       wallsLocations.forEach((wall) => {
+        if (wall.row >= rows || wall.col >= cols) return
         grid[wall.row][wall.col] = wall
       })
     }
@@ -102,6 +103,7 @@ enum Tools {
 }
 
 const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
+  console.log(game)
   const session = useSession()
   const router = useRouter()
   const [gameTitle, setGameTitle] = React.useState(game.title)
@@ -242,6 +244,8 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
         })
       })
       newGrid[rowIndex][colIndex].isPlayer = true
+      newGrid[rowIndex][colIndex].isWall = false
+      newGrid[rowIndex][colIndex].isGoal = false
       setGameGrid(newGrid)
       setGameState({
         ...gameState,
@@ -259,6 +263,8 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
         })
       })
       newGrid[rowIndex][colIndex].isGoal = true
+      newGrid[rowIndex][colIndex].isWall = false
+      newGrid[rowIndex][colIndex].isPlayer = false
       setGameGrid(newGrid)
       setGameState({
         ...gameState,
@@ -508,6 +514,29 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
                             undefined
                           )
                           setGameGrid(newGrid)
+                          setGameState({
+                            isGoalSet: false,
+                            isPlayerSet: false,
+                            playerLocation: undefined,
+                            goalLocation: undefined,
+                            wallsLocations: newGrid
+                              .map((row, rowIndex) => {
+                                const wallLocations: GridCell[] = []
+                                row.forEach((cell, colIndex) => {
+                                  if (cell.isWall) {
+                                    wallLocations.push({
+                                      row: rowIndex,
+                                      col: colIndex,
+                                      isWall: true,
+                                      isPlayer: false,
+                                      isGoal: false,
+                                    })
+                                  }
+                                })
+                                return wallLocations
+                              })
+                              .flat(),
+                          })
                         }}
                         value={numberOfColumns}
                         className="w-full h-2 rounded-lg appearance-none cursor-pointer bg-secondary accent-brand"

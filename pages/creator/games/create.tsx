@@ -23,6 +23,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Player from '@/components/creator/game/player'
 import React, { useEffect } from 'react'
+import SingleImageUpload from '@/components/forms/singleImageUpload'
 import Wall from '@/components/creator/game/wall'
 import clsx from 'clsx'
 import underLineImage from '@/images/lightlyWavedLine.svg'
@@ -186,6 +187,8 @@ const GameCreatePage = ({ user }: { user: User }) => {
         })
       })
       newGrid[rowIndex][colIndex].isPlayer = true
+      newGrid[rowIndex][colIndex].isWall = false
+      newGrid[rowIndex][colIndex].isGoal = false
       setGameGrid(newGrid)
       setGameState({
         ...gameState,
@@ -203,6 +206,8 @@ const GameCreatePage = ({ user }: { user: User }) => {
         })
       })
       newGrid[rowIndex][colIndex].isGoal = true
+      newGrid[rowIndex][colIndex].isWall = false
+      newGrid[rowIndex][colIndex].isPlayer = false
       setGameGrid(newGrid)
       setGameState({
         ...gameState,
@@ -259,6 +264,7 @@ const GameCreatePage = ({ user }: { user: User }) => {
   }
 
   const saveGame = async (data: { gameImage: ImageType }) => {
+    console.log('Saving game', data)
     closeAlert()
 
     if (!gameState.isPlayerSet || gameState.playerLocation === undefined) {
@@ -313,7 +319,7 @@ const GameCreatePage = ({ user }: { user: User }) => {
         title: gameTitle,
         image: imageRes.payload.image_url,
         numOfBlocks: numberOfBlocks,
-        sizeOfGrid: gameGrid.length,
+        sizeOfGrid: numberOfColumns,
         playerLocation: playerLocation,
         goalLocation: goalLocation,
         wallsLocations: wallsLocations,
@@ -389,7 +395,7 @@ const GameCreatePage = ({ user }: { user: User }) => {
             <div className="w-full flex bg-white justify-evenly gap-12 flex-col lg:flex-row">
               {/* Draw Grid */}
               <div
-                className="grid gap-px transition-all w-fit"
+                className="grid gap-px transition-all w-fit h-fit"
                 style={{
                   gridTemplateColumns: `repeat(${gameGrid[0].length}, minmax(0, 1fr))`,
                 }}
@@ -485,6 +491,14 @@ const GameCreatePage = ({ user }: { user: User }) => {
                     />
                   </div>
                 </div>
+                <SingleImageUpload
+                  control={control}
+                  name="gameImage"
+                  error={errors.gameImage?.message as unknown as string}
+                  label="Game Image"
+                  isRequired={true}
+                />
+
                 <div className="flex gap-4 pt-4">
                   <button
                     className="btn btn-brand rounded-lg hover:bg-brand-400 hover:text-white py-2 h-fit disabled:bg-gray-500 disabled:cursor-not-allowed disabled:text-white"
