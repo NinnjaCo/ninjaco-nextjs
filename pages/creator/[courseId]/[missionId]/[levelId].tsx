@@ -60,6 +60,7 @@ const EditLevel = ({
   const [defaultStepByStepGuideImages, setDefaultStepByStepGuideImages] = React.useState<string[]>(
     level.stepGuideImages
   )
+  console.log(defaultStepByStepGuideImages)
 
   const [alertData, setAlertData] = React.useState<{
     message: string
@@ -91,6 +92,7 @@ const EditLevel = ({
       data.stepByStepGuideImages = []
     }
 
+    // No new images, and the old images have been deleted
     if (
       data.buildingPartsImages.length === 0 &&
       data.stepByStepGuideImages.length === 0 &&
@@ -105,6 +107,7 @@ const EditLevel = ({
       return
     }
 
+    // No new images, and the old images have not been changed
     if (
       data.buildingPartsImages?.length === 0 &&
       data.stepByStepGuideImages?.length === 0 &&
@@ -140,8 +143,13 @@ const EditLevel = ({
       return
     }
 
-    const buildingPartsImagesUrls = await Promise.all(
-      data.buildingPartsImages?.map(async (image) => {
+    const dirtyData = {
+      buildingPartsImages: defaultBuildingPartsImages,
+      stepGuideImages: defaultStepByStepGuideImages,
+    }
+
+    await Promise.all(
+      data.buildingPartsImages.map(async (image) => {
         if (!image.file) {
           setAlertData({
             message: 'One of the images is not valid',
@@ -166,7 +174,7 @@ const EditLevel = ({
           const url = await new ImageApi(session.data).uploadImage({
             image: image.file,
           })
-          return url.payload.image_url
+          dirtyData.buildingPartsImages.push(url.payload.image_url)
         } catch (err) {
           setAlertData({
             message: 'There was an error uploading the images',
@@ -179,7 +187,7 @@ const EditLevel = ({
       })
     )
 
-    const stepByStepGuideImagesUrls = await Promise.all(
+    await Promise.all(
       data.stepByStepGuideImages?.map(async (image) => {
         if (!image.file) {
           setAlertData({
@@ -205,7 +213,7 @@ const EditLevel = ({
           const url = await new ImageApi(session.data).uploadImage({
             image: image.file,
           })
-          return url.payload.image_url
+          dirtyData.stepGuideImages.push(url.payload.image_url)
         } catch (err) {
           setAlertData({
             message: 'There was an error uploading the images',
@@ -217,35 +225,6 @@ const EditLevel = ({
         }
       })
     )
-
-    const newBuildingPartsImages = defaultBuildingPartsImages
-    const newStepByStepGuideImages = defaultStepByStepGuideImages
-
-    if (buildingPartsImagesUrls) {
-      buildingPartsImagesUrls.forEach((url) => {
-        if (url) {
-          newBuildingPartsImages.push(url)
-        }
-      })
-    }
-
-    if (stepByStepGuideImagesUrls) {
-      stepByStepGuideImagesUrls.forEach((url) => {
-        if (url) {
-          newStepByStepGuideImages.push(url)
-        }
-      })
-    }
-
-    let dirtyData = {}
-
-    if (newBuildingPartsImages.length !== level.buildingPartsImages.length) {
-      dirtyData = { ...dirtyData, buildingPartsImages: newBuildingPartsImages }
-    }
-
-    if (newStepByStepGuideImages.length !== level.stepGuideImages.length) {
-      dirtyData = { ...dirtyData, stepGuideImages: newStepByStepGuideImages }
-    }
 
     try {
       await new LevelApi(course._id, mission._id, session.data).update(level._id, {
@@ -272,7 +251,7 @@ const EditLevel = ({
       <main className="w-full">
         <CreatorMenu creator={user} isOnCoursePage={true} isOnGamesPage={false} />
         <CreateResourceCard
-          title="Create Level"
+          title="Edit Level"
           underLineImage={underLineImage}
           titleImage={floatingLegos}
         >

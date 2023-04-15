@@ -192,7 +192,11 @@ const MultipleImageUpload = ({
                             />
                             <button
                               className="absolute top-1 left-1 p-1 rounded-full bg-error-dark text-white"
-                              onClick={() => {
+                              onClick={(e) => {
+                                e.preventDefault()
+                                // if this is the last image and the field isRequired then dont remove it
+                                if (initialsImage.length === 1 && isRequired) return
+
                                 const newImages = initialsImage?.filter(
                                   (image: string, i: number) => i !== index
                                 )
