@@ -1,9 +1,11 @@
+import { User as UserModel } from '@/models/crud'
 import NextAuth from 'next-auth'
 
 declare module 'next-auth' {
   // export default NextAuth
   interface User {
     id: string
+    user: UserModel
     accessToken: string
     refreshToken: string
   }
@@ -13,6 +15,7 @@ declare module 'next-auth' {
    */
   interface Session {
     id: string
+    user: UserModel
     accessToken: string
   }
 }
@@ -20,6 +23,7 @@ declare module 'next-auth' {
 declare module 'next-auth/jwt' {
   interface JWT {
     id: string
+    user: UserModel
     accessToken: string
     refreshToken: string
   }
