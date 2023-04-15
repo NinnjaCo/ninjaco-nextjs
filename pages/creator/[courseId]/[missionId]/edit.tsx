@@ -14,7 +14,6 @@ import { Mission } from '@/models/crud/mission.model'
 import { MissionApi } from '@/utils/api/mission/mission.api'
 import { TextArea } from '@/components/forms/textArea'
 import { User } from '@/models/crud'
-import { UserApi } from '@/utils/api/user'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
@@ -120,6 +119,7 @@ const EditMission = ({
 
   const onSubmitHandler = async (data: EditMissionFormDataType) => {
     // I had to use any, because the dirtyData.image type will get change from ImageType to string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const dirtyData: any = {}
     Object.keys(dirtyFields).forEach((key) => {
       dirtyData[key] = data[key]
@@ -184,7 +184,7 @@ const EditMission = ({
 
   const addNewCategoryAndSelectIt = async () => {
     try {
-      const res = await new CategoryApi(session.data).create({
+      await new CategoryApi(session.data).create({
         categoryName: addNewCategoryState.newCategoryName,
       })
       queryClient.invalidateQueries('categories')

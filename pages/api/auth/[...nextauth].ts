@@ -47,7 +47,7 @@ export const authOptions: AuthOptions = {
     error: '/auth/signin',
   },
   callbacks: {
-    async jwt({ user, token, account, trigger, session }) {
+    async jwt({ user, token, trigger, session }) {
       if (trigger === 'update') {
         token.user = session.user
         return token
@@ -69,7 +69,6 @@ export const authOptions: AuthOptions = {
         // Check if token is expired
         if (token) {
           const decoded = jwt.decode(token.accessToken) as jwt.JwtPayload
-          // console.log('decoded', decoded)
           const exp = decoded.exp
           if (!exp)
             throw new Error('Something went wrong, expiration date is not defined in jwt callback')

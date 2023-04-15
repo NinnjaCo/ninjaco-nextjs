@@ -1,5 +1,4 @@
 import * as yup from 'yup'
-import { CategoryApi } from '@/utils/api/category/category.api'
 import { Course } from '@/models/crud/course.model'
 import { CourseApi } from '@/utils/api/course/course.api'
 import { ImageApi } from '@/utils/api/images/image-upload.api'
@@ -8,12 +7,11 @@ import { Level } from '@/models/crud/level.model'
 import { LevelApi } from '@/utils/api/level/level.api'
 import { Mission } from '@/models/crud/mission.model'
 import { User } from '@/models/crud'
-import { UserApi } from '@/utils/api/user'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
-import { getSession, useSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
+import { useSession } from 'next-auth/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Alert from '@/components/shared/alert'
 import CreateResourceCard from '@/components/creator/creationCard'
@@ -75,16 +73,12 @@ const EditLevel = ({
     register,
     handleSubmit,
     control,
-    setValue,
     formState: { errors },
   } = useForm<EditLevelFormDataType>({
     resolver: yupResolver(EditLevelFormSchema),
   })
 
   const onSubmitHandler = async (data: EditLevelFormDataType) => {
-    console.log('new images:', data)
-    console.log('oldImages', defaultBuildingPartsImages, defaultStepByStepGuideImages)
-
     if (
       data.buildingPartsImages.length === 0 &&
       data.stepByStepGuideImages.length === 0 &&

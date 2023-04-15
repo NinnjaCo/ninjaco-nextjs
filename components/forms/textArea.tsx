@@ -1,4 +1,3 @@
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { Control, Controller } from 'react-hook-form'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import React from 'react'
@@ -11,6 +10,7 @@ type InputProps = React.DetailedHTMLProps<
   cols: number
   rows: number
   rootClassName?: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<any>
   name: string
   label: string
@@ -19,7 +19,7 @@ type InputProps = React.DetailedHTMLProps<
   isRequired?: boolean
 }
 // eslint-disable-next-line react/display-name
-export const TextArea = React.forwardRef<HTMLInputElement, InputProps>(
+export const TextArea = React.forwardRef<HTMLTextAreaElement, InputProps>(
   (
     {
       className,
@@ -49,7 +49,7 @@ export const TextArea = React.forwardRef<HTMLInputElement, InputProps>(
           render={({ field }) => (
             <div className="w-full relative">
               <textarea
-                ref={ref as any}
+                ref={ref}
                 name={name}
                 id={name}
                 cols={cols}

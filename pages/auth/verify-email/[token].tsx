@@ -50,8 +50,6 @@ const VerifyEmail = (props: ServerProps) => {
   const {
     register,
     handleSubmit,
-    control,
-
     formState: { errors, isSubmitted },
   } = useForm<VerifyEmailFormDataType>({
     resolver: yupResolver(VerifyEmailFormSchema),

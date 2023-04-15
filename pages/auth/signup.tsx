@@ -9,7 +9,6 @@ import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { signIn } from 'next-auth/react'
 import { useAuthApi } from '@/utils/api/auth'
 import { useForm } from 'react-hook-form'
-import { useRouter } from 'next/router'
 import { validateTokenRoleRequest } from '@/middleware/validateTokenRole'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Alert from '@/components/shared/alert'
@@ -64,7 +63,6 @@ interface ServerProps {
 const Signup = (props: ServerProps) => {
   const authApi = useAuthApi()
   const t = useTranslation()
-  const router = useRouter()
   const [signUpButtonDisabled, setSignUpButtonDisabled] = React.useState(false)
 
   const {

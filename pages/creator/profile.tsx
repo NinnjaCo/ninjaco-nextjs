@@ -19,7 +19,7 @@ import CreatorMenu from '@/components/creator/creatorMenu'
 import DatePickerWithHookForm from '@/components/forms/datePickerWithHookForm'
 import Head from 'next/head'
 import ProfileImageUpload from '@/components/forms/profileImageUpload'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import useTranslation from '@/hooks/useTranslation'
 import useUserProfilePicture from '@/hooks/useUserProfilePicture'
 
@@ -207,7 +207,7 @@ export default function Profile({ serverUser }: ServerProps) {
         passwordConfirmation: '',
       })
 
-      const newSession = await session.update({
+      await session.update({
         ...session,
         user: {
           ...res.payload,

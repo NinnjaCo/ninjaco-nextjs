@@ -12,6 +12,7 @@ interface SideMenuTabProps {
   >
   isHighlighted?: boolean
   actionOnClick?: () => void
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Body?: any
 }
 

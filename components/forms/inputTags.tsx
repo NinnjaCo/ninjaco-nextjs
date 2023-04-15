@@ -1,13 +1,11 @@
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { Control, Controller } from 'react-hook-form'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { Fragment, useState } from 'react'
 import { Input } from './input'
-import { Listbox, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/solid'
-import clsx from 'clsx'
+import { useState } from 'react'
 
 interface InputTagsProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<any>
   name: string
   label: string

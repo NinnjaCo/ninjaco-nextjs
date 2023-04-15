@@ -1,11 +1,12 @@
 import { Control, Controller } from 'react-hook-form'
 import Image from 'next/image'
-import ImageUploading, { ErrorsType, ImageListType, ImageType } from 'react-images-uploading'
+import ImageUploading, { ErrorsType, ImageListType } from 'react-images-uploading'
 import React, { useState } from 'react'
 import clsx from 'clsx'
 import imagePlaceHolder from '@/images/imagePlaceHolder.svg'
 
 interface SingleImageUploadProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<any>
   name: string
   isRequired?: boolean

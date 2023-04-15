@@ -7,6 +7,7 @@ import clsx from 'clsx'
 
 interface SelectWithAdditionProps {
   selectList: string[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<any>
   name: string
   label: string

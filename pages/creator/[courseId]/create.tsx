@@ -13,7 +13,6 @@ import { Input } from '@/components/forms/input'
 import { MissionApi } from '@/utils/api/mission/mission.api'
 import { TextArea } from '@/components/forms/textArea'
 import { User } from '@/models/crud'
-import { UserApi } from '@/utils/api/user'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
@@ -156,7 +155,7 @@ const CreateMissionOrEdit = ({
 
   const addNewCategoryAndSelectIt = async () => {
     try {
-      const res = await new CategoryApi(session.data).create({
+      await new CategoryApi(session.data).create({
         categoryName: addNewCategoryState.newCategoryName,
       })
       queryClient.invalidateQueries('categories')

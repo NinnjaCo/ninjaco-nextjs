@@ -6,6 +6,7 @@ import clsx from 'clsx'
 import imagePlaceHolder from '@/images/imagePlaceHolder.svg'
 
 interface MultipleImageUploadProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<any>
   name: string
   isRequired?: boolean
@@ -68,7 +69,6 @@ const MultipleImageUpload = ({
               onImageUpload,
               onImageRemoveAll,
               isDragging,
-              onImageUpdate,
               dragProps,
               onImageRemove,
               errors,
