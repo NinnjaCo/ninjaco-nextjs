@@ -1,10 +1,12 @@
 import * as yup from 'yup'
 import { AdminAlertDialog } from '@/components/admin/dialog'
 import { AuthError } from '@/models/shared'
+import { AxiosError } from 'axios'
 import { Category } from '@/models/crud/category.model'
 import { CategoryApi } from '@/utils/api/category/category.api'
 import { Course } from '@/models/crud/course.model'
 import { CourseApi } from '@/utils/api/course/course.api'
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { ImageApi } from '@/utils/api/images/image-upload.api'
 import { ImageType } from 'react-images-uploading'
 import { Input } from '@/components/forms/input'
@@ -16,6 +18,7 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { useForm } from 'react-hook-form'
+import { useQuery, useQueryClient } from 'react-query'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -49,14 +52,15 @@ const CreateMissionFormSchema = yup
 const CreateMissionOrEdit = ({
   user,
   course,
-  categories,
+  serverCategories,
 }: {
   user: User
   course: Course
-  categories: Category[]
+  serverCategories: Category[]
 }) => {
   const router = useRouter()
   const session = useSession()
+  const queryClient = useQueryClient()
 
   const [alertData, setAlertData] = React.useState<{
     message: string
@@ -70,6 +74,30 @@ const CreateMissionOrEdit = ({
   const closeAlert = () => {
     setAlertData({ ...alertData, open: false })
   }
+
+  const { data: fetechedCategories } = useQuery<Category[]>(
+    ['categories', session],
+    async () => {
+      const response = await new CategoryApi(session.data).find()
+      return response.payload
+    },
+    {
+      initialData: serverCategories,
+      enabled: !!session.data,
+      onError: (error) => {
+        if (isAxiosError(error)) {
+          const errors = unWrapAuthError(error as AxiosError<AuthError> | undefined)
+          setAlertData({
+            message: errors[0].message || 'Something went wrong',
+            variant: 'error',
+            open: true,
+          })
+        }
+      },
+    }
+  )
+
+  const categories = fetechedCategories || serverCategories
 
   const {
     register,
@@ -126,6 +154,35 @@ const CreateMissionOrEdit = ({
     open: false,
   })
 
+  const addNewCategoryAndSelectIt = async () => {
+    try {
+      const res = await new CategoryApi(session.data).create({
+        categoryName: addNewCategoryState.newCategoryName,
+      })
+      queryClient.invalidateQueries('categories')
+
+      setValue('missionCategory', addNewCategoryState.newCategoryName)
+      setAddNewCategoryState({
+        newCategoryName: '',
+        open: false,
+      })
+    } catch (error) {
+      if (isAxiosError<AuthError>(error)) {
+        const errors = unWrapAuthError(error)
+        setAlertData({
+          message: errors[0].message || 'Something went wrong',
+          variant: 'error',
+          open: true,
+        })
+      } else {
+        setAlertData({
+          message: 'Error creating category',
+          variant: 'error',
+          open: true,
+        })
+      }
+    }
+  }
   return (
     <>
       <Head>
@@ -199,17 +256,21 @@ const CreateMissionOrEdit = ({
                 })
               }}
               confirm={() => {
-                setValue('missionCategory', addNewCategoryState.newCategoryName)
-                setAddNewCategoryState({
-                  newCategoryName: '',
-                  open: false,
-                })
+                addNewCategoryAndSelectIt()
               }}
               backButtonText="Cancel"
               confirmButtonText="Create"
               backButtonClassName="bg-error text-brand hover:bg-error-dark hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
               confirmButtonClassName="bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
             >
+              {/* add warning that categories created cannot be deleted for consistency purposes */}
+              <div className="flex gap-4">
+                <ExclamationTriangleIcon className="w-6 h-6 text-error-dark" />
+                <p className="text-brand text-sm">
+                  Please note that categories created cannot be deleted for consistency purposes.
+                </p>
+              </div>
+
               <Input
                 name="addCategory"
                 label="New Category"
@@ -297,7 +358,7 @@ export const getServerSideProps = async (context) => {
     props: {
       user: session.user,
       course: courseResponse.payload,
-      categories: categories.payload,
+      serverCategories: categories.payload,
     },
   }
 }
