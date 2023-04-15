@@ -26,7 +26,7 @@ const CreateResourceCard: React.FC<CreationCardProps> = ({
           <Image
             src={titleImage}
             alt="Logo Pointing Down"
-            className="w-20 md:w-28"
+            className="w-20 md:w-28 lg:w-40 xl:w-48 animate-float"
             priority
           ></Image>
         </div>

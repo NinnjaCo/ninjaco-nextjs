@@ -11,6 +11,7 @@ import Chip from '@/components/shared/chip'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import Head from 'next/head'
 import Image from 'next/image'
+import ImageCard from '@/components/creator/imageCard'
 import Link from 'next/link'
 import clsx from 'clsx'
 
@@ -36,20 +37,7 @@ export default function MissionPage({
         <CreatorMenu isOnCoursePage={true} isOnGamesPage={false} creator={user} />
         <div className="flex gap-4 px-6 my-12 w-full md:flex-row flex-col">
           <div className="w-52 h-32 relative">
-            <Image
-              className="bg-brand-100 border-2 border-brand-200 rounded-xl w-52 h-32"
-              src={mission.image}
-              style={{
-                objectFit: 'contain',
-              }}
-              fill
-              sizes="(max-width: 768px) 40vw,
-              (max-width: 1200px) 50vw,
-              60vw"
-              alt="PP"
-              placeholder="blur"
-              blurDataURL={mission.image}
-            />
+            <ImageCard image={mission.image} />
           </div>
           <div className="flex flex-col gap-9 w-full">
             <div className="flex justify-between gap-6 items-center">

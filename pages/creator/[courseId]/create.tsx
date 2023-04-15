@@ -129,8 +129,8 @@ const CreateMissionOrEdit = ({
   return (
     <>
       <Head>
-        <title>NinjaCo | Create or Edit Mission</title>
-        <meta name="description" content="Create or Edit Mission" />
+        <title>NinjaCo | Create Mission</title>
+        <meta name="description" content="Create Mission" />
       </Head>
       <main className="w-full">
         <CreatorMenu creator={user} isOnCoursePage={true} isOnGamesPage={false} />

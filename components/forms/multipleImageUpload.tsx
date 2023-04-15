@@ -122,6 +122,8 @@ const MultipleImageUpload = ({
                         <div key={index} className="relative">
                           <Image
                             src={image.dataURL}
+                            placeholder="blur"
+                            blurDataURL={image.dataURL}
                             alt="Uploaded Image"
                             width={150}
                             height={150}

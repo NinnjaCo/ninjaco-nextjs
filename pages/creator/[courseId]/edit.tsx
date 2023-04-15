@@ -1,5 +1,6 @@
 import * as yup from 'yup'
 import { AuthError } from '@/models/shared'
+import { Course } from '@/models/crud/course.model'
 import { CourseApi } from '@/utils/api/course/course.api'
 import { ImageApi } from '@/utils/api/images/image-upload.api'
 import { ImageType } from 'react-images-uploading'
@@ -29,30 +30,30 @@ enum CourseType {
   ARDUINO = 'ARDUINO',
   HTML = 'HTML',
 }
-type CreateCourseFormDataType = {
-  courseType: CourseType
-  courseTitle: string
-  courseImage: ImageType
-  courseDescription: string
-  courseAgeRange?: string[]
-  coursePrerequisites?: string[]
-  courseObjectives?: string[]
+type EditCourseFormDataType = {
+  type: CourseType
+  title: string
+  image: ImageType
+  description: string
+  ageRange?: string[]
+  preRequisites?: string[]
+  objectives?: string[]
 }
 
-const CreateCourseFormSchema = yup
+const EditCourseFormSchema = yup
   .object()
   .shape({
-    courseType: yup.string().oneOf(Object.values(CourseType)).required('Course Type is required'),
-    courseTitle: yup.string().required('Course Title is required'),
-    courseImage: yup.object().required('Course Image is required'),
-    courseDescription: yup.string().required('Course Description is required'),
-    courseAgeRange: yup.array().of(yup.string()),
-    coursePrerequisites: yup.array().of(yup.string()),
-    courseObjectives: yup.array().of(yup.string()),
+    type: yup.string().oneOf(Object.values(CourseType)).required('Course Type is required'),
+    title: yup.string().required('Course Title is required'),
+    image: yup.object(),
+    description: yup.string().required('Course Description is required'),
+    ageRange: yup.array().of(yup.string()),
+    preRequisites: yup.array().of(yup.string()),
+    objectives: yup.array().of(yup.string()),
   })
   .required()
 
-const CreateCourseOrEdit = ({ user }: { user: User }) => {
+const CreateCourseOrEdit = ({ user, course }: { user: User; course: Course }) => {
   const router = useRouter()
   const session = useSession()
   const [alertData, setAlertData] = React.useState<{
@@ -72,42 +73,41 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
     register,
     handleSubmit,
     control,
-    formState: { errors },
-  } = useForm<CreateCourseFormDataType>({
-    resolver: yupResolver(CreateCourseFormSchema),
+    formState: { errors, dirtyFields },
+  } = useForm<EditCourseFormDataType>({
+    resolver: yupResolver(EditCourseFormSchema),
     defaultValues: {
-      courseType: CourseType.ARDUINO,
-      courseAgeRange: [],
-      coursePrerequisites: [],
-      courseObjectives: [],
+      ageRange: course.ageRange,
+      description: course.description,
+      objectives: course.objectives,
+      preRequisites: course.preRequisites,
+      title: course.title,
+      type: course.type,
     },
   })
 
-  const onSubmitHandler = async (data: CreateCourseFormDataType) => {
-    if (!data.courseImage.file) {
-      setAlertData({
-        message: 'Please upload a course image',
-        variant: 'error',
-        open: true,
-      })
-      return
-    }
-    // Upload Image and get url
-    const imageUploadRes = await new ImageApi(session.data).uploadImage({
-      image: data.courseImage.file,
+  const onSubmitHandler = async (data: EditCourseFormDataType) => {
+    // I had to use any, because the dirtyData.image type will get change from ImageType to string
+    console.log(data)
+    const dirtyData: any = {}
+    Object.keys(dirtyFields).forEach((key) => {
+      dirtyData[key] = data[key]
     })
 
     try {
-      await new CourseApi(session.data).create({
-        type: data.courseType,
-        title: data.courseTitle,
-        image: imageUploadRes.payload.image_url,
-        description: data.courseDescription,
-        ageRange: data.courseAgeRange,
-        preRequisites: data.coursePrerequisites,
-        objectives: data.courseObjectives,
+      if (dirtyData.image && dirtyData.image.file) {
+        // Upload Image and get url
+        const imageUploadRes = await new ImageApi(session.data).uploadImage({
+          image: dirtyData.image.file,
+        })
+        dirtyData.image = imageUploadRes.payload.image_url
+      }
+
+      console.log(dirtyData)
+      await new CourseApi(session.data).update(course._id, {
+        ...dirtyData,
       })
-      router.push('/creator')
+      router.push(`/creator/${course._id}`)
     } catch (error) {
       if (isAxiosError<AuthError>(error)) {
         const errors = unWrapAuthError(error)
@@ -118,7 +118,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
         })
       } else {
         setAlertData({
-          message: 'Error creating game',
+          message: 'Error editing game',
           variant: 'error',
           open: true,
         })
@@ -128,13 +128,13 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
   return (
     <>
       <Head>
-        <title>NinjaCo | Create Course</title>
-        <meta name="description" content="Create a Course" />
+        <title>NinjaCo | Edit Course</title>
+        <meta name="description" content="Edit a Course" />
       </Head>
       <main className="w-full">
         <CreatorMenu creator={user} isOnCoursePage={true} isOnGamesPage={false} />
         <CreateResourceCard
-          title="Create Course"
+          title="Edit Course"
           underLineImage={underLineImage}
           titleImage={floatingLegos}
         >
@@ -148,42 +148,43 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
           <form onSubmit={handleSubmit(onSubmitHandler)} className="flex flex-col gap-8" id="form">
             <Select
               control={control}
-              error={errors.courseType?.message}
+              error={errors.type?.message}
               label="Course Type"
-              name={register('courseType').name}
+              name={register('type').name}
               selectList={Object.values(CourseType)}
               isRequired={true}
               rootClassName="w-48"
             />
             <SingleImageUpload
               control={control}
-              name={register('courseImage').name}
-              error={errors.courseImage?.message as unknown as string} // Convert to string since it returned a FieldError
+              name={register('image').name}
+              error={errors.image?.message as unknown as string}
+              label="course Image"
               isRequired={true}
-              label="Course Banner Image"
+              defaultImage={course.image}
             />
             <Input
-              {...register('courseTitle')}
+              {...register('title')}
               label={'Course Title'}
               placeholder="Course Title"
-              error={errors.courseTitle?.message}
+              error={errors.title?.message}
               isRequired={true}
             />
             <TextArea
               cols={4}
               rows={4}
               control={control}
-              {...register('courseDescription')}
+              {...register('description')}
               label={'Course Description'}
               placeholder="Course Description"
-              error={errors.courseDescription?.message}
+              error={errors.description?.message}
               className="resize-none"
               isRequired={true}
             />
             <InputTags
               control={control}
-              error={errors.courseAgeRange?.message}
-              name={register('courseAgeRange').name}
+              error={errors.ageRange?.message}
+              name={register('ageRange').name}
               label="Course Age Range"
               helperText="Enter a range and press enter to add it"
               placeholder="Course Age Range"
@@ -201,16 +202,16 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
             />
             <InputTags
               control={control}
-              error={errors.coursePrerequisites?.message}
-              name={register('coursePrerequisites').name}
+              error={errors.preRequisites?.message}
+              name={register('preRequisites').name}
               label="Course Prerequisites"
               helperText="Enter a prerequisites and press enter to add it"
               placeholder="Course Prerequisites"
             />
             <InputTags
               control={control}
-              error={errors.courseObjectives?.message}
-              name={register('courseObjectives').name}
+              error={errors.objectives?.message}
+              name={register('objectives').name}
               label="Course Objectives"
               helperText="Enter an objectives and press enter to add it"
               placeholder="Course Objectives"
@@ -231,7 +232,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
                 value="Submit"
                 className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
               >
-                Create Course
+                Edit Course
               </button>
             </div>
           </form>
@@ -246,6 +247,8 @@ export default CreateCourseOrEdit
 export const getServerSideProps = async (context) => {
   const { query, req, res } = context
 
+  const { courseId } = query
+
   const session = await getServerSession(req, res, authOptions)
   if (!session) {
     return {
@@ -257,9 +260,22 @@ export const getServerSideProps = async (context) => {
     }
   }
 
+  const courseRes = await new CourseApi(session).findOne(courseId)
+  if (!courseRes || !courseRes.payload) {
+    return {
+      props: {
+        redirect: {
+          destination: '/auth/signin',
+          permanent: false,
+        },
+      },
+    }
+  }
+
   return {
     props: {
       user: session.user,
+      course: courseRes.payload,
     },
   }
 }

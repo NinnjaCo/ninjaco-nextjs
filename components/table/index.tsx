@@ -57,6 +57,7 @@ const Table = ({
           },
           '& .MuiDataGrid-footerContainer': {
             backgroundColor: `${footerHexColor} !important`,
+            borderTop: '1px solid #C0D2E6 !important',
           },
         }}
         rowSelection={rowSelection}

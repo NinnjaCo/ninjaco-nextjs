@@ -91,11 +91,22 @@ const SingleImageUpload = ({
                         }}
                         fill
                         alt="PP"
-                        priority
+                        sizes="(max-width: 768px) 40vw,
+                        (max-width: 1200px) 50vw,
+                        60vw"
+                        placeholder="blur"
+                        blurDataURL={
+                          uploadedPicture[0]?.dataURL ?? defaultImage ?? imagePlaceHolder
+                        }
                       />
                     ) : (
                       <div className="w-full h-full flex flex-col justify-center items-center gap-2">
-                        <Image src={imagePlaceHolder} alt="Placeholder" />
+                        <Image
+                          src={imagePlaceHolder}
+                          alt="Placeholder"
+                          placeholder="blur"
+                          blurDataURL={imagePlaceHolder}
+                        />
                         <p className="text-xs">Drop image here | Click</p>
                       </div>
                     )}
