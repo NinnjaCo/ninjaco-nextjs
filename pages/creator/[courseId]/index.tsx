@@ -90,7 +90,7 @@ export default function CourseView({ user, course }: { user: User; course: Cours
           </div>
           <div className="flex gap-4 items-center">
             <div className="text-brand font-medium text-xs">{course.missions.length} missions</div>
-            <button className="btn btn-secondary bg-brand-300 rounded-lg text-brand-700 border-brand-700 hover:bg-brand hover:text-white py-1 px-4 h-fit flex gap-3">
+            <button className="btn btn-secondary bg-brand-300 rounded-lg text-brand-700 border-brand-300 hover:bg-brand hover:text-white py-1 px-4 h-fit flex gap-3">
               <FunnelIcon className="w-4 h-4" />
               Filter
             </button>

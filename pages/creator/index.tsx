@@ -36,7 +36,7 @@ export default function Home({ user, courses }: { user: User; courses: Course[] 
             </div>
             <div className="flex gap-10 justify-start items-center">
               <div className="text-base text-brand">{courses.length} entries</div>{' '}
-              <button className="btn btn-secondary bg-brand-300 rounded-lg text-brand-700 border-brand-700 hover:bg-brand hover:text-white py-1 px-4 h-fit flex gap-3">
+              <button className="btn btn-secondary bg-brand-300 rounded-lg text-brand-700 border-brand-300 hover:bg-brand hover:text-white py-1 px-4 h-fit flex gap-3">
                 <FunnelIcon className="w-4 h-4" />
                 Filter
               </button>
