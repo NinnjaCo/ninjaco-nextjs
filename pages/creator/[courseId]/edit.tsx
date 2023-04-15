@@ -53,7 +53,7 @@ const EditCourseFormSchema = yup
   })
   .required()
 
-const CreateCourseOrEdit = ({ user, course }: { user: User; course: Course }) => {
+const EditCourse = ({ user, course }: { user: User; course: Course }) => {
   const router = useRouter()
   const session = useSession()
   const [alertData, setAlertData] = React.useState<{
@@ -88,7 +88,6 @@ const CreateCourseOrEdit = ({ user, course }: { user: User; course: Course }) =>
 
   const onSubmitHandler = async (data: EditCourseFormDataType) => {
     // I had to use any, because the dirtyData.image type will get change from ImageType to string
-    console.log(data)
     const dirtyData: any = {}
     Object.keys(dirtyFields).forEach((key) => {
       dirtyData[key] = data[key]
@@ -118,7 +117,7 @@ const CreateCourseOrEdit = ({ user, course }: { user: User; course: Course }) =>
         })
       } else {
         setAlertData({
-          message: 'Error editing game',
+          message: 'Error editing course',
           variant: 'error',
           open: true,
         })
@@ -242,7 +241,7 @@ const CreateCourseOrEdit = ({ user, course }: { user: User; course: Course }) =>
   )
 }
 
-export default CreateCourseOrEdit
+export default EditCourse
 
 export const getServerSideProps = async (context) => {
   const { query, req, res } = context
