@@ -8,7 +8,6 @@ import Link from 'next/link'
 import LocaleMenu from '../layout/localeMenu'
 import clsx from 'clsx'
 import logo_black from '@/images/logo_black.svg'
-import seperator from '@/images/seperator.svg'
 import useUserProfilePicture from '@/hooks/useUserProfilePicture'
 
 interface CreatorMenuPros {
@@ -79,7 +78,7 @@ const CreatorMenu = ({ isOnCoursePage, creator, isOnGamesPage }: CreatorMenuPros
             </Link>
           </button>
 
-          <Image src={seperator} alt="seperator" className="w-2 h-8" priority></Image>
+          <div className="w-[4px] h-8 bg-brand-300 rounded-full"></div>
 
           <button className="hover-underline-animation">
             <Link

@@ -99,12 +99,20 @@ const ProfileImageUpload = ({
                           ? uploadedProfilePicture[0].dataURL
                           : defaultImage.profilePic
                       }
+                      placeholder="blur"
+                      blurDataURL={
+                        uploadedProfilePicture.length !== 0 && uploadedProfilePicture[0].dataURL
+                          ? uploadedProfilePicture[0].dataURL
+                          : defaultImage.profilePic
+                      }
                       style={{
                         objectFit: 'contain',
                       }}
                       fill
                       alt="PP"
-                      priority
+                      sizes="(max-width: 768px) 40vw,
+                      (max-width: 1200px) 50vw,
+                      60vw"
                     />
                     <CameraIcon className="text-brand w-6 absolute bottom-1 right-2 bg-brand-50 rounded-full" />
                   </div>

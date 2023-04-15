@@ -128,8 +128,8 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
   return (
     <>
       <Head>
-        <title>NinjaCo | Create or Edit Course</title>
-        <meta name="description" content="Create or Edit Course" />
+        <title>NinjaCo | Create Course</title>
+        <meta name="description" content="Create a Course" />
       </Head>
       <main className="w-full">
         <CreatorMenu creator={user} isOnCoursePage={true} isOnGamesPage={false} />
