@@ -666,18 +666,6 @@ export const getServerSideProps = async (context) => {
     }
   }
 
-  const response = await new UserApi(session).findOne(session.id)
-  if (!response || !response.payload) {
-    return {
-      props: {
-        redirect: {
-          destination: '/auth/signin',
-          permanent: false,
-        },
-      },
-    }
-  }
-
   const gameResponse = await new GameApi(session).findOne(gameId)
 
   if (!gameResponse || !gameResponse.payload) {
@@ -690,8 +678,8 @@ export const getServerSideProps = async (context) => {
       },
     }
   }
-  console.log('hello', gameResponse)
+
   return {
-    props: { user: response.payload, game: gameResponse.payload },
+    props: { user: session.user, game: gameResponse.payload },
   }
 }

@@ -575,21 +575,9 @@ export const getServerSideProps = async (context) => {
     }
   }
 
-  const response = await new UserApi(session).findOne(session.id)
-  if (!response || !response.payload) {
-    return {
-      props: {
-        redirect: {
-          destination: '/auth/signin',
-          permanent: false,
-        },
-      },
-    }
-  }
-
   return {
     props: {
-      user: response.payload,
+      user: session.user,
     },
   }
 }
