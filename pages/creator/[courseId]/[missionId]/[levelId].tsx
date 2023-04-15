@@ -48,7 +48,12 @@ const EditLevel = ({
 }) => {
   const router = useRouter()
   const session = useSession()
-
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 25,
+      behavior: 'smooth',
+    })
+  }
   const [defaultBuildingPartsImages, setDefaultBuildingPartsImages] = React.useState<string[]>(
     level.buildingPartsImages
   )
@@ -79,9 +84,30 @@ const EditLevel = ({
   })
 
   const onSubmitHandler = async (data: EditLevelFormDataType) => {
+    if (!data.buildingPartsImages) {
+      data.buildingPartsImages = []
+    }
+    if (!data.stepByStepGuideImages) {
+      data.stepByStepGuideImages = []
+    }
+
     if (
       data.buildingPartsImages.length === 0 &&
       data.stepByStepGuideImages.length === 0 &&
+      (defaultBuildingPartsImages.length === 0 || defaultStepByStepGuideImages.length === 0)
+    ) {
+      setAlertData({
+        message: 'You need to upload at least one image',
+        variant: 'error',
+        open: true,
+      })
+      scrollToTop()
+      return
+    }
+
+    if (
+      data.buildingPartsImages?.length === 0 &&
+      data.stepByStepGuideImages?.length === 0 &&
       defaultBuildingPartsImages.length === level.buildingPartsImages.length &&
       defaultStepByStepGuideImages.length === level.stepGuideImages.length
     ) {
@@ -90,35 +116,39 @@ const EditLevel = ({
         variant: 'warning',
         open: true,
       })
+      scrollToTop()
       return
     }
 
-    if (data.buildingPartsImages.length + defaultBuildingPartsImages.length > 10) {
+    if (data.buildingPartsImages?.length + defaultBuildingPartsImages.length > 10) {
       setAlertData({
         message: 'You can only upload 10 images for building parts',
         variant: 'error',
         open: true,
       })
+      scrollToTop()
       return
     }
 
-    if (data.stepByStepGuideImages.length + defaultStepByStepGuideImages.length > 10) {
+    if (data.stepByStepGuideImages?.length + defaultStepByStepGuideImages.length > 10) {
       setAlertData({
         message: 'You can only upload 10 images for step by step guide',
         variant: 'error',
         open: true,
       })
+      scrollToTop()
       return
     }
 
     const buildingPartsImagesUrls = await Promise.all(
-      data.buildingPartsImages.map(async (image) => {
+      data.buildingPartsImages?.map(async (image) => {
         if (!image.file) {
           setAlertData({
             message: 'One of the images is not valid',
             variant: 'error',
             open: true,
           })
+          scrollToTop()
           return
         }
 
@@ -128,6 +158,7 @@ const EditLevel = ({
             variant: 'error',
             open: true,
           })
+          scrollToTop()
           return
         }
 
@@ -142,19 +173,21 @@ const EditLevel = ({
             variant: 'error',
             open: true,
           })
+          scrollToTop()
           return
         }
       })
     )
 
     const stepByStepGuideImagesUrls = await Promise.all(
-      data.stepByStepGuideImages.map(async (image) => {
+      data.stepByStepGuideImages?.map(async (image) => {
         if (!image.file) {
           setAlertData({
             message: 'One of the images is not valid',
             variant: 'error',
             open: true,
           })
+          scrollToTop()
           return
         }
 
@@ -164,6 +197,7 @@ const EditLevel = ({
             variant: 'error',
             open: true,
           })
+          scrollToTop()
           return
         }
 
@@ -178,6 +212,7 @@ const EditLevel = ({
             variant: 'error',
             open: true,
           })
+          scrollToTop()
           return
         }
       })
@@ -224,6 +259,7 @@ const EditLevel = ({
         variant: 'error',
         open: true,
       })
+      scrollToTop()
     }
   }
 

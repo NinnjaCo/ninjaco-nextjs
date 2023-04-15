@@ -54,6 +54,13 @@ const CreateCourseFormSchema = yup
 const CreateCourseOrEdit = ({ user }: { user: User }) => {
   const router = useRouter()
   const session = useSession()
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 25,
+      behavior: 'smooth',
+    })
+  }
+
   const [alertData, setAlertData] = React.useState<{
     message: string
     variant: 'success' | 'info' | 'warning' | 'error'
@@ -89,6 +96,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
         variant: 'error',
         open: true,
       })
+      scrollToTop()
       return
     }
     // Upload Image and get url
@@ -115,12 +123,14 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
           variant: 'error',
           open: true,
         })
+        scrollToTop()
       } else {
         setAlertData({
           message: 'Error creating game',
           variant: 'error',
           open: true,
         })
+        scrollToTop()
       }
     }
   }

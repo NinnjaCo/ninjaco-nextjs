@@ -63,6 +63,12 @@ const EditMission = ({
   const router = useRouter()
   const session = useSession()
   const queryClient = useQueryClient()
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 25,
+      behavior: 'smooth',
+    })
+  }
 
   const [alertData, setAlertData] = React.useState<{
     message: string
@@ -94,6 +100,7 @@ const EditMission = ({
             variant: 'error',
             open: true,
           })
+          scrollToTop()
         }
       },
     }
@@ -132,6 +139,7 @@ const EditMission = ({
         variant: 'warning',
         open: true,
       })
+      scrollToTop()
 
       return
     }
@@ -166,12 +174,14 @@ const EditMission = ({
           variant: 'error',
           open: true,
         })
+        scrollToTop()
       } else {
         setAlertData({
           message: 'Error editing mission',
           variant: 'error',
           open: true,
         })
+        scrollToTop()
       }
     }
   }
@@ -203,12 +213,14 @@ const EditMission = ({
           variant: 'error',
           open: true,
         })
+        scrollToTop()
       } else {
         setAlertData({
           message: 'Error creating category',
           variant: 'error',
           open: true,
         })
+        scrollToTop()
       }
     }
   }

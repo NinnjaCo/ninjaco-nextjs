@@ -45,6 +45,12 @@ const CreateLevel = ({
 }) => {
   const router = useRouter()
   const session = useSession()
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 25,
+      behavior: 'smooth',
+    })
+  }
 
   const [alertData, setAlertData] = React.useState<{
     message: string
@@ -74,6 +80,7 @@ const CreateLevel = ({
       variant: 'info',
       open: true,
     })
+    scrollToTop()
 
     if (data.buildingPartsImages.length > 10) {
       setAlertData({
@@ -81,6 +88,7 @@ const CreateLevel = ({
         variant: 'error',
         open: true,
       })
+      scrollToTop()
       return
     }
 
@@ -90,6 +98,7 @@ const CreateLevel = ({
         variant: 'error',
         open: true,
       })
+      scrollToTop()
       return
     }
 
@@ -104,6 +113,7 @@ const CreateLevel = ({
             variant: 'error',
             open: true,
           })
+          scrollToTop()
           return
         }
 
@@ -113,6 +123,7 @@ const CreateLevel = ({
             variant: 'error',
             open: true,
           })
+          scrollToTop()
           return
         }
 
@@ -127,6 +138,7 @@ const CreateLevel = ({
             variant: 'error',
             open: true,
           })
+          scrollToTop()
           return
         }
       })
@@ -140,6 +152,7 @@ const CreateLevel = ({
             variant: 'error',
             open: true,
           })
+          scrollToTop()
           return
         }
 
@@ -149,6 +162,7 @@ const CreateLevel = ({
             variant: 'error',
             open: true,
           })
+          scrollToTop()
           return
         }
 
@@ -163,6 +177,7 @@ const CreateLevel = ({
             variant: 'error',
             open: true,
           })
+          scrollToTop()
           return
         }
       })
@@ -191,6 +206,7 @@ const CreateLevel = ({
         variant: 'error',
         open: true,
       })
+      scrollToTop()
       return
     }
 
@@ -200,6 +216,7 @@ const CreateLevel = ({
         variant: 'error',
         open: true,
       })
+      scrollToTop()
       return
     }
 
@@ -218,6 +235,7 @@ const CreateLevel = ({
         variant: 'error',
         open: true,
       })
+      scrollToTop()
     }
   }
 

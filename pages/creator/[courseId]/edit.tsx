@@ -55,6 +55,12 @@ const EditCourseFormSchema = yup
 const EditCourse = ({ user, course }: { user: User; course: Course }) => {
   const router = useRouter()
   const session = useSession()
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 25,
+      behavior: 'smooth',
+    })
+  }
   const [alertData, setAlertData] = React.useState<{
     message: string
     variant: 'success' | 'info' | 'warning' | 'error'
@@ -114,12 +120,14 @@ const EditCourse = ({ user, course }: { user: User; course: Course }) => {
           variant: 'error',
           open: true,
         })
+        scrollToTop()
       } else {
         setAlertData({
           message: 'Error editing course',
           variant: 'error',
           open: true,
         })
+        scrollToTop()
       }
     }
   }
