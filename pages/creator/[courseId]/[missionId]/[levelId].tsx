@@ -4,6 +4,7 @@ import { Course } from '@/models/crud/course.model'
 import { CourseApi } from '@/utils/api/course/course.api'
 import { ImageApi } from '@/utils/api/images/image-upload.api'
 import { ImageListType } from 'react-images-uploading'
+import { Level } from '@/models/crud/level.model'
 import { LevelApi } from '@/utils/api/level/level.api'
 import { Mission } from '@/models/crud/mission.model'
 import { User } from '@/models/crud'
@@ -23,30 +24,39 @@ import React from 'react'
 import floatingLegos from '@/images/floatingLegos.svg'
 import underLineImage from '@/images/lightlyWavedLine.svg'
 
-type CreateLevelFormDataType = {
+type EditLevelFormDataType = {
   buildingPartsImages: ImageListType
   stepByStepGuideImages: ImageListType
 }
 
-const CreateLevelFormSchema = yup
+const EditLevelFormSchema = yup
   .object()
   .shape({
-    buildingPartsImages: yup.array().min(1).required(),
-    stepByStepGuideImages: yup.array().min(1).required(),
+    buildingPartsImages: yup.array(),
+    stepByStepGuideImages: yup.array(),
   })
   .required()
 
-const CreateLevel = ({
+const EditLevel = ({
   user,
+  level,
   mission,
   course,
 }: {
   user: User
+  level: Level
   mission: Mission
   course: Course
 }) => {
   const router = useRouter()
   const session = useSession()
+
+  const [defaultBuildingPartsImages, setDefaultBuildingPartsImages] = React.useState<string[]>(
+    level.buildingPartsImages
+  )
+  const [defaultStepByStepGuideImages, setDefaultStepByStepGuideImages] = React.useState<string[]>(
+    level.stepGuideImages
+  )
 
   const [alertData, setAlertData] = React.useState<{
     message: string
@@ -67,18 +77,29 @@ const CreateLevel = ({
     control,
     setValue,
     formState: { errors },
-  } = useForm<CreateLevelFormDataType>({
-    resolver: yupResolver(CreateLevelFormSchema),
+  } = useForm<EditLevelFormDataType>({
+    resolver: yupResolver(EditLevelFormSchema),
   })
 
-  const onSubmitHandler = async (data: CreateLevelFormDataType) => {
-    setAlertData({
-      message: 'Creating level...',
-      variant: 'info',
-      open: true,
-    })
+  const onSubmitHandler = async (data: EditLevelFormDataType) => {
+    console.log('new images:', data)
+    console.log('oldImages', defaultBuildingPartsImages, defaultStepByStepGuideImages)
 
-    if (data.buildingPartsImages.length > 10) {
+    if (
+      data.buildingPartsImages.length === 0 &&
+      data.stepByStepGuideImages.length === 0 &&
+      defaultBuildingPartsImages.length === level.buildingPartsImages.length &&
+      defaultStepByStepGuideImages.length === level.stepGuideImages.length
+    ) {
+      setAlertData({
+        message: 'No changes were made',
+        variant: 'warning',
+        open: true,
+      })
+      return
+    }
+
+    if (data.buildingPartsImages.length + defaultBuildingPartsImages.length > 10) {
       setAlertData({
         message: 'You can only upload 10 images for building parts',
         variant: 'error',
@@ -87,7 +108,7 @@ const CreateLevel = ({
       return
     }
 
-    if (data.stepByStepGuideImages.length > 10) {
+    if (data.stepByStepGuideImages.length + defaultStepByStepGuideImages.length > 10) {
       setAlertData({
         message: 'You can only upload 10 images for step by step guide',
         variant: 'error',
@@ -95,9 +116,6 @@ const CreateLevel = ({
       })
       return
     }
-
-    // go over the images and upload them using ImageApi
-    // then get the urls and save them in the database
 
     const buildingPartsImagesUrls = await Promise.all(
       data.buildingPartsImages.map(async (image) => {
@@ -171,53 +189,44 @@ const CreateLevel = ({
       })
     )
 
-    // check if there are any undefined values in the arrays, if so remove them
-    const buildingPartsImagesUrlsFiltered: string[] = []
-    const stepByStepGuideImagesUrlsFiltered: string[] = []
+    const newBuildingPartsImages = defaultBuildingPartsImages
+    const newStepByStepGuideImages = defaultStepByStepGuideImages
 
-    buildingPartsImagesUrls.forEach((url) => {
-      if (url) {
-        buildingPartsImagesUrlsFiltered.push(url)
-      }
-    })
-
-    stepByStepGuideImagesUrls.forEach((url) => {
-      if (url) {
-        stepByStepGuideImagesUrlsFiltered.push(url)
-      }
-    })
-
-    // check if the arrays are empty, if so return
-    if (buildingPartsImagesUrlsFiltered.length === 0) {
-      setAlertData({
-        message: 'There was an error uploading the images',
-        variant: 'error',
-        open: true,
+    if (buildingPartsImagesUrls) {
+      buildingPartsImagesUrls.forEach((url) => {
+        if (url) {
+          newBuildingPartsImages.push(url)
+        }
       })
-      return
     }
 
-    if (stepByStepGuideImagesUrlsFiltered.length === 0) {
-      setAlertData({
-        message: 'There was an error uploading the images',
-        variant: 'error',
-        open: true,
+    if (stepByStepGuideImagesUrls) {
+      stepByStepGuideImagesUrls.forEach((url) => {
+        if (url) {
+          newStepByStepGuideImages.push(url)
+        }
       })
-      return
     }
 
-    // create the level
+    let dirtyData = {}
+
+    if (newBuildingPartsImages.length !== level.buildingPartsImages.length) {
+      dirtyData = { ...dirtyData, buildingPartsImages: newBuildingPartsImages }
+    }
+
+    if (newStepByStepGuideImages.length !== level.stepGuideImages.length) {
+      dirtyData = { ...dirtyData, stepGuideImages: newStepByStepGuideImages }
+    }
+
     try {
-      await new LevelApi(course._id, mission._id, session.data).create({
-        buildingPartsImages: buildingPartsImagesUrlsFiltered,
-        stepGuideImages: stepByStepGuideImagesUrlsFiltered,
-        levelNumber: mission.levels.length + 1,
+      await new LevelApi(course._id, mission._id, session.data).update(level._id, {
+        ...dirtyData,
       })
 
       router.push(`/creator/${course._id}/${mission._id}/`)
     } catch (err) {
       setAlertData({
-        message: 'There was an error creating the level',
+        message: 'There was an error updating the level',
         variant: 'error',
         open: true,
       })
@@ -227,7 +236,7 @@ const CreateLevel = ({
   return (
     <>
       <Head>
-        <title>NinjaCo | Create Level</title>
+        <title>NinjaCo | Edit Level</title>
         <meta name="description" content="Create Level" />
       </Head>
       <main className="w-full">
@@ -245,22 +254,32 @@ const CreateLevel = ({
             close={closeAlert}
           />
           <form onSubmit={handleSubmit(onSubmitHandler)} className="flex flex-col gap-8" id="form">
-            <div className="text-2xl text-brand">
-              Creating Level Number {mission.levels.length + 1}
-            </div>
+            <div className="text-2xl text-brand">Editing Level Number {level.levelNumber}</div>
             <MultipleImageUpload
               control={control}
               name={register('buildingPartsImages').name}
               error={errors.buildingPartsImages?.message as unknown as string} // Convert to string since it returned a FieldError
               isRequired={true}
               label="Building Parts Images"
+              initialData={{
+                initialImages: defaultBuildingPartsImages,
+                editInitialImages: (newImages) => {
+                  setDefaultBuildingPartsImages(newImages)
+                },
+              }}
             />
             <MultipleImageUpload
               control={control}
               name={register('stepByStepGuideImages').name}
               error={errors.stepByStepGuideImages?.message as unknown as string} // Convert to string since it returned a FieldError
               isRequired={true}
-              label="Step by Step Guide Images "
+              label="Step by Step Guide Images"
+              initialData={{
+                initialImages: defaultStepByStepGuideImages,
+                editInitialImages: (newImages) => {
+                  setDefaultStepByStepGuideImages(newImages)
+                },
+              }}
             />
 
             <div className="flex w-full justify-between gap-4 md:gap-12 h-fit md:flex-row flex-col-reverse">
@@ -279,7 +298,7 @@ const CreateLevel = ({
                 value="Submit"
                 className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
               >
-                Create Level
+                Edit Level
               </button>
             </div>
           </form>
@@ -289,12 +308,12 @@ const CreateLevel = ({
   )
 }
 
-export default CreateLevel
+export default EditLevel
 
 export const getServerSideProps = async (context) => {
   const { req, res, query } = context
 
-  const { courseId, missionId } = query
+  const { courseId, missionId, levelId } = query
 
   const session = await getServerSession(req, res, authOptions)
   if (!session) {
@@ -332,9 +351,23 @@ export const getServerSideProps = async (context) => {
     }
   }
 
+  const level = mission.levels.find((level) => level._id === levelId)
+
+  if (!level) {
+    return {
+      props: {
+        redirect: {
+          destination: '/creator/' + courseId + '/' + missionId,
+          permanent: false,
+        },
+      },
+    }
+  }
+
   return {
     props: {
       user: session.user,
+      level: level,
       mission: mission,
       course: course.payload,
     },
