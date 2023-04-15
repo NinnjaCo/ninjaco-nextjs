@@ -248,7 +248,8 @@ export default CreateCourseOrEdit
 
 export const getServerSideProps = async (context) => {
   const { query, req, res } = context
-  const { id: gameId } = query
+
+  const { id: courseId } = query
 
   const session = await getServerSession(req, res, authOptions)
   if (!session) {
@@ -261,20 +262,8 @@ export const getServerSideProps = async (context) => {
     }
   }
 
-  const response = await new UserApi(session).findOne(session.id)
-  if (!response || !response.payload) {
-    return {
-      props: {
-        redirect: {
-          destination: '/auth/signin',
-          permanent: false,
-        },
-      },
-    }
-  }
-
-  const CourseResponse = await new CourseApi(session).findOne(session.id)
-  if (!response || !response.payload) {
+  const courseRes = await new CourseApi(session).findOne(courseId)
+  if (!courseRes || !courseRes.payload) {
     return {
       props: {
         redirect: {
@@ -287,8 +276,8 @@ export const getServerSideProps = async (context) => {
 
   return {
     props: {
-      user: response.payload,
-      course: CourseResponse.payload,
+      user: session.user,
+      course: courseRes.payload,
     },
   }
 }
