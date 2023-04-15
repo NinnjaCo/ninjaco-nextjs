@@ -108,7 +108,7 @@ export const authOptions: AuthOptions = {
       }
     },
     session: async ({ session, token }) => {
-      console.log('IN SESSION CALLBACK', session, token)
+      console.log('IN SESSION CALLBACK')
       session.accessToken = token.accessToken
       session.id = token.sub ?? token.id
       session.user = token.user
