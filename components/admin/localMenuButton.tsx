@@ -13,7 +13,7 @@ const LocaleMenuButton: React.FC<{ isTextHidden }> = ({ isTextHidden }) => {
     router.push({ pathname, query }, asPath, { locale: locale })
   }
   return (
-    <Menu as="div" className="relative inline-block text-left z-20 w-full">
+    <Menu as="div" className="relative inline-block text-left z-10 w-full">
       <div>
         <Menu.Button
           className="inline-flex w-full justify-center rounded-md text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
