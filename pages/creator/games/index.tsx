@@ -4,12 +4,16 @@ import { GameApi } from '@/utils/api/game/game.api'
 import { User } from '@/models/crud'
 import { authOptions } from '../../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
+import { useState } from 'react'
 import CreatorMenu from '@/components/creator/creatorMenu'
+import Filter from '@/components/creator/filter'
 import GameCard from '@/components/creator/gameCard'
 import Head from 'next/head'
 import Link from 'next/link'
+import dayjs from 'dayjs'
 
 export default function Home({ user, games }: { user: User; games: Game[] }) {
+  const [filteredGames, setFilteredGames] = useState<Game[]>(games)
   return (
     <>
       <Head>
@@ -35,15 +39,45 @@ export default function Home({ user, games }: { user: User; games: Game[] }) {
             </div>
             <div className="flex gap-10 justify-start items-center">
               <div className="text-base text-brand"> 10 entries</div>{' '}
-              <button className="btn btn-secondary bg-brand-300 rounded-lg text-brand-700 border-brand-700 hover:bg-secondary-800 py-1 px-4 h-fit flex gap-3">
-                <FunnelIcon className="w-4 h-4 text-brand" />
-                Filter
-              </button>
+              <Filter
+                filterFields={[
+                  {
+                    name: 'Newest',
+                    setter: setFilteredGames,
+                    sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? -1 : 1),
+                  },
+                  {
+                    name: 'Recently Updated',
+                    sortFunction: (a, b) => (dayjs(a.updatedAt).isAfter(b.updatedAt) ? -1 : 1),
+                    setter: setFilteredGames,
+                  },
+                  {
+                    name: 'Oldest',
+                    sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? 1 : -1),
+                    setter: setFilteredGames,
+                  },
+                  {
+                    name: 'Name (A-Z)',
+                    sortFunction: (a, b) => (a.title > b.title ? 1 : -1),
+                    setter: setFilteredGames,
+                  },
+                  {
+                    name: 'Name (Z-A)',
+                    sortFunction: (a, b) => (a.title > b.title ? -1 : 1),
+                    setter: setFilteredGames,
+                  },
+                  {
+                    name: 'Size of Game (Largest)',
+                    sortFunction: (a, b) => (a.sizeOfGrid.length > b.sizeOfGrid.length ? -1 : 1),
+                    setter: setFilteredGames,
+                  },
+                ]}
+              />
             </div>
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center mt-7 px-10 place-items-center">
-          {games.map((game, index) => (
+          {filteredGames.map((game, index) => (
             <Link href={`/creator/games/${game._id}`} key={index}>
               <GameCard game={game} />
             </Link>
