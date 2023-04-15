@@ -14,13 +14,17 @@ const MissionCard: React.FC<{ mission: Mission }> = ({ mission }) => {
               objectFit: 'contain',
             }}
             fill
+            sizes="(max-width: 768px) 40vw,
+              (max-width: 1200px) 50vw,
+              60vw"
             alt="PP"
-            priority
+            placeholder="blur"
+            blurDataURL={mission.image}
           />
         </div>
         <div className="text-brand font-semibold text-sm">{mission.title}</div>
         <div className=" flex gap-2">
-          <Image src={suitCase} alt="suitcase" />
+          <Image src={suitCase} alt="suitcase" className="w-4 h-4" width={16} height={16} />
           <div className="text-brand-500 font-normal text-xs"> levels: </div>
           <div className="text-brand-500 font-normal text-xs">{mission.levels.length}</div>
         </div>

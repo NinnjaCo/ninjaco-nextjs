@@ -12,6 +12,7 @@ import CreatorMenu from '@/components/creator/creatorMenu'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
+import clsx from 'clsx'
 
 export default function MissionPage({
   user,
@@ -42,8 +43,12 @@ export default function MissionPage({
                 objectFit: 'contain',
               }}
               fill
+              sizes="(max-width: 768px) 40vw,
+              (max-width: 1200px) 50vw,
+              60vw"
               alt="PP"
-              priority
+              placeholder="blur"
+              blurDataURL={mission.image}
             />
           </div>
           <div className="flex flex-col gap-9 w-full">
@@ -77,9 +82,13 @@ export default function MissionPage({
             <div className="grid grid-cols-4 sm:grid-cols-7 md:grid-cols-10 lg:grid-cols-11 xl:grid-cols-12 w-full gap-8 items-center place-items-center">
               {mission.levels.map((level, index) => (
                 <div
-                  className={`rounded-full w-10 h-10 flex justify-center items-center text-center p-8 text-2xl font-semibold text-brand-800 ${
-                    level.levelNumber % 2 === 0 ? 'bg-secondary-300' : 'bg-brand-300'
-                  }`}
+                  className={clsx(
+                    'rounded-full w-16 h-16 flex justify-center items-center text-center text-2xl font-semibold text-brand shadow-inner',
+                    {
+                      'bg-brand-300 shadow-brand-400': level.levelNumber % 2 === 0,
+                      'bg-secondary-300 shadow-secondary-900': level.levelNumber % 2 !== 0,
+                    }
+                  )}
                   key={index}
                 >
                   {level.levelNumber}
@@ -113,18 +122,6 @@ export const getServerSideProps = async (context) => {
     }
   }
 
-  const response = await new UserApi(session).findOne(session.id)
-  if (!response || !response.payload) {
-    return {
-      props: {
-        redirect: {
-          destination: '/auth/signin',
-          permanent: false,
-        },
-      },
-    }
-  }
-
   const course = await new CourseApi(session).findOne(courseId)
 
   if (!course || !course.payload) {
@@ -154,7 +151,7 @@ export const getServerSideProps = async (context) => {
 
   return {
     props: {
-      user: response.payload,
+      user: session.user,
       mission: mission,
       course: course.payload,
       missionCategory: missionCategory.payload,

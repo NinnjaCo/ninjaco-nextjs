@@ -13,8 +13,12 @@ const GameCard: React.FC<{ game: Game }> = ({ game }) => {
               objectFit: 'contain',
             }}
             fill
+            sizes="(max-width: 768px) 40vw,
+              (max-width: 1200px) 50vw,
+              60vw"
             alt="PP"
-            priority
+            placeholder="blur"
+            blurDataURL={game.image}
           />
         </div>
         <div className="text-brand font-semibold text-sm">{game.title}</div>

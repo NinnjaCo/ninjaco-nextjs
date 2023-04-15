@@ -31,8 +31,12 @@ export default function CourseView({ user, course }: { user: User; course: Cours
                 objectFit: 'contain',
               }}
               fill
+              sizes="(max-width: 768px) 40vw,
+              (max-width: 1200px) 50vw,
+              60vw"
               alt="PP"
-              priority
+              placeholder="blur"
+              blurDataURL={course.image}
             />
           </div>
           <div className="flex flex-col gap-9 w-full">
@@ -53,29 +57,35 @@ export default function CourseView({ user, course }: { user: User; course: Cours
               <div className=" text-brand font-medium text-xs md:text-base">Course type:</div>
               <div className="text-brand font-semibold text-sm md:text-lg">{course.type}</div>
             </div>
-            {course?.ageRange && (
-              <div className="flex gap-3 items-center w-full flex-wrap">
-                <div className=" text-brand font-medium text-xs md:text-base">Age range:</div>
-                {course?.ageRange?.map((age, index) => (
-                  <Chip text={age} key={index} />
-                ))}
-              </div>
-            )}
+            <div className="flex gap-3 items-center w-full flex-wrap">
+              <div className=" text-brand font-medium text-xs md:text-base">Age range:</div>
+              {course.ageRange?.length !== 0 ? (
+                course?.ageRange?.map((age, index) => <Chip text={age} key={index} />)
+              ) : (
+                <Chip text="Not Specified" />
+              )}
+            </div>
           </div>
           <div className="flex flex-col gap-4">
             <div className="flex gap-3 items-center w-full flex-wrap">
               <div className=" text-brand font-medium text-xs md:text-base">
                 Course prerequisites:
               </div>
-              {course?.preRequisites?.map((prerequisite, index) => (
-                <Chip text={prerequisite} key={index} />
-              ))}
+              {course.preRequisites?.length !== 0 ? (
+                course?.preRequisites?.map((prerequisite, index) => (
+                  <Chip text={prerequisite} key={index} />
+                ))
+              ) : (
+                <Chip text="None" />
+              )}
             </div>
             <div className="flex gap-3 items-center w-full flex-wrap">
               <div className=" text-brand font-medium text-xs md:text-base">Course objectives:</div>
-              {course?.objectives?.map((objective, index) => (
-                <Chip text={objective} key={index} />
-              ))}
+              {course.objectives?.length !== 0 ? (
+                course?.objectives?.map((objective, index) => <Chip text={objective} key={index} />)
+              ) : (
+                <Chip text="None" />
+              )}
             </div>
           </div>
         </div>
@@ -128,18 +138,6 @@ export const getServerSideProps = async (context) => {
     }
   }
 
-  const response = await new UserApi(session).findOne(session.id)
-  if (!response || !response.payload) {
-    return {
-      props: {
-        redirect: {
-          destination: '/auth/signin',
-          permanent: false,
-        },
-      },
-    }
-  }
-
   const course = await new CourseApi(session).findOne(courseId)
 
   if (!course || !course.payload) {
@@ -155,7 +153,7 @@ export const getServerSideProps = async (context) => {
 
   return {
     props: {
-      user: response.payload,
+      user: session.user,
       course: course.payload,
     },
   }

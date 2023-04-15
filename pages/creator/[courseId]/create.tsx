@@ -268,18 +268,6 @@ export const getServerSideProps = async (context) => {
     }
   }
 
-  const response = await new UserApi(session).findOne(session.id)
-  if (!response || !response.payload) {
-    return {
-      props: {
-        redirect: {
-          destination: '/auth/signin',
-          permanent: false,
-        },
-      },
-    }
-  }
-
   const courseResponse = await new CourseApi(session).findOne(courseId as string)
   if (!courseResponse || !courseResponse.payload) {
     return {
@@ -307,7 +295,7 @@ export const getServerSideProps = async (context) => {
 
   return {
     props: {
-      user: response.payload,
+      user: session.user,
       course: courseResponse.payload,
       categories: categories.payload,
     },

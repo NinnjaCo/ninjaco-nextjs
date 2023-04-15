@@ -21,8 +21,13 @@ export const authOptions: AuthOptions = {
             credentials?.email ?? '',
             credentials?.password ?? ''
           )
+
+          // remove role_id from role object, for security reasons
+          res.payload.user.role._id = ''
+
           return {
             id: res.payload.user._id,
+            user: res.payload.user,
             accessToken: res.payload.access_token,
             refreshToken: res.payload.refresh_token,
           }
@@ -51,6 +56,7 @@ export const authOptions: AuthOptions = {
         // If user is returned, it means that the user is signing in just now
         return {
           id: user.id,
+          user: user.user,
           accessToken: user.accessToken,
           refreshToken: user.refreshToken,
         }
@@ -75,6 +81,7 @@ export const authOptions: AuthOptions = {
               const res = await new AuthApi().refresh(token.refreshToken)
               return {
                 id: res.payload.user._id,
+                user: res.payload.user,
                 accessToken: res.payload.access_token,
                 refreshToken: res.payload.refresh_token,
               }
@@ -88,6 +95,7 @@ export const authOptions: AuthOptions = {
           else {
             return {
               id: token.id,
+              user: token.user,
               accessToken: token.accessToken,
               refreshToken: token.refreshToken,
             }
@@ -100,9 +108,11 @@ export const authOptions: AuthOptions = {
       }
     },
     session: async ({ session, token }) => {
-      console.log('IN SESSION CALLBACK', session, token)
+      console.log('IN SESSION CALLBACK')
       session.accessToken = token.accessToken
       session.id = token.sub ?? token.id
+      session.user = token.user
+
       const decoded = jwt.decode(token.accessToken) as jwt.JwtPayload
       if (!decoded || !decoded.exp)
         throw new Error('Something went wrong, jwt is not defined in session callback')

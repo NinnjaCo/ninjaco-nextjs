@@ -93,7 +93,6 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
       return
     }
     // Upload Image and get url
-    console.log(data)
     const imageUploadRes = await new ImageApi(session.data).uploadImage({
       image: data.courseImage.file,
     })
@@ -258,21 +257,9 @@ export const getServerSideProps = async (context) => {
     }
   }
 
-  const response = await new UserApi(session).findOne(session.id)
-  if (!response || !response.payload) {
-    return {
-      props: {
-        redirect: {
-          destination: '/auth/signin',
-          permanent: false,
-        },
-      },
-    }
-  }
-
   return {
     props: {
-      user: response.payload,
+      user: session.user,
     },
   }
 }

@@ -46,7 +46,6 @@ export const authroizeRequest = async (req: NextRequestWithAuth): Promise<autori
 
     // If the user does not have the correct role, redirect them to the home page
     if (!authorizationData || !authorizationData.payload) {
-      console.log('Invalid Role Trying to access authorized page')
       return {
         authorized: false,
         rewriteUrl: '/auth/unauthorized',
