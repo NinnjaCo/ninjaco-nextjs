@@ -42,9 +42,12 @@ export default function MissionPage({
           <div className="flex flex-col gap-9 w-full">
             <div className="flex justify-between gap-6 items-center">
               <div className=" text-brand font-semibold text-xl md:text-3xl">{mission.title}</div>
-              <button className="text-xs  md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit">
+              <Link
+                className="text-xs  md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit"
+                href={`/creator/${course._id}/${mission._id}/edit`}
+              >
                 Edit Mission
-              </button>
+              </Link>
             </div>
             <div className=" text-brand-500 font-medium text-xs md:text-base w-full">
               {mission.description}
