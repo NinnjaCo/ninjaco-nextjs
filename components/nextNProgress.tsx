@@ -78,6 +78,7 @@ const NextNProgress = ({
       Router.events.off('routeChangeComplete', routeChangeEnd)
       Router.events.off('routeChangeError', routeChangeError)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const routeChangeStart = (

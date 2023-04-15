@@ -2,13 +2,14 @@ import * as yup from 'yup'
 import { AuthError } from '@/models/shared'
 import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/outline'
 import { Input } from '@/components/forms/input'
+import { RoleEnum } from '@/models/crud'
 import { authOptions } from '../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { signIn } from 'next-auth/react'
 import { useAuthApi } from '@/utils/api/auth'
 import { useForm } from 'react-hook-form'
-import { useRouter } from 'next/router'
+import { validateTokenRoleRequest } from '@/middleware/validateTokenRole'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Alert from '@/components/shared/alert'
 import AuthCard from '@/components/auth/authCard'
@@ -62,7 +63,6 @@ interface ServerProps {
 const Signup = (props: ServerProps) => {
   const authApi = useAuthApi()
   const t = useTranslation()
-  const router = useRouter()
   const [signUpButtonDisabled, setSignUpButtonDisabled] = React.useState(false)
 
   const {
@@ -171,6 +171,7 @@ const Signup = (props: ServerProps) => {
               placeholder="John"
               StartIcon={UserIcon}
               error={errors.firstName?.message}
+              isRequired={true}
             />
             <Input
               {...register('lastName')}
@@ -178,12 +179,14 @@ const Signup = (props: ServerProps) => {
               placeholder="Smith"
               StartIcon={UserIcon}
               error={errors.lastName?.message}
+              isRequired={true}
             />
             <DatePickerWithHookForm
               control={control}
               name={register('dateOfBirth').name} // we only need the "name" prop
               label={t.signUp.dateOfBirth as string}
               error={errors.dateOfBirth?.message}
+              isRequired={true}
             />
             <Input
               {...register('email')}
@@ -191,6 +194,7 @@ const Signup = (props: ServerProps) => {
               placeholder={t.signUp.email as string}
               StartIcon={EnvelopeIcon}
               error={errors.email?.message}
+              isRequired={true}
             />
             <Input
               {...register('password')}
@@ -199,6 +203,7 @@ const Signup = (props: ServerProps) => {
               placeholder={t.signUp.password as string}
               StartIcon={LockClosedIcon}
               error={errors.password?.message}
+              isRequired={true}
             />
             <Input
               {...register('passwordConfirmation')}
@@ -207,6 +212,7 @@ const Signup = (props: ServerProps) => {
               placeholder={t.signUp.confirmPassword as string}
               StartIcon={LockClosedIcon}
               error={errors.passwordConfirmation?.message}
+              isRequired={true}
             />
             <button
               type="submit"
@@ -241,6 +247,31 @@ export const getServerSideProps = async (context) => {
 
   const session = await getServerSession(req, res, authOptions)
   if (session) {
+    const canUserAccessCreatorPage = await validateTokenRoleRequest(
+      [RoleEnum.CREATOR, RoleEnum.ADMIN],
+      session.accessToken
+    )
+    if (canUserAccessCreatorPage && canUserAccessCreatorPage.payload) {
+      const canUserAccessAdminPage = await validateTokenRoleRequest(
+        [RoleEnum.ADMIN],
+        session.accessToken
+      )
+      if (canUserAccessAdminPage && canUserAccessAdminPage.payload) {
+        return {
+          redirect: {
+            destination: '/admin',
+            permanent: false,
+          },
+        }
+      }
+      return {
+        redirect: {
+          destination: '/creator',
+          permanent: false,
+        },
+      }
+    }
+
     return {
       redirect: {
         destination: (query.redirectTo as string | undefined) || '/',

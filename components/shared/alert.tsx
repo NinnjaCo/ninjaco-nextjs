@@ -1,6 +1,7 @@
 import {
   CheckCircleIcon,
   ExclamationCircleIcon,
+  ExclamationTriangleIcon,
   InformationCircleIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
@@ -71,7 +72,7 @@ export const Alert: FC<AlertProps> = ({
                 <ExclamationCircleIcon className="w-5 h-5 text-warning-dark" aria-hidden="true" />
               )}
               {variant === 'error' && (
-                <CheckCircleIcon className="w-5 h-5 text-error-dark" aria-hidden="true" />
+                <ExclamationTriangleIcon className="w-5 h-5 text-error-dark" aria-hidden="true" />
               )}
             </div>
             <div className="ml-3">

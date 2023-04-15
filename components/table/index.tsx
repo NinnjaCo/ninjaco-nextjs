@@ -38,6 +38,7 @@ const Table = ({
         hideFooterPagination={hidePagination}
         pageSizeOptions={[5, 10, 20, 50, 100]}
         density={density}
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         getRowClassName={(params) => {
           return rowClassName
         }}
@@ -57,6 +58,7 @@ const Table = ({
           },
           '& .MuiDataGrid-footerContainer': {
             backgroundColor: `${footerHexColor} !important`,
+            borderTop: '1px solid #C0D2E6 !important',
           },
         }}
         rowSelection={rowSelection}

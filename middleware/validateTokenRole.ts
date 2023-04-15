@@ -7,7 +7,7 @@ export interface ValidateTokenRoleRequest {
 }
 
 export const validateTokenRoleRequest = async (
-  role: RoleEnum,
+  alloweRoles: RoleEnum[],
   access_token: string
 ): Promise<ValidateTokenRoleRequest> => {
   const data = await (
@@ -17,7 +17,7 @@ export const validateTokenRoleRequest = async (
         'Content-Type': 'application/json',
         Authorization: `Bearer ${access_token}`,
       },
-      body: JSON.stringify({ role: role, token: access_token }),
+      body: JSON.stringify({ alloweRoles: alloweRoles, token: access_token }),
     })
   ).json()
 
@@ -35,15 +35,17 @@ export const authroizeRequest = async (req: NextRequestWithAuth): Promise<autori
     let authorizationData: ValidateTokenRoleRequest | undefined = undefined
 
     if (req.nextUrl.pathname.startsWith('/admin')) {
-      authorizationData = await validateTokenRoleRequest(RoleEnum.ADMIN, token.accessToken)
+      authorizationData = await validateTokenRoleRequest([RoleEnum.ADMIN], token.accessToken)
     }
     if (req.nextUrl.pathname.startsWith('/creator')) {
-      authorizationData = await validateTokenRoleRequest(RoleEnum.CREATOR, token.accessToken)
+      authorizationData = await validateTokenRoleRequest(
+        [RoleEnum.CREATOR, RoleEnum.ADMIN],
+        token.accessToken
+      )
     }
 
     // If the user does not have the correct role, redirect them to the home page
     if (!authorizationData || !authorizationData.payload) {
-      console.log('Invalid Role Trying to access authorized page')
       return {
         authorized: false,
         rewriteUrl: '/auth/unauthorized',

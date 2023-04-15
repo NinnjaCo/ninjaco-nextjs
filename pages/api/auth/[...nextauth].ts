@@ -21,8 +21,13 @@ export const authOptions: AuthOptions = {
             credentials?.email ?? '',
             credentials?.password ?? ''
           )
+
+          // remove role_id from role object, for security reasons
+          res.payload.user.role._id = ''
+
           return {
             id: res.payload.user._id,
+            user: res.payload.user,
             accessToken: res.payload.access_token,
             refreshToken: res.payload.refresh_token,
           }
@@ -42,20 +47,20 @@ export const authOptions: AuthOptions = {
     error: '/auth/signin',
   },
   callbacks: {
-    async jwt({ user, token, account }) {
+    async jwt({ user, token, trigger, session }) {
+      if (trigger === 'update') {
+        token.user = session.user
+        return token
+      }
       // User is what is returned from the authorize function
       // Token is what is returned from the session function
       // Account is what is returned from the provider callback
-
-      // console.log('IN JWT CALLBACK')
-      // console.log('user', user)
-      // console.log('token', token)
-      // console.log('account', account)
 
       if (user) {
         // If user is returned, it means that the user is signing in just now
         return {
           id: user.id,
+          user: user.user,
           accessToken: user.accessToken,
           refreshToken: user.refreshToken,
         }
@@ -64,19 +69,22 @@ export const authOptions: AuthOptions = {
         // Check if token is expired
         if (token) {
           const decoded = jwt.decode(token.accessToken) as jwt.JwtPayload
-          // console.log('decoded', decoded)
           const exp = decoded.exp
           if (!exp)
             throw new Error('Something went wrong, expiration date is not defined in jwt callback')
 
-          console.log('exp', new Date(exp * 1000).toString())
-          // console.log('Date.now()', Date.now())
-          if (exp * 1000 < Date.now()) {
-            console.log('TOKEN IS EXPIRED')
+          // exp is the actual expiration date of the access token
+          // we want to refresh the token before it expires, thus we create a safe zone of 5 minutes
+          // before the actual expiration date, so that we can refresh the token before it expires
+          const exp_safe_zone = exp - 5 * 60
+          if (exp_safe_zone * 1000 < Date.now()) {
+            // If token is expired, refresh it
+            console.log('REFRESHING TOKEN', token)
             try {
               const res = await new AuthApi().refresh(token.refreshToken)
               return {
                 id: res.payload.user._id,
+                user: res.payload.user,
                 accessToken: res.payload.access_token,
                 refreshToken: res.payload.refresh_token,
               }
@@ -88,9 +96,9 @@ export const authOptions: AuthOptions = {
           }
           // If token is not expired, return it
           else {
-            console.log("TOKEN ISN'T EXPIRED")
             return {
               id: token.id,
+              user: token.user,
               accessToken: token.accessToken,
               refreshToken: token.refreshToken,
             }
@@ -104,16 +112,19 @@ export const authOptions: AuthOptions = {
     },
     session: async ({ session, token }) => {
       console.log('IN SESSION CALLBACK')
-      // console.log('session', session)
-      // console.log('token', token)
       session.accessToken = token.accessToken
-      session.refreshToken = token.refreshToken
       session.id = token.sub ?? token.id
+      session.user = token.user
+
       const decoded = jwt.decode(token.accessToken) as jwt.JwtPayload
       if (!decoded || !decoded.exp)
         throw new Error('Something went wrong, jwt is not defined in session callback')
 
-      session.expires = new Date(decoded.exp * 1000).toString()
+      // exp is the actual expiration date of the access token
+      // we want to refresh the token before it expires, thus we create a safe zone of 5 minutes
+      // before the actual expiration date, so that we can refresh the token before it expires
+      const exp_safe_zone = decoded.exp - 5 * 60
+      session.expires = new Date(exp_safe_zone * 1000).toString()
       return session
     },
   },

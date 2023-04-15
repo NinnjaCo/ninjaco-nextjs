@@ -7,7 +7,7 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { Quicksand } from 'next/font/google'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import { TranslationsProvider } from '@/contexts/TranslationContext'
-import { useEffect, useMemo, useRef } from 'react'
+import { useMemo, useRef } from 'react'
 import NextNProgress from '@/components/nextNProgress'
 import PageLayout from '@/components/layout/pageLayout'
 import SessionManager from '@/components/auth/sessionManager'
@@ -22,7 +22,7 @@ const quick_sand = Quicksand({
   variable: '--font-quicksand',
 })
 
-export default function App({ Component, pageProps, router }: AppProps) {
+export default function App({ Component, pageProps }: AppProps) {
   const queryClientRef = useRef<QueryClient>(new QueryClient())
 
   const dehydratedState = useMemo(() => {

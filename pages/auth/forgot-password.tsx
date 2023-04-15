@@ -124,6 +124,7 @@ const ForgotPassword = () => {
               placeholder={'John.smith@email.com'}
               StartIcon={EnvelopeIcon}
               error={errors.email?.message}
+              isRequired={true}
             />
             <button
               type="submit"

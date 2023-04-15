@@ -9,6 +9,7 @@ export interface User {
   role: Role
   isVerified: boolean
   points: number
+  profilePicture: string
   createdAt: string
   updatedAt: string
 }

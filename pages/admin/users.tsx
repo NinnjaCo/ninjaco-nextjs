@@ -3,7 +3,6 @@ import * as React from 'react'
 import * as yup from 'yup'
 import { AdminAlertDialog } from '@/components/admin/dialog'
 import { Alert } from '@/components/shared/alert'
-import { AuthApi } from '@/utils/api/auth/auth.api'
 import { AuthError } from '@/models/shared'
 import { AxiosError } from 'axios'
 import { ChevronRightIcon, PencilIcon } from '@heroicons/react/24/solid'
@@ -302,6 +301,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
     resetPasswordState,
     queryClient,
     session,
+    emailApi,
   ])
 
   const getDialogBody = useCallback(() => {
@@ -653,6 +653,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
             placeholder="John"
             StartIcon={UserIcon}
             error={errors.firstName?.message}
+            isRequired={true}
           />
           <Input
             {...register('lastName')}
@@ -660,12 +661,14 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
             placeholder="Smith"
             StartIcon={UserIcon}
             error={errors.lastName?.message}
+            isRequired={true}
           />
           <DatePickerWithHookForm
             control={control}
             name={register('dateOfBirth').name} // we only need the "name" prop
             label={'Date of Birth'}
             error={errors.dateOfBirth?.message}
+            isRequired={true}
           />
           <Input
             {...register('email')}
@@ -673,6 +676,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
             placeholder="Email"
             StartIcon={EnvelopeIcon}
             error={errors.email?.message}
+            isRequired={true}
           />
           <Input
             {...register('password')}
@@ -681,6 +685,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
             placeholder="Password"
             StartIcon={LockClosedIcon}
             error={errors.password?.message}
+            isRequired={true}
           />
           <Input
             {...register('passwordConfirmation')}
@@ -689,6 +694,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
             placeholder="Confirm Password"
             StartIcon={LockClosedIcon}
             error={errors.passwordConfirmation?.message}
+            isRequired={true}
           />
           <button
             type="submit"

@@ -11,7 +11,8 @@ import LevelIndicator from '@/components/shared/level'
 import React, { useMemo } from 'react'
 import SideMenu from '@/components/admin/sideMenu'
 import Table from '@/components/table'
-import profile_photo from '@/images/profile_photo.svg'
+import fallbackProfilePicture from '@/images/fallbackProfilePicture.svg'
+import getGeneratedAvatar from '@/utils/shared/getGeneratedAvatar'
 import statistics from '@/images/statistics.svg'
 import total_courses from '@/images/total_courses.svg'
 import total_creators from '@/images/total_creators.svg'
@@ -30,11 +31,26 @@ const AdminDashboard: React.FC<{ users: User[]; countUsers: number; countCreator
         width: 120,
         minWidth: 50,
         headerClassName: 'bg-brand-200',
-        renderCell: (params) => (
-          <div className="flex items-center justify-center">
-            <Image src={profile_photo} alt="image" className="w-10 h-10 rounded-full" />
-          </div>
-        ),
+        renderCell: (params) => {
+          let imageToRender = fallbackProfilePicture
+          if (params.value.profilePicture && params.value.profilePicture != '') {
+            imageToRender = params.value.profilePicture
+          } else if (params.value.firstName) {
+            imageToRender = getGeneratedAvatar(params.value)
+          }
+
+          return (
+            <div className="flex items-center justify-center">
+              <Image
+                src={imageToRender}
+                alt="image"
+                width={40}
+                height={40}
+                className="w-10 h-10 rounded-full border-2 border-brand-300"
+              />
+            </div>
+          )
+        },
         flex: 1,
         sortable: false,
         filterable: false,
@@ -90,7 +106,7 @@ const AdminDashboard: React.FC<{ users: User[]; countUsers: number; countCreator
     () =>
       users.map((user) => ({
         id: user._id, // for now send id instead of image
-        profilePhoto: user._id, // for now send id instead of image
+        profilePhoto: user, // for now send id instead of image
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
