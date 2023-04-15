@@ -79,7 +79,7 @@ const CreatorMenu = ({ isOnCoursePage, creator, isOnGamesPage }: CreatorMenuPros
             </Link>
           </button>
 
-          <Image src={seperator} alt="seperator" width={3} height={3} priority></Image>
+          <Image src={seperator} alt="seperator" className="w-2 h-8" priority></Image>
 
           <button className="hover-underline-animation">
             <Link
