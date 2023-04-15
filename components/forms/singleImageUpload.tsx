@@ -101,12 +101,7 @@ const SingleImageUpload = ({
                       />
                     ) : (
                       <div className="w-full h-full flex flex-col justify-center items-center gap-2">
-                        <Image
-                          src={imagePlaceHolder}
-                          alt="Placeholder"
-                          placeholder="blur"
-                          blurDataURL={imagePlaceHolder}
-                        />
+                        <Image src={imagePlaceHolder} alt="Placeholder" />
                         <p className="text-xs">Drop image here | Click</p>
                       </div>
                     )}
