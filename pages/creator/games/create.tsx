@@ -174,8 +174,6 @@ const GameCreatePage = ({ user }: { user: User }) => {
   ]
 
   const clickOnSquare = (rowIndex: number, colIndex: number) => {
-    console.log('Clicked on square', rowIndex, colIndex)
-    console.log('Selected tool', selectedTool)
     if (selectedTool === Tools.PLAYER) {
       // Only 1 player allowed
       const newGrid = gameGrid.map((row) => {
@@ -244,8 +242,6 @@ const GameCreatePage = ({ user }: { user: User }) => {
   }
 
   const changeTool = (tool: Tools) => {
-    console.log('Changing tool to', tool)
-
     if (tool === Tools.ERASER) {
       const newGrid = gameGrid.map((row) => {
         return row.map((cell) => {
@@ -264,7 +260,6 @@ const GameCreatePage = ({ user }: { user: User }) => {
   }
 
   const saveGame = async (data: { gameImage: ImageType }) => {
-    console.log('Saving game', data)
     closeAlert()
 
     if (!gameState.isPlayerSet || gameState.playerLocation === undefined) {

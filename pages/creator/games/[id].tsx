@@ -41,7 +41,6 @@ interface GridCell {
 const createGrid = (rows: number, cols: number, initialGameState): GridCell[][] => {
   const grid: GridCell[][] = []
 
-  console.log(initialGameState)
   if (initialGameState) {
     const { playerLocation, goalLocation, wallsLocations } = initialGameState
     for (let row = 0; row < rows; row++) {
@@ -103,7 +102,6 @@ enum Tools {
 }
 
 const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
-  console.log(game)
   const session = useSession()
   const router = useRouter()
   const [gameTitle, setGameTitle] = React.useState(game.title)
@@ -231,8 +229,6 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
   ]
 
   const clickOnSquare = (rowIndex: number, colIndex: number) => {
-    console.log('Clicked on square', rowIndex, colIndex)
-    console.log('Selected tool', selectedTool)
     if (selectedTool === Tools.PLAYER) {
       // Only 1 player allowed
       const newGrid = gameGrid.map((row) => {
@@ -301,8 +297,6 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
   }
 
   const changeTool = (tool: Tools) => {
-    console.log('Changing tool to', tool)
-
     if (tool === Tools.ERASER) {
       const newGrid = gameGrid.map((row) => {
         return row.map((cell) => {

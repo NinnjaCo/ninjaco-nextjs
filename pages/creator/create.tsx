@@ -93,7 +93,6 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
       return
     }
     // Upload Image and get url
-    console.log(data)
     const imageUploadRes = await new ImageApi(session.data).uploadImage({
       image: data.courseImage.file,
     })

@@ -17,7 +17,6 @@ export const checkIfUserIsVerified = async (
 
       // If the user does not have the correct role, redirect them to the home page
       if (!user || !user.isVerified) {
-        console.log('Unverified User Trying to access a page')
         return {
           isVerified: false,
           rewriteUrl: '/auth/unauthorized',
@@ -30,7 +29,6 @@ export const checkIfUserIsVerified = async (
         isVerified: true,
       }
     } catch (error) {
-      console.log(error)
       return {
         isVerified: false,
         rewriteUrl: '/auth/signin',
