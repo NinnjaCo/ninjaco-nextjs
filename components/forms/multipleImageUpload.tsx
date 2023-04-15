@@ -119,18 +119,20 @@ const MultipleImageUpload = ({
                   {uploadedPictures.map((image: ImageType, index: number) => {
                     return (
                       image.dataURL && (
-                        <div key={index} className="relative">
+                        <div key={index} className="relative w-52 h-36 bg-brand-50 rounded">
                           <Image
                             src={image.dataURL}
                             placeholder="blur"
                             blurDataURL={image.dataURL}
                             alt="Uploaded Image"
-                            width={150}
-                            height={150}
                             style={{
-                              objectFit: 'cover',
+                              objectFit: 'contain',
                             }}
-                            className="rounded"
+                            fill
+                            sizes="(max-width: 768px) 40vw,
+                            (max-width: 1200px) 50vw,
+                            60vw"
+                            className="rounded-md"
                           />
                           <button
                             className="absolute top-1 left-1 p-1 rounded-full bg-error-dark text-white"
