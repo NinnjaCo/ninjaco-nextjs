@@ -44,18 +44,18 @@ const useNonNullUser = (user: User | undefined, serverUser: User) => {
 
 export default function Profile({ serverUser }: ServerProps) {
   const queryClient = useQueryClient()
-  const { data: session } = useSession()
+  const session = useSession()
   const t = useTranslation()
 
   const { data: fetchedUser } = useQuery<User>(
     ['user', session],
     async () => {
-      const response = await new UserApi(session).findOne(serverUser._id)
+      const response = await new UserApi(session.data).findOne(serverUser._id)
       return response.payload
     },
     {
       initialData: serverUser,
-      enabled: !!session,
+      enabled: !!session.data,
       onError: (error) => {
         if (isAxiosError(error)) {
           const errors = unWrapAuthError(error as AxiosError<AuthError> | undefined)
@@ -177,7 +177,7 @@ export default function Profile({ serverUser }: ServerProps) {
         data.profilePictureState.image.file
       ) {
         // Upload Image and get url
-        const imageUploadRes = await new ImageApi(session).uploadImage({
+        const imageUploadRes = await new ImageApi(session.data).uploadImage({
           image: data.profilePictureState.image.file,
         })
 
@@ -187,7 +187,7 @@ export default function Profile({ serverUser }: ServerProps) {
           profilePicture: imageUploadRes.payload.image_url,
         }
       }
-      const res = await new UserApi(session).update(serverUser._id, dirtyData)
+      const res = await new UserApi(session.data).update(serverUser._id, dirtyData)
 
       // update user using react-query
       // refetch the user data
@@ -206,6 +206,14 @@ export default function Profile({ serverUser }: ServerProps) {
         password: '',
         passwordConfirmation: '',
       })
+
+      const newSession = await session.update({
+        ...session,
+        user: {
+          ...res.payload,
+        },
+      })
+
       setSaveButtonDisabled(false)
     } catch (error) {
       setSaveButtonDisabled(false)

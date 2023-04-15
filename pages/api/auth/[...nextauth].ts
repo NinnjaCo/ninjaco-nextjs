@@ -47,7 +47,11 @@ export const authOptions: AuthOptions = {
     error: '/auth/signin',
   },
   callbacks: {
-    async jwt({ user, token, account }) {
+    async jwt({ user, token, account, trigger, session }) {
+      if (trigger === 'update') {
+        token.user = session.user
+        return token
+      }
       // User is what is returned from the authorize function
       // Token is what is returned from the session function
       // Account is what is returned from the provider callback

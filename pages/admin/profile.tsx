@@ -42,7 +42,7 @@ const useNonNullUser = (user: User | undefined, serverUser: User) => {
 }
 export default function Profile({ serverUser }: ServerProps) {
   const queryClient = useQueryClient()
-  const { data: session } = useSession()
+  const { data: session, update: updateSession } = useSession()
   const t = useTranslation()
 
   const { data: fetchedUser } = useQuery<User>(
@@ -204,6 +204,14 @@ export default function Profile({ serverUser }: ServerProps) {
         password: '',
         passwordConfirmation: '',
       })
+
+      await updateSession({
+        ...session,
+        user: {
+          ...res.payload,
+        },
+      })
+
       setSaveButtonDisabled(false)
     } catch (error) {
       setSaveButtonDisabled(false)

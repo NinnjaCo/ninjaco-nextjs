@@ -3,6 +3,7 @@ import { Fragment } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { User } from '@/models/crud'
 import { useRouter } from 'next-router-mock'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import LocaleMenu from '../layout/localeMenu'
@@ -18,7 +19,7 @@ interface CreatorMenuPros {
 const CreatorMenu = ({ isOnCoursePage, creator, isOnGamesPage }: CreatorMenuPros) => {
   const router = useRouter()
   const profilePhoto = useUserProfilePicture(creator)
-
+  const session = useSession()
   const linkForMenu = [
     {
       name: 'Courses',
@@ -36,7 +37,7 @@ const CreatorMenu = ({ isOnCoursePage, creator, isOnGamesPage }: CreatorMenuPros
         return (
           <Image
             className="rounded-full bg-white border-2 border-brand w-9 h-9"
-            src={profilePhoto.profilePic}
+            src={session?.data?.user?.profilePicture || profilePhoto.profilePic}
             width={45}
             height={45}
             alt="PP"
