@@ -54,6 +54,8 @@ Here's a brief high-level overview of the tech stack the NinjaCo app uses:
 
 - For backend API, the app uses [NestJS](https://nestjs.com/), a progressive Node.js framework for building efficient, reliable and scalable server-side applications.
 
+- For image storage, the app uses [Minio](https://min.io/), an open source object storage server compatible with Amazon S3 APIs. Minio is a high performance distributed object storage server, designed for large-scale private cloud infrastructure.
+
 - For code formatting, the app uses [Prettier](https://prettier.io/), an opinionated code formatter. Prettier is an opinionated code formatter with support for JavaScript, TypeScript, CSS, JSON, GraphQL, Markdown, and more. It removes all original styling and ensures that all outputted code conforms to a consistent style.
 
 <br><br>
