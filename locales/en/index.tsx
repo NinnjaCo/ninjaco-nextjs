@@ -337,7 +337,15 @@ const englishTranslations: WebsiteTranslations = {
       noMissions: 'No missions yet',
     },
     createCourse: {
-      imageAlert: 'Please upload a course image',
+      alerts: {
+        imageAlert: 'Please upload a course image',
+      },
+      schema: {
+        courseTypeRequired: 'Course Type is required',
+        courseTitleRequired: 'Course Title is required',
+        courseImageRequired: 'Course Banner Image is required',
+        courseDescriptionRequired: 'Course Description is required',
+      },
       createCourse: 'Create Course',
       courseType: 'Course Type',
       courseImage: 'Course Banner Image',
@@ -352,8 +360,15 @@ const englishTranslations: WebsiteTranslations = {
       cancel: 'Cancel',
     },
     editCourse: {
-      wentWrong: 'Something went wrong',
-      error: 'Error editing the course',
+      alerts: {
+        wentWrong: 'Something went wrong',
+        error: 'Error editing the course',
+      },
+      schema: {
+        courseTypeRequired: 'Course Type is required',
+        courseTitleRequired: 'Course Title is required',
+        courseDescriptionRequired: 'Course Description is required',
+      },
       editCourse: 'Edit Course',
       courseType: 'Course Type',
       courseImage: 'Course Banner Image',

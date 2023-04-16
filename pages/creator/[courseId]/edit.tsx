@@ -41,19 +41,6 @@ type EditCourseFormDataType = {
   objectives?: string[]
 }
 
-const EditCourseFormSchema = yup
-  .object()
-  .shape({
-    type: yup.string().oneOf(Object.values(CourseType)).required('Course Type is required'),
-    title: yup.string().required('Course Title is required'),
-    image: yup.object(),
-    description: yup.string().required('Course Description is required'),
-    ageRange: yup.array().of(yup.string()),
-    preRequisites: yup.array().of(yup.string()),
-    objectives: yup.array().of(yup.string()),
-  })
-  .required()
-
 const EditCourse = ({ user, course }: { user: User; course: Course }) => {
   const t = useTranslation()
   const router = useRouter()
@@ -70,6 +57,24 @@ const EditCourse = ({ user, course }: { user: User; course: Course }) => {
   const closeAlert = () => {
     setAlertData({ ...alertData, open: false })
   }
+
+  const EditCourseFormSchema = yup
+    .object()
+    .shape({
+      type: yup
+        .string()
+        .oneOf(Object.values(CourseType))
+        .required(`${t.Creator.editCourse.schema.courseTypeRequired}`),
+      title: yup.string().required(`${t.Creator.editCourse.schema.courseTitleRequired}`),
+      image: yup.object(),
+      description: yup
+        .string()
+        .required(`${t.Creator.editCourse.schema.courseDescriptionRequired}`),
+      ageRange: yup.array().of(yup.string()),
+      preRequisites: yup.array().of(yup.string()),
+      objectives: yup.array().of(yup.string()),
+    })
+    .required()
 
   const {
     register,
@@ -113,13 +118,13 @@ const EditCourse = ({ user, course }: { user: User; course: Course }) => {
       if (isAxiosError<AuthError>(error)) {
         const errors = unWrapAuthError(error)
         setAlertData({
-          message: errors[0].message || `${t.Creator.editCourse.wentWrong}`,
+          message: errors[0].message || `${t.Creator.editCourse.alerts.wentWrong}`,
           variant: 'error',
           open: true,
         })
       } else {
         setAlertData({
-          message: `${t.Creator.createCourse.courseImage}`,
+          message: `${t.Creator.editCourse.alerts.error}`,
           variant: 'error',
           open: true,
         })

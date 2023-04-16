@@ -179,7 +179,15 @@ export interface WebsiteTranslations {
       noMissions: translationElement
     }
     createCourse: {
-      imageAlert: translationElement
+      alerts: {
+        imageAlert: translationElement
+      }
+      schema: {
+        courseTypeRequired: translationElement
+        courseTitleRequired: translationElement
+        courseImageRequired: translationElement
+        courseDescriptionRequired: translationElement
+      }
       createCourse: translationElement
       courseType: translationElement
       courseImage: translationElement
@@ -194,8 +202,15 @@ export interface WebsiteTranslations {
       cancel: translationElement
     }
     editCourse: {
-      wentWrong: translationElement
-      error: translationElement
+      alerts: {
+        wentWrong: translationElement
+        error: translationElement
+      }
+      schema: {
+        courseTypeRequired: translationElement
+        courseTitleRequired: translationElement
+        courseDescriptionRequired: translationElement
+      }
       editCourse: translationElement
       courseType: translationElement
       courseImage: translationElement

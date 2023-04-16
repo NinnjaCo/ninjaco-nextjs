@@ -348,7 +348,15 @@ const frenchTranslations: WebsiteTranslations = {
       noMissions: 'Aucune mission',
     },
     createCourse: {
-      imageAlert: 'veuillez télécharger une image de cours',
+      alerts: {
+        imageAlert: 'veuillez télécharger une image de cours',
+      },
+      schema: {
+        courseTypeRequired: 'Le type de cours est requis',
+        courseTitleRequired: 'Le titre du cours est requis ',
+        courseImageRequired: "L'image du cours est requise",
+        courseDescriptionRequired: 'La description du cours est obligatoire',
+      },
       createCourse: 'Créer un cours',
       courseType: 'Type de cours',
       courseImage: 'Image de bannière du cours',
@@ -363,8 +371,15 @@ const frenchTranslations: WebsiteTranslations = {
       cancel: 'Annuler',
     },
     editCourse: {
-      wentWrong: "quelque chose s'est mal passé",
-      error: 'erreur lors de la modification du cours',
+      alerts: {
+        wentWrong: "quelque chose s'est mal passé",
+        error: 'erreur lors de la modification du cours',
+      },
+      schema: {
+        courseTypeRequired: 'Le type de cours est requis',
+        courseTitleRequired: 'Le titre du cours est requis ',
+        courseDescriptionRequired: 'La description du cours est obligatoire',
+      },
       editCourse: 'Modifier le cours',
       courseType: 'Type de cours',
       courseImage: 'Image de bannière du cours',

@@ -40,19 +40,6 @@ type CreateCourseFormDataType = {
   courseObjectives?: string[]
 }
 
-const CreateCourseFormSchema = yup
-  .object()
-  .shape({
-    courseType: yup.string().oneOf(Object.values(CourseType)).required('Course Type is required'),
-    courseTitle: yup.string().required('Course Title is required'),
-    courseImage: yup.object().required('Course Image is required'),
-    courseDescription: yup.string().required('Course Description is required'),
-    courseAgeRange: yup.array().of(yup.string()),
-    coursePrerequisites: yup.array().of(yup.string()),
-    courseObjectives: yup.array().of(yup.string()),
-  })
-  .required()
-
 const CreateCourseOrEdit = ({ user }: { user: User }) => {
   const router = useRouter()
   const t = useTranslation()
@@ -69,6 +56,23 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
   const closeAlert = () => {
     setAlertData({ ...alertData, open: false })
   }
+  const CreateCourseFormSchema = yup
+    .object()
+    .shape({
+      courseType: yup
+        .string()
+        .oneOf(Object.values(CourseType))
+        .required(`${t.Creator.createCourse.schema.courseTypeRequired}`),
+      courseTitle: yup.string().required(`${t.Creator.createCourse.schema.courseTitleRequired}`),
+      courseImage: yup.object().required(`${t.Creator.createCourse.schema.courseImageRequired}`),
+      courseDescription: yup
+        .string()
+        .required(`${t.Creator.createCourse.schema.courseDescriptionRequired}`),
+      courseAgeRange: yup.array().of(yup.string()),
+      coursePrerequisites: yup.array().of(yup.string()),
+      courseObjectives: yup.array().of(yup.string()),
+    })
+    .required()
 
   const {
     register,
@@ -88,7 +92,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
   const onSubmitHandler = async (data: CreateCourseFormDataType) => {
     if (!data.courseImage.file) {
       setAlertData({
-        message: `${t.Creator.createCourse.imageAlert}`,
+        message: `${t.Creator.createCourse.alerts.imageAlert}`,
         variant: 'error',
         open: true,
       })
