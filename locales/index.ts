@@ -162,6 +162,27 @@ export interface WebsiteTranslations {
     save: translationElement
     changePassword: translationElement
   }
+  Creator: {
+    games: {
+      viewGames: {
+        headTitle: translationElement
+        title: translationElement
+        createGame: translationElement
+        entries: translationElement
+        filter: {
+          newest: translationElement
+          oldest: translationElement
+          recentlyUpdated: translationElement
+          NameAZ: translationElement
+          NameZA: translationElement
+          SizeOfGame: translationElement
+        }
+      }
+    }
+  }
+  Filter: {
+    filter: translationElement
+  }
 }
 
 // Create locale type support en | fr

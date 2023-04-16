@@ -320,6 +320,27 @@ const englishTranslations: WebsiteTranslations = {
     save: 'SAVE',
     changePassword: 'Change Password',
   },
+  Creator: {
+    games: {
+      viewGames: {
+        headTitle: 'NinjaCo | Games',
+        title: 'Games',
+        createGame: 'Create Game',
+        entries: 'Entries',
+        filter: {
+          newest: 'Newest',
+          oldest: 'Oldest',
+          NameAZ: 'Name (A-Z)',
+          NameZA: 'Name (Z-A)',
+          recentlyUpdated: 'Recently Updated',
+          SizeOfGame: 'Size of Game',
+        },
+      },
+    },
+  },
+  Filter: {
+    filter: 'Filter',
+  },
 }
 
 export default englishTranslations

@@ -331,5 +331,26 @@ const frenchTranslations: WebsiteTranslations = {
     save: 'Sauvegarder',
     changePassword: 'Changer le mot de passe',
   },
+  Creator: {
+    games: {
+      viewGames: {
+        headTitle: 'NinjaCo | Jeux',
+        title: 'Jeux',
+        createGame: 'Créer un Jeu',
+        entries: 'Entrées',
+        filter: {
+          newest: 'Le plus récent',
+          oldest: 'Le plus ancien',
+          NameAZ: 'Nom (A-Z)',
+          NameZA: 'Nom (Z-A)',
+          recentlyUpdated: 'Récemment mis à jour',
+          SizeOfGame: 'Taille du Jeu',
+        },
+      },
+    },
+  },
+  Filter: {
+    filter: 'Filtre',
+  },
 }
 export default frenchTranslations
