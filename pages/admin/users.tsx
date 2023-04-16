@@ -272,7 +272,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
 
           queryClient.invalidateQueries('users')
           setAlertData({
-            message: t.Admin.Users.deleteSuccessfully as string,
+            message: t.Admin.Users.userDeletedSuccessfully as string,
             variant: 'success',
             open: true,
           })
@@ -297,12 +297,26 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
     }
   }, [
     alertDiaglogState.dialogType,
-    deleteUserState,
-    notifyMessage,
-    resetPasswordState,
-    queryClient,
-    session,
     emailApi,
+    notifyMessage.rowParams.row.email,
+    notifyMessage.message,
+    resetPasswordState.password,
+    resetPasswordState.rowParams.row.id,
+    resetPasswordState.rowParams.row.email,
+    resetPasswordState.notifyUser,
+    session,
+    queryClient,
+    t.Admin.Users.resetPasswordSuccessfully,
+    t.Admin.Users.resetPassword,
+    t.Admin.Users.resetPasswordsent,
+    t.Admin.Users.somethingWentWrong,
+    t.Admin.Users.resetPasswordError,
+    t.Admin.Users.userDeletedSuccessfully,
+    t.Admin.Users.userDeletedError,
+    deleteUserState.rowParams.row.id,
+    deleteUserState.rowParams.row.email,
+    deleteUserState.notifyUser,
+    deleteUserState.message,
   ])
 
   const getDialogBody = useCallback(() => {
@@ -407,16 +421,16 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
                 value: params.row.id,
               },
               {
-                label: t.Admin.Users.name,
+                label: t.Admin.Users.name as string,
                 value: `${params.row.firstName} ${params.row.lastName}`,
               },
               {
-                label: t.Admin.Users.email,
+                label: t.Admin.Users.email as string,
                 value: params.row.email,
               },
             ],
-            backButtonText: t.Admin.Users.cancel,
-            confirmButtonText: t.Admin.Users.send,
+            backButtonText: t.Admin.Users.cancel as string,
+            confirmButtonText: t.Admin.Users.send as string,
             confirmButtonClassName: 'bg-brand hover:bg-brand-500 text-white',
             open: true,
             dialogType: 'notify',
@@ -429,25 +443,25 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
       },
       {
         id: 2,
-        text: t.Admin.Usres.title,
+        text: t.Admin.Users.title,
         onClick: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
           setAlertDialogState({
-            title: t.Admin.Users.title,
+            title: t.Admin.Users.title as string,
             detailsRows: [
               {
                 label: 'ID',
                 value: params.row.id,
               },
               {
-                label: t.Admin.Users.name,
+                label: t.Admin.Users.name as string,
                 value: `${params.row.firstName} ${params.row.lastName}`,
               },
               {
-                label: t.Admin.Users.email,
+                label: t.Admin.Users.email as string,
                 value: params.row.email,
               },
             ],
-            backButtonText: t.Admin.Users.cancel,
+            backButtonText: t.Admin.Users.cancel as string,
             confirmButtonText: 'Reset',
             confirmButtonClassName: 'bg-brand hover:bg-brand-500 text-white',
             open: true,
@@ -465,23 +479,23 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
         textClassName: 'text-red-500',
         onClick: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
           setAlertDialogState({
-            title: t.Admin.Users.deleteUser,
+            title: t.Admin.Users.deleteUser as string,
             detailsRows: [
               {
                 label: 'ID',
                 value: params.row.id,
               },
               {
-                label: t.Admin.Users.name,
+                label: t.Admin.Users.name as string,
                 value: `${params.row.firstName} ${params.row.lastName}`,
               },
               {
-                label: t.Admin.Users.email,
+                label: t.Admin.Users.email as string,
                 value: params.row.email,
               },
             ],
-            backButtonText: t.Admin.Users.cancel,
-            confirmButtonText: t.Admin.Users.delete,
+            backButtonText: t.Admin.Users.cancel as string,
+            confirmButtonText: t.Admin.Users.delete as string,
             confirmButtonClassName: 'bg-error-dark hover:bg-error text-white',
             open: true,
             dialogType: 'delete',
@@ -493,7 +507,18 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
         },
       },
     ],
-    [deleteUserState, notifyMessage, resetPasswordState]
+    [
+      deleteUserState,
+      notifyMessage,
+      resetPasswordState,
+      t.Admin.Users.cancel,
+      t.Admin.Users.delete,
+      t.Admin.Users.deleteUser,
+      t.Admin.Users.email,
+      t.Admin.Users.name,
+      t.Admin.Users.send,
+      t.Admin.Users.title,
+    ]
   )
 
   const columns: GridColDef[] = useMemo(
@@ -611,7 +636,16 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
         flex: 1,
       },
     ],
-    [editActions]
+    [
+      editActions,
+      t.Admin.Users.action,
+      t.Admin.Users.createdAt,
+      t.Admin.Users.dateOfBirth,
+      t.Admin.Users.email,
+      t.Admin.Users.firstName,
+      t.Admin.Users.lastName,
+      t.Admin.Users.updatedAt,
+    ]
   )
 
   const rows: GridRowsProp = useMemo(
