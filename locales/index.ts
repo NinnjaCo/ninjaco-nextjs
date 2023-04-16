@@ -185,6 +185,29 @@ export interface WebsiteTranslations {
       updatedAt: translationElement
       entriesFound: translationElement
     }
+    Users: {
+      somethingWentWrong: translationElement
+      createdSuccessfully: translationElement
+      resetPassword: translationElement
+      resetPasswordsent: translationElement
+      resetPasswordError: translationElement
+      resetPasswordSuccessfully: translationElement
+      userDeletedSuccessfully: translationElement
+      userDeletedError: translationElement
+      message: translationElement
+      notifyByEmail: translationElement
+      newPassword: translationElement
+      firstName: translationElement
+      lastName: translationElement
+      email: translationElement
+      dateOfBirth: translationElement
+      createdAt: translationElement
+      updatedAt: translationElement
+      action: translationElement
+      addUsers: translationElement
+      cancel: translationElement
+      entriesFound: translationElement
+    }
   }
 }
 
