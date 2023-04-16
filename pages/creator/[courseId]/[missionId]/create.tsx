@@ -20,6 +20,7 @@ import MultipleImageUpload from '@/components/forms/multipleImageUpload'
 import React from 'react'
 import floatingLegos from '@/images/floatingLegos.svg'
 import underLineImage from '@/images/lightlyWavedLine.svg'
+import useTranslation from '@/hooks/useTranslation'
 
 type CreateLevelFormDataType = {
   buildingPartsImages: ImageListType
@@ -43,6 +44,7 @@ const CreateLevel = ({
   mission: Mission
   course: Course
 }) => {
+  const t = useTranslation()
   const router = useRouter()
   const session = useSession()
   const scrollToTop = () => {
@@ -76,7 +78,7 @@ const CreateLevel = ({
 
   const onSubmitHandler = async (data: CreateLevelFormDataType) => {
     setAlertData({
-      message: 'Creating level...',
+      message: t.Creator.createLevelPage.creatingLevel as string,
       variant: 'info',
       open: true,
     })
@@ -84,7 +86,7 @@ const CreateLevel = ({
 
     if (data.buildingPartsImages.length > 10) {
       setAlertData({
-        message: 'You can only upload 10 images for building parts',
+        message: t.Creator.createLevelPage.onlyTenBuildingParts as string,
         variant: 'error',
         open: true,
       })
@@ -94,7 +96,7 @@ const CreateLevel = ({
 
     if (data.stepByStepGuideImages.length > 10) {
       setAlertData({
-        message: 'You can only upload 10 images for step by step guide',
+        message: t.Creator.createLevelPage.onlyTenStepByStep as string,
         variant: 'error',
         open: true,
       })
@@ -109,7 +111,7 @@ const CreateLevel = ({
       data.buildingPartsImages.map(async (image) => {
         if (!image.file) {
           setAlertData({
-            message: 'One of the images is not valid',
+            message: t.Creator.createLevelPage.imageIsNotValid as string,
             variant: 'error',
             open: true,
           })
@@ -119,7 +121,7 @@ const CreateLevel = ({
 
         if (image.file.size > 1000000) {
           setAlertData({
-            message: 'One of the images is too big, please make sure it is less than 1MB',
+            message: t.Creator.createLevelPage.imageIsTooBig as string,
             variant: 'error',
             open: true,
           })
@@ -134,7 +136,7 @@ const CreateLevel = ({
           return url.payload.image_url
         } catch (err) {
           setAlertData({
-            message: 'There was an error uploading the images',
+            message: t.Creator.createLevelPage.errorUploadingImage as string,
             variant: 'error',
             open: true,
           })
@@ -148,7 +150,7 @@ const CreateLevel = ({
       data.stepByStepGuideImages.map(async (image) => {
         if (!image.file) {
           setAlertData({
-            message: 'One of the images is not valid',
+            message: t.Creator.createLevelPage.imageIsNotValid as string,
             variant: 'error',
             open: true,
           })
@@ -158,7 +160,7 @@ const CreateLevel = ({
 
         if (image.file.size > 1000000) {
           setAlertData({
-            message: 'One of the images is too big, please make sure it is less than 1MB',
+            message: t.Creator.createLevelPage.imageIsTooBig as string,
             variant: 'error',
             open: true,
           })
@@ -173,7 +175,7 @@ const CreateLevel = ({
           return url.payload.image_url
         } catch (err) {
           setAlertData({
-            message: 'There was an error uploading the images',
+            message: t.Creator.createLevelPage.errorUploadingImage as string,
             variant: 'error',
             open: true,
           })
@@ -202,7 +204,7 @@ const CreateLevel = ({
     // check if the arrays are empty, if so return
     if (buildingPartsImagesUrlsFiltered.length === 0) {
       setAlertData({
-        message: 'There was an error uploading the images',
+        message: t.Creator.createLevelPage.errorUploadingImage as string,
         variant: 'error',
         open: true,
       })
@@ -212,7 +214,7 @@ const CreateLevel = ({
 
     if (stepByStepGuideImagesUrlsFiltered.length === 0) {
       setAlertData({
-        message: 'There was an error uploading the images',
+        message: t.Creator.createLevelPage.errorUploadingImage as string,
         variant: 'error',
         open: true,
       })
@@ -231,7 +233,7 @@ const CreateLevel = ({
       router.push(`/creator/${course._id}/${mission._id}/`)
     } catch (err) {
       setAlertData({
-        message: 'There was an error creating the level',
+        message: t.Creator.createLevelPage.errorCreatingLevel as string,
         variant: 'error',
         open: true,
       })
@@ -248,7 +250,7 @@ const CreateLevel = ({
       <main className="w-full">
         <CreatorMenu creator={user} isOnCoursePage={true} isOnGamesPage={false} />
         <CreateResourceCard
-          title="Create Level"
+          title={t.Creator.createLevelPage.createLevel as string}
           underLineImage={underLineImage}
           titleImage={floatingLegos}
         >
@@ -261,21 +263,21 @@ const CreateLevel = ({
           />
           <form onSubmit={handleSubmit(onSubmitHandler)} className="flex flex-col gap-8" id="form">
             <div className="text-2xl text-brand">
-              Creating Level Number {mission.levels.length + 1}
+              {t.Creator.createLevelPage.creatingLevelNumber} {mission.levels.length + 1}
             </div>
             <MultipleImageUpload
               control={control}
               name={register('buildingPartsImages').name}
               error={errors.buildingPartsImages?.message as unknown as string} // Convert to string since it returned a FieldError
               isRequired={true}
-              label="Building Parts Images"
+              label={t.Creator.createLevelPage.buildingPartImages as string}
             />
             <MultipleImageUpload
               control={control}
               name={register('stepByStepGuideImages').name}
               error={errors.stepByStepGuideImages?.message as unknown as string} // Convert to string since it returned a FieldError
               isRequired={true}
-              label="Step by Step Guide Images "
+              label={t.Creator.createLevelPage.stepByStepImages as string}
             />
 
             <div className="flex w-full justify-between gap-4 md:gap-12 h-fit md:flex-row flex-col-reverse">
@@ -286,7 +288,7 @@ const CreateLevel = ({
                   router.back()
                 }}
               >
-                Cancel
+                {t.Creator.createLevelPage.cancel}
               </button>
               <button
                 type="submit"
@@ -294,7 +296,7 @@ const CreateLevel = ({
                 value="Submit"
                 className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
               >
-                Create Level
+                {t.Creator.createLevelPage.createLevel}
               </button>
             </div>
           </form>

@@ -167,7 +167,92 @@ export interface WebsiteTranslations {
     save: translationElement
     changePassword: translationElement
   }
+  Forms: {
+    imageUpload: {
+      unacceptableImageType: translationElement
+      unacceptableImageSize: translationElement
+      lowResolutionImage: translationElement
+      dropImageHere: translationElement
+      removeImage: translationElement
+      removeAllImages: translationElement
+    }
+  }
   Creator: {
+    viewMissionPage: {
+      editMission: translationElement
+      missionCategory: translationElement
+      levels: translationElement
+      addLevel: translationElement
+    }
+    editMissionPage: {
+      missionTitleRequired: translationElement
+      missionDescriptionRequired: translationElement
+      missionCategoryRequired: translationElement
+      somethingWrong: translationElement
+      noChangesMade: translationElement
+      errorEditingMission: translationElement
+      errorCreatingCategory: translationElement
+      warning: translationElement
+      cancel: translationElement
+      editMission: translationElement
+      missionTitle: translationElement
+      missionBannerImage: translationElement
+      missionDescription: translationElement
+      missionCategory: translationElement
+      createNewCategory: translationElement
+      addCategory: translationElement
+      newCategory: translationElement
+    }
+    createMissionPage: {
+      missionTitleRequired: translationElement
+      missionImageRequired: translationElement
+      missionDescriptionRequired: translationElement
+      missionCategoryRequired: translationElement
+      somethingWrong: translationElement
+      pleaseUploadImage: translationElement
+      errorCreatingGame: translationElement
+      errorCreatingCategory: translationElement
+      createMission: translationElement
+      missionTitle: translationElement
+      missionBannerImage: translationElement
+      missionDescription: translationElement
+      missionCategory: translationElement
+      selectACategory: translationElement
+      createNewCategory: translationElement
+      warning: translationElement
+      addCategory: translationElement
+      newCategory: translationElement
+      cancel: translationElement
+    }
+    createLevelPage: {
+      creatingLevel: translationElement
+      onlyTenBuildingParts: translationElement
+      onlyTenStepByStep: translationElement
+      imageIsNotValid: translationElement
+      imageIsTooBig: translationElement
+      errorUploadingImage: translationElement
+      errorCreatingLevel: translationElement
+      creatingLevelNumber: translationElement
+      buildingPartImages: translationElement
+      stepByStepImages: translationElement
+      cancel: translationElement
+      createLevel: translationElement
+    }
+    editLevelPage: {
+      atLeastOneImage: translationElement
+      noChangesMade: translationElement
+      onlyTenBuildingParts: translationElement
+      onlyTenStepByStep: translationElement
+      imageIsNotValid: translationElement
+      imageIsTooBig: translationElement
+      errorUploadingImage: translationElement
+      errorUpdatingLevel: translationElement
+      editLevel: translationElement
+      editLevelNumber: translationElement
+      buildingPartImages: translationElement
+      stepByStepImages: translationElement
+      cancel: translationElement
+    }
     games: {
       viewGames: {
         headTitle: translationElement

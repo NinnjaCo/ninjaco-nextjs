@@ -6,6 +6,7 @@ import ImageUploading, { ErrorsType, ImageListType } from 'react-images-uploadin
 import React, { useEffect, useState } from 'react'
 import clsx from 'clsx'
 import getGeneratedAvatar from '@/utils/shared/getGeneratedAvatar'
+import useTranslation from '@/hooks/useTranslation'
 
 interface ProfileImageUploadProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -35,15 +36,17 @@ const ProfileImageUpload = ({
     setDefaultImage(defaultStartImage)
   }, [defaultStartImage])
 
+  const t = useTranslation()
+
   const getImageUploadErrorMessage = (error: ErrorsType) => {
     if (error?.acceptType) {
-      return 'Unacceptable image type'
+      return t.Forms.imageUpload.unacceptableImageType as string
     }
     if (error?.maxFileSize) {
-      return 'Max File Size Reached'
+      return t.Forms.imageUpload.unacceptableImageSize as string
     }
     if (error?.resolution) {
-      return 'Low Resolution'
+      return t.Forms.imageUpload.lowResolutionImage as string
     }
   }
 
@@ -133,7 +136,7 @@ const ProfileImageUpload = ({
                         })
                       }}
                     >
-                      Remove image
+                      {t.Forms.imageUpload.removeImage}
                     </button>
                   )}
                   {errors && (
