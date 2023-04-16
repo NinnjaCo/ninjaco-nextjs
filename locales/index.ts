@@ -215,6 +215,7 @@ export interface WebsiteTranslations {
       password: translationElement
       confirmPassword: translationElement
       notify: translationElement
+      users: translationElement
     }
   }
 }

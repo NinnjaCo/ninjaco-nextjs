@@ -373,6 +373,7 @@ const englishTranslations: WebsiteTranslations = {
       password: 'Password',
       confirmPassword: 'Confirm Password',
       notify: 'Notify',
+      users: 'Users',
     },
   },
 }

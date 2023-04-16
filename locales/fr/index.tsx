@@ -384,6 +384,7 @@ const frenchTranslations: WebsiteTranslations = {
       password: 'Mot de passe',
       confirmPassword: 'Confirmez le mot de passe',
       notify: 'Notifier',
+      users: 'Utilisateurs',
     },
   },
 }

@@ -756,7 +756,9 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
         <div className="flex flex-col flex-grow w-3/4 h-full gap-4 py-8 px-4">
           <div className="flex items-center justify-between w-full">
             <div className="flex flex-col gap-2">
-              <p className="text-brand-700 text-xl md:text-2xl lg:text-3xl font-semibold">Users</p>
+              <p className="text-brand-700 text-xl md:text-2xl lg:text-3xl font-semibold">
+                {t.Admin.Users.users}
+              </p>
               <div className="text-sm text-brand  ">
                 {(users ?? serverUsers).length} {t.Admin.Users.entriesFound}
               </div>
