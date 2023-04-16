@@ -21,6 +21,7 @@ import MultipleImageUpload from '@/components/forms/multipleImageUpload'
 import React from 'react'
 import floatingLegos from '@/images/floatingLegos.svg'
 import underLineImage from '@/images/lightlyWavedLine.svg'
+import useTranslation from '@/hooks/useTranslation'
 
 type EditLevelFormDataType = {
   buildingPartsImages: ImageListType
@@ -46,6 +47,7 @@ const EditLevel = ({
   mission: Mission
   course: Course
 }) => {
+  const t = useTranslation()
   const router = useRouter()
   const session = useSession()
   const scrollToTop = () => {
@@ -99,7 +101,7 @@ const EditLevel = ({
       (defaultBuildingPartsImages.length === 0 || defaultStepByStepGuideImages.length === 0)
     ) {
       setAlertData({
-        message: 'You need to upload at least one image',
+        message: t.Creator.editLevelPage.atLeastOneImage as string,
         variant: 'error',
         open: true,
       })
@@ -115,7 +117,7 @@ const EditLevel = ({
       defaultStepByStepGuideImages.length === level.stepGuideImages.length
     ) {
       setAlertData({
-        message: 'No changes were made',
+        message: t.Creator.editLevelPage.noChangesMade as string,
         variant: 'warning',
         open: true,
       })
@@ -125,7 +127,7 @@ const EditLevel = ({
 
     if (data.buildingPartsImages?.length + defaultBuildingPartsImages.length > 10) {
       setAlertData({
-        message: 'You can only upload 10 images for building parts',
+        message: t.Creator.editLevelPage.onlyTenBuildingParts as string,
         variant: 'error',
         open: true,
       })
@@ -135,7 +137,7 @@ const EditLevel = ({
 
     if (data.stepByStepGuideImages?.length + defaultStepByStepGuideImages.length > 10) {
       setAlertData({
-        message: 'You can only upload 10 images for step by step guide',
+        message: t.Creator.editLevelPage.onlyTenStepByStep as string,
         variant: 'error',
         open: true,
       })
@@ -152,7 +154,7 @@ const EditLevel = ({
       data.buildingPartsImages.map(async (image) => {
         if (!image.file) {
           setAlertData({
-            message: 'One of the images is not valid',
+            message: t.Creator.editLevelPage.imageIsNotValid as string,
             variant: 'error',
             open: true,
           })
@@ -162,7 +164,7 @@ const EditLevel = ({
 
         if (image.file.size > 1000000) {
           setAlertData({
-            message: 'One of the images is too big, please make sure it is less than 1MB',
+            message: t.Creator.editLevelPage.imageIsTooBig as string,
             variant: 'error',
             open: true,
           })
@@ -177,7 +179,7 @@ const EditLevel = ({
           dirtyData.buildingPartsImages.push(url.payload.image_url)
         } catch (err) {
           setAlertData({
-            message: 'There was an error uploading the images',
+            message: t.Creator.editLevelPage.errorUploadingImage as string,
             variant: 'error',
             open: true,
           })
@@ -191,7 +193,7 @@ const EditLevel = ({
       data.stepByStepGuideImages?.map(async (image) => {
         if (!image.file) {
           setAlertData({
-            message: 'One of the images is not valid',
+            message: t.Creator.editLevelPage.imageIsNotValid as string,
             variant: 'error',
             open: true,
           })
@@ -201,7 +203,7 @@ const EditLevel = ({
 
         if (image.file.size > 1000000) {
           setAlertData({
-            message: 'One of the images is too big, please make sure it is less than 1MB',
+            message: t.Creator.editLevelPage.imageIsTooBig as string,
             variant: 'error',
             open: true,
           })
@@ -216,7 +218,7 @@ const EditLevel = ({
           dirtyData.stepGuideImages.push(url.payload.image_url)
         } catch (err) {
           setAlertData({
-            message: 'There was an error uploading the images',
+            message: t.Creator.editLevelPage.errorUploadingImage as string,
             variant: 'error',
             open: true,
           })
@@ -234,7 +236,7 @@ const EditLevel = ({
       router.push(`/creator/${course._id}/${mission._id}/`)
     } catch (err) {
       setAlertData({
-        message: 'There was an error updating the level',
+        message: t.Creator.editLevelPage.errorUpdatingLevel as string,
         variant: 'error',
         open: true,
       })
@@ -251,7 +253,7 @@ const EditLevel = ({
       <main className="w-full">
         <CreatorMenu creator={user} isOnCoursePage={true} isOnGamesPage={false} />
         <CreateResourceCard
-          title="Edit Level"
+          title={t.Creator.editLevelPage.editLevel as string}
           underLineImage={underLineImage}
           titleImage={floatingLegos}
         >
@@ -263,13 +265,15 @@ const EditLevel = ({
             close={closeAlert}
           />
           <form onSubmit={handleSubmit(onSubmitHandler)} className="flex flex-col gap-8" id="form">
-            <div className="text-2xl text-brand">Editing Level Number {level.levelNumber}</div>
+            <div className="text-2xl text-brand">
+              {t.Creator.editLevelPage.editLevelNumber} {level.levelNumber}
+            </div>
             <MultipleImageUpload
               control={control}
               name={register('buildingPartsImages').name}
               error={errors.buildingPartsImages?.message as unknown as string} // Convert to string since it returned a FieldError
               isRequired={true}
-              label="Building Parts Images"
+              label={t.Creator.editLevelPage.buildingPartImages as string}
               initialData={{
                 initialImages: defaultBuildingPartsImages,
                 editInitialImages: (newImages) => {
@@ -282,7 +286,7 @@ const EditLevel = ({
               name={register('stepByStepGuideImages').name}
               error={errors.stepByStepGuideImages?.message as unknown as string} // Convert to string since it returned a FieldError
               isRequired={true}
-              label="Step by Step Guide Images"
+              label={t.Creator.editLevelPage.stepByStepImages as string}
               initialData={{
                 initialImages: defaultStepByStepGuideImages,
                 editInitialImages: (newImages) => {
@@ -299,7 +303,7 @@ const EditLevel = ({
                   router.back()
                 }}
               >
-                Cancel
+                {t.Creator.editLevelPage.cancel}
               </button>
               <button
                 type="submit"
@@ -307,7 +311,7 @@ const EditLevel = ({
                 value="Submit"
                 className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
               >
-                Edit Level
+                {t.Creator.editLevelPage.editLevel}
               </button>
             </div>
           </form>
