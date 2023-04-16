@@ -64,7 +64,7 @@ const ForgotPassword = () => {
 
       if (!res.payload) {
         setAlertData({
-          message: t.forgetPassword.wrong as string,
+          message: t.Auth.forgetPassword.wrong as string,
           variant: 'error',
           open: true,
         })
@@ -72,7 +72,7 @@ const ForgotPassword = () => {
       }
 
       setAlertData({
-        message: t.forgetPassword.checkEmail as string,
+        message: t.Auth.forgetPassword.checkEmail as string,
         variant: 'success',
         open: true,
       })
@@ -80,7 +80,7 @@ const ForgotPassword = () => {
       if (isAxiosError<AuthError>(error)) {
         const errors = unWrapAuthError(error)
         setAlertData({
-          message: errors[0].message || (t.forgetPassword.wrong as string),
+          message: errors[0].message || (t.Auth.forgetPassword.wrong as string),
           variant: 'error',
           open: true,
         })
@@ -91,7 +91,7 @@ const ForgotPassword = () => {
   return (
     <>
       <Head>
-        <title> {t.forgetPassword.title}</title>
+        <title> {t.Auth.forgetPassword.title}</title>
         <meta name="description" content="Reset Password with NinjaCo" />
       </Head>
       <main className="relative w-full h-screen">
@@ -106,7 +106,7 @@ const ForgotPassword = () => {
           }}
         ></Menu>
         <AuthCard
-          title={t.forgetPassword.title as string}
+          title={t.Auth.forgetPassword.title as string}
           titleImage={logoPointingDown}
           underLineImage={lightlyWavedLine}
         >
@@ -120,7 +120,7 @@ const ForgotPassword = () => {
           <form onSubmit={handleSubmit(onSubmitHandler)} className="flex flex-col gap-4" id="form">
             <Input
               {...register('email')}
-              label={t.forgetPassword.label as string}
+              label={t.Auth.forgetPassword.label as string}
               placeholder={'John.smith@email.com'}
               StartIcon={EnvelopeIcon}
               error={errors.email?.message}
@@ -132,15 +132,15 @@ const ForgotPassword = () => {
               value="Submit"
               className="w-full btn bg-brand-200 hover:bg-brand text-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500"
             >
-              {t.forgetPassword.sendResetLink}
+              {t.Auth.forgetPassword.sendResetLink}
             </button>
           </form>
           <div className="w-full flex justify-between text-xs mt-6">
             <Link className="cursor-pointer text-brand-500" href="/">
-              {t.forgetPassword.backToHome}
+              {t.Auth.forgetPassword.backToHome}
             </Link>
             <Link href="/auth/signin" className="cursor-pointer text-brand font-semibold">
-              {t.forgetPassword.signIn}
+              {t.Auth.forgetPassword.signIn}
             </Link>
           </div>
         </AuthCard>

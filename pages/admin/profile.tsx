@@ -267,7 +267,7 @@ export default function Profile({ serverUser }: ServerProps) {
                   className="btn btn-secondary rounded-lg px-4 sm:pr-6 py-2 hover:bg-brand-500 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                   disabled={saveButtonDisabled}
                 >
-                  {t.profile.save}
+                  {t.Profile.save}
                 </button>
               </div>
               <Alert
@@ -278,13 +278,13 @@ export default function Profile({ serverUser }: ServerProps) {
               />
               <div className="bg-brand-50 p-4 rounded w-full flex flex-col gap-4">
                 <div className="hidden md:block text-brand font-semibold text-sm md:text-base">
-                  {t.profile.profile}
+                  {t.Profile.profile}
                 </div>
                 <div className="flex flex-col md:flex-row flex-wrap w-full gap-2 md:gap-4">
                   <div className="flex-1 flex-shrink">
                     <Input
                       {...register('firstName')}
-                      label={t.profile.firstName}
+                      label={t.Profile.firstName}
                       placeholder="John"
                       StartIcon={UserIcon}
                       error={errors.firstName?.message}
@@ -293,7 +293,7 @@ export default function Profile({ serverUser }: ServerProps) {
                   <div className="flex-1 flex-shrink">
                     <Input
                       {...register('lastName')}
-                      label={t.profile.lastName}
+                      label={t.Profile.lastName}
                       placeholder="Smith"
                       StartIcon={UserIcon}
                       error={errors.lastName?.message}
@@ -305,7 +305,7 @@ export default function Profile({ serverUser }: ServerProps) {
                     <DatePickerWithHookForm
                       control={control}
                       name={register('dateOfBirth').name} // we only need the "name" prop
-                      label={t.profile.dateOfBirth as string}
+                      label={t.Profile.dateOfBirth as string}
                       error={errors.dateOfBirth?.message}
                     />
                   </div>
@@ -322,13 +322,13 @@ export default function Profile({ serverUser }: ServerProps) {
               </div>
               <div className="bg-brand-50 p-4 rounded w-full flex flex-col gap-4 ">
                 <div className="hidden md:block text-brand font-semibold text-sm md:text-base">
-                  {t.profile.changePassword}
+                  {t.Profile.changePassword}
                 </div>
                 <div className="flex flex-col md:flex-row flex-wrap w-full gap-2 md:gap-4 ">
                   <div className="flex-1 flex-shrink ">
                     <Input
                       {...register('password')}
-                      label={t.profile.password}
+                      label={t.Profile.password}
                       placeholder="Password"
                       type="password"
                       StartIcon={LockClosedIcon}
@@ -338,7 +338,7 @@ export default function Profile({ serverUser }: ServerProps) {
                   <div className="flex-1 flex-shrink">
                     <Input
                       {...register('passwordConfirmation')}
-                      label={t.profile.confirmPassword}
+                      label={t.Profile.confirmPassword}
                       type="password"
                       placeholder="Confirm Password"
                       StartIcon={LockClosedIcon}
