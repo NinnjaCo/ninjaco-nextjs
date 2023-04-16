@@ -18,11 +18,12 @@ import CreateResourceCard from '@/components/creator/creationCard'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import Head from 'next/head'
 import InputTags from '@/components/forms/inputTags'
-import React from 'react'
+import React, { useTransition } from 'react'
 import Select from '@/components/forms/select'
 import SingleImageUpload from '@/components/forms/singleImageUpload'
 import floatingLegos from '@/images/floatingLegos.svg'
 import underLineImage from '@/images/lightlyWavedLine.svg'
+import useTranslation from '@/hooks/useTranslation'
 
 enum CourseType {
   ARDUINO = 'ARDUINO',
@@ -38,21 +39,9 @@ type CreateCourseFormDataType = {
   courseObjectives?: string[]
 }
 
-const CreateCourseFormSchema = yup
-  .object()
-  .shape({
-    courseType: yup.string().oneOf(Object.values(CourseType)).required('Course Type is required'),
-    courseTitle: yup.string().required('Course Title is required'),
-    courseImage: yup.object().required('Course Image is required'),
-    courseDescription: yup.string().required('Course Description is required'),
-    courseAgeRange: yup.array().of(yup.string()),
-    coursePrerequisites: yup.array().of(yup.string()),
-    courseObjectives: yup.array().of(yup.string()),
-  })
-  .required()
-
 const CreateCourseOrEdit = ({ user }: { user: User }) => {
   const router = useRouter()
+  const t = useTranslation()
   const session = useSession()
   const scrollToTop = () => {
     window.scrollTo({
@@ -73,6 +62,23 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
   const closeAlert = () => {
     setAlertData({ ...alertData, open: false })
   }
+  const CreateCourseFormSchema = yup
+    .object()
+    .shape({
+      courseType: yup
+        .string()
+        .oneOf(Object.values(CourseType))
+        .required(`${t.Creator.createCourse.schema.courseTypeRequired}`),
+      courseTitle: yup.string().required(`${t.Creator.createCourse.schema.courseTitleRequired}`),
+      courseImage: yup.object().required(`${t.Creator.createCourse.schema.courseImageRequired}`),
+      courseDescription: yup
+        .string()
+        .required(`${t.Creator.createCourse.schema.courseDescriptionRequired}`),
+      courseAgeRange: yup.array().of(yup.string()),
+      coursePrerequisites: yup.array().of(yup.string()),
+      courseObjectives: yup.array().of(yup.string()),
+    })
+    .required()
 
   const {
     register,
@@ -92,7 +98,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
   const onSubmitHandler = async (data: CreateCourseFormDataType) => {
     if (!data.courseImage.file) {
       setAlertData({
-        message: 'Please upload a course image',
+        message: `${t.Creator.createCourse.alerts.imageAlert}`,
         variant: 'error',
         open: true,
       })
@@ -143,7 +149,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
       <main className="w-full">
         <CreatorMenu creator={user} isOnCoursePage={true} isOnGamesPage={false} />
         <CreateResourceCard
-          title="Create Course"
+          title={t.Creator.createCourse.createCourse}
           underLineImage={underLineImage}
           titleImage={floatingLegos}
         >
@@ -158,7 +164,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
             <Select
               control={control}
               error={errors.courseType?.message}
-              label="Course Type"
+              label={t.Creator.createCourse.courseType}
               name={register('courseType').name}
               selectList={Object.values(CourseType)}
               isRequired={true}
@@ -169,12 +175,12 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
               name={register('courseImage').name}
               error={errors.courseImage?.message as unknown as string} // Convert to string since it returned a FieldError
               isRequired={true}
-              label="Course Banner Image"
+              label={t.Creator.createCourse.courseImage}
             />
             <Input
               {...register('courseTitle')}
-              label={'Course Title'}
-              placeholder="Course Title"
+              label={t.Creator.createCourse.courseTitle}
+              placeholder={t.Creator.createCourse.courseTitle as string}
               error={errors.courseTitle?.message}
               isRequired={true}
             />
@@ -183,8 +189,8 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
               rows={4}
               control={control}
               {...register('courseDescription')}
-              label={'Course Description'}
-              placeholder="Course Description"
+              label={t.Creator.createCourse.courseDescription}
+              placeholder={t.Creator.createCourse.courseDescription as string}
               error={errors.courseDescription?.message}
               className="resize-none"
               isRequired={true}
@@ -193,9 +199,9 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
               control={control}
               error={errors.courseAgeRange?.message}
               name={register('courseAgeRange').name}
-              label="Course Age Range"
-              helperText="Enter a range and press enter to add it"
-              placeholder="Course Age Range"
+              label={t.Creator.createCourse.courseAgeRange}
+              helperText={t.Creator.createCourse.ageRangeHelper}
+              placeholder={t.Creator.createCourse.courseAgeRange as string}
               formatter={(ageRange) => {
                 //   should be number-number or number
                 const ageRangeArray = ageRange.split('-')
@@ -212,16 +218,16 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
               control={control}
               error={errors.coursePrerequisites?.message}
               name={register('coursePrerequisites').name}
-              label="Course Prerequisites"
-              helperText="Enter a prerequisites and press enter to add it"
+              label={t.Creator.createCourse.coursePrerequisites}
+              helperText={t.Creator.createCourse.prerequisitesHelper}
               placeholder="Course Prerequisites"
             />
             <InputTags
               control={control}
               error={errors.courseObjectives?.message}
               name={register('courseObjectives').name}
-              label="Course Objectives"
-              helperText="Enter an objectives and press enter to add it"
+              label={t.Creator.createCourse.courseObjectives}
+              helperText={t.Creator.createCourse.objectivesHelper}
               placeholder="Course Objectives"
             />
             <div className="flex w-full justify-between gap-4 md:gap-12 h-fit md:flex-row flex-col-reverse">
@@ -232,7 +238,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
                   router.back()
                 }}
               >
-                Cancel
+                {t.Creator.createCourse.cancel}
               </button>
               <button
                 type="submit"
@@ -240,7 +246,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
                 value="Submit"
                 className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
               >
-                Create Course
+                {t.Creator.createCourse.createCourse}
               </button>
             </div>
           </form>

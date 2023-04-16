@@ -1,4 +1,5 @@
 import { Control, Controller } from 'react-hook-form'
+import { translationElement } from '@/locales'
 import Image from 'next/image'
 import ImageUploading, { ErrorsType, ImageListType } from 'react-images-uploading'
 import React, { useState } from 'react'
@@ -12,7 +13,7 @@ interface SingleImageUploadProps {
   name: string
   isRequired?: boolean
   error?: string
-  label?: string
+  label?: string | translationElement
   rootClassName?: string
   defaultImage?: string
 }

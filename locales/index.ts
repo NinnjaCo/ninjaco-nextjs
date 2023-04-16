@@ -167,6 +167,11 @@ export interface WebsiteTranslations {
     save: translationElement
     changePassword: translationElement
   }
+
+  MenuCreator: {
+    courses: translationElement
+    games: translationElement
+  }
   Forms: {
     imageUpload: {
       unacceptableImageType: translationElement
@@ -178,6 +183,69 @@ export interface WebsiteTranslations {
     }
   }
   Creator: {
+    viewCourses: {
+      courses: translationElement
+      entries: translationElement
+      createCourse: translationElement
+      filter: translationElement
+    }
+    coursePage: {
+      editCourse: translationElement
+      courseType: translationElement
+      coursePrerequisites: translationElement
+      courseObjectives: translationElement
+      ageRange: translationElement
+      addMission: translationElement
+      filter: translationElement
+      missions: translationElement
+      noMissions: translationElement
+    }
+    createCourse: {
+      alerts: {
+        imageAlert: translationElement
+      }
+      schema: {
+        courseTypeRequired: translationElement
+        courseTitleRequired: translationElement
+        courseImageRequired: translationElement
+        courseDescriptionRequired: translationElement
+      }
+      createCourse: translationElement
+      courseType: translationElement
+      courseImage: translationElement
+      courseTitle: translationElement
+      courseDescription: translationElement
+      courseAgeRange: translationElement
+      ageRangeHelper: translationElement
+      coursePrerequisites: translationElement
+      prerequisitesHelper: translationElement
+      courseObjectives: translationElement
+      objectivesHelper: translationElement
+      cancel: translationElement
+    }
+    editCourse: {
+      alerts: {
+        wentWrong: translationElement
+        error: translationElement
+      }
+      schema: {
+        courseTypeRequired: translationElement
+        courseTitleRequired: translationElement
+        courseDescriptionRequired: translationElement
+      }
+      editCourse: translationElement
+      courseType: translationElement
+      courseImage: translationElement
+      courseTitle: translationElement
+      courseDescription: translationElement
+      courseAgeRange: translationElement
+      ageRangeHelper: translationElement
+      coursePrerequisites: translationElement
+      prerequisitesHelper: translationElement
+      courseObjectives: translationElement
+      objectivesHelper: translationElement
+      cancel: translationElement
+    }
     viewMissionPage: {
       editMission: translationElement
       missionCategory: translationElement
