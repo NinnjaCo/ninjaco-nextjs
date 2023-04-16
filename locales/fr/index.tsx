@@ -381,6 +381,8 @@ const frenchTranslations: WebsiteTranslations = {
       deleteUser: 'Supprimer l’utilisateur',
       delete: 'Effacer',
       entriesFound: 'Entrées trouvées',
+      password: 'Mot de passe',
+      confirmPassword: 'Confirmez le mot de passe',
     },
   },
 }
