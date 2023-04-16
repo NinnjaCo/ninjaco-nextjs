@@ -405,7 +405,15 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
           </div>
         )
     }
-  }, [alertDiaglogState.dialogType, notifyMessage, resetPasswordState, deleteUserState])
+  }, [
+    alertDiaglogState.dialogType,
+    t.Admin.Users.message,
+    t.Admin.Users.notifyByEmail,
+    t.Admin.Users.newPassword,
+    notifyMessage,
+    resetPasswordState,
+    deleteUserState,
+  ])
 
   const editActions = useMemo(
     () => [
@@ -532,28 +540,28 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
       },
       {
         field: 'email',
-        headerName: t.Admin.Users.email,
+        headerName: t.Admin.Users.email as string,
         width: 200,
         minWidth: 140,
         headerClassName: 'bg-brand-200',
       },
       {
         field: 'firstName',
-        headerName: t.Admin.Users.firstName,
+        headerName: t.Admin.Users.firstName as string,
         width: 140,
         minWidth: 140,
         headerClassName: 'bg-brand-200',
       },
       {
         field: 'lastName',
-        headerName: t.Admin.Users.lastName,
+        headerName: t.Admin.Users.lastName as string,
         width: 140,
         minWidth: 140,
         headerClassName: 'bg-brand-200',
       },
       {
         field: 'dob',
-        headerName: t.Admin.Users.dateOfBirth,
+        headerName: t.Admin.Users.dateOfBirth as string,
         type: 'date',
         renderCell: (params) => getReadableDateFromISO(params.value as string),
         width: 140,
@@ -562,7 +570,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
       },
       {
         field: 'createdAt',
-        headerName: t.Admin.Users.createdAt,
+        headerName: t.Admin.Users.createdAt as string,
         type: 'date',
         renderCell: (params) => getReadableDateFromISO(params.value as string),
         width: 160,
@@ -572,7 +580,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
       },
       {
         field: 'updatedAt',
-        headerName: t.Admin.Users.updatedAt,
+        headerName: t.Admin.Users.updatedAt as string,
         type: 'date',
         renderCell: (params) => getReadableDateFromISO(params.value as string),
         width: 160,
@@ -582,7 +590,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
       },
       {
         field: 'action',
-        headerName: t.Admin.Users.action,
+        headerName: t.Admin.Users.action as string,
         width: 70,
         renderCell: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => (
           <Popover>
