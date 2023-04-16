@@ -242,6 +242,8 @@ export interface WebsiteTranslations {
       addCreators: translationElement
       creators: translationElement
       entriesFound: translationElement
+      back: translationElement
+      confirm: translationElement
     }
   }
 }
