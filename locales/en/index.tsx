@@ -384,6 +384,21 @@ const englishTranslations: WebsiteTranslations = {
       cancel: 'Cancel',
       createLevel: ' Create Level',
     },
+    editLevelPage: {
+      atLeastOneImage: 'You need to upload at least one image',
+      noChangesMade: 'No changes were made',
+      onlyTenBuildingParts: 'You can only upload 10 images for building parts',
+      onlyTenStepByStep: 'You can only upload 10 images for step by step guide',
+      imageIsNotValid: 'One of the images is not valid',
+      imageIsTooBig: 'One of the images is too big, please make sure it is less than 1MB',
+      errorUploadingImage: 'There was an error uploading the images',
+      errorUpdatingLevel: 'There was an error updating the level',
+      editLevel: 'Edit Level',
+      editLevelNumber: 'Editing Level Number ',
+      buildingPartImages: 'Building Parts Images',
+      stepByStepImages: 'Step by Step Guide Images',
+      cancel: 'Cancel',
+    },
   },
 }
 
