@@ -178,6 +178,36 @@ export interface WebsiteTranslations {
           SizeOfGame: translationElement
         }
       }
+      createGame: {
+        headTitle: translationElement
+        mobileError: translationElement
+        goBack: translationElement
+        title: translationElement
+        gameTitle: translationElement
+        sizeOfTheGrid: translationElement
+        toggleLimitedBlocks: translationElement
+        limitedNumberOfBlocks: translationElement
+        saveGame: translationElement
+        resetGrid: translationElement
+        toolbox: {
+          title: translationElement
+          description: translationElement
+          player: translationElement
+          goal: translationElement
+          wall: translationElement
+          eraseAll: translationElement
+        }
+        alerts: {
+          pleaseSelectATool: translationElement
+          pleaseSetAPlayer: translationElement
+          pleaseSetAGoal: translationElement
+          pleaseEnterAGameTitle: translationElement
+          pleaseUploadAnImage: translationElement
+          gameCreatedSuccessfully: translationElement
+          somethingWentWrong: translationElement
+          errorCreatingGame: translationElement
+        }
+      }
     }
   }
   Filter: {
