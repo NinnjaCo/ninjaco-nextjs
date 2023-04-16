@@ -9,14 +9,28 @@ import React from 'react'
  * @returns an svg of Flag
  */
 
-const Flag = ({ color, width, height }: { color: string; width: number; height: number }) => {
+const Flag = ({
+  color,
+  width,
+  height,
+  className,
+  strokeColor,
+}: {
+  color: string
+  width: number
+  height: number
+  className?: string
+  strokeColor?: string
+}) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       fill="currentColor"
+      stroke={strokeColor}
       width={width}
       height={height}
+      className={className}
     >
       <path
         fillRule="evenodd"

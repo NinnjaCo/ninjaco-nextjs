@@ -55,7 +55,7 @@ export default function CourseView({ user, course }: { user: User; course: Cours
             </div>
             <div className="flex gap-3 items-center w-full flex-wrap">
               <div className=" text-brand font-medium text-xs md:text-base">
-                {t.Creator.coursePage.filter}:
+                {t.Creator.coursePage.ageRange}:
               </div>
               {course.ageRange?.length !== 0 ? (
                 course?.ageRange?.map((age, index) => <Chip text={age} key={index} />)
@@ -101,10 +101,6 @@ export default function CourseView({ user, course }: { user: User; course: Cours
           </div>
           <div className="flex gap-4 items-center">
             <div className="text-brand font-medium text-xs">{course.missions.length} missions</div>
-            <button className="btn btn-secondary bg-brand-300 rounded-lg text-brand-700 border-brand-300 hover:bg-brand hover:text-white py-1 px-4 h-fit flex gap-3">
-              <FunnelIcon className="w-4 h-4" />
-              {t.Creator.coursePage.filter}
-            </button>
             <Filter
               filterFields={[
                 {
