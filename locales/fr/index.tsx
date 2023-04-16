@@ -358,13 +358,14 @@ const frenchTranslations: WebsiteTranslations = {
     createMissionPage: {
       somethingWrong: "Quelque chose s'est mal passé",
       pleaseUploadImage: 'Veuillez télécharger une image',
-      errorCreatinGame: 'Erreur lors de la création du jeu',
+      errorCreatingGame: 'Erreur lors de la création du jeu',
       errorCreatingCategory: 'Erreur lors de la création de la catégorie',
       createMission: 'Créer une Mission',
       missionTitle: 'Titre de la Mission',
       missionBannerImage: 'Image de bannière de mission',
       missionDescription: 'Description de la Mission',
       missionCategory: 'Catégorie de missions',
+      selectACategory: 'Sélectionnez une catégorie',
       createNewCategory: 'Créer une nouvelle catégorie',
       warning:
         'Veuillez noter que les catégories créées ne peuvent pas être supprimées à des fins de cohérence.',

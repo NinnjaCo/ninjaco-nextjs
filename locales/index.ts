@@ -188,13 +188,14 @@ export interface WebsiteTranslations {
     createMissionPage: {
       somethingWrong: translationElement
       pleaseUploadImage: translationElement
-      errorCreatinGame: translationElement
+      errorCreatingGame: translationElement
       errorCreatingCategory: translationElement
       createMission: translationElement
       missionTitle: translationElement
       missionBannerImage: translationElement
       missionDescription: translationElement
       missionCategory: translationElement
+      selectACategory: translationElement
       createNewCategory: translationElement
       warning: translationElement
       addCategory: translationElement
