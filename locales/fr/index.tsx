@@ -348,6 +348,7 @@ const frenchTranslations: WebsiteTranslations = {
       noMissions: 'Aucune mission',
     },
     createCourse: {
+      imageAlert: 'veuillez télécharger une image de cours',
       createCourse: 'Créer un cours',
       courseType: 'Type de cours',
       courseImage: 'Image de bannière du cours',

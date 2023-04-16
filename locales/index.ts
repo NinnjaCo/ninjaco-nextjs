@@ -179,6 +179,7 @@ export interface WebsiteTranslations {
       noMissions: translationElement
     }
     createCourse: {
+      imageAlert: translationElement
       createCourse: translationElement
       courseType: translationElement
       courseImage: translationElement

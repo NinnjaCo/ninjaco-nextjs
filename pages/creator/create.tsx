@@ -88,7 +88,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
   const onSubmitHandler = async (data: CreateCourseFormDataType) => {
     if (!data.courseImage.file) {
       setAlertData({
-        message: 'Please upload a course image',
+        message: `${t.Creator.createCourse.imageAlert}`,
         variant: 'error',
         open: true,
       })

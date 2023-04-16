@@ -337,6 +337,7 @@ const englishTranslations: WebsiteTranslations = {
       noMissions: 'No missions yet',
     },
     createCourse: {
+      imageAlert: 'Please upload a course image',
       createCourse: 'Create Course',
       courseType: 'Course Type',
       courseImage: 'Course Banner Image',
