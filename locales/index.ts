@@ -212,6 +212,20 @@ export interface WebsiteTranslations {
       newCategory: translationElement
       cancel: translationElement
     }
+    createLevelPage: {
+      creatingLevel: translationElement
+      only1tenBuildingParts: translationElement
+      onlyTenStepByStep: translationElement
+      imageIsNotValid: translationElement
+      imageIsTooBig: translationElement
+      errorUploadingImage: translationElement
+      errorCreatingLevel: translationElement
+      creatingLevelNumber: translationElement
+      buildingPartImages: translationElement
+      stepByStepImages: translationElement
+      cancel: translationElement
+      createLevel: translationElement
+    }
   }
 }
 
