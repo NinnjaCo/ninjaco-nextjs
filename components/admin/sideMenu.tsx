@@ -20,6 +20,7 @@ import React, { useState } from 'react'
 import clsx from 'clsx'
 import logo_head from '@/images/logo_head.svg'
 import logo_white from '@/images/logo_white.svg'
+import useTranslation from '@/hooks/useTranslation'
 
 interface SideMenuProps {
   higlightDashboard?: boolean
@@ -33,6 +34,7 @@ interface SideMenuProps {
 const SideMenu = (props: SideMenuProps) => {
   const [open, setIsOpen] = useState(false)
   const session = useSession()
+  const t = useTranslation()
 
   const [openLogout, setOpenLogout] = React.useState(false)
   const router = useRouter()
@@ -96,7 +98,7 @@ const SideMenu = (props: SideMenuProps) => {
 
     {
       Icon: ArrowRightOnRectangleIcon,
-      text: 'LOGOUT',
+      text: t.Admin.LogOutDialogue.logout,
       isHighlighted: props.higlightLogout ?? false,
       actionOnClick: () => {
         setOpenLogout(true)
@@ -108,15 +110,15 @@ const SideMenu = (props: SideMenuProps) => {
     <>
       {
         <AlertDialog
-          title="Are you sure you want to logout?"
+          title={t.Admin.LogOutDialogue.logoutconfimarion as string}
           close={() => {
             setOpenLogout(false)
           }}
           open={openLogout}
           confirm={preformLogout}
-          message="You will be logged out of your account."
-          confirmButtonText="Logout"
-          backButtonText="Cancel"
+          message={t.Admin.LogOutDialogue.logoutMessage as string}
+          confirmButtonText={t.Admin.LogOutDialogue.logout as string}
+          backButtonText={t.Admin.LogOutDialogue.cancel as string}
         />
       }
       {/* Menu after MD */}
