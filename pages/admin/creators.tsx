@@ -636,7 +636,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
             value="Submit"
             className="w-full btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
           >
-            {t.Admin.Creators.addCreator as string}
+            {t.Admin.Creators.addCreators as string}
           </button>
           <button
             onClick={() => setOpenCreatorAddDialog(false)}
@@ -681,7 +681,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
                 setOpenCreatorAddDialog(true)
               }}
             >
-              {t.Admin.Creators.addCreator as string}
+              {t.Admin.Creators.addCreators as string}
             </button>
           </div>
           <Alert
