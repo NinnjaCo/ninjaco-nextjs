@@ -2,6 +2,7 @@ import * as yup from 'yup'
 import { AuthError } from '@/models/shared'
 import { Game } from '@/models/crud/game.model'
 import { GameApi } from '@/utils/api/game/game.api'
+import { GridCell, GridCellComponent } from '@/components/creator/game/gridCell'
 import { ImageApi } from '@/utils/api/images/image-upload.api'
 import { ImageType } from 'react-images-uploading'
 import { Input } from '@/components/forms/input'
@@ -27,14 +28,7 @@ import SingleImageUpload from '@/components/forms/singleImageUpload'
 import Wall from '@/components/creator/game/wall'
 import clsx from 'clsx'
 import underLineImage from '@/images/lightlyWavedLine.svg'
-
-interface GridCell {
-  row: number
-  col: number
-  isWall: boolean
-  isPlayer: boolean
-  isGoal: boolean
-}
+import useTranslation from '@/hooks/useTranslation'
 
 const createGrid = (rows: number, cols: number, initialGameState): GridCell[][] => {
   const grid: GridCell[][] = []
@@ -103,6 +97,7 @@ enum Tools {
 const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
   const session = useSession()
   const router = useRouter()
+  const t = useTranslation()
   const [gameTitle, setGameTitle] = React.useState(game.title)
   const MIN_COLUMNS = 5
   const MAX_COLUMNS = 20
@@ -186,7 +181,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
 
   const toolboxTools: ToolsElments[] = [
     {
-      name: 'Player',
+      name: t.Creator.games.editGame.toolbox.player as string,
       icon: {
         width: 30,
         height: 60,
@@ -196,7 +191,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
       toolType: Tools.PLAYER,
     },
     {
-      name: 'Goal',
+      name: t.Creator.games.editGame.toolbox.goal as string,
       icon: {
         width: 30,
         height: 60,
@@ -206,7 +201,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
       toolType: Tools.GOAL,
     },
     {
-      name: 'Wall',
+      name: t.Creator.games.editGame.toolbox.wall as string,
       icon: {
         width: 30,
         height: 60,
@@ -216,7 +211,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
       toolType: Tools.WALL,
     },
     {
-      name: 'Erase All',
+      name: t.Creator.games.editGame.toolbox.eraseAll as string,
       icon: {
         width: 30,
         height: 60,
@@ -288,7 +283,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
       })
     } else {
       setAlertData({
-        message: 'Please select a tool from the toolbox',
+        message: t.Creator.games.editGame.alerts.pleaseSelectATool as string,
         variant: 'info',
         open: true,
       })
@@ -318,7 +313,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
 
     if (!gameState.isPlayerSet || gameState.playerLocation === undefined) {
       setAlertData({
-        message: 'Please set a player on the grid before saving',
+        message: t.Creator.games.editGame.alerts.pleaseSetAPlayer as string,
         variant: 'error',
         open: true,
       })
@@ -326,7 +321,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
     }
     if (!gameState.isGoalSet || gameState.goalLocation === undefined) {
       setAlertData({
-        message: 'Please set a goal on the grid before saving',
+        message: t.Creator.games.editGame.alerts.pleaseSetAGoal as string,
         variant: 'error',
         open: true,
       })
@@ -336,7 +331,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
     // check if game title is valid
     if (gameTitle === '' || gameTitle.length < 3) {
       setAlertData({
-        message: 'Please enter a game title with at least 3 characters',
+        message: t.Creator.games.editGame.alerts.pleaseEnterAGameTitle as string,
         variant: 'error',
         open: true,
       })
@@ -369,7 +364,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
       })
 
       setAlertData({
-        message: 'Game updated successfully',
+        message: t.Creator.games.editGame.alerts.gameCreatedSuccessfully as string,
         variant: 'success',
         open: true,
       })
@@ -383,13 +378,14 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
       if (isAxiosError<AuthError>(error)) {
         const errors = unWrapAuthError(error)
         setAlertData({
-          message: errors[0].message || 'Something went wrong',
+          message:
+            errors[0].message || (t.Creator.games.editGame.alerts.somethingWentWrong as string),
           variant: 'error',
           open: true,
         })
       } else {
         setAlertData({
-          message: 'Error creating game',
+          message: t.Creator.games.editGame.alerts.errorCreatingGame as string,
           variant: 'error',
           open: true,
         })
@@ -400,7 +396,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
   return (
     <>
       <Head>
-        <title>NinjaCo | Creator Edit & View Game</title>
+        <title>{t.Creator.games.editGame.headTitle}</title>
         <meta name="description" content="Leading online platform for visual programming" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
@@ -408,17 +404,17 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
         <CreatorMenu isOnCoursePage={false} isOnGamesPage={true} creator={user} />
         <div className="grid md:hidden items-center h-screen grid-cols-1 justify-items-center py-24 px-8 relative flex-auto">
           <h1 className="self-end divide-x-2 divide-black text-sm ">
-            <span className="px-2 font-bold">Please use your Computer to View Or Edit a Game</span>
+            <span className="px-2 font-bold">{t.Creator.games.editGame.mobileError}</span>
           </h1>
           <Link href="/creator/games" className="self-start my-4 text-sm btn btn-brand">
-            Go Back
+            {t.Creator.games.editGame.goBack}
           </Link>
         </div>
         <div className="w-full h-1/2 hidden justify-between items-stretch md:flex">
           <div className="flex flex-col p-8 gap-8 w-full">
             <div className="flex justify-between">
               <div className="flex flex-col text-brand-500 font-bold">
-                <p className="text-lg md:text-xl lg:text-2xl">Create game level</p>
+                <p className="text-lg md:text-xl lg:text-2xl">{t.Creator.games.editGame.title}</p>
                 <Image src={underLineImage} alt="Waved Line" className="w-40" />
               </div>
               <Alert
@@ -430,8 +426,8 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
             </div>
             <Input
               name="name"
-              label="Game Title"
-              placeholder="Game Title"
+              label={t.Creator.games.editGame.gameTitle}
+              placeholder={t.Creator.games.editGame.gameTitle as string}
               className="max-w-md"
               value={gameTitle}
               onChange={(e) => {
@@ -450,26 +446,11 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
                 {gameGrid.map((row, rowIndex) => {
                   return row.map((cell, colIndex) => {
                     return (
-                      <div
-                        className={clsx(
-                          'bg-brand-50 border-2 border-brand-100 cursor-cell',
-                          cell.isWall && 'bg-brand-500',
-                          cell.isPlayer && 'bg-secondary',
-                          cell.isGoal && 'bg-brand-800'
-                        )}
-                        style={{
-                          width: `${cellSize}px`,
-                          height: `${cellSize}px`,
-                        }}
+                      <GridCellComponent
                         key={`${rowIndex}-${colIndex}`}
-                        onClick={() => {
-                          clickOnSquare(rowIndex, colIndex)
-                        }}
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={() => {
-                          clickOnSquare(rowIndex, colIndex)
-                        }}
+                        cell={cell}
+                        size={cellSize}
+                        onClick={clickOnSquare}
                       />
                     )
                   })
@@ -479,7 +460,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
                 <div className="flex flex-col gap-8 justify-normal">
                   <div className="flex flex-col gap-2">
                     <label htmlFor="default-range" className="block text-sm font-medium text-brand">
-                      Size of the grid {numberOfColumns} x {numberOfColumns}
+                      {t.Creator.games.editGame.sizeOfTheGrid} {numberOfColumns} x {numberOfColumns}
                     </label>
                     <div className="flex gap-2 items-center">
                       <span className="text-brand-500">{MIN_COLUMNS}</span>
@@ -548,14 +529,18 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
                         className={`${toogleLimitedBlocks ? 'bg-brand-700' : 'bg-brand-500'}
                       relative inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
                       >
-                        <span className="sr-only">toogle Limited Blocks</span>
+                        <span className="sr-only">
+                          {t.Creator.games.editGame.toggleLimitedBlocks}
+                        </span>
                         <span
                           aria-hidden="true"
                           className={`${toogleLimitedBlocks ? 'translate-x-7' : 'translate-x-0'}
                         pointer-events-none inline-block h-[34px] w-[34px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
                         />
                       </Switch>
-                      <div className="text-brand font-medium">Limited number of blocks</div>
+                      <div className="text-brand font-medium">
+                        {t.Creator.games.editGame.limitedNumberOfBlocks}
+                      </div>
                     </div>
                     <Input
                       name="limitedBlocks"
@@ -590,7 +575,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
                       handleSubmit(saveGame)()
                     }}
                   >
-                    Save Game
+                    {t.Creator.games.editGame.saveGame}
                   </button>
                   <button
                     className="btn btn-secondary rounded-lg hover:bg-brand-400 hover:text-white py-2 h-fit"
@@ -598,7 +583,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
                       setGameGrid(createGrid(numberOfColumns, numberOfColumns, undefined))
                     }}
                   >
-                    Reset Grid
+                    {t.Creator.games.editGame.resetGrid}
                   </button>
                 </div>
               </div>
@@ -607,8 +592,10 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
           {/* ToolBox */}
           <div className="hidden md:flex bg-brand min-h-screen w-full max-w-[12rem] flex-col items-start gap-12 py-4 px-1 lg:px-4">
             <div className="flex flex-col gap-1">
-              <div className="text-brand-50 text-xl">Items Menu</div>
-              <div className="text-brand-200 text-2xs">Select an item and place it on the map</div>
+              <div className="text-brand-50 text-xl">{t.Creator.games.editGame.toolbox.title}</div>
+              <div className="text-brand-200 text-2xs">
+                {t.Creator.games.editGame.toolbox.description}
+              </div>
             </div>
             <div className="flex flex-col gap-5">
               {toolboxTools.map((tool, index) => {

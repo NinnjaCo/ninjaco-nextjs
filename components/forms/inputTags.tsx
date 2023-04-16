@@ -2,14 +2,16 @@ import { Control, Controller } from 'react-hook-form'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { Input } from './input'
 import { XMarkIcon } from '@heroicons/react/24/solid'
+import { translationElement } from '@/locales'
 import { useState } from 'react'
+import clsx from 'clsx'
 
 interface InputTagsProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<any>
   name: string
-  label: string
-  helperText: string
+  label: string | translationElement
+  helperText: string | translationElement
   error: string | undefined
   placeholder: string
   isRequired?: boolean

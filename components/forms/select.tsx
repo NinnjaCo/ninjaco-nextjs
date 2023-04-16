@@ -3,6 +3,7 @@ import { Control, Controller } from 'react-hook-form'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
+import { translationElement } from '@/locales'
 import clsx from 'clsx'
 
 interface SelectProps {
@@ -10,7 +11,7 @@ interface SelectProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<any>
   name: string
-  label: string
+  label: string | translationElement
   error: string | undefined
   isRequired?: boolean
   rootClassName?: string

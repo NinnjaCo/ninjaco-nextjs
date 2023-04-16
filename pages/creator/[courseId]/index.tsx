@@ -14,9 +14,12 @@ import ImageCard from '@/components/creator/imageCard'
 import Link from 'next/link'
 import MissionCard from '@/components/creator/missionCard'
 import dayjs from 'dayjs'
+import useTranslation from '@/hooks/useTranslation'
 
 export default function CourseView({ user, course }: { user: User; course: Course }) {
   const [filteredMissions, setFilteredMissions] = useState<Mission[]>(course.missions)
+  const t = useTranslation()
+
   return (
     <>
       <Head>
@@ -35,7 +38,7 @@ export default function CourseView({ user, course }: { user: User; course: Cours
                 className="text-xs  md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit"
                 href={`/creator/${course._id}/edit`}
               >
-                Edit Course
+                {t.Creator.coursePage.editCourse}
               </Link>
             </div>
             <div className=" text-brand-500 font-medium text-xs md:text-base w-full">
@@ -46,11 +49,14 @@ export default function CourseView({ user, course }: { user: User; course: Cours
         <div className="grid grid-cols-1 gap-4 md:gap-0 md:grid-cols-2 justify-between px-6 my-6 border-b-2 py-6 border-brand-50">
           <div className="flex flex-col gap-4 border-r-0 md:border-r-2 mr-0 md:mr-12 border-brand-50">
             <div className="flex gap-3 items-center">
-              <div className=" text-brand font-medium text-xs md:text-base">Course type:</div>
+              {t.Creator.coursePage.courseType}:
+              <div className=" text-brand font-medium text-xs md:text-base"></div>
               <div className="text-brand font-semibold text-sm md:text-lg">{course.type}</div>
             </div>
             <div className="flex gap-3 items-center w-full flex-wrap">
-              <div className=" text-brand font-medium text-xs md:text-base">Age range:</div>
+              <div className=" text-brand font-medium text-xs md:text-base">
+                {t.Creator.coursePage.ageRange}:
+              </div>
               {course.ageRange?.length !== 0 ? (
                 course?.ageRange?.map((age, index) => <Chip text={age} key={index} />)
               ) : (
@@ -61,7 +67,7 @@ export default function CourseView({ user, course }: { user: User; course: Cours
           <div className="flex flex-col gap-4">
             <div className="flex gap-3 items-center w-full flex-wrap">
               <div className=" text-brand font-medium text-xs md:text-base">
-                Course prerequisites:
+                {t.Creator.coursePage.coursePrerequisites}:
               </div>
               {course.preRequisites?.length !== 0 ? (
                 course?.preRequisites?.map((prerequisite, index) => (
@@ -72,7 +78,9 @@ export default function CourseView({ user, course }: { user: User; course: Cours
               )}
             </div>
             <div className="flex gap-3 items-center w-full flex-wrap">
-              <div className=" text-brand font-medium text-xs md:text-base">Course objectives:</div>
+              <div className=" text-brand font-medium text-xs md:text-base">
+                {t.Creator.coursePage.courseObjectives}:
+              </div>
               {course.objectives?.length !== 0 ? (
                 course?.objectives?.map((objective, index) => <Chip text={objective} key={index} />)
               ) : (
@@ -83,12 +91,12 @@ export default function CourseView({ user, course }: { user: User; course: Cours
         </div>
         <div className="flex flex-col px-6 pb-12 pt-6 gap-6">
           <div className="flex justify-between gap-10">
-            <div className="font-semibold text-2xl">Missions</div>
+            <div className="font-semibold text-2xl">{t.Creator.coursePage.missions}</div>
             <Link
               className=" text-xs md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit"
               href={`/creator/${course._id}/create`}
             >
-              Add Mission
+              {t.Creator.coursePage.addMission}
             </Link>
           </div>
           <div className="flex gap-4 items-center">
@@ -137,7 +145,7 @@ export default function CourseView({ user, course }: { user: User; course: Cours
               ))}
             </div>
           ) : (
-            <div className="text-brand font-medium text-lg">No missions yet</div>
+            <div className="text-brand font-medium text-lg">{t.Creator.coursePage.noMissions}</div>
           )}
         </div>
       </main>

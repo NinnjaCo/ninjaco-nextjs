@@ -8,6 +8,7 @@ import Link from 'next/link'
 import LocaleMenu from '../layout/localeMenu'
 import clsx from 'clsx'
 import logo_black from '@/images/logo_black.svg'
+import useTranslation from '@/hooks/useTranslation'
 import useUserProfilePicture from '@/hooks/useUserProfilePicture'
 
 interface CreatorMenuPros {
@@ -18,6 +19,7 @@ interface CreatorMenuPros {
 const CreatorMenu = ({ isOnCoursePage, creator, isOnGamesPage }: CreatorMenuPros) => {
   const profilePhoto = useUserProfilePicture(creator)
   const session = useSession()
+  const t = useTranslation()
   const linkForMenu = [
     {
       name: 'Courses',
@@ -73,7 +75,7 @@ const CreatorMenu = ({ isOnCoursePage, creator, isOnGamesPage }: CreatorMenuPros
                   isOnCoursePage && !isOnGamesPage,
               })}
             >
-              Courses
+              {t.MenuCreator.courses}
             </Link>
           </button>
 
@@ -87,7 +89,7 @@ const CreatorMenu = ({ isOnCoursePage, creator, isOnGamesPage }: CreatorMenuPros
                   isOnGamesPage && !isOnCoursePage,
               })}
             >
-              Games
+              {t.MenuCreator.games}
             </Link>
           </button>
         </div>

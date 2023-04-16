@@ -1,5 +1,6 @@
 import { Course } from '@/models/crud/course.model'
 import { CourseApi } from '@/utils/api/course/course.api'
+import { FunnelIcon } from '@heroicons/react/24/outline'
 import { User } from '@/models/crud'
 import { authOptions } from '../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
@@ -10,10 +11,11 @@ import Filter from '@/components/creator/filter'
 import Head from 'next/head'
 import Link from 'next/link'
 import dayjs from 'dayjs'
+import useTranslation from '@/hooks/useTranslation'
 
 export default function Home({ user, courses }: { user: User; courses: Course[] }) {
   const [filteredCourses, setFilteredCourses] = useState<Course[]>(courses)
-
+  const t = useTranslation()
   return (
     <>
       <Head>
@@ -27,18 +29,22 @@ export default function Home({ user, courses }: { user: User; courses: Course[] 
         <div className="flex flex-row mt-7 justify-between">
           <div className="flex flex-col mx-6 gap-6 w-full">
             <div className="flex w-full justify-between items-center">
-              <div className="text-brand-700 font-semibold text-xl lg:text-2xl">Courses</div>
+              <div className="text-brand-700 font-semibold text-xl lg:text-2xl">
+                {t.Creator.viewCourses.courses}
+              </div>
               <div className="text-brand-700 font-semibold">
                 <Link
                   className="btn btn-secondary bg-secondary rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 py-2 h-fit"
                   href="/creator/create"
                 >
-                  Create Course
+                  {t.Creator.viewCourses.createCourse}
                 </Link>
               </div>
             </div>
             <div className="flex gap-10 justify-start items-center">
-              <div className="text-base text-brand">{courses.length} entries</div>{' '}
+              <div className="text-base text-brand">
+                {courses.length} {t.Creator.viewCourses.entries}
+              </div>
               <Filter
                 filterFields={[
                   {

@@ -1,9 +1,11 @@
 import { Control, Controller } from 'react-hook-form'
+import { translationElement } from '@/locales'
 import Image from 'next/image'
 import ImageUploading, { ErrorsType, ImageListType } from 'react-images-uploading'
 import React, { useState } from 'react'
 import clsx from 'clsx'
 import imagePlaceHolder from '@/images/imagePlaceHolder.svg'
+import useTranslation from '@/hooks/useTranslation'
 
 interface SingleImageUploadProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -11,7 +13,7 @@ interface SingleImageUploadProps {
   name: string
   isRequired?: boolean
   error?: string
-  label?: string
+  label?: string | translationElement
   rootClassName?: string
   defaultImage?: string
 }
@@ -27,16 +29,17 @@ const SingleImageUpload = ({
 }: SingleImageUploadProps) => {
   // Use array because the library forces an array of ImageType
   const [uploadedPicture, setUploadedPicture] = useState<ImageListType>([])
+  const t = useTranslation()
 
   const getImageUploadErrorMessage = (error: ErrorsType) => {
     if (error?.acceptType) {
-      return 'Unacceptable image type'
+      return t.Forms.imageUpload.unacceptableImageType as string
     }
     if (error?.maxFileSize) {
-      return 'Max File Size Reached'
+      return t.Forms.imageUpload.unacceptableImageSize as string
     }
     if (error?.resolution) {
-      return 'Low Resolution'
+      return t.Forms.imageUpload.lowResolutionImage as string
     }
   }
   return (
@@ -103,7 +106,7 @@ const SingleImageUpload = ({
                     ) : (
                       <div className="w-full h-full flex flex-col justify-center items-center gap-2">
                         <Image src={imagePlaceHolder} alt="Placeholder" />
-                        <p className="text-xs">Drop image here | Click</p>
+                        <p className="text-xs">{t.Forms.imageUpload.dropImageHere}</p>
                       </div>
                     )}
                   </div>
@@ -115,7 +118,7 @@ const SingleImageUpload = ({
                         field.onChange(null)
                       }}
                     >
-                      Remove image
+                      {t.Forms.imageUpload.removeImage}
                     </button>
                   )}
                   {errors && (
