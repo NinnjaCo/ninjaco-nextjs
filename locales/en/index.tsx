@@ -320,6 +320,18 @@ const englishTranslations: WebsiteTranslations = {
     save: 'SAVE',
     changePassword: 'Change Password',
   },
+  Admin: {
+    Dashboard: {
+      prophilePhoto: 'Profile Photo',
+      firstName: 'First Name',
+      lastName: 'Last Name',
+      email: 'Email',
+      level: 'Level',
+      points: 'Points',
+      statistics: 'Statistics',
+      leaderboard: 'Leaderboard',
+    },
+  },
 }
 
 export default englishTranslations
