@@ -174,6 +174,17 @@ export interface WebsiteTranslations {
       statistics: translationElement
       leaderboard: translationElement
     }
+    Courses: {
+      headerTitle : translationElement
+      title: translationElement
+      id: translationElement
+      usersEnrolled: translationElement
+      numberOfMissions: translationElement
+      numberOfLevels: translationElement
+      createdAt: translationElement
+      updatedAt: translationElement
+      entriesFound: translationElement
+
   }
 }
 
