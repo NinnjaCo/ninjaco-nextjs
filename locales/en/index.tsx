@@ -377,7 +377,7 @@ const englishTranslations: WebsiteTranslations = {
       imageIsNotValid: 'One of the images is not valid',
       imageIsTooBig: 'One of the images is too big, please make sure it is less than 1MB',
       errorUploadingImage: 'There was an error uploading the images',
-      errorCreatingLevel: 'One of the images is not valid',
+      errorCreatingLevel: 'There was an error creating the level',
       creatingLevelNumber: ' Creating Level Number',
       buildingPartImages: 'building Parts Images',
       stepByStepImages: 'Step by Step Guide Images',

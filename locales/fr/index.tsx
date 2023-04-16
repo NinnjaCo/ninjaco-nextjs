@@ -383,6 +383,20 @@ const frenchTranslations: WebsiteTranslations = {
       newCategory: 'Nouvelle catégorie',
       cancel: 'Annuler',
     },
+    createLevelPage: {
+      creatingLevel: 'Création du niveau...',
+      only1tenBuildingParts: 'Vous ne pouvez ajouter que 1 à 10 pièces de construction',
+      onlyTenStepByStep: 'Vous ne pouvez ajouter que 1 à 10 étapes',
+      imageIsNotValid: "Une des images n'est pas validé",
+      imageIsTooBig: 'Une des images est trop grande, elle ne doit pas dépasser 1MB',
+      errorUploadingImage: 'Erreur lors du téléchargement de l`image',
+      errorCreatingLevel: 'Erreur lors de la création du niveau',
+      creatingLevelNumber: 'Création du niveau numéro',
+      buildingPartImages: 'Images de pièces de construction',
+      stepByStepImages: 'Images étape par étape',
+      cancel: 'Annuler',
+      createLevel: 'Créer un Niveau',
+    },
   },
 }
 export default frenchTranslations
