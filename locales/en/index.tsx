@@ -331,6 +331,17 @@ const englishTranslations: WebsiteTranslations = {
       statistics: 'Statistics',
       leaderboard: 'Leaderboard',
     },
+    Courses: {
+      headerTitle: 'Courses',
+      title: 'Title',
+      id: 'ID',
+      usersEnrolled: 'Users Enrolled',
+      numberOfMissions: 'Number of Missions',
+      numberOfLevels: 'Number of Levels',
+      createdAt: 'Created At',
+      updatedAt: 'Updated At',
+      entriesFound: 'entries found',
+    },
   },
 }
 
