@@ -6,7 +6,6 @@ import { ImageType } from 'react-images-uploading'
 import { Input } from '@/components/forms/input'
 import { TextArea } from '@/components/forms/textArea'
 import { User } from '@/models/crud'
-import { UserApi } from '@/utils/api/user'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
@@ -44,6 +43,13 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
   const router = useRouter()
   const t = useTranslation()
   const session = useSession()
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 25,
+      behavior: 'smooth',
+    })
+  }
+
   const [alertData, setAlertData] = React.useState<{
     message: string
     variant: 'success' | 'info' | 'warning' | 'error'
@@ -96,6 +102,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
         variant: 'error',
         open: true,
       })
+      scrollToTop()
       return
     }
     // Upload Image and get url
@@ -122,12 +129,14 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
           variant: 'error',
           open: true,
         })
+        scrollToTop()
       } else {
         setAlertData({
           message: 'Error creating game',
           variant: 'error',
           open: true,
         })
+        scrollToTop()
       }
     }
   }

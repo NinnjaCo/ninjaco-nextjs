@@ -12,6 +12,7 @@ const MenuButton: React.FC<{
   isHighlighted?: boolean
   hideText?: boolean
   actionOnClick?: () => void
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Body?: any
 }> = ({ text, Icon, isHighlighted, hideText, actionOnClick, Body }) => {
   if (!Body) {

@@ -13,7 +13,6 @@ import { Input } from '@/components/forms/input'
 import { MissionApi } from '@/utils/api/mission/mission.api'
 import { TextArea } from '@/components/forms/textArea'
 import { User } from '@/models/crud'
-import { UserApi } from '@/utils/api/user'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
@@ -61,6 +60,12 @@ const CreateMissionOrEdit = ({
   const router = useRouter()
   const session = useSession()
   const queryClient = useQueryClient()
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 25,
+      behavior: 'smooth',
+    })
+  }
 
   const [alertData, setAlertData] = React.useState<{
     message: string
@@ -92,6 +97,7 @@ const CreateMissionOrEdit = ({
             variant: 'error',
             open: true,
           })
+          scrollToTop()
         }
       },
     }
@@ -116,6 +122,7 @@ const CreateMissionOrEdit = ({
         variant: 'error',
         open: true,
       })
+      scrollToTop()
       return
     }
 
@@ -139,12 +146,14 @@ const CreateMissionOrEdit = ({
           variant: 'error',
           open: true,
         })
+        scrollToTop()
       } else {
         setAlertData({
           message: 'Error creating game',
           variant: 'error',
           open: true,
         })
+        scrollToTop()
       }
     }
   }
@@ -156,7 +165,7 @@ const CreateMissionOrEdit = ({
 
   const addNewCategoryAndSelectIt = async () => {
     try {
-      const res = await new CategoryApi(session.data).create({
+      await new CategoryApi(session.data).create({
         categoryName: addNewCategoryState.newCategoryName,
       })
       queryClient.invalidateQueries('categories')
@@ -174,12 +183,14 @@ const CreateMissionOrEdit = ({
           variant: 'error',
           open: true,
         })
+        scrollToTop()
       } else {
         setAlertData({
           message: 'Error creating category',
           variant: 'error',
           open: true,
         })
+        scrollToTop()
       }
     }
   }

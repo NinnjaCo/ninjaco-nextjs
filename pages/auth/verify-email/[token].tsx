@@ -50,8 +50,6 @@ const VerifyEmail = (props: ServerProps) => {
   const {
     register,
     handleSubmit,
-    control,
-
     formState: { errors, isSubmitted },
   } = useForm<VerifyEmailFormDataType>({
     resolver: yupResolver(VerifyEmailFormSchema),
@@ -150,8 +148,8 @@ const VerifyEmail = (props: ServerProps) => {
             <Input
               {...register('code')}
               type="text"
-              label={t.verifyEmail.code}
-              placeholder={t.verifyEmail.code as string}
+              label={t.Auth.verifyEmail.code}
+              placeholder={t.Auth.verifyEmail.code as string}
               StartIcon={LockClosedIcon}
               error={errors.code?.message}
               disabled={props.errorMessage !== undefined}
@@ -170,15 +168,15 @@ const VerifyEmail = (props: ServerProps) => {
                 }
               )}
             >
-              {t.verifyEmail.verify}
+              {t.Auth.verifyEmail.verify}
             </button>
           </form>
           <div className="w-full flex justify-between text-xs mt-6">
             <Link className="cursor-pointer text-brand-500" href="/">
-              {t.verifyEmail.backToHome}
+              {t.Auth.verifyEmail.backToHome}
             </Link>
             <Link href="/auth/signin" className="cursor-pointer text-brand font-semibold">
-              {t.verifyEmail.signIn}
+              {t.Auth.verifyEmail.signIn}
             </Link>
           </div>
         </AuthCard>

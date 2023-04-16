@@ -2,17 +2,18 @@ import { CameraIcon } from '@heroicons/react/24/solid'
 import { Control, Controller } from 'react-hook-form'
 import { User } from '@/models/crud'
 import Image from 'next/image'
-import ImageUploading, { ErrorsType, ImageListType, ImageType } from 'react-images-uploading'
+import ImageUploading, { ErrorsType, ImageListType } from 'react-images-uploading'
 import React, { useEffect, useState } from 'react'
 import clsx from 'clsx'
 import getGeneratedAvatar from '@/utils/shared/getGeneratedAvatar'
-import useUserProfilePicture from '@/hooks/useUserProfilePicture'
 
 interface ProfileImageUploadProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<any>
   name: string
   rootClassName?: string
   defaultStartImage: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     profilePic: any
     nowGenerated: boolean
   }

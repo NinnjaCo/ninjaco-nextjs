@@ -7,7 +7,6 @@ import { ImageType } from 'react-images-uploading'
 import { Input } from '@/components/forms/input'
 import { TextArea } from '@/components/forms/textArea'
 import { User } from '@/models/crud'
-import { UserApi } from '@/utils/api/user'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
@@ -45,6 +44,12 @@ const EditCourse = ({ user, course }: { user: User; course: Course }) => {
   const t = useTranslation()
   const router = useRouter()
   const session = useSession()
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 25,
+      behavior: 'smooth',
+    })
+  }
   const [alertData, setAlertData] = React.useState<{
     message: string
     variant: 'success' | 'info' | 'warning' | 'error'
@@ -95,6 +100,7 @@ const EditCourse = ({ user, course }: { user: User; course: Course }) => {
 
   const onSubmitHandler = async (data: EditCourseFormDataType) => {
     // I had to use any, because the dirtyData.image type will get change from ImageType to string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const dirtyData: any = {}
     Object.keys(dirtyFields).forEach((key) => {
       dirtyData[key] = data[key]
@@ -109,7 +115,6 @@ const EditCourse = ({ user, course }: { user: User; course: Course }) => {
         dirtyData.image = imageUploadRes.payload.image_url
       }
 
-      console.log(dirtyData)
       await new CourseApi(session.data).update(course._id, {
         ...dirtyData,
       })
@@ -122,12 +127,14 @@ const EditCourse = ({ user, course }: { user: User; course: Course }) => {
           variant: 'error',
           open: true,
         })
+        scrollToTop()
       } else {
         setAlertData({
           message: `${t.Creator.editCourse.alerts.error}`,
           variant: 'error',
           open: true,
         })
+        scrollToTop()
       }
     }
   }

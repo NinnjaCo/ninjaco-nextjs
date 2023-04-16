@@ -14,7 +14,7 @@ export interface WebsiteTranslations {
     register: translationElement
     signOut: translationElement
   }
-  fourOhFour: {
+  FourOhFour: {
     headTitle: translationElement
     title: translationElement
     goBackHome: translationElement
@@ -103,53 +103,55 @@ export interface WebsiteTranslations {
     question4: translationElement
     answer4: translationElement
   }
-  signin: {
-    headTitle: translationElement
-    email: translationElement
-    password: translationElement
-    signIn: translationElement
-    forgotPassword: translationElement
-    signUp: translationElement
+  Auth: {
+    signin: {
+      headTitle: translationElement
+      email: translationElement
+      password: translationElement
+      signIn: translationElement
+      forgotPassword: translationElement
+      signUp: translationElement
+    }
+    forgetPassword: {
+      title: translationElement
+      invalidEmail: translationElement
+      emailRequired: translationElement
+      wrong: translationElement
+      checkEmail: translationElement
+      label: translationElement
+      sendResetLink: translationElement
+      backToHome: translationElement
+      signIn: translationElement
+    }
+    resetPassword: {
+      title: translationElement
+      newPassword: translationElement
+      password: translationElement
+      confirmPassword: translationElement
+      confirmPassword1: translationElement
+      changePassword: translationElement
+      backToHome: translationElement
+      signIn: translationElement
+    }
+    signUp: {
+      firstName: translationElement
+      lastName: translationElement
+      dateOfBirth: translationElement
+      email: translationElement
+      password: translationElement
+      confirmPassword: translationElement
+      signUp: translationElement
+      backToHome: translationElement
+      signIn: translationElement
+    }
+    verifyEmail: {
+      code: translationElement
+      verify: translationElement
+      backToHome: translationElement
+      signIn: translationElement
+    }
   }
-  forgetPassword: {
-    title: translationElement
-    invalidEmail: translationElement
-    emailRequired: translationElement
-    wrong: translationElement
-    checkEmail: translationElement
-    label: translationElement
-    sendResetLink: translationElement
-    backToHome: translationElement
-    signIn: translationElement
-  }
-  resetPassword: {
-    title: translationElement
-    newPassword: translationElement
-    password: translationElement
-    confirmPassword: translationElement
-    confirmPassword1: translationElement
-    changePassword: translationElement
-    backToHome: translationElement
-    signIn: translationElement
-  }
-  signUp: {
-    firstName: translationElement
-    lastName: translationElement
-    dateOfBirth: translationElement
-    email: translationElement
-    password: translationElement
-    confirmPassword: translationElement
-    signUp: translationElement
-    backToHome: translationElement
-    signIn: translationElement
-  }
-  verifyEmail: {
-    code: translationElement
-    verify: translationElement
-    backToHome: translationElement
-    signIn: translationElement
-  }
-  profile: {
+  Profile: {
     firstName: translationElement
     lastName: translationElement
     dateOfBirth: translationElement

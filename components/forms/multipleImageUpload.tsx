@@ -6,12 +6,17 @@ import clsx from 'clsx'
 import imagePlaceHolder from '@/images/imagePlaceHolder.svg'
 
 interface MultipleImageUploadProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<any>
   name: string
   isRequired?: boolean
   error?: string
   label?: string
   rootClassName?: string
+  initialData?: {
+    initialImages: string[]
+    editInitialImages: (newImages: string[]) => void
+  }
 }
 
 const MultipleImageUpload = ({
@@ -21,9 +26,13 @@ const MultipleImageUpload = ({
   label,
   error,
   rootClassName,
+  initialData,
 }: MultipleImageUploadProps) => {
   // Use array because the library forces an array of ImageType
   const [uploadedPictures, setUploadedPictures] = useState<ImageListType>([])
+  const [initialsImage, setInitialImages] = useState<string[] | undefined>(
+    initialData?.initialImages
+  )
 
   const getImageUploadErrorMessage = (error: ErrorsType) => {
     if (error?.acceptType) {
@@ -60,7 +69,6 @@ const MultipleImageUpload = ({
               onImageUpload,
               onImageRemoveAll,
               isDragging,
-              onImageUpdate,
               dragProps,
               onImageRemove,
               errors,
@@ -163,6 +171,58 @@ const MultipleImageUpload = ({
                       )
                     )
                   })}
+                  {initialsImage &&
+                    initialsImage.map((image: string, index: number) => {
+                      return (
+                        image && (
+                          <div key={index} className="relative w-52 h-36 bg-brand-50 rounded">
+                            <Image
+                              src={image}
+                              placeholder="blur"
+                              blurDataURL={image}
+                              alt="Uploaded Image"
+                              style={{
+                                objectFit: 'contain',
+                              }}
+                              fill
+                              sizes="(max-width: 768px) 40vw,
+                            (max-width: 1200px) 50vw,
+                            60vw"
+                              className="rounded-md"
+                            />
+                            <button
+                              className="absolute top-1 left-1 p-1 rounded-full bg-error-dark text-white"
+                              onClick={(e) => {
+                                e.preventDefault()
+                                // if this is the last image and the field isRequired then dont remove it
+                                if (initialsImage.length === 1 && isRequired) return
+
+                                const newImages = initialsImage?.filter(
+                                  (image: string, i: number) => i !== index
+                                )
+                                setInitialImages(newImages)
+                                initialData?.editInitialImages(newImages)
+                              }}
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-2 w-2"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={5}
+                                  d="M6 18L18 6M6 6l12 12"
+                                />
+                              </svg>
+                            </button>
+                          </div>
+                        )
+                      )
+                    })}
                 </div>
               </>
             )}

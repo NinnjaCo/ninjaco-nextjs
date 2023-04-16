@@ -2,7 +2,6 @@ import { Bars3Icon, BookOpenIcon, PuzzlePieceIcon } from '@heroicons/react/24/ou
 import { Fragment } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { User } from '@/models/crud'
-import { useRouter } from 'next-router-mock'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -18,7 +17,6 @@ interface CreatorMenuPros {
   creator: User
 }
 const CreatorMenu = ({ isOnCoursePage, creator, isOnGamesPage }: CreatorMenuPros) => {
-  const router = useRouter()
   const profilePhoto = useUserProfilePicture(creator)
   const session = useSession()
   const t = useTranslation()

@@ -38,6 +38,7 @@ const Table = ({
         hideFooterPagination={hidePagination}
         pageSizeOptions={[5, 10, 20, 50, 100]}
         density={density}
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         getRowClassName={(params) => {
           return rowClassName
         }}

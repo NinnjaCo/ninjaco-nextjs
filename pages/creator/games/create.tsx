@@ -6,7 +6,6 @@ import { ImageType } from 'react-images-uploading'
 import { Input } from '@/components/forms/input'
 import { Switch } from '@headlessui/react'
 import { User } from '@/models/crud'
-import { UserApi } from '@/utils/api/user'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
@@ -22,7 +21,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import Player from '@/components/creator/game/player'
-import React, { useEffect } from 'react'
+import React from 'react'
 import SingleImageUpload from '@/components/forms/singleImageUpload'
 import Wall from '@/components/creator/game/wall'
 import clsx from 'clsx'
@@ -60,6 +59,7 @@ interface ToolsElments {
     width: number
     height: number
     color: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     icon: any
   }
   toolType: Tools
@@ -85,7 +85,7 @@ const GameCreatePage = ({ user }: { user: User }) => {
   )
   const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false)
   const [selectedTool, setSelectedTool] = React.useState<Tools>(Tools.NONE)
-  const [cellSize, setCellSize] = React.useState(25)
+  const cellSize = 25
 
   const [toogleLimitedBlocks, setToogleLimitedBlocks] = React.useState(false)
   const [numberOfBlocks, setNumberOfBlocks] = React.useState<number | undefined>(undefined)

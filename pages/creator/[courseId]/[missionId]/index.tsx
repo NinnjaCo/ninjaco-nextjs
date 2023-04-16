@@ -4,13 +4,11 @@ import { Course } from '@/models/crud/course.model'
 import { CourseApi } from '@/utils/api/course/course.api'
 import { Mission } from '@/models/crud/mission.model'
 import { User } from '@/models/crud'
-import { UserApi } from '@/utils/api/user'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import Chip from '@/components/shared/chip'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import Head from 'next/head'
-import Image from 'next/image'
 import ImageCard from '@/components/creator/imageCard'
 import Link from 'next/link'
 import clsx from 'clsx'
@@ -72,18 +70,20 @@ export default function MissionPage({
           {mission.levels.length !== 0 ? (
             <div className="grid grid-cols-4 sm:grid-cols-7 md:grid-cols-10 lg:grid-cols-11 xl:grid-cols-12 w-full gap-8 items-center place-items-center">
               {mission.levels.map((level, index) => (
-                <div
+                <Link
                   className={clsx(
                     'rounded-full w-16 h-16 flex justify-center items-center text-center text-2xl font-semibold text-brand shadow-inner',
                     {
-                      'bg-brand-300 shadow-brand-400': level.levelNumber % 2 === 0,
-                      'bg-secondary-300 shadow-secondary-900': level.levelNumber % 2 !== 0,
+                      'bg-brand-300 shadow-brand-400 hover:bg-brand': level.levelNumber % 2 === 0,
+                      'bg-secondary-300 shadow-secondary-900 hover:bg-secondary':
+                        level.levelNumber % 2 !== 0,
                     }
                   )}
                   key={index}
+                  href={`/creator/${course._id}/${mission._id}/${level._id}`}
                 >
                   {level.levelNumber}
-                </div>
+                </Link>
               ))}
             </div>
           ) : (

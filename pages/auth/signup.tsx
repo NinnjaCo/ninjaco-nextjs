@@ -9,7 +9,6 @@ import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { signIn } from 'next-auth/react'
 import { useAuthApi } from '@/utils/api/auth'
 import { useForm } from 'react-hook-form'
-import { useRouter } from 'next/router'
 import { validateTokenRoleRequest } from '@/middleware/validateTokenRole'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Alert from '@/components/shared/alert'
@@ -64,7 +63,6 @@ interface ServerProps {
 const Signup = (props: ServerProps) => {
   const authApi = useAuthApi()
   const t = useTranslation()
-  const router = useRouter()
   const [signUpButtonDisabled, setSignUpButtonDisabled] = React.useState(false)
 
   const {
@@ -169,7 +167,7 @@ const Signup = (props: ServerProps) => {
           <form onSubmit={handleSubmit(onSubmitHandler)} className="flex flex-col gap-4" id="form">
             <Input
               {...register('firstName')}
-              label={t.signUp.firstName}
+              label={t.Auth.signUp.firstName}
               placeholder="John"
               StartIcon={UserIcon}
               error={errors.firstName?.message}
@@ -177,7 +175,7 @@ const Signup = (props: ServerProps) => {
             />
             <Input
               {...register('lastName')}
-              label={t.signUp.lastName}
+              label={t.Auth.signUp.lastName}
               placeholder="Smith"
               StartIcon={UserIcon}
               error={errors.lastName?.message}
@@ -186,14 +184,14 @@ const Signup = (props: ServerProps) => {
             <DatePickerWithHookForm
               control={control}
               name={register('dateOfBirth').name} // we only need the "name" prop
-              label={t.signUp.dateOfBirth as string}
+              label={t.Auth.signUp.dateOfBirth as string}
               error={errors.dateOfBirth?.message}
               isRequired={true}
             />
             <Input
               {...register('email')}
-              label={t.signUp.email}
-              placeholder={t.signUp.email as string}
+              label={t.Auth.signUp.email}
+              placeholder={t.Auth.signUp.email as string}
               StartIcon={EnvelopeIcon}
               error={errors.email?.message}
               isRequired={true}
@@ -201,8 +199,8 @@ const Signup = (props: ServerProps) => {
             <Input
               {...register('password')}
               type="password"
-              label={t.signUp.password}
-              placeholder={t.signUp.password as string}
+              label={t.Auth.signUp.password}
+              placeholder={t.Auth.signUp.password as string}
               StartIcon={LockClosedIcon}
               error={errors.password?.message}
               isRequired={true}
@@ -210,8 +208,8 @@ const Signup = (props: ServerProps) => {
             <Input
               {...register('passwordConfirmation')}
               type="password"
-              label={t.signUp.confirmPassword}
-              placeholder={t.signUp.confirmPassword as string}
+              label={t.Auth.signUp.confirmPassword}
+              placeholder={t.Auth.signUp.confirmPassword as string}
               StartIcon={LockClosedIcon}
               error={errors.passwordConfirmation?.message}
               isRequired={true}
@@ -223,15 +221,15 @@ const Signup = (props: ServerProps) => {
               className="w-full btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
               disabled={signUpButtonDisabled}
             >
-              {t.signUp.signUp}
+              {t.Auth.signUp.signUp}
             </button>
           </form>
           <div className="w-full flex justify-between text-xs mt-6">
             <Link className="cursor-pointer text-brand-500" href="/">
-              {t.signUp.backToHome}
+              {t.Auth.signUp.backToHome}
             </Link>
             <Link href="/auth/signin" className="cursor-pointer text-brand font-semibold">
-              {t.signUp.signIn}
+              {t.Auth.signUp.signIn}
             </Link>
           </div>
         </AuthCard>

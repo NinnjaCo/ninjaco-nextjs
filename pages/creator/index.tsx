@@ -4,13 +4,17 @@ import { FunnelIcon } from '@heroicons/react/24/outline'
 import { User } from '@/models/crud'
 import { authOptions } from '../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
+import { useState } from 'react'
 import CourseCard from '@/components/creator/courseCard'
 import CreatorMenu from '@/components/creator/creatorMenu'
+import Filter from '@/components/creator/filter'
 import Head from 'next/head'
 import Link from 'next/link'
+import dayjs from 'dayjs'
 import useTranslation from '@/hooks/useTranslation'
 
 export default function Home({ user, courses }: { user: User; courses: Course[] }) {
+  const [filteredCourses, setFilteredCourses] = useState<Course[]>(courses)
   const t = useTranslation()
   return (
     <>
@@ -45,12 +49,47 @@ export default function Home({ user, courses }: { user: User; courses: Course[] 
                 <FunnelIcon className="w-4 h-4" />
                 {t.Creator.viewCourses.filter}
               </button>
+              <div className="text-base text-brand">{courses.length} entries</div>{' '}
+              <Filter
+                filterFields={[
+                  {
+                    name: 'Newest',
+                    setter: setFilteredCourses,
+                    sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? -1 : 1),
+                  },
+                  {
+                    name: 'Recently Updated',
+                    sortFunction: (a, b) => (dayjs(a.updatedAt).isAfter(b.updatedAt) ? -1 : 1),
+                    setter: setFilteredCourses,
+                  },
+                  {
+                    name: 'Oldest',
+                    sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? 1 : -1),
+                    setter: setFilteredCourses,
+                  },
+                  {
+                    name: 'Name (A-Z)',
+                    sortFunction: (a, b) => (a.title > b.title ? 1 : -1),
+                    setter: setFilteredCourses,
+                  },
+                  {
+                    name: 'Name (Z-A)',
+                    sortFunction: (a, b) => (a.title > b.title ? -1 : 1),
+                    setter: setFilteredCourses,
+                  },
+                  {
+                    name: 'Number of Missions',
+                    sortFunction: (a, b) => (a.missions.length > b.missions.length ? -1 : 1),
+                    setter: setFilteredCourses,
+                  },
+                ]}
+              />
             </div>
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center mt-7 px-10 place-items-center">
-          {courses.map((course, index) => (
-            <Link href={`/creator/${course._id}`} key={index}>
+          {filteredCourses.map((course, index) => (
+            <Link href={`/creator/${course._id}`} key={course._id}>
               <CourseCard course={course} />
             </Link>
           ))}

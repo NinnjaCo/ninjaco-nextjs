@@ -1,21 +1,25 @@
 import { Course } from '@/models/crud/course.model'
 import { CourseApi } from '@/utils/api/course/course.api'
 import { FunnelIcon } from '@heroicons/react/24/outline'
+import { Mission } from '@/models/crud/mission.model'
 import { User } from '@/models/crud'
-import { UserApi } from '@/utils/api/user'
 import { authOptions } from '../../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
+import { useState } from 'react'
 import Chip from '@/components/shared/chip'
 import CreatorMenu from '@/components/creator/creatorMenu'
+import Filter from '@/components/creator/filter'
 import Head from 'next/head'
-import Image from 'next/image'
 import ImageCard from '@/components/creator/imageCard'
 import Link from 'next/link'
 import MissionCard from '@/components/creator/missionCard'
+import dayjs from 'dayjs'
 import useTranslation from '@/hooks/useTranslation'
 
 export default function CourseView({ user, course }: { user: User; course: Course }) {
+  const [filteredMissions, setFilteredMissions] = useState<Mission[]>(course.missions)
   const t = useTranslation()
+
   return (
     <>
       <Head>
@@ -101,10 +105,44 @@ export default function CourseView({ user, course }: { user: User; course: Cours
               <FunnelIcon className="w-4 h-4" />
               {t.Creator.coursePage.filter}
             </button>
+            <Filter
+              filterFields={[
+                {
+                  name: 'Newest',
+                  setter: setFilteredMissions,
+                  sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? -1 : 1),
+                },
+                {
+                  name: 'Recently Updated',
+                  sortFunction: (a, b) => (dayjs(a.updatedAt).isAfter(b.updatedAt) ? -1 : 1),
+                  setter: setFilteredMissions,
+                },
+                {
+                  name: 'Oldest',
+                  sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? 1 : -1),
+                  setter: setFilteredMissions,
+                },
+                {
+                  name: 'Name (A-Z)',
+                  sortFunction: (a, b) => (a.title > b.title ? 1 : -1),
+                  setter: setFilteredMissions,
+                },
+                {
+                  name: 'Name (Z-A)',
+                  sortFunction: (a, b) => (a.title > b.title ? -1 : 1),
+                  setter: setFilteredMissions,
+                },
+                {
+                  name: 'Number of Levels (Low-High)',
+                  sortFunction: (a, b) => (a.levels.length > b.levels.length ? -1 : 1),
+                  setter: setFilteredMissions,
+                },
+              ]}
+            />
           </div>
-          {course.missions.length !== 0 ? (
+          {filteredMissions.length !== 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center place-items-center">
-              {course.missions.map((mission, index) => (
+              {filteredMissions.map((mission, index) => (
                 <Link href={`/creator/${course._id}/${mission._id}`} key={index}>
                   <MissionCard mission={mission} />
                 </Link>

@@ -99,7 +99,7 @@ const Signin = (props: ServerProps) => {
   return (
     <>
       <Head>
-        <title>{t.signin.headTitle}</title>
+        <title>{t.Auth.signin.headTitle}</title>
         <meta name="description" content="Sign In to NinjaCo" />
       </Head>
       <main className="relative w-full h-screen">
@@ -114,7 +114,7 @@ const Signin = (props: ServerProps) => {
           }}
         ></Menu>
         <AuthCard
-          title={t.signin.signIn as string}
+          title={t.Auth.signin.signIn as string}
           titleImage={logoPointingDown}
           underLineImage={heavilyWavedLine}
         >
@@ -128,16 +128,16 @@ const Signin = (props: ServerProps) => {
           <form onSubmit={handleSubmit(onSubmitHandler)} className="flex flex-col gap-4" id="form">
             <Input
               {...register('email')}
-              label={t.signin.email as string}
-              placeholder={t.signin.email as string}
+              label={t.Auth.signin.email as string}
+              placeholder={t.Auth.signin.email as string}
               StartIcon={EnvelopeIcon}
               error={errors.email?.message}
             />
             <Input
               {...register('password')}
               type="password"
-              label={t.signin.password as string}
-              placeholder={t.signin.password as string}
+              label={t.Auth.signin.password as string}
+              placeholder={t.Auth.signin.password as string}
               StartIcon={LockClosedIcon}
               error={errors.password?.message}
             />
@@ -149,15 +149,15 @@ const Signin = (props: ServerProps) => {
               className="w-full btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
               disabled={signInButtonDisabled}
             >
-              {t.signin.signIn}
+              {t.Auth.signin.signIn}
             </button>
           </form>
           <div className="w-full flex justify-between text-xs mt-6 flex-wrap gap-4">
             <Link className="cursor-pointer text-brand font-semibold" href="/auth/forgot-password">
-              {t.signin.forgotPassword}
+              {t.Auth.signin.forgotPassword}
             </Link>
             <Link href="/auth/signup" className="cursor-pointer text-brand font-semibold">
-              {t.signin.signUp}
+              {t.Auth.signin.signUp}
             </Link>
           </div>
         </AuthCard>
