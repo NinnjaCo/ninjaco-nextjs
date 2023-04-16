@@ -226,6 +226,21 @@ export interface WebsiteTranslations {
       cancel: translationElement
       createLevel: translationElement
     }
+    editLevelPage: {
+      atLeastOneImage: translationElement
+      noChangesMade: translationElement
+      onlyTenBuildingParts: translationElement
+      onlyTenStepByStep: translationElement
+      imageIsNotValid: translationElement
+      imageIsTooBig: translationElement
+      errorUploadingImage: translationElement
+      errorUpdatingLevel: translationElement
+      editLevel: translationElement
+      editLevelNumber: translationElement
+      buildingPartImages: translationElement
+      stepByStepImages: translationElement
+      cancel: translationElement
+    }
   }
 }
 
