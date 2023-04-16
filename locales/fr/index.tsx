@@ -342,6 +342,17 @@ const frenchTranslations: WebsiteTranslations = {
       statistics: 'Statistiques',
       leaderboard: 'Classement',
     },
+    Courses: {
+      headerTitle: 'Cours',
+      title: 'titre',
+      id: 'ID',
+      usersEnrolled: 'Utilisateurs inscrits',
+      numberOfMissions: 'Nombre de missions',
+      numberOfLevels: 'Nombre de niveaux',
+      createdAt: 'Créé à',
+      updatedAt: 'Mis à jour à',
+      entriesFound: 'Entrées trouvées',
+    },
   },
 }
 export default frenchTranslations
