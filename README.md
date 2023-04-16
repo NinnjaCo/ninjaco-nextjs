@@ -108,15 +108,23 @@ git clone https://github.com/NinnjaCo/ninjaco-nextjs.git
 npm install
 ```
 
-3. Run the server
+3. Copy the `.env.example` file and rename it to `.env`
 
-- 3.1 Development mode 🐛
+```bash
+cp .env.example .env
+```
+
+> Edit the `.env` file and add your own values.
+
+4. Run the server
+
+- 4.1 Development mode 🐛
 
 ```bash
 npm run dev
 ```
 
-- 3.2 Production mode ⚡️
+- 4.2 Production mode ⚡️
 
 ```bash
 npm run build
