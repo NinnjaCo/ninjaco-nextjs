@@ -160,6 +160,12 @@ export interface WebsiteTranslations {
     save: translationElement
     changePassword: translationElement
   }
+  Creator: {
+    courses: translationElement
+    entries: translationElement
+    createCourse: translationElement
+    filter: translationElement
+  }
 }
 
 // Create locale type support en | fr

@@ -318,6 +318,12 @@ const englishTranslations: WebsiteTranslations = {
     save: 'SAVE',
     changePassword: 'Change Password',
   },
+  Creator: {
+    courses: 'Courses',
+    entries: 'Entries',
+    createCourse: 'Create Course',
+    filter: 'Filter',
+  },
 }
 
 export default englishTranslations

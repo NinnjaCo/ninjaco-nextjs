@@ -329,5 +329,8 @@ const frenchTranslations: WebsiteTranslations = {
     save: 'Sauvegarder',
     changePassword: 'Changer le mot de passe',
   },
+  Creator: {
+    
+  },
 }
 export default frenchTranslations
