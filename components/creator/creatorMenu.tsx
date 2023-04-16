@@ -20,6 +20,7 @@ const CreatorMenu = ({ isOnCoursePage, creator, isOnGamesPage }: CreatorMenuPros
   const router = useRouter()
   const profilePhoto = useUserProfilePicture(creator)
   const session = useSession()
+  const t = useTranslation()
   const linkForMenu = [
     {
       name: 'Courses',
@@ -75,7 +76,7 @@ const CreatorMenu = ({ isOnCoursePage, creator, isOnGamesPage }: CreatorMenuPros
                   isOnCoursePage && !isOnGamesPage,
               })}
             >
-              Courses
+              {t.MenuCreator.courses}
             </Link>
           </button>
 
@@ -89,7 +90,7 @@ const CreatorMenu = ({ isOnCoursePage, creator, isOnGamesPage }: CreatorMenuPros
                   isOnGamesPage && !isOnCoursePage,
               })}
             >
-              Games
+              {t.MenuCreator.games}
             </Link>
           </button>
         </div>
