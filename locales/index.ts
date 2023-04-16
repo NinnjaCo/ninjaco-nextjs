@@ -244,6 +244,13 @@ export interface WebsiteTranslations {
       entriesFound: translationElement
       back: translationElement
       confirm: translationElement
+      resetPass: translationElement
+      notifyUser: translationElement
+      deleteUser: translationElement
+      editUser: translationElement
+      password: translationElement
+      confirmPassword: translationElement
+      submit: translationElement
     }
   }
 }
