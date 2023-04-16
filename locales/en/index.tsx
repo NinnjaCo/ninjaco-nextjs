@@ -320,6 +320,16 @@ const englishTranslations: WebsiteTranslations = {
     save: 'SAVE',
     changePassword: 'Change Password',
   },
+  Forms: {
+    ImageUpload: {
+      unacceptableImageType: 'Unacceptable image type',
+      unacceptableImageSize: 'Max File Size Reached',
+      lowResolutionImage: 'Low Resolution',
+      dropImageHere: 'Drop image here | Click',
+      removeImage: 'Remove image',
+      removeAllImages: 'Remove All',
+    },
+  },
   Creator: {
     viewMissionPage: {
       editMission: 'Edit Mission',
