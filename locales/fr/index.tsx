@@ -429,6 +429,12 @@ const frenchTranslations: WebsiteTranslations = {
       logoutMessage: 'Vous êtes sur le point de vous déconnecter',
       cancel: 'Annuler',
     },
+    SideMenu: {
+      dashboard: 'Tableau de bord',
+      courses: 'Cours',
+      users: 'Utilisateurs',
+      creators: 'Créateurs',
+    },
   },
 }
 export default frenchTranslations
