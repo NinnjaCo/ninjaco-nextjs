@@ -571,7 +571,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
       </Head>
 
       <AdminAlertDialog
-        title="Add Creator"
+        title={t.Admin.Creators.addCreators as string}
         open={openCreatorAddDialog}
         confirm={() => {}} // Confirmation is done inside the form body
         close={() => setOpenCreatorAddDialog(false)}

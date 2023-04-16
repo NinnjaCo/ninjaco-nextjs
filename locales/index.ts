@@ -252,6 +252,12 @@ export interface WebsiteTranslations {
       confirmPassword: translationElement
       submit: translationElement
     }
+    LogOutDialogue: {
+      logout: translationElement
+      logoutconfimarion: translationElement
+      logoutMessage: translationElement
+      cancel: translationElement
+    }
   }
 }
 
