@@ -330,7 +330,10 @@ const frenchTranslations: WebsiteTranslations = {
     changePassword: 'Changer le mot de passe',
   },
   Creator: {
-    
+    courses: 'Cours',
+    entries: 'Entrées',
+    createCourse: 'Créer un cours',
+    filter: 'Filtre',
   },
 }
 export default frenchTranslations
