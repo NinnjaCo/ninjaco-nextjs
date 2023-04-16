@@ -331,6 +331,16 @@ const frenchTranslations: WebsiteTranslations = {
     save: 'Sauvegarder',
     changePassword: 'Changer le mot de passe',
   },
+  Forms: {
+    ImageUpload: {
+      unacceptableImageType: "Type d'image non accepté",
+      unacceptableImageSize: "Taille d'image non acceptable",
+      lowResolutionImage: 'Image de faible résolution',
+      dropImageHere: "Déposez l'image ici | Cliquez ",
+      removeImage: "Supprimer l'image",
+      removeAllImages: 'Supprimer toutes les images',
+    },
+  },
   Creator: {
     viewMissionPage: {
       editMission: 'Modifier la Mission',
