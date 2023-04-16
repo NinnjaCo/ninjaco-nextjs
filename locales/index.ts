@@ -178,6 +178,17 @@ export interface WebsiteTranslations {
       missions: translationElement
       noMissions: translationElement
     }
+    createCourse: {
+      createCourse: translationElement
+      courseType: translationElement
+      courseImage: translationElement
+      courseTitle: translationElement
+      courseDescription: translationElement
+      courseAgeRange: translationElement
+      coursePrerequisites: translationElement
+      courseObjectives: translationElement
+      cancel: translationElement
+    }
   }
   MenuCreator: {
     courses: translationElement

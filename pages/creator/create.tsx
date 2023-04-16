@@ -19,11 +19,12 @@ import CreateResourceCard from '@/components/creator/creationCard'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import Head from 'next/head'
 import InputTags from '@/components/forms/inputTags'
-import React from 'react'
+import React, { useTransition } from 'react'
 import Select from '@/components/forms/select'
 import SingleImageUpload from '@/components/forms/singleImageUpload'
 import floatingLegos from '@/images/floatingLegos.svg'
 import underLineImage from '@/images/lightlyWavedLine.svg'
+import useTranslation from '@/hooks/useTranslation'
 
 enum CourseType {
   ARDUINO = 'ARDUINO',
@@ -54,6 +55,7 @@ const CreateCourseFormSchema = yup
 
 const CreateCourseOrEdit = ({ user }: { user: User }) => {
   const router = useRouter()
+  const t = useTranslation()
   const session = useSession()
   const [alertData, setAlertData] = React.useState<{
     message: string
@@ -134,7 +136,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
       <main className="w-full">
         <CreatorMenu creator={user} isOnCoursePage={true} isOnGamesPage={false} />
         <CreateResourceCard
-          title="Create Course"
+          title={t.Creator.createCourse.createCourse}
           underLineImage={underLineImage}
           titleImage={floatingLegos}
         >

@@ -1,9 +1,10 @@
+import { translationElement } from '@/locales'
 import Image from 'next/image'
 import React from 'react'
 
 type CreationCardProps = {
   children: React.ReactNode
-  title: string
+  title: string | translationElement
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   underLineImage: any
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

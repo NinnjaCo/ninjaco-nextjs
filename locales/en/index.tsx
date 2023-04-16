@@ -336,6 +336,17 @@ const englishTranslations: WebsiteTranslations = {
       missions: 'Missions',
       noMissions: 'No missions yet',
     },
+    createCourse: {
+      createCourse: 'Create Course',
+      courseType: 'Course Type',
+      courseImage: 'Course Banner Image',
+      courseTitle: 'Course Title',
+      courseDescription: 'Course Description',
+      courseAgeRange: 'Course Age Range',
+      coursePrerequisites: 'Course Prerequisites',
+      courseObjectives: 'Course Objectives',
+      cancel: 'Cancel',
+    },
   },
   MenuCreator: {
     courses: 'Courses',

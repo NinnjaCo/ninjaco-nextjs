@@ -347,6 +347,17 @@ const frenchTranslations: WebsiteTranslations = {
       missions: 'Missions',
       noMissions: 'Aucune mission',
     },
+    createCourse: {
+      createCourse: 'Créer un cours',
+      courseType: 'Type de cours',
+      courseImage: 'Image du cours',
+      courseTitle: 'Titre du cours',
+      courseDescription: 'Description du cours',
+      courseAgeRange: "Tranche d'âge du cours",
+      coursePrerequisites: 'Prérequis du cours',
+      courseObjectives: 'Objectifs du cours',
+      cancel: 'Annuler',
+    },
   },
   MenuCreator: {
     courses: 'Cours',
