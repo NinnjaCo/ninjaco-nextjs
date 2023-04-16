@@ -320,6 +320,14 @@ const englishTranslations: WebsiteTranslations = {
     save: 'SAVE',
     changePassword: 'Change Password',
   },
+  Creator: {
+    viewMissionPage: {
+      editMission: 'Edit Mission',
+      missionCategory: 'Mission Category:',
+      levels: 'Levels',
+      addLevel: 'Add Level',
+    },
+  },
 }
 
 export default englishTranslations

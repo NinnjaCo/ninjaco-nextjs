@@ -162,6 +162,14 @@ export interface WebsiteTranslations {
     save: translationElement
     changePassword: translationElement
   }
+  Creator: {
+    viewMissionPage: {
+      editMission: translationElement
+      missionCategory: translationElement
+      levels: translationElement
+      addLevel: translationElement
+    }
+  }
 }
 
 // Create locale type support en | fr
