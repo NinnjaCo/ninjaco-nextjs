@@ -32,23 +32,6 @@ import floatingLegos from '@/images/floatingLegos.svg'
 import underLineImage from '@/images/lightlyWavedLine.svg'
 import useTranslation from '@/hooks/useTranslation'
 
-type CreateMissionFormDataType = {
-  missionTitle: string
-  missionImage: ImageType
-  missionDescription: string
-  missionCategory: string
-}
-
-const CreateMissionFormSchema = yup
-  .object()
-  .shape({
-    missionTitle: yup.string().required('Mission Title is required'),
-    missionImage: yup.object().required('Mission Image is required'),
-    missionDescription: yup.string().required('Mission Description is required'),
-    missionCategory: yup.string().required('Mission Category is required'),
-  })
-  .required()
-
 const CreateMissionOrEdit = ({
   user,
   course,
@@ -68,6 +51,31 @@ const CreateMissionOrEdit = ({
       behavior: 'smooth',
     })
   }
+
+  type CreateMissionFormDataType = {
+    missionTitle: string
+    missionImage: ImageType
+    missionDescription: string
+    missionCategory: string
+  }
+
+  const CreateMissionFormSchema = yup
+    .object()
+    .shape({
+      missionTitle: yup
+        .string()
+        .required(t.Creator.createMissionPage.missionTitleRequired as string),
+      missionImage: yup
+        .object()
+        .required(t.Creator.createMissionPage.missionImageRequired as string),
+      missionDescription: yup
+        .string()
+        .required(t.Creator.createMissionPage.missionDescriptionRequired as string),
+      missionCategory: yup
+        .string()
+        .required(t.Creator.createMissionPage.missionCategoryRequired as string),
+    })
+    .required()
 
   const [alertData, setAlertData] = React.useState<{
     message: string
