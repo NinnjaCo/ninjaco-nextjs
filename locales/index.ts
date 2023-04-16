@@ -212,6 +212,8 @@ export interface WebsiteTranslations {
       send: translationElement
       title: translationElement
       entriesFound: translationElement
+      password: translationElement
+      confirmPassword: translationElement
     }
   }
 }
