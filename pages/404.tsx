@@ -8,7 +8,7 @@ export default function FourOhFour(): React.ReactElement {
   return (
     <>
       <Head>
-        <title>{t.fourOhFour.headTitle}</title>
+        <title>{t.FourOhFour.headTitle}</title>
       </Head>
 
       <div className="h-screen flex flex-col">
@@ -25,10 +25,10 @@ export default function FourOhFour(): React.ReactElement {
         <div className="grid items-center h-screen grid-cols-1 justify-items-center pt-24 pb-20 relative flex-auto">
           <h1 className="self-end divide-x-2 divide-black">
             <span className="px-2 font-bold">404</span>
-            <span className="px-2">{t.fourOhFour.title}</span>
+            <span className="px-2">{t.FourOhFour.title}</span>
           </h1>
           <Link href="/" className="self-start my-4 text-sm btn btn-brand">
-            {t.fourOhFour.goBackHome}
+            {t.FourOhFour.goBackHome}
           </Link>
         </div>
       </div>

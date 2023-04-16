@@ -1,5 +1,6 @@
 import { Control, Controller } from 'react-hook-form'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
+import { translationElement } from '@/locales'
 import React from 'react'
 import clsx from 'clsx'
 
@@ -13,7 +14,7 @@ type InputProps = React.DetailedHTMLProps<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<any>
   name: string
-  label: string
+  label: string | translationElement
   placeholder: string
   error: string | undefined
   isRequired?: boolean

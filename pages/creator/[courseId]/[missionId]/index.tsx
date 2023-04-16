@@ -12,6 +12,7 @@ import Head from 'next/head'
 import ImageCard from '@/components/creator/imageCard'
 import Link from 'next/link'
 import clsx from 'clsx'
+import useTranslation from '@/hooks/useTranslation'
 
 export default function MissionPage({
   user,
@@ -24,6 +25,7 @@ export default function MissionPage({
   course: Course
   missionCategory: Category
 }) {
+  const t = useTranslation()
   return (
     <>
       <Head>
@@ -44,7 +46,7 @@ export default function MissionPage({
                 className="text-xs  md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit"
                 href={`/creator/${course._id}/${mission._id}/edit`}
               >
-                Edit Mission
+                {t.Creator.viewMissionPage.editMission}
               </Link>
             </div>
             <div className=" text-brand-500 font-medium text-xs md:text-base w-full">
@@ -53,17 +55,19 @@ export default function MissionPage({
           </div>
         </div>
         <div className="flex gap-3 items-center w-full flex-wrap px-6 my-8">
-          <div className=" text-brand font-medium text-xs md:text-base">Mission Category:</div>
+          <div className=" text-brand font-medium text-xs md:text-base">
+            {t.Creator.viewMissionPage.missionCategory}
+          </div>
           <Chip text={missionCategory.categoryName} />
         </div>
         <div className="flex flex-col px-6 pb-12 gap-6">
           <div className="flex justify-between gap-10">
-            <div className="font-semibold text-2xl">Levels</div>
+            <div className="font-semibold text-2xl">{t.Creator.viewMissionPage.levels}</div>
             <Link
               className=" text-xs md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit"
               href={`/creator/${course._id}/${mission._id}/create`}
             >
-              Add level
+              {t.Creator.viewMissionPage.addLevel}
             </Link>
           </div>
 

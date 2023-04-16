@@ -135,7 +135,7 @@ const ResetPassword = (props: ServerProps) => {
           }}
         ></Menu>
         <AuthCard
-          title={t.resetPassword.title as string}
+          title={t.Auth.resetPassword.title as string}
           titleImage={logoPointingDown}
           underLineImage={lightlyWavedLine}
         >
@@ -150,8 +150,8 @@ const ResetPassword = (props: ServerProps) => {
             <Input
               {...register('password')}
               type="password"
-              label={t.resetPassword.newPassword as string}
-              placeholder={t.resetPassword.password as string}
+              label={t.Auth.resetPassword.newPassword as string}
+              placeholder={t.Auth.resetPassword.password as string}
               StartIcon={LockClosedIcon}
               error={errors.password?.message}
               disabled={props.errorMessage !== undefined}
@@ -160,8 +160,8 @@ const ResetPassword = (props: ServerProps) => {
             <Input
               {...register('passwordConfirmation')}
               type="password"
-              label={t.resetPassword.confirmPassword as string}
-              placeholder={t.resetPassword.confirmPassword1 as string}
+              label={t.Auth.resetPassword.confirmPassword as string}
+              placeholder={t.Auth.resetPassword.confirmPassword1 as string}
               StartIcon={LockClosedIcon}
               error={errors.passwordConfirmation?.message}
               disabled={props.errorMessage !== undefined}
@@ -180,15 +180,15 @@ const ResetPassword = (props: ServerProps) => {
                 }
               )}
             >
-              {t.resetPassword.changePassword}
+              {t.Auth.resetPassword.changePassword}
             </button>
           </form>
           <div className="w-full flex justify-between text-xs mt-6">
             <Link className="cursor-pointer text-brand-500" href="/">
-              {t.resetPassword.backToHome}
+              {t.Auth.resetPassword.backToHome}
             </Link>
             <Link href="/auth/signin" className="cursor-pointer text-brand font-semibold">
-              {t.resetPassword.signIn}
+              {t.Auth.resetPassword.signIn}
             </Link>
           </div>
         </AuthCard>

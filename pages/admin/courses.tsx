@@ -135,7 +135,7 @@ const AdminCoursesView: React.FC<{ courses: Course[] }> = ({ courses }) => {
       </Head>
 
       <main className="flex w-full h-screen overflow-hidden">
-        <SideMenu higlightUsers={true} />
+        <SideMenu higlightCourses={true} />
         <div className="flex flex-col flex-grow w-3/4 h-full gap-4 py-8 px-4">
           <div className="flex items-center justify-between w-full">
             <div className="flex flex-col gap-2">
