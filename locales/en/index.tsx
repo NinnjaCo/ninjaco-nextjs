@@ -343,6 +343,22 @@ const englishTranslations: WebsiteTranslations = {
       addCategory: 'Add Category',
       newCategory: 'New Category',
     },
+    createMissionPage: {
+      somethingWrong: 'Something went wrong',
+      pleaseUploadImage: 'Please upload a course image',
+      errorCreatinGame: 'Error creating game',
+      errorCreatingCategory: 'Error creating category',
+      createMission: 'Create Mission',
+      missionTitle: 'Mission Title',
+      missionBannerImage: 'Mission Banner Image',
+      missionDescription: 'Mission Description',
+      missionCategory: 'Mission Category',
+      createNewCategory: 'Create New Category',
+      warning: 'Please note that categories created cannot be deleted for consistency purposes.',
+      addCategory: 'Add Category',
+      newCategory: 'New Category',
+      cancel: 'Cancel',
+    },
   },
 }
 

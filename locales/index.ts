@@ -185,6 +185,22 @@ export interface WebsiteTranslations {
       addCategory: translationElement
       newCategory: translationElement
     }
+    createMissionPage: {
+      somethingWrong: translationElement
+      pleaseUploadImage: translationElement
+      errorCreatinGame: translationElement
+      errorCreatingCategory: translationElement
+      createMission: translationElement
+      missionTitle: translationElement
+      missionBannerImage: translationElement
+      missionDescription: translationElement
+      missionCategory: translationElement
+      createNewCategory: translationElement
+      warning: translationElement
+      addCategory: translationElement
+      newCategory: translationElement
+      cancel: translationElement
+    }
   }
 }
 
