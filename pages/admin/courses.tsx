@@ -10,20 +10,21 @@ import { useMemo } from 'react'
 import Head from 'next/head'
 import SideMenu from '@/components/admin/sideMenu'
 import Table from '@/components/table'
-
+import useTranslation from '@/hooks/useTranslation'
 const AdminCoursesView: React.FC<{ courses: Course[] }> = ({ courses }) => {
+  const t = useTranslation()
   const columns: GridColDef[] = useMemo(
     () => [
       {
         field: 'id',
-        headerName: 'ID',
+        headerName: t.Admin.Courses.id,
         width: 200,
         minWidth: 140,
         headerClassName: 'bg-brand-200',
       },
       {
         field: 'title',
-        headerName: 'Title',
+        headerName: t.Admin.Courses.title,
         width: 180,
         minWidth: 140,
         headerClassName: 'bg-brand-200',
@@ -31,7 +32,7 @@ const AdminCoursesView: React.FC<{ courses: Course[] }> = ({ courses }) => {
       },
       {
         field: 'usersEnrolled',
-        headerName: 'Users Enrolled',
+        headerName: t.Admin.Courses.usersEnrolled,
         width: 140,
         minWidth: 140,
         headerClassName: 'bg-brand-200',
@@ -39,7 +40,7 @@ const AdminCoursesView: React.FC<{ courses: Course[] }> = ({ courses }) => {
       },
       {
         field: 'numberOfMissions',
-        headerName: 'Number of Missions',
+        headerName: t.Admin.Courses.numberOfMissions,
         width: 180,
         minWidth: 180,
         headerClassName: 'bg-brand-200',
@@ -47,7 +48,7 @@ const AdminCoursesView: React.FC<{ courses: Course[] }> = ({ courses }) => {
       },
       {
         field: 'numberOfLevels',
-        headerName: 'Number of Levels',
+        headerName: t.Admin.Courses.numberOfLevels,
         width: 180,
         minWidth: 180,
         headerClassName: 'bg-brand-200',
@@ -55,7 +56,7 @@ const AdminCoursesView: React.FC<{ courses: Course[] }> = ({ courses }) => {
       },
       {
         field: 'createdAt',
-        headerName: 'Created At',
+        headerName: t.Admin.Courses.createdAt,
         type: 'date',
         renderCell: (params) => getReadableDateFromISO(params.value as string),
         width: 160,
@@ -65,7 +66,7 @@ const AdminCoursesView: React.FC<{ courses: Course[] }> = ({ courses }) => {
       },
       {
         field: 'updatedAt',
-        headerName: 'Updated At',
+        headerName: t.Admin.Courses.updatedAt,
         type: 'date',
         renderCell: (params) => getReadableDateFromISO(params.value as string),
         width: 160,
@@ -74,7 +75,15 @@ const AdminCoursesView: React.FC<{ courses: Course[] }> = ({ courses }) => {
         flex: 1,
       },
     ],
-    []
+    [
+      t.Admin.Courses.createdAt,
+      t.Admin.Courses.id,
+      t.Admin.Courses.numberOfLevels,
+      t.Admin.Courses.numberOfMissions,
+      t.Admin.Courses.title,
+      t.Admin.Courses.updatedAt,
+      t.Admin.Courses.usersEnrolled,
+    ]
   )
 
   const rows: GridRowsProp = useMemo(
@@ -114,9 +123,11 @@ const AdminCoursesView: React.FC<{ courses: Course[] }> = ({ courses }) => {
           <div className="flex items-center justify-between w-full">
             <div className="flex flex-col gap-2">
               <p className="text-brand-700 text-xl md:text-2xl lg:text-3xl font-semibold">
-                Courses
+                {t.Admin.Courses.headerTitle}
               </p>
-              <div className="text-sm text-brand  ">{courses.length} entries found</div>
+              <div className="text-sm text-brand  ">
+                {courses.length} {t.Admin.Courses.entriesFound}
+              </div>
             </div>
           </div>
           <Table columns={columns} rows={rows} width={'100%'} height={900} className="mr-4" />

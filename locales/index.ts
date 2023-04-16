@@ -175,7 +175,7 @@ export interface WebsiteTranslations {
       leaderboard: translationElement
     }
     Courses: {
-      headerTitle : translationElement
+      headerTitle: translationElement
       title: translationElement
       id: translationElement
       usersEnrolled: translationElement
@@ -184,7 +184,7 @@ export interface WebsiteTranslations {
       createdAt: translationElement
       updatedAt: translationElement
       entriesFound: translationElement
-
+    }
   }
 }
 
