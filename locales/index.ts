@@ -162,6 +162,16 @@ export interface WebsiteTranslations {
     save: translationElement
     changePassword: translationElement
   }
+  Forms: {
+    ImageUpload: {
+      unacceptableImageType: translationElement
+      unacceptableImageSize: translationElement
+      lowResolutionImage: translationElement
+      dropImageHere: translationElement
+      removeImage: translationElement
+      removeAllImages: translationElement
+    }
+  }
   Creator: {
     viewMissionPage: {
       editMission: translationElement
