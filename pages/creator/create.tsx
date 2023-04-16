@@ -151,7 +151,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
             <Select
               control={control}
               error={errors.courseType?.message}
-              label="Course Type"
+              label={t.Creator.createCourse.courseType}
               name={register('courseType').name}
               selectList={Object.values(CourseType)}
               isRequired={true}
@@ -162,11 +162,11 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
               name={register('courseImage').name}
               error={errors.courseImage?.message as unknown as string} // Convert to string since it returned a FieldError
               isRequired={true}
-              label="Course Banner Image"
+              label={t.Creator.createCourse.courseImage}
             />
             <Input
               {...register('courseTitle')}
-              label={'Course Title'}
+              label={t.Creator.createCourse.courseTitle}
               placeholder="Course Title"
               error={errors.courseTitle?.message}
               isRequired={true}
@@ -176,7 +176,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
               rows={4}
               control={control}
               {...register('courseDescription')}
-              label={'Course Description'}
+              label={t.Creator.createCourse.courseDescription}
               placeholder="Course Description"
               error={errors.courseDescription?.message}
               className="resize-none"
@@ -186,7 +186,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
               control={control}
               error={errors.courseAgeRange?.message}
               name={register('courseAgeRange').name}
-              label="Course Age Range"
+              label={t.Creator.createCourse.courseAgeRange}
               helperText="Enter a range and press enter to add it"
               placeholder="Course Age Range"
               formatter={(ageRange) => {
@@ -205,7 +205,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
               control={control}
               error={errors.coursePrerequisites?.message}
               name={register('coursePrerequisites').name}
-              label="Course Prerequisites"
+              label={t.Creator.createCourse.coursePrerequisites}
               helperText="Enter a prerequisites and press enter to add it"
               placeholder="Course Prerequisites"
             />
@@ -213,7 +213,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
               control={control}
               error={errors.courseObjectives?.message}
               name={register('courseObjectives').name}
-              label="Course Objectives"
+              label={t.Creator.createCourse.courseObjectives}
               helperText="Enter an objectives and press enter to add it"
               placeholder="Course Objectives"
             />
@@ -225,7 +225,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
                   router.back()
                 }}
               >
-                Cancel
+                {t.Creator.createCourse.cancel}
               </button>
               <button
                 type="submit"
@@ -233,7 +233,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
                 value="Submit"
                 className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
               >
-                Create Course
+                {t.Creator.createCourse.createCourse}
               </button>
             </div>
           </form>

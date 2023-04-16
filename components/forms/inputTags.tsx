@@ -5,12 +5,13 @@ import { Fragment, useState } from 'react'
 import { Input } from './input'
 import { Listbox, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/solid'
+import { translationElement } from '@/locales'
 import clsx from 'clsx'
 
 interface InputTagsProps {
   control: Control<any>
   name: string
-  label: string
+  label: string | translationElement
   helperText: string
   error: string | undefined
   placeholder: string
