@@ -338,9 +338,14 @@ const frenchTranslations: WebsiteTranslations = {
     },
     coursePage: {
       editCourse: 'Modifier le cours',
+      courseType: 'Type de cours',
       coursePrerequisites: 'Prérequis du cours',
+      courseObjectives: 'Objectifs du cours',
+      ageRange: "Tranche d'âge",
       addMission: 'Ajouter une mission',
       filter: 'Filtre',
+      missions: 'Missions',
+      noMissions: 'Aucune mission',
     },
   },
   MenuCreator: {

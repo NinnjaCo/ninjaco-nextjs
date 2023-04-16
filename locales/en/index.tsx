@@ -327,9 +327,14 @@ const englishTranslations: WebsiteTranslations = {
     },
     coursePage: {
       editCourse: 'Edit Course',
+      courseType: 'Course Type',
       coursePrerequisites: 'Course Prerequisites',
+      courseObjectives: 'Course Objectives',
+      ageRange: 'Age Range',
       addMission: 'Add Mission',
       filter: 'Filter',
+      missions: 'Missions',
+      noMissions: 'No missions yet',
     },
   },
   MenuCreator: {

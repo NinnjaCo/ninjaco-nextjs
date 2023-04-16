@@ -169,9 +169,14 @@ export interface WebsiteTranslations {
     }
     coursePage: {
       editCourse: translationElement
+      courseType: translationElement
       coursePrerequisites: translationElement
+      courseObjectives: translationElement
+      ageRange: translationElement
       addMission: translationElement
       filter: translationElement
+      missions: translationElement
+      noMissions: translationElement
     }
   }
   MenuCreator: {
