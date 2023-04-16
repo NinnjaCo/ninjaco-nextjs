@@ -9,6 +9,7 @@ import Link from 'next/link'
 import LocaleMenu from '../layout/localeMenu'
 import clsx from 'clsx'
 import logo_black from '@/images/logo_black.svg'
+import useTranslation from '@/hooks/useTranslation'
 import useUserProfilePicture from '@/hooks/useUserProfilePicture'
 
 interface CreatorMenuPros {
