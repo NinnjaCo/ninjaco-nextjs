@@ -217,6 +217,32 @@ export interface WebsiteTranslations {
       notify: translationElement
       users: translationElement
     }
+    Creators: {
+      somethingWentWrong: translationElement
+      createdSuccessfully: translationElement
+      resetPassword: translationElement
+      resetPasswordsent: translationElement
+      resetPasswordSuccessfully: translationElement
+      errorResetingPassword: translationElement
+      userDeletedSuccessfully: translationElement
+      errorUpdatingProfile: translationElement
+      notifyByEmail: translationElement
+      newPassword: translationElement
+      message: translationElement
+      name: translationElement
+      cancel: translationElement
+      reset: translationElement
+      delete: translationElement
+      firstName: translationElement
+      lastName: translationElement
+      dateOfBirth: translationElement
+      createdAt: translationElement
+      updatedAt: translationElement
+      action: translationElement
+      addCreators: translationElement
+      creators: translationElement
+      entriesFound: translationElement
+    }
   }
 }
 
