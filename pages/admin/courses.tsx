@@ -1,41 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react'
-import * as yup from 'yup'
-import { AdminAlertDialog } from '@/components/admin/dialog'
-import { Alert } from '@/components/shared/alert'
-import { AuthError } from '@/models/shared'
-import { AxiosError } from 'axios'
-import { ChevronRightIcon, PencilIcon } from '@heroicons/react/24/solid'
 import { Course } from '@/models/crud/course.model'
 import { CourseApi } from '@/utils/api/course/course.api'
-import { EmailEnum } from '@/utils/api/email/email.api'
-import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/outline'
-import {
-  GridColDef,
-  GridRenderCellParams,
-  GridRowsProp,
-  GridTreeNodeWithRender,
-} from '@mui/x-data-grid'
-import { Input } from '@/components/forms/input'
-import { Popover, Transition } from '@headlessui/react'
-import { RoleEnum } from '@/models/crud/role.model'
-import { User } from '@/models/crud'
-import { UserApi } from '@/utils/api/user'
+import { GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import { authOptions } from '../api/auth/[...nextauth]'
 import { getReadableDateFromISO } from '@/utils/shared'
 import { getServerSession } from 'next-auth'
-import { isAxiosError, unWrapAuthError } from '@/utils/errors'
-import { useCallback, useMemo } from 'react'
-import { useEmailApi } from '@/utils/api/email/email.api'
-import { useForm } from 'react-hook-form'
-import { useQuery, useQueryClient } from 'react-query'
-import { useSession } from 'next-auth/react'
-import { yupResolver } from '@hookform/resolvers/yup'
-import DatePickerWithHookForm from '@/components/forms/datePickerWithHookForm'
+import { useMemo } from 'react'
 import Head from 'next/head'
 import SideMenu from '@/components/admin/sideMenu'
 import Table from '@/components/table'
-import clsx from 'clsx'
 
 const AdminCoursesView: React.FC<{ courses: Course[] }> = ({ courses }) => {
   const columns: GridColDef[] = useMemo(

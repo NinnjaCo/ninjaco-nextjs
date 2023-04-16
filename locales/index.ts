@@ -162,6 +162,19 @@ export interface WebsiteTranslations {
     save: translationElement
     changePassword: translationElement
   }
+
+  Admin: {
+    Dashboard: {
+      prophilePhoto: translationElement
+      firstName: translationElement
+      lastName: translationElement
+      email: translationElement
+      level: translationElement
+      points: translationElement
+      statistics: translationElement
+      leaderboard: translationElement
+    }
+  }
 }
 
 // Create locale type support en | fr
