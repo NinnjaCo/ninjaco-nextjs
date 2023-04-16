@@ -321,12 +321,12 @@ const englishTranslations: WebsiteTranslations = {
     changePassword: 'Change Password',
   },
   Forms: {
-    ImageUpload: {
+    imageUpload: {
       unacceptableImageType: 'Unacceptable image type',
       unacceptableImageSize: 'Max File Size Reached',
       lowResolutionImage: 'Low Resolution',
-      dropImageHere: 'Drop image here | Click',
-      removeImage: 'Remove image',
+      dropImageHere: 'Drop Image Here | Click',
+      removeImage: 'Remove Image',
       removeAllImages: 'Remove All',
     },
   },

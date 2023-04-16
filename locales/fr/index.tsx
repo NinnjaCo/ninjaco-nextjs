@@ -332,7 +332,7 @@ const frenchTranslations: WebsiteTranslations = {
     changePassword: 'Changer le mot de passe',
   },
   Forms: {
-    ImageUpload: {
+    imageUpload: {
       unacceptableImageType: "Type d'image non accepté",
       unacceptableImageSize: "Taille d'image non acceptable",
       lowResolutionImage: 'Image de faible résolution',

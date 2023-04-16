@@ -163,7 +163,7 @@ export interface WebsiteTranslations {
     changePassword: translationElement
   }
   Forms: {
-    ImageUpload: {
+    imageUpload: {
       unacceptableImageType: translationElement
       unacceptableImageSize: translationElement
       lowResolutionImage: translationElement
