@@ -331,5 +331,17 @@ const frenchTranslations: WebsiteTranslations = {
     save: 'Sauvegarder',
     changePassword: 'Changer le mot de passe',
   },
+  Admin: {
+    Dashboard: {
+      prophilePhoto: 'Photo profil',
+      firstName: 'Prénom',
+      lastName: 'Nom de Famille',
+      email: 'Email',
+      level: 'Niveau',
+      points: 'Points',
+      statistics: 'Statistiques',
+      leaderboard: 'Classement',
+    },
+  },
 }
 export default frenchTranslations
