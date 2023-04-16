@@ -2,6 +2,7 @@ import { FunnelIcon } from '@heroicons/react/24/outline'
 import { Menu, Transition } from '@headlessui/react'
 import React, { Fragment } from 'react'
 import clsx from 'clsx'
+import useTranslation from '@/hooks/useTranslation'
 
 interface Field {
   name: string
@@ -10,6 +11,7 @@ interface Field {
 }
 
 const Filter = ({ filterFields }: { filterFields: Field[] }) => {
+  const t = useTranslation()
   return (
     <Menu as="div" className="relative inline-block text-left z-20">
       <div>
@@ -20,7 +22,7 @@ const Filter = ({ filterFields }: { filterFields: Field[] }) => {
           aria-label="Change language"
         >
           <FunnelIcon className="w-4 h-4" />
-          Filter
+          {t.Filter.filter}
         </Menu.Button>
       </div>
       <Transition

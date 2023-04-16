@@ -150,6 +150,11 @@ export interface WebsiteTranslations {
       backToHome: translationElement
       signIn: translationElement
     }
+    unauhorized: {
+      headTitle: translationElement
+      title: translationElement
+      goBack: translationElement
+    }
   }
   Profile: {
     firstName: translationElement
@@ -161,6 +166,92 @@ export interface WebsiteTranslations {
     profile: translationElement
     save: translationElement
     changePassword: translationElement
+  }
+  Creator: {
+    games: {
+      viewGames: {
+        headTitle: translationElement
+        title: translationElement
+        createGame: translationElement
+        entries: translationElement
+        filter: {
+          newest: translationElement
+          oldest: translationElement
+          recentlyUpdated: translationElement
+          NameAZ: translationElement
+          NameZA: translationElement
+          SizeOfGame: translationElement
+        }
+      }
+      createGame: {
+        headTitle: translationElement
+        mobileError: translationElement
+        goBack: translationElement
+        title: translationElement
+        gameTitle: translationElement
+        sizeOfTheGrid: translationElement
+        toggleLimitedBlocks: translationElement
+        limitedNumberOfBlocks: translationElement
+        saveGame: translationElement
+        resetGrid: translationElement
+        toolbox: {
+          title: translationElement
+          description: translationElement
+          player: translationElement
+          goal: translationElement
+          wall: translationElement
+          eraseAll: translationElement
+        }
+        alerts: {
+          pleaseSelectATool: translationElement
+          pleaseSetAPlayer: translationElement
+          pleaseSetAGoal: translationElement
+          pleaseEnterAGameTitle: translationElement
+          pleaseUploadAnImage: translationElement
+          gameCreatedSuccessfully: translationElement
+          somethingWentWrong: translationElement
+          errorCreatingGame: translationElement
+        }
+      }
+      editGame: {
+        headTitle: translationElement
+        mobileError: translationElement
+        goBack: translationElement
+        title: translationElement
+        gameTitle: translationElement
+        sizeOfTheGrid: translationElement
+        toggleLimitedBlocks: translationElement
+        limitedNumberOfBlocks: translationElement
+        saveGame: translationElement
+        resetGrid: translationElement
+        toolbox: {
+          title: translationElement
+          description: translationElement
+          player: translationElement
+          goal: translationElement
+          wall: translationElement
+          eraseAll: translationElement
+        }
+        alerts: {
+          pleaseSelectATool: translationElement
+          pleaseSetAPlayer: translationElement
+          pleaseSetAGoal: translationElement
+          pleaseEnterAGameTitle: translationElement
+          pleaseUploadAnImage: translationElement
+          gameCreatedSuccessfully: translationElement
+          somethingWentWrong: translationElement
+          errorCreatingGame: translationElement
+        }
+      }
+    }
+  }
+  Filter: {
+    filter: translationElement
+  }
+  ServerError: {
+    headTitle: translationElement
+    title: translationElement
+    goBackHome: translationElement
   }
 }
 
