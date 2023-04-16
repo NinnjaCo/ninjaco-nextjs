@@ -200,12 +200,17 @@ export interface WebsiteTranslations {
       firstName: translationElement
       lastName: translationElement
       email: translationElement
+      name: translationElement
       dateOfBirth: translationElement
       createdAt: translationElement
       updatedAt: translationElement
       action: translationElement
       addUsers: translationElement
       cancel: translationElement
+      delete: translationElement
+      deleteUser: translationElement
+      send: translationElement
+      title: translationElement
       entriesFound: translationElement
     }
   }
