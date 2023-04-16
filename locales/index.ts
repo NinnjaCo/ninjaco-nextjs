@@ -214,6 +214,7 @@ export interface WebsiteTranslations {
       entriesFound: translationElement
       password: translationElement
       confirmPassword: translationElement
+      notify: translationElement
     }
   }
 }

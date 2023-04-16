@@ -383,6 +383,7 @@ const frenchTranslations: WebsiteTranslations = {
       entriesFound: 'Entrées trouvées',
       password: 'Mot de passe',
       confirmPassword: 'Confirmez le mot de passe',
+      notify: 'Notifier',
     },
   },
 }

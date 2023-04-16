@@ -397,7 +397,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
     () => [
       {
         id: 1,
-        text: 'Notify',
+        text: t.Admin.Users.notify,
         onClick: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
           setAlertDialogState({
             title: 'Notify User',
