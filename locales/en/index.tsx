@@ -370,6 +370,8 @@ const englishTranslations: WebsiteTranslations = {
       deleteUser: 'Delete User',
       delete: 'Delete',
       entriesFound: 'entries found',
+      password: 'Password',
+      confirmPassword: 'Confirm Password',
     },
   },
 }
