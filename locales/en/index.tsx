@@ -418,6 +418,12 @@ const englishTranslations: WebsiteTranslations = {
       logoutMessage: 'You will be logged out of your account.',
       cancel: 'Cancel',
     },
+    SideMenu: {
+      dashboard: 'Dashboard',
+      courses: 'Courses',
+      users: 'Users',
+      creators: 'Creators',
+    },
   },
 }
 
