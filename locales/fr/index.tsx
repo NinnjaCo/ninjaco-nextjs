@@ -340,13 +340,20 @@ const frenchTranslations: WebsiteTranslations = {
     },
     editMissionPage: {
       somethingWrong: "Quelque chose s'est mal passé",
-      noChangeaMade: 'Aucune modification apportée',
+      noChangesMade: 'Aucune modification apportée',
       errorEditingMission: "Erreur lors de l'édition de la mission",
       errorCreatingCategory: 'Erreur lors de la création de la catégorie',
       warning:
         ' Veuillez noter que les catégories créées ne peuvent pas être supprimées à des fins de cohérence.',
       cancel: 'Annuler',
       editMission: 'Modifier la Mission',
+      missionTitle: 'Titre de la Mission',
+      missionBannerImage: 'Image de bannière de mission',
+      missionDescription: 'Description de la Mission',
+      missionCategory: 'Catégorie de missions',
+      createNewCategory: 'Créer une nouvelle catégorie',
+      addCategory: 'Ajouter une catégorie',
+      newCategory: 'Nouvelle catégorie',
     },
   },
 }

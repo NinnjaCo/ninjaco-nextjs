@@ -171,12 +171,19 @@ export interface WebsiteTranslations {
     }
     editMissionPage: {
       somethingWrong: translationElement
-      noChangeaMade: translationElement
+      noChangesMade: translationElement
       errorEditingMission: translationElement
       errorCreatingCategory: translationElement
       warning: translationElement
       cancel: translationElement
       editMission: translationElement
+      missionTitle: translationElement
+      missionBannerImage: translationElement
+      missionDescription: translationElement
+      missionCategory: translationElement
+      createNewCategory: translationElement
+      addCategory: translationElement
+      newCategory: translationElement
     }
   }
 }

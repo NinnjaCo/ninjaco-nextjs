@@ -31,6 +31,7 @@ import SelectWithAddition from '@/components/forms/selectWithAddition'
 import SingleImageUpload from '@/components/forms/singleImageUpload'
 import floatingLegos from '@/images/floatingLegos.svg'
 import underLineImage from '@/images/lightlyWavedLine.svg'
+import useTranslation from '@/hooks/useTranslation'
 
 type EditMissionFormDataType = {
   title: string
@@ -60,6 +61,7 @@ const EditMission = ({
   mission: Mission
   serverCategories: Category[]
 }) => {
+  const t = useTranslation()
   const router = useRouter()
   const session = useSession()
   const queryClient = useQueryClient()
@@ -96,7 +98,7 @@ const EditMission = ({
         if (isAxiosError(error)) {
           const errors = unWrapAuthError(error as AxiosError<AuthError> | undefined)
           setAlertData({
-            message: errors[0].message || 'Something went wrong',
+            message: errors[0].message || (t.Creator.editMissionPage.somethingWrong as string),
             variant: 'error',
             open: true,
           })
@@ -135,7 +137,7 @@ const EditMission = ({
     // if no changes, return
     if (Object.keys(dirtyData).length === 0) {
       setAlertData({
-        message: 'No changes made',
+        message: t.Creator.editMissionPage.noChangesMade as string,
         variant: 'warning',
         open: true,
       })
@@ -170,14 +172,14 @@ const EditMission = ({
       if (isAxiosError<AuthError>(error)) {
         const errors = unWrapAuthError(error)
         setAlertData({
-          message: errors[0].message || 'Something went wrong',
+          message: errors[0].message || (t.Creator.editMissionPage.somethingWrong as string),
           variant: 'error',
           open: true,
         })
         scrollToTop()
       } else {
         setAlertData({
-          message: 'Error editing mission',
+          message: t.Creator.editMissionPage.errorEditingMission as string,
           variant: 'error',
           open: true,
         })
@@ -209,14 +211,14 @@ const EditMission = ({
       if (isAxiosError<AuthError>(error)) {
         const errors = unWrapAuthError(error)
         setAlertData({
-          message: errors[0].message || 'Something went wrong',
+          message: errors[0].message || (t.Creator.editMissionPage.somethingWrong as string),
           variant: 'error',
           open: true,
         })
         scrollToTop()
       } else {
         setAlertData({
-          message: 'Error creating category',
+          message: t.Creator.editMissionPage.errorCreatingCategory as string,
           variant: 'error',
           open: true,
         })
@@ -233,7 +235,7 @@ const EditMission = ({
       <main className="w-full">
         <CreatorMenu creator={user} isOnCoursePage={true} isOnGamesPage={false} />
         <CreateResourceCard
-          title="Create Mission"
+          title={t.Creator.editMissionPage.editMission as string}
           underLineImage={underLineImage}
           titleImage={floatingLegos}
         >
@@ -247,8 +249,8 @@ const EditMission = ({
           <form onSubmit={handleSubmit(onSubmitHandler)} className="flex flex-col gap-8" id="form">
             <Input
               {...register('title')}
-              label={'Mission Title'}
-              placeholder="Mission Title"
+              label={t.Creator.editMissionPage.missionTitle as string}
+              placeholder={t.Creator.editMissionPage.missionTitle as string}
               error={errors.title?.message}
               isRequired={true}
             />
@@ -257,7 +259,7 @@ const EditMission = ({
               name={register('image').name}
               error={errors.image?.message as unknown as string} // Convert to string since it returned a FieldError
               isRequired={true}
-              label="Mission Banner Image"
+              label={t.Creator.editMissionPage.missionBannerImage as string}
               defaultImage={mission.image}
             />
             <TextArea
@@ -266,8 +268,8 @@ const EditMission = ({
               control={control}
               name={register('description').name}
               ref={register('description').ref}
-              label={'Mission Description'}
-              placeholder="Mission Description"
+              label={t.Creator.editMissionPage.missionDescription as string}
+              placeholder={t.Creator.editMissionPage.missionDescription as string}
               error={errors.description?.message}
               className="resize-none"
               isRequired={true}
@@ -277,8 +279,8 @@ const EditMission = ({
               name={register('categoryName').name}
               error={errors.categoryName?.message}
               isRequired={true}
-              label="Mission Category"
-              placeholder="Select a Category"
+              label={t.Creator.editMissionPage.missionCategory as string}
+              placeholder={t.Creator.editMissionPage.missionCategory as string}
               selectList={categories.map((category) => category.categoryName)}
               callBackOnClickAddition={() => {
                 setAddNewCategoryState({
@@ -291,7 +293,7 @@ const EditMission = ({
 
             <AdminAlertDialog
               open={addNewCategoryState.open}
-              title="Create a new category"
+              title={t.Creator.editMissionPage.createNewCategory as string}
               close={() => {
                 setAddNewCategoryState({
                   newCategoryName: '',
@@ -310,15 +312,13 @@ const EditMission = ({
               {/* add warning that categories created cannot be deleted for consistency purposes */}
               <div className="flex gap-4">
                 <ExclamationTriangleIcon className="w-6 h-6 text-error-dark" />
-                <p className="text-brand text-sm">
-                  Please note that categories created cannot be deleted for consistency purposes.
-                </p>
+                <p className="text-brand text-sm">{t.Creator.editMissionPage.warning}</p>
               </div>
 
               <Input
-                name="addCategory"
-                label="New Category"
-                placeholder="New Category"
+                name={t.Creator.editMissionPage.addCategory as string}
+                label={t.Creator.editMissionPage.newCategory as string}
+                placeholder={t.Creator.editMissionPage.newCategory as string}
                 value={addNewCategoryState.newCategoryName ?? null}
                 onChange={(e) => {
                   setAddNewCategoryState({
@@ -338,7 +338,7 @@ const EditMission = ({
                   router.back()
                 }}
               >
-                Cancel
+                {t.Creator.editMissionPage.cancel}
               </button>
               <button
                 type="submit"
@@ -346,7 +346,7 @@ const EditMission = ({
                 value="Submit"
                 className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
               >
-                Edit Mission
+                {t.Creator.editMissionPage.editMission}
               </button>
             </div>
           </form>
