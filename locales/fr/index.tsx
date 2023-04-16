@@ -331,5 +331,13 @@ const frenchTranslations: WebsiteTranslations = {
     save: 'Sauvegarder',
     changePassword: 'Changer le mot de passe',
   },
+  Creator: {
+    viewMissionPage: {
+      editMission: 'Modifier la Mission',
+      missionCategory: 'Catégorie de missions:',
+      levels: 'Les Niveaux',
+      addLevel: 'Ajouter un Niveau',
+    },
+  },
 }
 export default frenchTranslations
