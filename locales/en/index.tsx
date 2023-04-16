@@ -370,6 +370,20 @@ const englishTranslations: WebsiteTranslations = {
       newCategory: 'New Category',
       cancel: 'Cancel',
     },
+    createLevelPage: {
+      creatingLevel: 'Creating level...',
+      only1tenBuildingParts: 'You can only upload 10 images for building parts',
+      onlyTenStepByStep: 'You can only upload 10 images for step by step guide',
+      imageIsNotValid: 'One of the images is not valid',
+      imageIsTooBig: 'One of the images is too big, please make sure it is less than 1MB',
+      errorUploadingImage: 'There was an error uploading the images',
+      errorCreatingLevel: 'One of the images is not valid',
+      creatingLevelNumber: ' Creating Level Number',
+      buildingPartImages: 'building Parts Images',
+      stepByStepImages: 'Step by Step Guide Images',
+      cancel: 'Cancel',
+      createLevel: ' Create Level',
+    },
   },
 }
 
