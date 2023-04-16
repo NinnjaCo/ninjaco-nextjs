@@ -338,6 +338,16 @@ const frenchTranslations: WebsiteTranslations = {
       levels: 'Les Niveaux',
       addLevel: 'Ajouter un Niveau',
     },
+    editMissionPage: {
+      somethingWrong: "Quelque chose s'est mal passé",
+      noChangeaMade: 'Aucune modification apportée',
+      errorEditingMission: "Erreur lors de l'édition de la mission",
+      errorCreatingCategory: 'Erreur lors de la création de la catégorie',
+      warning:
+        ' Veuillez noter que les catégories créées ne peuvent pas être supprimées à des fins de cohérence.',
+      cancel: 'Annuler',
+      editMission: 'Modifier la Mission',
+    },
   },
 }
 export default frenchTranslations

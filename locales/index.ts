@@ -169,6 +169,15 @@ export interface WebsiteTranslations {
       levels: translationElement
       addLevel: translationElement
     }
+    editMissionPage: {
+      somethingWrong: translationElement
+      noChangeaMade: translationElement
+      errorEditingMission: translationElement
+      errorCreatingCategory: translationElement
+      warning: translationElement
+      cancel: translationElement
+      editMission: translationElement
+    }
   }
 }
 

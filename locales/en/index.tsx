@@ -327,6 +327,15 @@ const englishTranslations: WebsiteTranslations = {
       levels: 'Levels',
       addLevel: 'Add Level',
     },
+    editMissionPage: {
+      somethingWrong: 'Something went wrong',
+      noChangeaMade: 'No changes made',
+      errorEditingMission: 'Error editing mission',
+      errorCreatingCategory: 'Error creating category',
+      warning: ' Please note that categories created cannot be deleted for consistency purposes.',
+      cancel: 'Cancel',
+      editMission: 'Edit Mission',
+    },
   },
 }
 
