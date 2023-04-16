@@ -401,6 +401,16 @@ const englishTranslations: WebsiteTranslations = {
       addCreators: 'Add Creators',
       creators: 'Creators',
       entriesFound: 'entries found',
+      back: 'Back',
+      confirm: 'Confirm',
+      resetPass: 'Reset Password',
+      notifyUser: 'Notify User',
+      deleteUser: 'Delete User',
+      editUser: 'Edit User',
+
+      confirmPassword: 'Confirm Password',
+      submit: 'Submit',
+      password: 'Password',
     },
   },
 }

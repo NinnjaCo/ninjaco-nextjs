@@ -34,6 +34,7 @@ import Head from 'next/head'
 import SideMenu from '@/components/admin/sideMenu'
 import Table from '@/components/table'
 import clsx from 'clsx'
+import useTranslation from '@/hooks/useTranslation'
 
 type AddCreatorFormDataType = {
   firstName: string
@@ -72,6 +73,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
   const { data: session } = useSession()
   const queryClient = useQueryClient()
   const emailApi = useEmailApi(session)
+  const t = useTranslation()
 
   const { data: users } = useQuery<User[], Error>(
     ['users', session],
@@ -86,7 +88,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
         if (isAxiosError(error)) {
           const errors = unWrapAuthError(error as AxiosError<AuthError> | undefined)
           setAlertData({
-            message: errors[0].message || 'Something went wrong',
+            message: errors[0].message || (t.Admin.Creators.somethingWentWrong as string),
             variant: 'error',
             open: true,
           })
@@ -122,7 +124,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
       setOpenCreatorAddDialog(false)
       queryClient.invalidateQueries('users')
       setAlertData({
-        message: 'Creator Created Successfully',
+        message: t.Admin.Creators.createdSuccessfully as string,
         variant: 'success',
         open: true,
       })
@@ -131,7 +133,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
       if (isAxiosError<AuthError>(error)) {
         const errors = unWrapAuthError(error)
         setAlertData({
-          message: errors[0].message || 'Something went wrong',
+          message: errors[0].message || (t.Admin.Creators.somethingWentWrong as string),
           variant: 'error',
           open: true,
         })
@@ -165,9 +167,9 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
     open: false,
     title: '',
     detailsRows: [],
-    backButtonText: 'Back',
-    confirmButtonText: 'Confirm',
-    dialogType: 'resetPassword',
+    backButtonText: t.Admin.Creators.back as string,
+    confirmButtonText: t.Admin.Creators.confirm as string,
+    dialogType: t.Admin.Creators.resetPass as string,
   })
 
   const [resetPasswordState, setResetPasswordState] = React.useState<{
@@ -196,7 +198,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
         try {
           if (resetPasswordState.password.length < 8) {
             setAlertData({
-              message: 'Password must be at least 8 characters long',
+              message: t.Admin.Creators.resetPassword as string,
               variant: 'error',
               open: true,
             })
@@ -212,14 +214,13 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
             await emailApi.sendEmail({
               emailType: EmailEnum.RESET,
               receiverEmail: resetPasswordState.rowParams.row.email,
-              message:
-                'An administrator has reset your password. Please contact them or the support team for more information.',
+              message: t.Admin.Creators.resetPasswordSent as string,
             })
           }
 
           queryClient.invalidateQueries('users')
           setAlertData({
-            message: 'Password reset successfully',
+            message: t.Admin.Creators.resetPasswordSuccessfully as string,
             variant: 'success',
             open: true,
           })
@@ -227,13 +228,13 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
           if (isAxiosError<AuthError>(error)) {
             const errors = unWrapAuthError(error)
             setAlertData({
-              message: errors[0].message || 'Something went wrong',
+              message: errors[0].message || (t.Admin.Creators.somethingWentWrong as string),
               variant: 'error',
               open: true,
             })
           } else {
             setAlertData({
-              message: 'Error resetting password',
+              message: t.Admin.Creators.errorResetingPassword as string,
               variant: 'error',
               open: true,
             })
@@ -255,7 +256,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
 
           queryClient.invalidateQueries('users')
           setAlertData({
-            message: 'User deleted successfully',
+            message: t.Admin.Creators.userDeletedSuccessfully as string,
             variant: 'success',
             open: true,
           })
@@ -263,13 +264,13 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
           if (isAxiosError<AuthError>(error)) {
             const errors = unWrapAuthError(error)
             setAlertData({
-              message: errors[0].message || 'Something went wrong',
+              message: errors[0].message || (t.Admin.Creators.somethingWentWrong as string),
               variant: 'error',
               open: true,
             })
           } else {
             setAlertData({
-              message: 'Error updating profile',
+              message: t.Admin.Creators.errorUpdatingProfile as string,
               variant: 'error',
               open: true,
             })
@@ -294,7 +295,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
           <div className="flex flex-col" key="1">
             <div className="flex items-center my-4">
               <input
-                name="notify-user"
+                name={t.Admin.Creators.notifyUser as string}
                 type="checkbox"
                 id="notify-user"
                 checked={resetPasswordState.notifyUser}
@@ -304,11 +305,11 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
                 className="w-4 h-4 accent-brand-500 bg-brand-100 border-brand-300 rounded focus:ring-brand-500 dark:focus:ring-brand-600 focus:ring-2"
               />
               <label htmlFor="notify-user" className="ml-2 block text-sm text-brand">
-                Notify them by sending an email
+                {t.Admin.Creators.notifyByEmail as string}
               </label>
             </div>
             <label htmlFor="message" className="mb-2 text-sm font-medium text-brand">
-              New Password
+              {t.Admin.Creators.newPassword as string}
             </label>
             <input
               id="password"
@@ -326,7 +327,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
           <div className="flex flex-col" key="1">
             <div className="flex items-center my-4">
               <input
-                name="notify-user"
+                name={t.Admin.Creators.notifyUser as string}
                 type="checkbox"
                 id="notify-user"
                 checked={deleteUserState.notifyUser}
@@ -336,11 +337,11 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
                 className="w-4 h-4 accent-brand-500 bg-brand-100 border-brand-300 rounded focus:ring-brand-500 dark:focus:ring-brand-600 focus:ring-2"
               />
               <label htmlFor="notify-user" className="ml-2 block text-sm text-brand">
-                Notify them by sending an email
+                {t.Admin.Creators.notifyByEmail as string}
               </label>
             </div>
             <label htmlFor="message" className="mb-2 text-sm font-medium text-brand">
-              Message
+              {t.Admin.Creators.message as string}
             </label>
             <textarea
               id="message"
@@ -361,17 +362,17 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
     () => [
       {
         id: 1,
-        text: 'Reset Password',
+        text: t.Admin.Creators.resetPass as string,
         onClick: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
           setAlertDialogState({
-            title: 'Reset Password',
+            title: t.Admin.Creators.resetPass as string,
             detailsRows: [
               {
                 label: 'ID',
                 value: params.row.id,
               },
               {
-                label: 'Name',
+                label: t.Admin.Creators.name as string,
                 value: `${params.row.firstName} ${params.row.lastName}`,
               },
               {
@@ -379,8 +380,8 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
                 value: params.row.email,
               },
             ],
-            backButtonText: 'Cancel',
-            confirmButtonText: 'Reset',
+            backButtonText: t.Admin.Creators.cancel as string,
+            confirmButtonText: t.Admin.Creators.reset as string,
             confirmButtonClassName: 'bg-brand hover:bg-brand-500 text-white',
             open: true,
             dialogType: 'resetPassword',
@@ -393,18 +394,18 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
       },
       {
         id: 2,
-        text: 'Delete',
+        text: t.Admin.Creators.delete as string,
         textClassName: 'text-red-500',
         onClick: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
           setAlertDialogState({
-            title: 'Delete User',
+            title: t.Admin.Creators.deleteUser,
             detailsRows: [
               {
                 label: 'ID',
                 value: params.row.id,
               },
               {
-                label: 'Name',
+                label: t.Admin.Creators.name as string,
                 value: `${params.row.firstName} ${params.row.lastName}`,
               },
               {
@@ -412,8 +413,8 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
                 value: params.row.email,
               },
             ],
-            backButtonText: 'Cancel',
-            confirmButtonText: 'Delete',
+            backButtonText: t.Admin.Creators.cancel as string,
+            confirmButtonText: t.Admin.Creators.delete as string,
             confirmButtonClassName: 'bg-error-dark hover:bg-error text-white',
             open: true,
             dialogType: 'delete',
@@ -446,13 +447,13 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
       },
       {
         field: 'firstName',
-        headerName: 'First Name',
+        headerName: t.Admin.Creators.firstName as string,
         width: 140,
         minWidth: 140,
         headerClassName: 'bg-brand-200',
       },
       {
-        field: 'lastName',
+        field: t.Admin.Creators.lastName as string,
         headerName: 'Last Name',
         width: 140,
         minWidth: 140,
@@ -460,7 +461,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
       },
       {
         field: 'dob',
-        headerName: 'Date of Birth',
+        headerName: t.Admin.Creators.dateOfBirth as string,
         width: 140,
         renderCell: (params) => getReadableDateFromISO(params.value as string),
         minWidth: 140,
@@ -469,7 +470,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
       },
       {
         field: 'createdAt',
-        headerName: 'Created At',
+        headerName: t.Admin.Creators.createdAt as string,
         type: 'date',
         renderCell: (params) => getReadableDateFromISO(params.value as string),
         width: 160,
@@ -479,7 +480,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
       },
       {
         field: 'updatedAt',
-        headerName: 'Updated At',
+        headerName: t.Admin.Creators.updatedAt as string,
         type: 'date',
         renderCell: (params) => getReadableDateFromISO(params.value as string),
         width: 160,
@@ -489,7 +490,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
       },
       {
         field: 'action',
-        headerName: 'Action',
+        headerName: t.Admin.Creators.actions as string,
         width: 70,
         renderCell: (params) => (
           <Popover>
@@ -499,7 +500,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
                   className="group flex items-center text-brand-500 bg-brand-300 w-8 h-8 justify-center rounded hover:bg-brand-500 hover:text-brand-300"
                   role="button"
                   tabIndex={0}
-                  aria-label="Edit User"
+                  aria-label={t.Admin.Creators.editUser as string}
                 >
                   <PencilIcon className={clsx('w-4 h-4 cursor-pointer')} />
                 </Popover.Button>
@@ -582,7 +583,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
         <form onSubmit={handleSubmit(onSubmitHandler)} className="flex flex-col gap-4" id="form">
           <Input
             {...register('firstName')}
-            label={'First Name'}
+            label={t.Admin.Creators.firstName as string}
             placeholder="John"
             StartIcon={UserIcon}
             error={errors.firstName?.message}
@@ -590,7 +591,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
           />
           <Input
             {...register('lastName')}
-            label={'Last Name'}
+            label={t.Admin.Creators.lastName as string}
             placeholder="Smith"
             StartIcon={UserIcon}
             error={errors.lastName?.message}
@@ -599,7 +600,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
           <DatePickerWithHookForm
             control={control}
             name={register('dateOfBirth').name} // we only need the "name" prop
-            label={'Date of Birth'}
+            label={t.Admin.Creators.dateOfBirth as string}
             error={errors.dateOfBirth?.message}
             isRequired={true}
           />
@@ -614,8 +615,8 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
           <Input
             {...register('password')}
             type="password"
-            label="Password"
-            placeholder="Password"
+            label={t.Admin.Creators.password as string}
+            placeholder={t.Admin.Creators.password as string}
             StartIcon={LockClosedIcon}
             error={errors.password?.message}
             isRequired={true}
@@ -623,8 +624,8 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
           <Input
             {...register('passwordConfirmation')}
             type="password"
-            label="Confirm Password"
-            placeholder="Confirm Password"
+            label={t.Admin.Creators.confirmPassword as string}
+            placeholder={t.Admin.Creators.confirmPassword as string}
             StartIcon={LockClosedIcon}
             error={errors.passwordConfirmation?.message}
             isRequired={true}
@@ -635,13 +636,13 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
             value="Submit"
             className="w-full btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
           >
-            Add Creator
+            {t.Admin.Creators.addCreator as string}
           </button>
           <button
             onClick={() => setOpenCreatorAddDialog(false)}
             className="w-full btn bg-brand-50 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
           >
-            Cancel
+            {t.Admin.Creators.cancel as string}
           </button>
         </form>
       </AdminAlertDialog>
@@ -668,10 +669,10 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
           <div className="flex items-center justify-between w-full flex-wrap">
             <div className="flex flex-col gap-2">
               <p className="text-brand-700 text-xl md:text-2xl lg:text-3xl font-semibold">
-                Creators
+                {t.Admin.Creators.creators as string}
               </p>
               <div className="text-sm text-brand  ">
-                {(users ?? serverUsers).length} entries found
+                {(users ?? serverUsers).length} {t.Admin.Creators.entriesFound as string}
               </div>
             </div>
             <button
@@ -680,7 +681,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
                 setOpenCreatorAddDialog(true)
               }}
             >
-              Add Creator
+              {t.Admin.Creators.addCreator as string}
             </button>
           </div>
           <Alert
