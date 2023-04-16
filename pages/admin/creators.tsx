@@ -214,7 +214,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
             await emailApi.sendEmail({
               emailType: EmailEnum.RESET,
               receiverEmail: resetPasswordState.rowParams.row.email,
-              message: t.Admin.Creators.resetPasswordSent as string,
+              message: t.Admin.Creators.resetPasswordsent as string,
             })
           }
 
@@ -398,7 +398,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
         textClassName: 'text-red-500',
         onClick: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
           setAlertDialogState({
-            title: t.Admin.Creators.deleteUser,
+            title: t.Admin.Creators.deleteUser as string,
             detailsRows: [
               {
                 label: 'ID',
@@ -490,7 +490,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
       },
       {
         field: 'action',
-        headerName: t.Admin.Creators.actions as string,
+        headerName: t.Admin.Creators.action as string,
         width: 70,
         renderCell: (params) => (
           <Popover>
