@@ -423,6 +423,12 @@ const frenchTranslations: WebsiteTranslations = {
       submit: 'Soumettre',
       password: 'Mot de passe',
     },
+    LogOutDialogue: {
+      logout: 'déconnecter',
+      logoutconfimarion: 'Êtes-vous sûr de vouloir vous déconnecter?',
+      logoutMessage: 'Vous êtes sur le point de vous déconnecter',
+      cancel: 'Annuler',
+    },
   },
 }
 export default frenchTranslations
