@@ -196,6 +196,10 @@ export interface WebsiteTranslations {
       newCategory: translationElement
     }
     createMissionPage: {
+      missionTitleRequired: translationElement
+      missionImageRequired: translationElement
+      missionDescriptionRequired: translationElement
+      missionCategoryRequired: translationElement
       somethingWrong: translationElement
       pleaseUploadImage: translationElement
       errorCreatingGame: translationElement

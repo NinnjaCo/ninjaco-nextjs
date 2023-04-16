@@ -354,6 +354,10 @@ const englishTranslations: WebsiteTranslations = {
       newCategory: 'New Category',
     },
     createMissionPage: {
+      missionTitleRequired: 'Mission Title is required',
+      missionImageRequired: 'Mission Image is required',
+      missionDescriptionRequired: 'Mission Description is required',
+      missionCategoryRequired: 'Mission Category is required',
       somethingWrong: 'Something went wrong',
       pleaseUploadImage: 'Please upload a course image',
       errorCreatingGame: 'Error creating game',

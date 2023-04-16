@@ -366,6 +366,10 @@ const frenchTranslations: WebsiteTranslations = {
       newCategory: 'Nouvelle catégorie',
     },
     createMissionPage: {
+      missionTitleRequired: 'Le titre de la mission est requis',
+      missionImageRequired: "L'image de la mission est requise",
+      missionDescriptionRequired: 'La description de la mission est requise',
+      missionCategoryRequired: 'La catégorie de la mission est requise',
       somethingWrong: "Quelque chose s'est mal passé",
       pleaseUploadImage: 'Veuillez télécharger une image',
       errorCreatingGame: 'Erreur lors de la création du jeu',
