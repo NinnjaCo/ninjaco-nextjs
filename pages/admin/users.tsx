@@ -295,29 +295,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
         break
       }
     }
-  }, [
-    alertDiaglogState.dialogType,
-    emailApi,
-    notifyMessage.rowParams.row.email,
-    notifyMessage.message,
-    resetPasswordState.password,
-    resetPasswordState.rowParams.row.id,
-    resetPasswordState.rowParams.row.email,
-    resetPasswordState.notifyUser,
-    session,
-    queryClient,
-    t.Admin.Users.resetPasswordSuccessfully,
-    t.Admin.Users.resetPassword,
-    t.Admin.Users.resetPasswordsent,
-    t.Admin.Users.somethingWentWrong,
-    t.Admin.Users.resetPasswordError,
-    t.Admin.Users.userDeletedSuccessfully,
-    t.Admin.Users.userDeletedError,
-    deleteUserState.rowParams.row.id,
-    deleteUserState.rowParams.row.email,
-    deleteUserState.notifyUser,
-    deleteUserState.message,
-  ])
+  }, [])
 
   const getDialogBody = useCallback(() => {
     switch (alertDiaglogState.dialogType) {
@@ -680,19 +658,19 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
       </Head>
 
       <AdminAlertDialog
-        title="Add User"
+        title={t.Admin.Users.addUsers as string}
         open={openAddUserDialog}
         confirm={() => {}} // Confirmation is done inside the form body
         close={() => setOpenAddUserDialog(false)}
-        backButtonText="Cancel"
+        backButtonText={t.Admin.Users.cancel as string}
         backButtonClassName="bg-brand-200 text-brand-500 hover:bg-brand-300 hover:text-brand hidden"
-        confirmButtonText="Add User"
+        confirmButtonText={t.Admin.Users.addUsers as string}
         confirmButtonClassName="bg-brand-500 text-brand-50 hover:bg-brand-700 hidden"
       >
         <form onSubmit={handleSubmit(onSubmitHandler)} className="flex flex-col gap-4" id="form">
           <Input
             {...register('firstName')}
-            label={'First Name'}
+            label={t.Admin.Users.firstName as string}
             placeholder="John"
             StartIcon={UserIcon}
             error={errors.firstName?.message}
@@ -700,7 +678,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
           />
           <Input
             {...register('lastName')}
-            label={'Last Name'}
+            label={t.Admin.Users.lastName as string}
             placeholder="Smith"
             StartIcon={UserIcon}
             error={errors.lastName?.message}
@@ -709,13 +687,13 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
           <DatePickerWithHookForm
             control={control}
             name={register('dateOfBirth').name} // we only need the "name" prop
-            label={'Date of Birth'}
+            label={t.Admin.Users.dateOfBirth as string}
             error={errors.dateOfBirth?.message}
             isRequired={true}
           />
           <Input
             {...register('email')}
-            label="Email"
+            label={t.Admin.Users.email as string}
             placeholder="Email"
             StartIcon={EnvelopeIcon}
             error={errors.email?.message}
@@ -724,8 +702,8 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
           <Input
             {...register('password')}
             type="password"
-            label="Password"
-            placeholder="Password"
+            label={t.Admin.Users.password as string}
+            placeholder={t.Admin.Users.password as string}
             StartIcon={LockClosedIcon}
             error={errors.password?.message}
             isRequired={true}
@@ -733,8 +711,8 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
           <Input
             {...register('passwordConfirmation')}
             type="password"
-            label="Confirm Password"
-            placeholder="Confirm Password"
+            label={t.Admin.Users.password as string}
+            placeholder={t.Admin.Users.password as string}
             StartIcon={LockClosedIcon}
             error={errors.passwordConfirmation?.message}
             isRequired={true}
@@ -745,13 +723,13 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
             value="Submit"
             className="w-full btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
           >
-            Add User
+            {t.Admin.Users.addUsers}
           </button>
           <button
             onClick={() => setOpenAddUserDialog(false)}
             className="w-full btn bg-brand-50 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
           >
-            Cancel
+            {t.Admin.Users.cancel}
           </button>
         </form>
       </AdminAlertDialog>
@@ -780,7 +758,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
             <div className="flex flex-col gap-2">
               <p className="text-brand-700 text-xl md:text-2xl lg:text-3xl font-semibold">Users</p>
               <div className="text-sm text-brand  ">
-                {(users ?? serverUsers).length} entries found
+                {(users ?? serverUsers).length} {t.Admin.Users.entriesFound}
               </div>
             </div>
             <button
@@ -789,7 +767,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
                 setOpenAddUserDialog(true)
               }}
             >
-              Add User
+              {t.Admin.Users.addUsers}
             </button>
           </div>
           <Alert
