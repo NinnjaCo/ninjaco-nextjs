@@ -412,6 +412,12 @@ const englishTranslations: WebsiteTranslations = {
       submit: 'Submit',
       password: 'Password',
     },
+    LogOutDialogue: {
+      logout: 'Logout',
+      logoutconfimarion: 'Are you sure you want to logout?',
+      logoutMessage: 'You will be logged out of your account.',
+      cancel: 'Cancel',
+    },
   },
 }
 
