@@ -25,6 +25,7 @@ import Select from '@/components/forms/select'
 import SingleImageUpload from '@/components/forms/singleImageUpload'
 import floatingLegos from '@/images/floatingLegos.svg'
 import underLineImage from '@/images/lightlyWavedLine.svg'
+import useTranslation from '@/hooks/useTranslation'
 
 enum CourseType {
   ARDUINO = 'ARDUINO',
@@ -54,6 +55,7 @@ const EditCourseFormSchema = yup
   .required()
 
 const EditCourse = ({ user, course }: { user: User; course: Course }) => {
+  const t = useTranslation()
   const router = useRouter()
   const session = useSession()
   const [alertData, setAlertData] = React.useState<{
@@ -111,13 +113,13 @@ const EditCourse = ({ user, course }: { user: User; course: Course }) => {
       if (isAxiosError<AuthError>(error)) {
         const errors = unWrapAuthError(error)
         setAlertData({
-          message: errors[0].message || 'Something went wrong',
+          message: errors[0].message || `${t.Creator.editCourse.wentWrong}`,
           variant: 'error',
           open: true,
         })
       } else {
         setAlertData({
-          message: 'Error editing course',
+          message: `${t.Creator.createCourse.courseImage}`,
           variant: 'error',
           open: true,
         })
@@ -133,7 +135,7 @@ const EditCourse = ({ user, course }: { user: User; course: Course }) => {
       <main className="w-full">
         <CreatorMenu creator={user} isOnCoursePage={true} isOnGamesPage={false} />
         <CreateResourceCard
-          title="Edit Course"
+          title={t.Creator.editCourse.editCourse}
           underLineImage={underLineImage}
           titleImage={floatingLegos}
         >
@@ -148,7 +150,7 @@ const EditCourse = ({ user, course }: { user: User; course: Course }) => {
             <Select
               control={control}
               error={errors.type?.message}
-              label="Course Type"
+              label={t.Creator.editCourse.courseType}
               name={register('type').name}
               selectList={Object.values(CourseType)}
               isRequired={true}
@@ -158,14 +160,14 @@ const EditCourse = ({ user, course }: { user: User; course: Course }) => {
               control={control}
               name={register('image').name}
               error={errors.image?.message as unknown as string}
-              label="course Image"
+              label={t.Creator.editCourse.courseImage}
               isRequired={true}
               defaultImage={course.image}
             />
             <Input
               {...register('title')}
-              label={'Course Title'}
-              placeholder="Course Title"
+              label={t.Creator.editCourse.courseTitle}
+              placeholder={t.Creator.editCourse.courseTitle as string}
               error={errors.title?.message}
               isRequired={true}
             />
@@ -174,8 +176,8 @@ const EditCourse = ({ user, course }: { user: User; course: Course }) => {
               rows={4}
               control={control}
               {...register('description')}
-              label={'Course Description'}
-              placeholder="Course Description"
+              label={t.Creator.editCourse.courseDescription}
+              placeholder={t.Creator.editCourse.courseDescription as string}
               error={errors.description?.message}
               className="resize-none"
               isRequired={true}
@@ -184,9 +186,9 @@ const EditCourse = ({ user, course }: { user: User; course: Course }) => {
               control={control}
               error={errors.ageRange?.message}
               name={register('ageRange').name}
-              label="Course Age Range"
-              helperText="Enter a range and press enter to add it"
-              placeholder="Course Age Range"
+              label={t.Creator.editCourse.courseAgeRange}
+              helperText={t.Creator.editCourse.ageRangeHelper}
+              placeholder={t.Creator.editCourse.courseAgeRange as string}
               formatter={(ageRange) => {
                 //   should be number-number or number
                 const ageRangeArray = ageRange.split('-')
@@ -203,17 +205,17 @@ const EditCourse = ({ user, course }: { user: User; course: Course }) => {
               control={control}
               error={errors.preRequisites?.message}
               name={register('preRequisites').name}
-              label="Course Prerequisites"
-              helperText="Enter a prerequisites and press enter to add it"
-              placeholder="Course Prerequisites"
+              label={t.Creator.editCourse.coursePrerequisites}
+              helperText={t.Creator.editCourse.prerequisitesHelper}
+              placeholder={t.Creator.editCourse.coursePrerequisites as string}
             />
             <InputTags
               control={control}
               error={errors.objectives?.message}
               name={register('objectives').name}
-              label="Course Objectives"
-              helperText="Enter an objectives and press enter to add it"
-              placeholder="Course Objectives"
+              label={t.Creator.editCourse.courseObjectives}
+              helperText={t.Creator.editCourse.objectivesHelper}
+              placeholder={t.Creator.editCourse.courseObjectives as string}
             />
             <div className="flex w-full justify-between gap-4 md:gap-12 h-fit md:flex-row flex-col-reverse">
               <button
@@ -223,7 +225,7 @@ const EditCourse = ({ user, course }: { user: User; course: Course }) => {
                   router.back()
                 }}
               >
-                Cancel
+                {t.Creator.editCourse.cancel}
               </button>
               <button
                 type="submit"
@@ -231,7 +233,7 @@ const EditCourse = ({ user, course }: { user: User; course: Course }) => {
                 value="Submit"
                 className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
               >
-                Edit Course
+                {t.Creator.editCourse.editCourse}
               </button>
             </div>
           </form>

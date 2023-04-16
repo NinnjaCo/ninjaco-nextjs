@@ -193,6 +193,22 @@ export interface WebsiteTranslations {
       objectivesHelper: translationElement
       cancel: translationElement
     }
+    editCourse: {
+      wentWrong: translationElement
+      error: translationElement
+      editCourse: translationElement
+      courseType: translationElement
+      courseImage: translationElement
+      courseTitle: translationElement
+      courseDescription: translationElement
+      courseAgeRange: translationElement
+      ageRangeHelper: translationElement
+      coursePrerequisites: translationElement
+      prerequisitesHelper: translationElement
+      courseObjectives: translationElement
+      objectivesHelper: translationElement
+      cancel: translationElement
+    }
   }
   MenuCreator: {
     courses: translationElement
