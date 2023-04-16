@@ -324,6 +324,10 @@ const englishTranslations: WebsiteTranslations = {
     createCourse: 'Create Course',
     filter: 'Filter',
   },
+  MenuCreator: {
+    courses: 'Courses',
+    games: 'Games',
+  },
 }
 
 export default englishTranslations

@@ -335,5 +335,9 @@ const frenchTranslations: WebsiteTranslations = {
     createCourse: 'Créer un cours',
     filter: 'Filtre',
   },
+  MenuCreator: {
+    courses: 'Cours',
+    games: 'Jeux',
+  },
 }
 export default frenchTranslations

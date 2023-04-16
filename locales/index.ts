@@ -166,6 +166,10 @@ export interface WebsiteTranslations {
     createCourse: translationElement
     filter: translationElement
   }
+  MenuCreator: {
+    courses: translationElement
+    games: translationElement
+  }
 }
 
 // Create locale type support en | fr
