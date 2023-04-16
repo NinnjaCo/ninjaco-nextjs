@@ -180,6 +180,9 @@ export interface WebsiteTranslations {
       addLevel: translationElement
     }
     editMissionPage: {
+      missionTitleRequired: translationElement
+      missionDescriptionRequired: translationElement
+      missionCategoryRequired: translationElement
       somethingWrong: translationElement
       noChangesMade: translationElement
       errorEditingMission: translationElement

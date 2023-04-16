@@ -349,6 +349,9 @@ const frenchTranslations: WebsiteTranslations = {
       addLevel: 'Ajouter un Niveau',
     },
     editMissionPage: {
+      missionTitleRequired: 'Le titre de la mission est requis',
+      missionDescriptionRequired: 'La description de la mission est requise',
+      missionCategoryRequired: 'La catégorie de la mission est requise',
       somethingWrong: "Quelque chose s'est mal passé",
       noChangesMade: 'Aucune modification apportée',
       errorEditingMission: "Erreur lors de l'édition de la mission",

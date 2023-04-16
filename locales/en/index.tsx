@@ -338,6 +338,9 @@ const englishTranslations: WebsiteTranslations = {
       addLevel: 'Add Level',
     },
     editMissionPage: {
+      missionTitleRequired: 'Mission Title is required',
+      missionDescriptionRequired: 'Mission Description is required',
+      missionCategoryRequired: 'Mission Category is required',
       somethingWrong: 'Something went wrong',
       noChangesMade: 'No changes made',
       errorEditingMission: 'Error editing mission',
