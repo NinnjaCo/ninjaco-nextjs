@@ -258,6 +258,12 @@ export interface WebsiteTranslations {
       logoutMessage: translationElement
       cancel: translationElement
     }
+    SideMenu: {
+      dashboard: translationElement
+      courses: translationElement
+      users: translationElement
+      creators: translationElement
+    }
   }
 }
 
