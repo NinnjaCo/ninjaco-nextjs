@@ -150,6 +150,11 @@ export interface WebsiteTranslations {
       backToHome: translationElement
       signIn: translationElement
     }
+    unauhorized: {
+      headTitle: translationElement
+      title: translationElement
+      goBack: translationElement
+    }
   }
   Profile: {
     firstName: translationElement
@@ -161,6 +166,21 @@ export interface WebsiteTranslations {
     profile: translationElement
     save: translationElement
     changePassword: translationElement
+  }
+
+  MenuCreator: {
+    courses: translationElement
+    games: translationElement
+  }
+  Forms: {
+    imageUpload: {
+      unacceptableImageType: translationElement
+      unacceptableImageSize: translationElement
+      lowResolutionImage: translationElement
+      dropImageHere: translationElement
+      removeImage: translationElement
+      removeAllImages: translationElement
+    }
   }
   Creator: {
     viewCourses: {
@@ -226,10 +246,165 @@ export interface WebsiteTranslations {
       objectivesHelper: translationElement
       cancel: translationElement
     }
+    viewMissionPage: {
+      editMission: translationElement
+      missionCategory: translationElement
+      levels: translationElement
+      addLevel: translationElement
+    }
+    editMissionPage: {
+      missionTitleRequired: translationElement
+      missionDescriptionRequired: translationElement
+      missionCategoryRequired: translationElement
+      somethingWrong: translationElement
+      noChangesMade: translationElement
+      errorEditingMission: translationElement
+      errorCreatingCategory: translationElement
+      warning: translationElement
+      cancel: translationElement
+      editMission: translationElement
+      missionTitle: translationElement
+      missionBannerImage: translationElement
+      missionDescription: translationElement
+      missionCategory: translationElement
+      createNewCategory: translationElement
+      addCategory: translationElement
+      newCategory: translationElement
+    }
+    createMissionPage: {
+      missionTitleRequired: translationElement
+      missionImageRequired: translationElement
+      missionDescriptionRequired: translationElement
+      missionCategoryRequired: translationElement
+      somethingWrong: translationElement
+      pleaseUploadImage: translationElement
+      errorCreatingGame: translationElement
+      errorCreatingCategory: translationElement
+      createMission: translationElement
+      missionTitle: translationElement
+      missionBannerImage: translationElement
+      missionDescription: translationElement
+      missionCategory: translationElement
+      selectACategory: translationElement
+      createNewCategory: translationElement
+      warning: translationElement
+      addCategory: translationElement
+      newCategory: translationElement
+      cancel: translationElement
+    }
+    createLevelPage: {
+      creatingLevel: translationElement
+      onlyTenBuildingParts: translationElement
+      onlyTenStepByStep: translationElement
+      imageIsNotValid: translationElement
+      imageIsTooBig: translationElement
+      errorUploadingImage: translationElement
+      errorCreatingLevel: translationElement
+      creatingLevelNumber: translationElement
+      buildingPartImages: translationElement
+      stepByStepImages: translationElement
+      cancel: translationElement
+      createLevel: translationElement
+    }
+    editLevelPage: {
+      atLeastOneImage: translationElement
+      noChangesMade: translationElement
+      onlyTenBuildingParts: translationElement
+      onlyTenStepByStep: translationElement
+      imageIsNotValid: translationElement
+      imageIsTooBig: translationElement
+      errorUploadingImage: translationElement
+      errorUpdatingLevel: translationElement
+      editLevel: translationElement
+      editLevelNumber: translationElement
+      buildingPartImages: translationElement
+      stepByStepImages: translationElement
+      cancel: translationElement
+    }
+    games: {
+      viewGames: {
+        headTitle: translationElement
+        title: translationElement
+        createGame: translationElement
+        entries: translationElement
+        filter: {
+          newest: translationElement
+          oldest: translationElement
+          recentlyUpdated: translationElement
+          NameAZ: translationElement
+          NameZA: translationElement
+          SizeOfGame: translationElement
+        }
+      }
+      createGame: {
+        headTitle: translationElement
+        mobileError: translationElement
+        goBack: translationElement
+        title: translationElement
+        gameTitle: translationElement
+        sizeOfTheGrid: translationElement
+        toggleLimitedBlocks: translationElement
+        limitedNumberOfBlocks: translationElement
+        saveGame: translationElement
+        resetGrid: translationElement
+        toolbox: {
+          title: translationElement
+          description: translationElement
+          player: translationElement
+          goal: translationElement
+          wall: translationElement
+          eraseAll: translationElement
+        }
+        alerts: {
+          pleaseSelectATool: translationElement
+          pleaseSetAPlayer: translationElement
+          pleaseSetAGoal: translationElement
+          pleaseEnterAGameTitle: translationElement
+          pleaseUploadAnImage: translationElement
+          gameCreatedSuccessfully: translationElement
+          somethingWentWrong: translationElement
+          errorCreatingGame: translationElement
+        }
+      }
+      editGame: {
+        headTitle: translationElement
+        mobileError: translationElement
+        goBack: translationElement
+        title: translationElement
+        gameTitle: translationElement
+        sizeOfTheGrid: translationElement
+        toggleLimitedBlocks: translationElement
+        limitedNumberOfBlocks: translationElement
+        saveGame: translationElement
+        resetGrid: translationElement
+        toolbox: {
+          title: translationElement
+          description: translationElement
+          player: translationElement
+          goal: translationElement
+          wall: translationElement
+          eraseAll: translationElement
+        }
+        alerts: {
+          pleaseSelectATool: translationElement
+          pleaseSetAPlayer: translationElement
+          pleaseSetAGoal: translationElement
+          pleaseEnterAGameTitle: translationElement
+          pleaseUploadAnImage: translationElement
+          gameCreatedSuccessfully: translationElement
+          somethingWentWrong: translationElement
+          errorCreatingGame: translationElement
+        }
+      }
+    }
   }
-  MenuCreator: {
-    courses: translationElement
-    games: translationElement
+  Filter: {
+    filter: translationElement
+  }
+  ServerError: {
+    headTitle: translationElement
+    title: translationElement
+    goBackHome: translationElement
   }
 }
 
