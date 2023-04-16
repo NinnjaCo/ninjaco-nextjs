@@ -330,10 +330,18 @@ const frenchTranslations: WebsiteTranslations = {
     changePassword: 'Changer le mot de passe',
   },
   Creator: {
-    courses: 'Cours',
-    entries: 'Entrées',
-    createCourse: 'Créer un cours',
-    filter: 'Filtre',
+    viewCourses: {
+      courses: 'Cours',
+      entries: 'Entrées',
+      createCourse: 'Créer un cours',
+      filter: 'Filtre',
+    },
+    coursePage: {
+      editCourse: 'Modifier le cours',
+      coursePrerequisites: 'Prérequis du cours',
+      addMission: 'Ajouter une mission',
+      filter: 'Filtre',
+    },
   },
   MenuCreator: {
     courses: 'Cours',

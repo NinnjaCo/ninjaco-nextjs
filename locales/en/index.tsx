@@ -319,10 +319,18 @@ const englishTranslations: WebsiteTranslations = {
     changePassword: 'Change Password',
   },
   Creator: {
-    courses: 'Courses',
-    entries: 'Entries',
-    createCourse: 'Create Course',
-    filter: 'Filter',
+    viewCourses: {
+      courses: 'Courses',
+      entries: 'Entries',
+      createCourse: 'Create Course',
+      filter: 'Filter',
+    },
+    coursePage: {
+      editCourse: 'Edit Course',
+      coursePrerequisites: 'Course Prerequisites',
+      addMission: 'Add Mission',
+      filter: 'Filter',
+    },
   },
   MenuCreator: {
     courses: 'Courses',

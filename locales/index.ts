@@ -161,10 +161,18 @@ export interface WebsiteTranslations {
     changePassword: translationElement
   }
   Creator: {
-    courses: translationElement
-    entries: translationElement
-    createCourse: translationElement
-    filter: translationElement
+    viewCourses: {
+      courses: translationElement
+      entries: translationElement
+      createCourse: translationElement
+      filter: translationElement
+    }
+    coursePage: {
+      editCourse: translationElement
+      coursePrerequisites: translationElement
+      addMission: translationElement
+      filter: translationElement
+    }
   }
   MenuCreator: {
     courses: translationElement

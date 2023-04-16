@@ -26,24 +26,24 @@ export default function Home({ user, courses }: { user: User; courses: Course[] 
           <div className="flex flex-col mx-6 gap-6 w-full">
             <div className="flex w-full justify-between items-center">
               <div className="text-brand-700 font-semibold text-xl lg:text-2xl">
-                {t.Creator.courses}
+                {t.Creator.viewCourses.courses}
               </div>
               <div className="text-brand-700 font-semibold">
                 <Link
                   className="btn btn-secondary bg-secondary rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 py-2 h-fit"
                   href="/creator/create"
                 >
-                  {t.Creator.createCourse}
+                  {t.Creator.viewCourses.createCourse}
                 </Link>
               </div>
             </div>
             <div className="flex gap-10 justify-start items-center">
               <div className="text-base text-brand">
-                {courses.length} {t.Creator.entries}
+                {courses.length} {t.Creator.viewCourses.entries}
               </div>
               <button className="btn btn-secondary bg-brand-300 rounded-lg text-brand-700 border-brand-300 hover:bg-brand hover:text-white py-1 px-4 h-fit flex gap-3">
                 <FunnelIcon className="w-4 h-4" />
-                {t.Creator.filter}
+                {t.Creator.viewCourses.filter}
               </button>
             </div>
           </div>
