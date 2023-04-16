@@ -150,6 +150,11 @@ export interface WebsiteTranslations {
       backToHome: translationElement
       signIn: translationElement
     }
+    unauhorized: {
+      headTitle: translationElement
+      title: translationElement
+      goBack: translationElement
+    }
   }
   Profile: {
     firstName: translationElement

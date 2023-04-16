@@ -308,6 +308,11 @@ const englishTranslations: WebsiteTranslations = {
       backToHome: 'Back to Home',
       signIn: 'Sign In',
     },
+    unauhorized: {
+      headTitle: 'NinjaCo | Unauhorized',
+      title: 'Unauhorized',
+      goBack: 'Go Back',
+    },
   },
   Profile: {
     firstName: 'First Name',
