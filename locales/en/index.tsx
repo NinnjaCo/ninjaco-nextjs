@@ -372,7 +372,7 @@ const englishTranslations: WebsiteTranslations = {
     },
     createLevelPage: {
       creatingLevel: 'Creating level...',
-      only1tenBuildingParts: 'You can only upload 10 images for building parts',
+      onlyTenBuildingParts: 'You can only upload 10 images for building parts',
       onlyTenStepByStep: 'You can only upload 10 images for step by step guide',
       imageIsNotValid: 'One of the images is not valid',
       imageIsTooBig: 'One of the images is too big, please make sure it is less than 1MB',

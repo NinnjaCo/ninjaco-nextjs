@@ -214,7 +214,7 @@ export interface WebsiteTranslations {
     }
     createLevelPage: {
       creatingLevel: translationElement
-      only1tenBuildingParts: translationElement
+      onlyTenBuildingParts: translationElement
       onlyTenStepByStep: translationElement
       imageIsNotValid: translationElement
       imageIsTooBig: translationElement

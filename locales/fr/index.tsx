@@ -385,7 +385,7 @@ const frenchTranslations: WebsiteTranslations = {
     },
     createLevelPage: {
       creatingLevel: 'Création du niveau...',
-      only1tenBuildingParts: 'Vous ne pouvez ajouter que 1 à 10 pièces de construction',
+      onlyTenBuildingParts: 'Vous ne pouvez ajouter que 1 à 10 pièces de construction',
       onlyTenStepByStep: 'Vous ne pouvez ajouter que 1 à 10 étapes',
       imageIsNotValid: "Une des images n'est pas validé",
       imageIsTooBig: 'Une des images est trop grande, elle ne doit pas dépasser 1MB',
