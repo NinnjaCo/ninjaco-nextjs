@@ -243,6 +243,11 @@ export interface WebsiteTranslations {
   Filter: {
     filter: translationElement
   }
+  ServerError: {
+    headTitle: translationElement
+    title: translationElement
+    goBackHome: translationElement
+  }
 }
 
 // Create locale type support en | fr

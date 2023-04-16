@@ -412,5 +412,10 @@ const frenchTranslations: WebsiteTranslations = {
   Filter: {
     filter: 'Filtre',
   },
+  ServerError: {
+    headTitle: 'NinjaCo | Erreur',
+    title: 'Erreur dans le serveur, si le problème persiste, veuillez contacter l’administrateur',
+    goBackHome: 'Retour à la page d’accueil',
+  },
 }
 export default frenchTranslations

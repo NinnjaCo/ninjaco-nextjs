@@ -401,6 +401,11 @@ const englishTranslations: WebsiteTranslations = {
   Filter: {
     filter: 'Filter',
   },
+  ServerError: {
+    headTitle: 'NinjaCo | Server Error',
+    title: 'Something went wrong, please try again later',
+    goBackHome: 'Go Back Home',
+  },
 }
 
 export default englishTranslations
