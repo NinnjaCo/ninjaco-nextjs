@@ -12,7 +12,7 @@ interface InputTagsProps {
   control: Control<any>
   name: string
   label: string | translationElement
-  helperText: string
+  helperText: string | translationElement
   error: string | undefined
   placeholder: string
   isRequired?: boolean

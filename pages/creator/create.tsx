@@ -167,7 +167,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
             <Input
               {...register('courseTitle')}
               label={t.Creator.createCourse.courseTitle}
-              placeholder="Course Title"
+              placeholder={t.Creator.createCourse.courseTitle as string}
               error={errors.courseTitle?.message}
               isRequired={true}
             />
@@ -177,7 +177,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
               control={control}
               {...register('courseDescription')}
               label={t.Creator.createCourse.courseDescription}
-              placeholder="Course Description"
+              placeholder={t.Creator.createCourse.courseDescription as string}
               error={errors.courseDescription?.message}
               className="resize-none"
               isRequired={true}
@@ -187,8 +187,8 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
               error={errors.courseAgeRange?.message}
               name={register('courseAgeRange').name}
               label={t.Creator.createCourse.courseAgeRange}
-              helperText="Enter a range and press enter to add it"
-              placeholder="Course Age Range"
+              helperText={t.Creator.createCourse.ageRangeHelper}
+              placeholder={t.Creator.createCourse.courseAgeRange as string}
               formatter={(ageRange) => {
                 //   should be number-number or number
                 const ageRangeArray = ageRange.split('-')
@@ -206,7 +206,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
               error={errors.coursePrerequisites?.message}
               name={register('coursePrerequisites').name}
               label={t.Creator.createCourse.coursePrerequisites}
-              helperText="Enter a prerequisites and press enter to add it"
+              helperText={t.Creator.createCourse.prerequisitesHelper}
               placeholder="Course Prerequisites"
             />
             <InputTags
@@ -214,7 +214,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
               error={errors.courseObjectives?.message}
               name={register('courseObjectives').name}
               label={t.Creator.createCourse.courseObjectives}
-              helperText="Enter an objectives and press enter to add it"
+              helperText={t.Creator.createCourse.objectivesHelper}
               placeholder="Course Objectives"
             />
             <div className="flex w-full justify-between gap-4 md:gap-12 h-fit md:flex-row flex-col-reverse">

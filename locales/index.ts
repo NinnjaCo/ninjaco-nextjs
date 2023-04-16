@@ -185,8 +185,11 @@ export interface WebsiteTranslations {
       courseTitle: translationElement
       courseDescription: translationElement
       courseAgeRange: translationElement
+      ageRangeHelper: translationElement
       coursePrerequisites: translationElement
+      prerequisitesHelper: translationElement
       courseObjectives: translationElement
+      objectivesHelper: translationElement
       cancel: translationElement
     }
   }
