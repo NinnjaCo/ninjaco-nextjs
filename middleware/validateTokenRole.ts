@@ -30,6 +30,12 @@ export interface autorizationResposne {
   rewriteUrl?: string
 }
 export const authroizeRequest = async (req: NextRequestWithAuth): Promise<autorizationResposne> => {
+  if (req.nextUrl.pathname.startsWith('/app')) {
+    return {
+      authorized: true,
+    }
+  }
+
   const { token } = req.nextauth
   if (token) {
     let authorizationData: ValidateTokenRoleRequest | undefined = undefined
