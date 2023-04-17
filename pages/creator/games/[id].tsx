@@ -2,6 +2,7 @@ import * as yup from 'yup'
 import { AuthError } from '@/models/shared'
 import { Game } from '@/models/crud/game.model'
 import { GameApi } from '@/utils/api/game/game.api'
+import { GridCell, GridCellComponent } from '@/components/creator/game/gridCell'
 import { ImageApi } from '@/utils/api/images/image-upload.api'
 import { ImageType } from 'react-images-uploading'
 import { Input } from '@/components/forms/input'
@@ -28,14 +29,6 @@ import Wall from '@/components/creator/game/wall'
 import clsx from 'clsx'
 import underLineImage from '@/images/lightlyWavedLine.svg'
 import useTranslation from '@/hooks/useTranslation'
-
-interface GridCell {
-  row: number
-  col: number
-  isWall: boolean
-  isPlayer: boolean
-  isGoal: boolean
-}
 
 const createGrid = (rows: number, cols: number, initialGameState): GridCell[][] => {
   const grid: GridCell[][] = []
@@ -453,26 +446,11 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
                 {gameGrid.map((row, rowIndex) => {
                   return row.map((cell, colIndex) => {
                     return (
-                      <div
-                        className={clsx(
-                          'bg-brand-50 border-2 border-brand-100 cursor-cell',
-                          cell.isWall && 'bg-brand-500',
-                          cell.isPlayer && 'bg-secondary',
-                          cell.isGoal && 'bg-brand-800'
-                        )}
-                        style={{
-                          width: `${cellSize}px`,
-                          height: `${cellSize}px`,
-                        }}
+                      <GridCellComponent
                         key={`${rowIndex}-${colIndex}`}
-                        onClick={() => {
-                          clickOnSquare(rowIndex, colIndex)
-                        }}
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={() => {
-                          clickOnSquare(rowIndex, colIndex)
-                        }}
+                        cell={cell}
+                        size={cellSize}
+                        onClick={clickOnSquare}
                       />
                     )
                   })

@@ -168,6 +168,108 @@ export interface WebsiteTranslations {
     changePassword: translationElement
   }
 
+  Admin: {
+    Dashboard: {
+      prophilePhoto: translationElement
+      firstName: translationElement
+      lastName: translationElement
+      email: translationElement
+      level: translationElement
+      points: translationElement
+      statistics: translationElement
+      leaderboard: translationElement
+    }
+    Courses: {
+      headerTitle: translationElement
+      title: translationElement
+      id: translationElement
+      usersEnrolled: translationElement
+      numberOfMissions: translationElement
+      numberOfLevels: translationElement
+      createdAt: translationElement
+      updatedAt: translationElement
+      entriesFound: translationElement
+    }
+    Users: {
+      somethingWentWrong: translationElement
+      createdSuccessfully: translationElement
+      resetPassword: translationElement
+      resetPasswordsent: translationElement
+      resetPasswordError: translationElement
+      resetPasswordSuccessfully: translationElement
+      userDeletedSuccessfully: translationElement
+      userDeletedError: translationElement
+      message: translationElement
+      notifyByEmail: translationElement
+      newPassword: translationElement
+      firstName: translationElement
+      lastName: translationElement
+      email: translationElement
+      name: translationElement
+      dateOfBirth: translationElement
+      createdAt: translationElement
+      updatedAt: translationElement
+      action: translationElement
+      addUsers: translationElement
+      cancel: translationElement
+      delete: translationElement
+      deleteUser: translationElement
+      send: translationElement
+      title: translationElement
+      entriesFound: translationElement
+      password: translationElement
+      confirmPassword: translationElement
+      notify: translationElement
+      users: translationElement
+    }
+    Creators: {
+      somethingWentWrong: translationElement
+      createdSuccessfully: translationElement
+      resetPassword: translationElement
+      resetPasswordsent: translationElement
+      resetPasswordSuccessfully: translationElement
+      errorResetingPassword: translationElement
+      userDeletedSuccessfully: translationElement
+      errorUpdatingProfile: translationElement
+      notifyByEmail: translationElement
+      newPassword: translationElement
+      message: translationElement
+      name: translationElement
+      cancel: translationElement
+      reset: translationElement
+      delete: translationElement
+      firstName: translationElement
+      lastName: translationElement
+      dateOfBirth: translationElement
+      createdAt: translationElement
+      updatedAt: translationElement
+      action: translationElement
+      addCreators: translationElement
+      creators: translationElement
+      entriesFound: translationElement
+      back: translationElement
+      confirm: translationElement
+      resetPass: translationElement
+      notifyUser: translationElement
+      deleteUser: translationElement
+      editUser: translationElement
+      password: translationElement
+      confirmPassword: translationElement
+      submit: translationElement
+    }
+    LogOutDialogue: {
+      logout: translationElement
+      logoutconfimarion: translationElement
+      logoutMessage: translationElement
+      cancel: translationElement
+    }
+    SideMenu: {
+      dashboard: translationElement
+      courses: translationElement
+      users: translationElement
+      creators: translationElement
+    }
+  }
   MenuCreator: {
     courses: translationElement
     games: translationElement

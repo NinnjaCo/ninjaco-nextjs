@@ -17,17 +17,21 @@ import statistics from '@/images/statistics.svg'
 import total_courses from '@/images/total_courses.svg'
 import total_creators from '@/images/total_creators.svg'
 import total_users from '@/images/total_users.svg'
+import useTranslation from '@/hooks/useTranslation'
+
+// custom a hook to use the translation
 
 const AdminDashboard: React.FC<{ users: User[]; countUsers: number; countCreators: number }> = ({
   users,
   countUsers,
   countCreators,
 }) => {
+  const t = useTranslation()
   const columns: GridColDef[] = useMemo(
     () => [
       {
         field: 'profilePhoto',
-        headerName: 'Profile Photo',
+        headerName: t.Admin.Dashboard.prophilePhoto as string,
         width: 120,
         minWidth: 50,
         headerClassName: 'bg-brand-200',
@@ -57,7 +61,7 @@ const AdminDashboard: React.FC<{ users: User[]; countUsers: number; countCreator
       },
       {
         field: 'firstName',
-        headerName: 'First Name',
+        headerName: t.Admin.Dashboard.firstName as string,
         width: 120,
         minWidth: 120,
         headerClassName: 'bg-brand-200',
@@ -65,7 +69,7 @@ const AdminDashboard: React.FC<{ users: User[]; countUsers: number; countCreator
       },
       {
         field: 'lastName',
-        headerName: 'Last Name',
+        headerName: t.Admin.Dashboard.lastName as string,
         width: 120,
         minWidth: 120,
         headerClassName: 'bg-brand-200',
@@ -73,7 +77,7 @@ const AdminDashboard: React.FC<{ users: User[]; countUsers: number; countCreator
       },
       {
         field: 'email',
-        headerName: 'Email',
+        headerName: t.Admin.Dashboard.email as string,
         width: 200,
         minWidth: 200,
         headerClassName: 'bg-brand-200',
@@ -81,7 +85,7 @@ const AdminDashboard: React.FC<{ users: User[]; countUsers: number; countCreator
       },
       {
         field: 'level',
-        headerName: 'Level',
+        headerName: t.Admin.Dashboard.level as string,
         width: 120,
         minWidth: 120,
         headerClassName: 'bg-brand-200',
@@ -92,14 +96,14 @@ const AdminDashboard: React.FC<{ users: User[]; countUsers: number; countCreator
       },
       {
         field: 'points',
-        headerName: 'Points',
+        headerName: t.Admin.Dashboard.points as string,
         width: 120,
         minWidth: 120,
         headerClassName: 'bg-brand-200',
         flex: 1,
       },
     ],
-    []
+    [t.Admin.Dashboard]
   )
 
   const rows: GridRowsProp = useMemo(
@@ -130,7 +134,9 @@ const AdminDashboard: React.FC<{ users: User[]; countUsers: number; countCreator
           <div className="w-full flex flex-col">
             <div className="flex gap-3 items-center w-full py-2">
               <Image src={statistics} alt="image" />
-              <div className="text-brand font-semibold text-xl md:text-2xl">Statistics</div>
+              <div className="text-brand font-semibold text-xl md:text-2xl">
+                {t.Admin.Dashboard.statistics}
+              </div>
             </div>
 
             <div className=" bg-brand-50 p-4 rounded-2xl justify-between w-fit sm:w-full grid grid-cols-1 sm:grid-cols-3 gap-6 place-self-center sm:place-self-auto">
@@ -169,7 +175,9 @@ const AdminDashboard: React.FC<{ users: User[]; countUsers: number; countCreator
           <div className="w-full flex flex-col overflow-auto">
             <div className="flex gap-3 items-center py-2">
               <ChartBarIcon className="w-5 h-5 text-brand" />
-              <div className="text-brand font-semibold text-xl md:text-2xl">Leaderboard</div>
+              <div className="text-brand font-semibold text-xl md:text-2xl">
+                {t.Admin.Dashboard.leaderboard}
+              </div>
             </div>
             <Table
               columns={columns}
