@@ -31,7 +31,7 @@ const AdminDashboard: React.FC<{ users: User[]; countUsers: number; countCreator
     () => [
       {
         field: 'profilePhoto',
-        headerName: t.Admin.Dashboard.prophilePhoto,
+        headerName: t.Admin.Dashboard.prophilePhoto as string,
         width: 120,
         minWidth: 50,
         headerClassName: 'bg-brand-200',
@@ -61,7 +61,7 @@ const AdminDashboard: React.FC<{ users: User[]; countUsers: number; countCreator
       },
       {
         field: 'firstName',
-        headerName: t.Admin.Dashboard.firstName,
+        headerName: t.Admin.Dashboard.firstName as string,
         width: 120,
         minWidth: 120,
         headerClassName: 'bg-brand-200',
@@ -69,7 +69,7 @@ const AdminDashboard: React.FC<{ users: User[]; countUsers: number; countCreator
       },
       {
         field: 'lastName',
-        headerName: t.Admin.Dashboard.lastName,
+        headerName: t.Admin.Dashboard.lastName as string,
         width: 120,
         minWidth: 120,
         headerClassName: 'bg-brand-200',
@@ -77,7 +77,7 @@ const AdminDashboard: React.FC<{ users: User[]; countUsers: number; countCreator
       },
       {
         field: 'email',
-        headerName: t.Admin.Dashboard.email,
+        headerName: t.Admin.Dashboard.email as string,
         width: 200,
         minWidth: 200,
         headerClassName: 'bg-brand-200',
@@ -85,7 +85,7 @@ const AdminDashboard: React.FC<{ users: User[]; countUsers: number; countCreator
       },
       {
         field: 'level',
-        headerName: t.Admin.Dashboard.level,
+        headerName: t.Admin.Dashboard.level as string,
         width: 120,
         minWidth: 120,
         headerClassName: 'bg-brand-200',
@@ -96,21 +96,14 @@ const AdminDashboard: React.FC<{ users: User[]; countUsers: number; countCreator
       },
       {
         field: 'points',
-        headerName: t.Admin.Dashboard.points,
+        headerName: t.Admin.Dashboard.points as string,
         width: 120,
         minWidth: 120,
         headerClassName: 'bg-brand-200',
         flex: 1,
       },
     ],
-    [
-      t.Admin.Dashboard.email,
-      t.Admin.Dashboard.firstName,
-      t.Admin.Dashboard.lastName,
-      t.Admin.Dashboard.level,
-      t.Admin.Dashboard.points,
-      t.Admin.Dashboard.prophilePhoto,
-    ]
+    [t.Admin.Dashboard]
   )
 
   const rows: GridRowsProp = useMemo(

@@ -17,14 +17,14 @@ const AdminCoursesView: React.FC<{ courses: Course[] }> = ({ courses }) => {
     () => [
       {
         field: 'id',
-        headerName: t.Admin.Courses.id,
+        headerName: t.Admin.Courses.id as string,
         width: 200,
         minWidth: 140,
         headerClassName: 'bg-brand-200',
       },
       {
         field: 'title',
-        headerName: t.Admin.Courses.title,
+        headerName: t.Admin.Courses.title as string,
         width: 180,
         minWidth: 140,
         headerClassName: 'bg-brand-200',
@@ -32,7 +32,7 @@ const AdminCoursesView: React.FC<{ courses: Course[] }> = ({ courses }) => {
       },
       {
         field: 'usersEnrolled',
-        headerName: t.Admin.Courses.usersEnrolled,
+        headerName: t.Admin.Courses.usersEnrolled as string,
         width: 140,
         minWidth: 140,
         headerClassName: 'bg-brand-200',
@@ -40,7 +40,7 @@ const AdminCoursesView: React.FC<{ courses: Course[] }> = ({ courses }) => {
       },
       {
         field: 'numberOfMissions',
-        headerName: t.Admin.Courses.numberOfMissions,
+        headerName: t.Admin.Courses.numberOfMissions as string,
         width: 180,
         minWidth: 180,
         headerClassName: 'bg-brand-200',
@@ -48,7 +48,7 @@ const AdminCoursesView: React.FC<{ courses: Course[] }> = ({ courses }) => {
       },
       {
         field: 'numberOfLevels',
-        headerName: t.Admin.Courses.numberOfLevels,
+        headerName: t.Admin.Courses.numberOfLevels as string,
         width: 180,
         minWidth: 180,
         headerClassName: 'bg-brand-200',
@@ -56,7 +56,7 @@ const AdminCoursesView: React.FC<{ courses: Course[] }> = ({ courses }) => {
       },
       {
         field: 'createdAt',
-        headerName: t.Admin.Courses.createdAt,
+        headerName: t.Admin.Courses.createdAt as string,
         type: 'date',
         renderCell: (params) => getReadableDateFromISO(params.value as string),
         width: 160,
@@ -66,7 +66,7 @@ const AdminCoursesView: React.FC<{ courses: Course[] }> = ({ courses }) => {
       },
       {
         field: 'updatedAt',
-        headerName: t.Admin.Courses.updatedAt,
+        headerName: t.Admin.Courses.updatedAt as string,
         type: 'date',
         renderCell: (params) => getReadableDateFromISO(params.value as string),
         width: 160,

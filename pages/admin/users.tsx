@@ -295,7 +295,16 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
         break
       }
     }
-  }, [])
+  }, [
+    alertDiaglogState.dialogType,
+    deleteUserState,
+    emailApi,
+    notifyMessage,
+    queryClient,
+    resetPasswordState,
+    session,
+    t.Admin.Users,
+  ])
 
   const getDialogBody = useCallback(() => {
     switch (alertDiaglogState.dialogType) {
@@ -493,18 +502,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
         },
       },
     ],
-    [
-      deleteUserState,
-      notifyMessage,
-      resetPasswordState,
-      t.Admin.Users.cancel,
-      t.Admin.Users.delete,
-      t.Admin.Users.deleteUser,
-      t.Admin.Users.email,
-      t.Admin.Users.name,
-      t.Admin.Users.send,
-      t.Admin.Users.title,
-    ]
+    [deleteUserState, notifyMessage, resetPasswordState, t.Admin.Users]
   )
 
   const columns: GridColDef[] = useMemo(

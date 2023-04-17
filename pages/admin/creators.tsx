@@ -167,9 +167,9 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
     open: false,
     title: '',
     detailsRows: [],
-    backButtonText: t.Admin.Creators.back as string,
-    confirmButtonText: t.Admin.Creators.confirm as string,
-    dialogType: t.Admin.Creators.resetPass as string,
+    backButtonText: '',
+    confirmButtonText: '',
+    dialogType: 'resetPassword',
   })
 
   const [resetPasswordState, setResetPasswordState] = React.useState<{
@@ -281,11 +281,12 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
     }
   }, [
     alertDiaglogState.dialogType,
-    deleteUserState,
     resetPasswordState,
     session,
     queryClient,
+    t,
     emailApi,
+    deleteUserState,
   ])
 
   const getDialogBody = useCallback(() => {
@@ -356,7 +357,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
           </div>
         )
     }
-  }, [alertDiaglogState.dialogType, resetPasswordState, deleteUserState])
+  }, [alertDiaglogState, resetPasswordState, deleteUserState, t])
 
   const editActions = useMemo(
     () => [
@@ -426,7 +427,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
         },
       },
     ],
-    [deleteUserState, resetPasswordState]
+    [deleteUserState, resetPasswordState, t]
   )
 
   const columns: GridColDef[] = useMemo(
@@ -544,7 +545,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
         flex: 1,
       },
     ],
-    [editActions]
+    [editActions, t]
   )
 
   const rows: GridRowsProp = useMemo(
