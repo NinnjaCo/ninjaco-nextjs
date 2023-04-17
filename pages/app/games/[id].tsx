@@ -44,9 +44,15 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
               toolbox: jsonToolbox,
               grid: {
                 spacing: 20,
-                colour: '#ccc',
+                colour: '#DBE4EE',
                 length: 3,
                 snap: true,
+              },
+              css: true,
+              move: {
+                scrollbars: true,
+                drag: true,
+                wheel: true,
               },
               comments: false,
               maxBlocks: 10,

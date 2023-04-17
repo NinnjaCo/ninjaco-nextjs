@@ -1,5 +1,5 @@
 import 'blockly/blocks'
-import { BlocklyOptions } from 'blockly'
+import { BlocklyOptions, Theme } from 'blockly'
 import { load, save } from '@/blockly/serialization'
 import Blockly from 'blockly'
 import React, { useCallback, useEffect, useRef } from 'react'
@@ -11,10 +11,12 @@ interface BlocklyBoardProps {
   blocklyOptions: BlocklyOptions
   blocksDefinitions?: blocksDefinition
   codeGenerator: Blockly.CodeGenerator
+  children?: React.ReactNode
 }
 
 const BlocklyBoard = (props: BlocklyBoardProps) => {
   const blocklyDiv = useRef<HTMLDivElement>(null)
+  const toolboxDiv = useRef<HTMLDivElement>(null)
   const primaryWorkspace = useRef<Blockly.WorkspaceSvg>()
   const [loaded, setLoaded] = React.useState(false)
 
@@ -27,7 +29,7 @@ const BlocklyBoard = (props: BlocklyBoardProps) => {
     const { toolbox, ...rest } = props.blocklyOptions
 
     if (blocklyDiv.current) {
-      if (loaded && primaryWorkspace.current?.rendered) {
+      if (loaded || primaryWorkspace.current?.rendered) {
         return
       }
       // Start the workspace
@@ -64,8 +66,12 @@ const BlocklyBoard = (props: BlocklyBoardProps) => {
   }, [primaryWorkspace, blocklyDiv, props, loaded, generateCode])
 
   return (
-    <div className="w-full h-full flex flex-col">
-      <div ref={blocklyDiv} className="w-full h-full " />
+    <div className="w-full h-full flex flex-col relative">
+      <div ref={blocklyDiv} className="w-full h-full" />
+      <div className="hidden" ref={toolboxDiv}>
+        {props.children}
+      </div>
+      {/* <div className="absolute w-32 h-32 bg-red-500 z-20 top-10 right-10"></div> */}
       <button onClick={generateCode}>Convert</button>
     </div>
   )
