@@ -51,7 +51,7 @@ const SideMenu = (props: SideMenuProps) => {
   const menuSection = [
     {
       Icon: HomeIcon,
-      text: t.Admin.SideMenu.dashboard,
+      text: t.Admin.SideMenu.dashboard as string,
       isHighlighted: props.higlightDashboard ?? false,
       actionOnClick: () => {
         router.push('/admin')
@@ -59,7 +59,7 @@ const SideMenu = (props: SideMenuProps) => {
     },
     {
       Icon: BookOpenIcon,
-      text: t.Admin.SideMenu.courses,
+      text: t.Admin.SideMenu.courses as string,
       isHighlighted: props.higlightCourses ?? false,
       actionOnClick: () => {
         router.push('/admin/courses')
@@ -67,7 +67,7 @@ const SideMenu = (props: SideMenuProps) => {
     },
     {
       Icon: UserGroupIcon,
-      text: t.Admin.SideMenu.users,
+      text: t.Admin.SideMenu.users as string,
       isHighlighted: props.higlightUsers ?? false,
       actionOnClick: () => {
         router.push('/admin/users')
@@ -98,7 +98,7 @@ const SideMenu = (props: SideMenuProps) => {
 
     {
       Icon: ArrowRightOnRectangleIcon,
-      text: t.Admin.LogOutDialogue.logout,
+      text: t.Admin.LogOutDialogue.logout as string,
       isHighlighted: props.higlightLogout ?? false,
       actionOnClick: () => {
         setOpenLogout(true)
