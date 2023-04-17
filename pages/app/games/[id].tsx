@@ -1,3 +1,4 @@
+import { Block } from '@/components/blockly/blocks'
 import { GetServerSideProps } from 'next'
 import { User } from '@/models/crud'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
@@ -28,7 +29,7 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      <main className="relative h-screen w-full">
+      <main className="relative h-screen w-full flex flex-col">
         <UserMenu isOnCoursePage={false} isOnGamesPage={true} user={user} />
         <div className="grid md:hidden items-center h-screen grid-cols-1 justify-items-center py-24 px-8 relative flex-auto">
           <h1 className="self-end divide-x-2 divide-brand text-sm ">
@@ -38,7 +39,7 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
             {t.Creator.games.createGame.goBack}
           </Link>
         </div>
-        <div className="hidden md:flex w-full h-5/6">
+        <div className="hidden md:flex w-full h-full flex-1">
           <BlocklyBoard
             blocklyOptions={{
               toolbox: jsonToolbox,
@@ -69,7 +70,7 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
             }}
             codeGenerator={jsonGenerator}
             blocksDefinitions={jsonBlocks}
-          />
+          ></BlocklyBoard>
         </div>
       </main>
     </>

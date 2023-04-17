@@ -163,6 +163,7 @@ a {
   padding: 0.8rem;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  margin-bottom: 1rem;
 }
 
 /* The category label in the toolbox when it is selected. */
@@ -192,4 +193,12 @@ a {
   padding: 1rem;
   background-color: #edf2f7;
   border-right: 4px solid #6480a7;
+}
+
+.blocklyScrollbarHandle {
+  display: none !important;
+}
+
+.blocklyFlyoutBackground {
+  fill: #edf2f7;
 }

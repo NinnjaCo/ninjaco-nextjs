@@ -9,7 +9,6 @@ export const jsonToolbox: ToolboxDefinition = {
       name: 'JSON',
       cssconfig: {
         container: 'blockly-json-category',
-        icon: 'fa fa-cog',
       },
       contents: [
         {
@@ -24,6 +23,16 @@ export const jsonToolbox: ToolboxDefinition = {
           type: 'member',
         },
       ],
+    },
+    {
+      kind: 'category',
+      name: 'Variables',
+      custom: 'VARIABLE',
+    },
+    {
+      kind: 'category',
+      name: 'Functions',
+      custom: 'PROCEDURE',
     },
   ],
 }
