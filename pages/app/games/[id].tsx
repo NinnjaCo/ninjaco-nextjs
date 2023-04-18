@@ -1,11 +1,13 @@
-import { Block } from '@/components/blockly/blocks'
 import { GetServerSideProps } from 'next'
+import { GridCell } from '@/components/user/game/gridCell'
+import { GridCellComponent } from '@/components/creator/game/gridCell'
 import { User } from '@/models/crud'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
+import { gameBlocks } from '@/blockly/blocks/game'
+import { gameGenerator } from '@/blockly/generetors/game'
+import { gameToolBox } from '@/blockly/toolbox/game'
 import { getServerSession } from 'next-auth'
-import { jsonBlocks } from '@/blockly/blocks/json'
-import { jsonGenerator } from '@/blockly/generetors/json'
-import { jsonToolbox } from '@/blockly/toolbox/json'
+import Blockly from 'blockly'
 import BlocklyBoard from '@/components/blockly/blockly'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -18,8 +20,120 @@ interface ServerSideProps {
   gameId: string
 }
 
+const getInitialGrid = (size: number): GridCell[][] => {
+  const grid: GridCell[][] = []
+  for (let i = 0; i < size; i++) {
+    grid.push([])
+    for (let j = 0; j < size; j++) {
+      grid[i].push({
+        row: i,
+        col: j,
+        isPlayer: false,
+        isGoal: false,
+        isWall: i === 0 || j === 0 || i === size - 1 || j === size - 1,
+      })
+    }
+  }
+  return grid
+}
+
 const ViewGame = ({ user, gameId }: ServerSideProps) => {
   const t = useTranslation()
+
+  const [gameGrid, setGameGrid] = React.useState<GridCell[][]>(getInitialGrid(15))
+  const cellSize = 25
+
+  const parentRef = React.useRef<any>()
+
+  const onChangeListener = (
+    e: Blockly.Events.Abstract,
+    workspaceRefrence: Blockly.WorkspaceSvg
+  ) => {
+    // Don't run the code when the workspace finishes loading; we're
+    // already running it once when the application starts.
+    // Don't run the code during drags; we might have invalid state.
+    if (
+      e.isUiEvent ||
+      e.type == Blockly.Events.FINISHED_LOADING ||
+      workspaceRefrence.isDragging()
+    ) {
+      console.log('Event is UI event or finished loading or workspace is dragging')
+      return
+    }
+    if (e.type == Blockly.Events.BLOCK_CREATE) {
+      console.log('Event is block create')
+      return
+    }
+    if (e.type == Blockly.Events.BLOCK_DELETE) {
+      console.log('Event is block delete')
+      return
+    }
+    if (e.type == Blockly.Events.BLOCK_CHANGE) {
+      console.log('Event is block change')
+      return
+    }
+    if (e.type == Blockly.Events.BLOCK_MOVE) {
+      console.log('Event is block move')
+      return
+    }
+    if (e.type == Blockly.Events.BLOCK_DRAG) {
+      console.log('Event is block drag')
+      return
+    }
+    if (e.type == Blockly.Events.BUBBLE_OPEN) {
+      console.log('Event is bubble open')
+      return
+    }
+    if (e.type == Blockly.Events.TOOLBOX_ITEM_SELECT) {
+      console.log('Event is toolbox item select')
+      return
+    }
+    if (e.type == Blockly.Events.VAR_CREATE) {
+      console.log('Event is var create')
+      return
+    }
+
+    // generateCode()
+  }
+  const blocklyGameOptions: Blockly.BlocklyOptions = {
+    toolbox: gameToolBox,
+    theme: Blockly.Themes.Zelos,
+    grid: {
+      spacing: 20,
+      colour: '#DBE4EE',
+      length: 3,
+      snap: true,
+    },
+    css: true,
+    move: {
+      scrollbars: true,
+      drag: true,
+      wheel: true,
+    },
+    comments: false,
+    maxBlocks: 10,
+    trashcan: true,
+    modalInputs: true,
+    zoom: {
+      controls: true,
+      wheel: true,
+      startScale: 1.0,
+      maxScale: 3,
+      minScale: 0.3,
+      scaleSpeed: 1.2,
+    },
+  }
+
+  const getCodeFromBlockly = () => {
+    if (parentRef.current) {
+      return parentRef.current.generateCode()
+    }
+    return null
+  }
+  const runProgram = () => {
+    const code = getCodeFromBlockly()
+    console.log(code)
+  }
 
   return (
     <>
@@ -39,38 +153,40 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
             {t.Creator.games.createGame.goBack}
           </Link>
         </div>
-        <div className="hidden md:flex w-full h-full flex-1">
+        <div className="hidden md:flex w-full h-full flex-col relative">
           <BlocklyBoard
-            blocklyOptions={{
-              toolbox: jsonToolbox,
-              grid: {
-                spacing: 20,
-                colour: '#DBE4EE',
-                length: 3,
-                snap: true,
-              },
-              css: true,
-              move: {
-                scrollbars: true,
-                drag: true,
-                wheel: true,
-              },
-              comments: false,
-              maxBlocks: 10,
-              trashcan: true,
-              modalInputs: true,
-              zoom: {
-                controls: true,
-                wheel: true,
-                startScale: 1.0,
-                maxScale: 3,
-                minScale: 0.3,
-                scaleSpeed: 1.2,
-              },
-            }}
-            codeGenerator={jsonGenerator}
-            blocksDefinitions={jsonBlocks}
+            ref={parentRef}
+            blocklyOptions={blocklyGameOptions}
+            codeGenerator={gameGenerator}
+            blocksDefinitions={gameBlocks}
+            onChangeListener={onChangeListener}
+            storageKey={`game-${gameId}-${user._id}}`}
           ></BlocklyBoard>
+          <div
+            className="grid gap-px transition-all w-fit h-fit absolute right-20 top-16"
+            style={{
+              gridTemplateColumns: `repeat(${gameGrid[0].length}, minmax(0, 1fr))`,
+            }}
+          >
+            {gameGrid.map((row, rowIndex) => {
+              return row.map((cell, colIndex) => {
+                return (
+                  <GridCellComponent
+                    key={`${rowIndex}-${colIndex}`}
+                    cell={cell}
+                    size={cellSize}
+                    onClick={() => {}}
+                  />
+                )
+              })
+            })}
+          </div>
+          <button
+            onClick={runProgram}
+            className="btn w-fit bg-brand py-3 text-white hover:bg-brand-500 absolute bottom-14 left-4 z-50"
+          >
+            Run Program
+          </button>
         </div>
       </main>
     </>
