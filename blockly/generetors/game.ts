@@ -8,7 +8,7 @@ export class GameGenerator extends Blockly.Generator {
   scrub_(block: Blockly.Block, code: string, thisOnly: boolean) {
     const nextBlock = block.nextConnection && block.nextConnection.targetBlock()
     if (nextBlock && !thisOnly) {
-      return code + ',\n' + this.blockToCode(nextBlock)
+      return code + '\n' + this.blockToCode(nextBlock)
     }
     return code
   }
@@ -46,8 +46,8 @@ gameGenerator['maze_ifElse'] = function (block) {
 
 gameGenerator['maze_forever'] = function (block) {
   let branch = gameGenerator.statementToCode(block, 'DO')
-  if (JavaScript.INFINITE_LOOP_TRAP) {
-    branch = JavaScript.INFINITE_LOOP_TRAP.replace(/%1/g, `'block_id_${block.id}'`) + branch
+  if (gameGenerator.INFINITE_LOOP_TRAP) {
+    branch = gameGenerator.INFINITE_LOOP_TRAP.replace(/%1/g, `'block_id_${block.id}'`) + branch
   }
   return `while (notDone()) {\n${branch}}\n`
 }

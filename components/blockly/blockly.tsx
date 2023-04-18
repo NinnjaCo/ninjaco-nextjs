@@ -74,7 +74,6 @@ const BlocklyBoard = React.forwardRef(
         }
 
         setLoaded(true)
-
         // Whenever the workspace changes meaningfully, run the code again.
         workspace.addChangeListener((e: Blockly.Events.Abstract) => {
           onChangeListener(e, workspace)
