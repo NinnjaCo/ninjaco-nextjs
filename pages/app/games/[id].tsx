@@ -1,6 +1,6 @@
+import { Direction, GridCell } from '@/components/user/game/gridCell'
 import { GetServerSideProps } from 'next'
-import { GridCell } from '@/components/user/game/gridCell'
-import { GridCellComponent } from '@/components/creator/game/gridCell'
+import { GridCellComponent } from '@/components/user/game/gridCell'
 import { User } from '@/models/crud'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { gameBlocks } from '@/blockly/blocks/game'
@@ -28,7 +28,7 @@ const getInitialGrid = (size: number): GridCell[][] => {
       grid[i].push({
         row: i,
         col: j,
-        isPlayer: false,
+        isPlayer: i === 1 && j === 1,
         isGoal: false,
         isWall: i === 0 || j === 0 || i === size - 1 || j === size - 1,
       })
@@ -41,6 +41,10 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
   const t = useTranslation()
 
   const [gameGrid, setGameGrid] = React.useState<GridCell[][]>(getInitialGrid(15))
+  const [currentPlayerDirection, setCurrentPlayerDirection] = React.useState<Direction>(
+    Direction.DOWN
+  )
+
   const cellSize = 25
 
   const parentRef = React.useRef<any>()
@@ -176,6 +180,7 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
                     cell={cell}
                     size={cellSize}
                     onClick={() => {}}
+                    currentPlayerDirection={currentPlayerDirection}
                   />
                 )
               })

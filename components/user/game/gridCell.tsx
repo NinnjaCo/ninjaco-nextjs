@@ -1,5 +1,5 @@
 import Flag from '@/components/creator/game/flag'
-import Player from '@/components/creator/game/player'
+import Player from '@/components/user/game/player'
 import Wall from '@/components/creator/game/wall'
 import clsx from 'clsx'
 
@@ -11,13 +11,22 @@ export interface GridCell {
   isGoal: boolean
 }
 
+export enum Direction {
+  UP = 'UP',
+  DOWN = 'DOWN',
+  LEFT = 'LEFT',
+  RIGHT = 'RIGHT',
+}
+
 export const GridCellComponent = ({
   cell,
   size,
   onClick,
+  currentPlayerDirection,
 }: {
   cell: GridCell
   size: number
+  currentPlayerDirection: Direction
   onClick: (row, col) => void
 }) => {
   // a react component that renders a cell given its information in the cell
@@ -43,11 +52,13 @@ export const GridCellComponent = ({
     >
       {cell.isPlayer && (
         <Player
-          color="#EDC052"
-          width={22}
-          height={45}
-          className="absolute -translate-y-5"
+          playerColor="#EDC052"
+          directionColor="#FB7185"
+          width={40}
+          height={50}
+          className="absolute -translate-y-4 -translate-x-2"
           strokeColor="#29375B"
+          direction={currentPlayerDirection}
         />
       )}
       {cell.isGoal && (
