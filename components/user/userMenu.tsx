@@ -63,7 +63,7 @@ const UserMenu = ({ isOnCoursePage, user, isOnGamesPage }: UserMenuPros) => {
       }}
     >
       <Link className="w-24 md:w-36 lg:w-40 h-12 relative cursor-pointer" href="/">
-        <Image src={logo_black} alt="Hero Image" fill></Image>
+        <Image src={logo_black} alt="Hero Image" fill priority></Image>
       </Link>
       <div className="sm:block hidden">
         <div className="flex gap-6 justify-between">
