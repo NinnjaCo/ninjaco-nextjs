@@ -4,7 +4,7 @@ import marker from '@/images/marker.png'
 
 const MOVEMENT_HUE = 230
 const LOGIC_HUE = 210
-const LOOPS_HUE = 47
+const LOOPS_HUE = 347
 
 const TURN_DIRECTIONS = [
   ['turn left', 'turnLeft'],
@@ -12,8 +12,8 @@ const TURN_DIRECTIONS = [
 ]
 const PATH_DIRECTIONS = [
   ['ahead', 'isPathForward'],
-  ['left', 'isPathLeft'],
-  ['right', 'isPathRight'],
+  ['to the left', 'isPathLeft'],
+  ['to the right', 'isPathRight'],
 ]
 
 export const gameBlocks: BlockDefinition = Blockly.common.createBlockDefinitionsFromJsonArray([])
