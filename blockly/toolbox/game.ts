@@ -5,57 +5,45 @@ export const gameToolBox: ToolboxDefinition = {
   contents: [
     {
       kind: 'category',
-      name: 'Core',
+      name: 'Movement',
       contents: [
         {
           kind: 'block',
-          type: 'controls_if',
+          type: 'maze_moveForward',
         },
         {
           kind: 'block',
-          type: 'logic_compare',
+          type: 'maze_turn',
         },
       ],
     },
     {
       kind: 'category',
-      name: 'Custom',
+      name: 'Logic',
       contents: [
         {
           kind: 'block',
-          type: 'start',
+          type: 'maze_if',
         },
         {
-          kind: 'category',
-          name: 'Move',
-          contents: [
-            {
-              kind: 'block',
-              type: 'move_forward',
-            },
-          ],
-        },
-        {
-          kind: 'category',
-          name: 'Turn',
-          contents: [
-            {
-              kind: 'block',
-              type: 'turn_left',
-            },
-          ],
+          kind: 'block',
+          type: 'maze_ifElse',
         },
       ],
     },
     {
       kind: 'category',
-      name: 'Variables',
-      custom: 'VARIABLE',
-    },
-    {
-      kind: 'category',
-      name: 'Functions',
-      custom: 'PROCEDURE',
+      name: 'Loops',
+      contents: [
+        {
+          kind: 'block',
+          type: 'maze_repeat',
+        },
+        {
+          kind: 'block',
+          type: 'maze_forever',
+        },
+      ],
     },
   ],
 }
