@@ -6,6 +6,21 @@ export interface BlockCode {
   loopCount?: number
 }
 
+export enum BlockType {
+  MOVE_FORWARD = 'moveForward',
+  TURN_LEFT = 'turnLeft',
+  TURN_RIGHT = 'turnRight',
+  IF = 'if',
+  ELSE = 'else',
+  FOR = 'for',
+}
+
+export enum ConditionType {
+  IS_PATH_FORWARD = 'isPathForward',
+  IS_PATH_LEFT = 'isPathLeft',
+  IS_PATH_RIGHT = 'isPathRight',
+}
+
 function parseCode(code: string) {
   const lines = code
     .split('\n')
@@ -22,8 +37,17 @@ function parseBlocks(lines: string[], currentLine = 0): BlockCode[] {
     const line = lines[i]
 
     if (line.startsWith('if')) {
+      // isPathForward('block_id_5CoZ_`hU;XeKec`Y*NZA')
       const condition = line.match(/\((.*)\)/)?.[1]
-      const block: BlockCode = { type: 'if', condition }
+      const actualCondition = condition?.match(/(\w+)\(/)?.[1]
+      const id = condition?.match(/'([^']*)'/)?.[1]
+
+      if (!id || !actualCondition) {
+        console.log(condition, id, actualCondition)
+        throw new Error('Invalid condition')
+      }
+
+      const block: BlockCode = { type: BlockType.IF, condition: actualCondition, id }
       const { block: codeInsideTheIf, nextLine } = getBlock(lines, i)
       const parsedCodeIntoBlocks = parseBlocks(codeInsideTheIf)
       block.body = parsedCodeIntoBlocks
@@ -31,7 +55,7 @@ function parseBlocks(lines: string[], currentLine = 0): BlockCode[] {
       i = nextLine
       const prevLineStr = lines[i - 1]
       if (prevLineStr && prevLineStr.includes('else')) {
-        const block: BlockCode = { type: 'else' }
+        const block: BlockCode = { type: BlockType.ELSE, id }
         const { block: codeInsideTheElse, nextLine: nextLine2 } = getBlock(lines, i - 1)
         const parsedCodeIntoBlocks2 = parseBlocks(codeInsideTheElse)
         block.body = parsedCodeIntoBlocks2
@@ -40,7 +64,7 @@ function parseBlocks(lines: string[], currentLine = 0): BlockCode[] {
       }
     } else if (line.startsWith('for')) {
       const loopCount = parseInt(line.match(/<\s*(\d+)/)?.[1] ?? '0')
-      const block: BlockCode = { type: 'for', loopCount }
+      const block: BlockCode = { type: BlockType.FOR, loopCount }
       const { block: codeInsideTheFor, nextLine } = getBlock(lines, i)
       const parsedCodeIntoBlocks = parseBlocks(codeInsideTheFor)
       block.body = parsedCodeIntoBlocks
@@ -48,15 +72,15 @@ function parseBlocks(lines: string[], currentLine = 0): BlockCode[] {
       i = nextLine
     } else if (line.startsWith('moveForward')) {
       const id = line.match(/'([^']*)'/)?.[1]
-      blocks.push({ type: 'moveForward', id })
+      blocks.push({ type: BlockType.MOVE_FORWARD, id })
       i++
     } else if (line.startsWith('turnLeft')) {
       const id = line.match(/'([^']*)'/)?.[1]
-      blocks.push({ type: 'turnLeft', id })
+      blocks.push({ type: BlockType.TURN_LEFT, id })
       i++
     } else if (line.startsWith('turnRight')) {
       const id = line.match(/'([^']*)'/)?.[1]
-      blocks.push({ type: 'turnRight', id })
+      blocks.push({ type: BlockType.TURN_RIGHT, id })
       i++
     } else {
       i++
