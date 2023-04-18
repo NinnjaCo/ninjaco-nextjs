@@ -1,13 +1,10 @@
 import * as Blockly from 'blockly/core'
 
-// Use a unique storage key for this codelab
-const storageKey = 'jsonGeneratorWorkspace'
-
 /**
  * Saves the state of the workspace to browser's local storage.
  * @param {Blockly.Workspace} workspace Blockly workspace to save.
  */
-export const save = function (workspace) {
+export const save = function (workspace: Blockly.WorkspaceSvg, storageKey: string) {
   const data = Blockly.serialization.workspaces.save(workspace)
   window.localStorage?.setItem(storageKey, JSON.stringify(data))
 }
@@ -16,12 +13,12 @@ export const save = function (workspace) {
  * Loads saved state from local storage into the given workspace.
  * @param {Blockly.Workspace} workspace Blockly workspace to load into.
  */
-export const load = function (workspace) {
+export const load = function (workspace: Blockly.WorkspaceSvg, storageKey: string) {
   const data = window.localStorage?.getItem(storageKey)
   if (!data) return
 
   // Don't emit events during loading.
   Blockly.Events.disable()
-  Blockly.serialization.workspaces.load(JSON.parse(data), workspace, false)
+  Blockly.serialization.workspaces.load(JSON.parse(data), workspace, { recordUndo: false })
   Blockly.Events.enable()
 }
