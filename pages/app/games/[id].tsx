@@ -1,3 +1,4 @@
+import { BlockCode, parseCode } from '@/blockly/parser/game'
 import { Direction, GridCell } from '@/components/user/game/gridCell'
 import { GetServerSideProps } from 'next'
 import { GridCellComponent } from '@/components/user/game/gridCell'
@@ -7,7 +8,6 @@ import { gameBlocks } from '@/blockly/blocks/game'
 import { gameGenerator } from '@/blockly/generetors/game'
 import { gameToolBox } from '@/blockly/toolbox/game'
 import { getServerSession } from 'next-auth'
-import { parseCode } from '@/blockly/parser/game'
 import Blockly from 'blockly'
 import BlocklyBoard from '@/components/blockly/blockly'
 import Head from 'next/head'
@@ -15,7 +15,6 @@ import Link from 'next/link'
 import React from 'react'
 import UserMenu from '@/components/user/userMenu'
 import useTranslation from '@/hooks/useTranslation'
-
 interface ServerSideProps {
   user: User
   gameId: string
@@ -36,12 +35,6 @@ const getInitialGrid = (size: number): GridCell[][] => {
     }
   }
   return grid
-}
-
-// create an interface type that represent a action writing in the blockly
-type Action = {
-  type: string
-  args: string[]
 }
 
 /**
@@ -223,10 +216,6 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
     return gameGrid[row][col].isGoal
   }
 
-  const tester = () => {
-    moveForward()
-  }
-
   const parentRef = React.useRef<any>()
 
   const onChangeListener = (
@@ -324,8 +313,7 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
 
     console.log(code)
 
-    const parsedCode = parseCode(code)
-    console.log(parsedCode)
+    const parsedCode: BlockCode[] = parseCode(code)
   }
 
   return (
@@ -380,12 +368,6 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
             className="btn w-fit bg-brand py-3 text-white hover:bg-brand-500 absolute bottom-14 left-4 z-50"
           >
             Run Program
-          </button>
-          <button
-            onClick={tester}
-            className="btn w-fit bg-brand py-3 text-white hover:bg-brand-500 absolute bottom-32 left-4 z-50"
-          >
-            test
           </button>
         </div>
       </main>

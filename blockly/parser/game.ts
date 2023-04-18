@@ -1,8 +1,8 @@
-interface Block {
+export interface BlockCode {
   type: string
   id?: string
   condition?: string
-  body?: Block[]
+  body?: BlockCode[]
   loopCount?: number
 }
 
@@ -11,13 +11,11 @@ function parseCode(code: string) {
     .split('\n')
     .map((line) => line.trim())
     .filter((line) => line.length > 0)
-  console.log(lines)
-  console.log(getBlock(lines, 0))
   return parseBlocks(lines)
 }
 
-function parseBlocks(lines: string[], currentLine = 0): Block[] {
-  const blocks: Block[] = []
+function parseBlocks(lines: string[], currentLine = 0): BlockCode[] {
+  const blocks: BlockCode[] = []
   let i = currentLine
 
   while (i < lines.length) {
@@ -25,7 +23,7 @@ function parseBlocks(lines: string[], currentLine = 0): Block[] {
 
     if (line.startsWith('if')) {
       const condition = line.match(/\((.*)\)/)?.[1]
-      const block: Block = { type: 'if', condition }
+      const block: BlockCode = { type: 'if', condition }
       const { block: codeInsideTheIf, nextLine } = getBlock(lines, i)
       const parsedCodeIntoBlocks = parseBlocks(codeInsideTheIf)
       block.body = parsedCodeIntoBlocks
@@ -33,7 +31,7 @@ function parseBlocks(lines: string[], currentLine = 0): Block[] {
       i = nextLine
       const prevLineStr = lines[i - 1]
       if (prevLineStr && prevLineStr.includes('else')) {
-        const block: Block = { type: 'else' }
+        const block: BlockCode = { type: 'else' }
         const { block: codeInsideTheElse, nextLine: nextLine2 } = getBlock(lines, i - 1)
         const parsedCodeIntoBlocks2 = parseBlocks(codeInsideTheElse)
         block.body = parsedCodeIntoBlocks2
@@ -42,7 +40,7 @@ function parseBlocks(lines: string[], currentLine = 0): Block[] {
       }
     } else if (line.startsWith('for')) {
       const loopCount = parseInt(line.match(/<\s*(\d+)/)?.[1] ?? '0')
-      const block: Block = { type: 'for', loopCount }
+      const block: BlockCode = { type: 'for', loopCount }
       const { block: codeInsideTheFor, nextLine } = getBlock(lines, i)
       const parsedCodeIntoBlocks = parseBlocks(codeInsideTheFor)
       block.body = parsedCodeIntoBlocks
@@ -80,10 +78,7 @@ function getBlock(lines: string[], startIndex: number): { block: string[]; nextL
       // check if the bracket is not inside a string
       const isInsideString = line.match(/'.*}/)?.[0]
       if (!isInsideString) {
-        console.log('closing bracket', line, openBrackets)
         openBrackets--
-      } else {
-        console.log('closing bracket inside a string', line)
       }
     }
 
@@ -95,10 +90,7 @@ function getBlock(lines: string[], startIndex: number): { block: string[]; nextL
       // check if the bracket is not inside a string
       const isInsideString = line.match(/'.*{/)?.[0]
       if (!isInsideString) {
-        console.log('opening bracket', line, openBrackets)
         openBrackets++
-      } else {
-        console.log('opening bracket inside a string', line)
       }
     }
     if (openBrackets === 0) {
