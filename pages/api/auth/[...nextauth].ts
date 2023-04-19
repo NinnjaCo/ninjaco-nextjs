@@ -7,7 +7,6 @@ import jwt from 'jsonwebtoken'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 export const authOptions: AuthOptions = {
-  secret: process.env.JWT_ACCESS_SECRET,
   providers: [
     CredentialsProvider({
       name: 'local',

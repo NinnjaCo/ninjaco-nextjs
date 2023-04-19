@@ -34,15 +34,16 @@ export default withAuth(
   },
   {
     callbacks: {
-      authorized: ({ token }) => {
+      authorized: ({ token, req }) => {
         if (token) {
           console.log('Next Auth callback middlware returned a token exists')
           return true
         }
-        console.log('Next Auth callback middlware returned no token exists')
+        console.log('Next Auth callback middlware returned no token exists', req)
         return false
       },
     },
+    secret: process.env.NEXTAUTH_SECRET,
   }
 )
 
