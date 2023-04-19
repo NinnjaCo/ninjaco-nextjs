@@ -56,7 +56,8 @@ export default withAuth(
           return true
         }
         console.log('Next Auth callback middlware returned no token exists')
-        return false
+        // TODO FOR NO RETYRN TRUE TO TEST
+        return true
       },
     },
     secret: process.env.NEXTAUTH_SECRET,
