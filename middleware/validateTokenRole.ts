@@ -41,9 +41,9 @@ export interface autorizationResposne {
 }
 export const authroizeRequest = async (req: NextRequestWithAuth): Promise<autorizationResposne> => {
   const allCookies = req.cookies
-  const sessionCookieName = process.env.VERCEL
-    ? '__Secure-next-auth.session-token'
-    : 'next-auth.session-token'
+  const baseUrl = process.env.API_URL
+  const isHttps = process.env.VERCEL ?? baseUrl?.startsWith('https') ?? false
+  const sessionCookieName = isHttps ? '__Secure-next-auth.session-token' : 'next-auth.session-token'
   const tokenValue = allCookies.get(sessionCookieName)?.value
 
   let token: JWT | null = null
