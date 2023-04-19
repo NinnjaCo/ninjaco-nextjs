@@ -15,6 +15,7 @@ import Link from 'next/link'
 import React from 'react'
 import UserMenu from '@/components/user/userMenu'
 import useTranslation from '@/hooks/useTranslation'
+
 interface ServerSideProps {
   user: User
   gameId: string
@@ -28,7 +29,7 @@ const getInitialGrid = (size: number): GridCell[][] => {
       grid[i].push({
         row: i,
         col: j,
-        isPlayer: i === 1 && j === 1,
+        isPlayer: i === 7 && j === 7,
         isGoal: false,
         isWall: i === 0 || j === 0 || i === size - 1 || j === size - 1,
       })
@@ -55,43 +56,39 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
   const [currentPlayerDirection, setCurrentPlayerDirection] = React.useState<Direction>(
     Direction.DOWN
   )
-  const [playerLocation, setPlayerLocation] = React.useState({ row: 1, col: 1 })
+  const [playerLocation, setPlayerLocation] = React.useState({ row: 7, col: 7 })
   const [result, setResult] = React.useState(ResultType.UNSET)
   const cellSize = 25
 
   // Changes the state of the currentPlayerDirection
   const turnLeft = () => {
-    switch (currentPlayerDirection) {
-      case Direction.UP:
-        setCurrentPlayerDirection(Direction.LEFT)
-        break
-      case Direction.DOWN:
-        setCurrentPlayerDirection(Direction.RIGHT)
-        break
-      case Direction.LEFT:
-        setCurrentPlayerDirection(Direction.DOWN)
-        break
-      case Direction.RIGHT:
-        setCurrentPlayerDirection(Direction.UP)
-        break
-    }
+    setCurrentPlayerDirection((prev) => {
+      switch (prev) {
+        case Direction.UP:
+          return Direction.LEFT
+        case Direction.DOWN:
+          return Direction.RIGHT
+        case Direction.LEFT:
+          return Direction.DOWN
+        case Direction.RIGHT:
+          return Direction.UP
+      }
+    })
   }
   // Changes the state of the currentPlayerDirection
   const turnRight = () => {
-    switch (currentPlayerDirection) {
-      case Direction.UP:
-        setCurrentPlayerDirection(Direction.RIGHT)
-        break
-      case Direction.DOWN:
-        setCurrentPlayerDirection(Direction.LEFT)
-        break
-      case Direction.LEFT:
-        setCurrentPlayerDirection(Direction.UP)
-        break
-      case Direction.RIGHT:
-        setCurrentPlayerDirection(Direction.DOWN)
-        break
-    }
+    setCurrentPlayerDirection((prev) => {
+      switch (prev) {
+        case Direction.UP:
+          return Direction.LEFT
+        case Direction.DOWN:
+          return Direction.RIGHT
+        case Direction.LEFT:
+          return Direction.DOWN
+        case Direction.RIGHT:
+          return Direction.UP
+      }
+    })
   }
   // Changes the state of the playerLocation and gameGrid
   const moveForward = () => {
@@ -235,6 +232,7 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
     }
     if (e.type == Blockly.Events.BLOCK_CREATE) {
       console.log('Event is block create')
+      console.log(e)
       return
     }
     if (e.type == Blockly.Events.BLOCK_DELETE) {
@@ -246,6 +244,7 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
       return
     }
     if (e.type == Blockly.Events.BLOCK_MOVE) {
+      const castedEvent = e as Blockly.Events.BlockMove
       console.log('Event is block move')
       return
     }
@@ -304,83 +303,109 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
   }
   const runProgram = () => {
     const code = getCodeFromBlockly()
+    console.log('code', code)
     if (!code) {
       return
     }
+
+    // If the player is already on the goal, don't run the code
     if (result === ResultType.SUCCESS) {
       return
     }
 
     const parsedCode: BlockCode[] = parseCode(code)
-
     console.log('parsedCode', parsedCode)
-    const timestep = 1000 / 60
 
     // traverse the code and execute the blocks in order (depth first)
-
     executeCode(parsedCode)
   }
+
+  const WAIT_TIME = 1000
   const executeCode = (code: BlockCode[] | undefined) => {
-    if (!code) {
+    if (!code || code.length === 0) {
       return
     }
 
-    for (let i = 0; i < code.length; i++) {
-      const block = code[i]
-      switch (block.type) {
-        case BlockType.MOVE_FORWARD:
-          if (!isPathAhead()) {
-            setResult(ResultType.FAILURE)
-            return
-          }
-          moveForward()
-          break
-        case BlockType.TURN_LEFT:
-          turnLeft()
-          break
-        case BlockType.TURN_RIGHT:
-          turnRight()
-          break
-        case BlockType.IF:
-          switch (block.condition) {
-            case ConditionType.IS_PATH_FORWARD:
-              if (isPathAhead()) {
+    const block = code[0]
+    const remainingCode = code.slice(1)
+    console.log('Executing block', block)
+    // Execute block
+    switch (block.type) {
+      case BlockType.MOVE_FORWARD:
+        if (!isPathAhead()) {
+          setResult(ResultType.FAILURE)
+          return
+        }
+        console.log('Moving forward')
+        if (parentRef.current) {
+          parentRef.current.highlightBlockById(block.id)
+        }
+        moveForward()
+        break
+      case BlockType.TURN_LEFT:
+        if (parentRef.current) {
+          parentRef.current.highlightBlockById(block.id)
+        }
+        turnLeft()
+        break
+      case BlockType.TURN_RIGHT:
+        turnRight()
+        break
+      case BlockType.IF:
+        switch (block.condition) {
+          case ConditionType.IS_PATH_FORWARD:
+            if (isPathAhead()) {
+              setTimeout(() => {
                 executeCode(block.body)
-              }
-              break
-            case ConditionType.IS_PATH_LEFT:
-              if (isPathLeft()) {
+              }, WAIT_TIME)
+            }
+            break
+          case ConditionType.IS_PATH_LEFT:
+            if (isPathLeft()) {
+              setTimeout(() => {
                 executeCode(block.body)
-              }
-              break
-            case ConditionType.IS_PATH_RIGHT:
-              if (isPathRight()) {
+              }, WAIT_TIME)
+            }
+            break
+          case ConditionType.IS_PATH_RIGHT:
+            if (isPathRight()) {
+              setTimeout(() => {
                 executeCode(block.body)
-              }
-              break
-          }
-          break
-        case BlockType.ELSE:
+              }, WAIT_TIME)
+            }
+            break
+        }
+        break
+      case BlockType.ELSE:
+        setTimeout(() => {
           executeCode(block.body)
-          break
-        case BlockType.FOR:
-          if (!block.loopCount) {
-            return
-          }
+        }, WAIT_TIME)
+        break
+      case BlockType.FOR:
+        if (!block.loopCount) {
+          return
+        }
 
-          if (block.loopCount > 100) {
-            setResult(ResultType.FAILURE)
-            return
-          }
+        if (block.loopCount > 100) {
+          setResult(ResultType.FAILURE)
+          return
+        }
 
-          for (let j = 0; j < block.loopCount; j++) {
+        // each iteration of the loop should wait for the previous iteration WAIT_TIME
+        for (let i = 0; i < block.loopCount; i++) {
+          setTimeout(() => {
             executeCode(block.body)
-          }
+          }, WAIT_TIME * i)
+        }
 
-          break
-      }
+        break
     }
+
+    setTimeout(() => {
+      executeCode(remainingCode)
+    }, WAIT_TIME)
   }
+
   return (
     <>
       <Head>
