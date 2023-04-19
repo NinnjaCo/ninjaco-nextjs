@@ -10,18 +10,27 @@ export const validateTokenRoleRequest = async (
   alloweRoles: RoleEnum[],
   access_token: string
 ): Promise<ValidateTokenRoleRequest> => {
-  const data = await (
-    await fetch(process.env.API_URL + '/auth/validate-token-role', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${access_token}`,
-      },
-      body: JSON.stringify({ alloweRoles: alloweRoles, token: access_token }),
-    })
-  ).json()
+  try {
+    console.log('validateTokenRoleRequest', process.env.API_URL)
+    const data = await (
+      await fetch(process.env.API_URL + '/auth/validate-token-role', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${access_token}`,
+        },
+        body: JSON.stringify({ alloweRoles: alloweRoles, token: access_token }),
+      })
+    ).json()
 
-  return data
+    return data
+  } catch (error) {
+    console.log('Error in validateTokenRoleRequest', error)
+    return {
+      payload: false,
+      timestamp: Date.now(),
+    }
+  }
 }
 
 export interface autorizationResposne {
@@ -58,6 +67,7 @@ export const authroizeRequest = async (req: NextRequestWithAuth): Promise<autori
     }
   } else {
     // A non signedin user should not be able to access the admin page
+    console.log('User is not signed in in validateTokenRole')
     return {
       authorized: false,
       rewriteUrl: '/auth/signin',
