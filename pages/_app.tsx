@@ -8,14 +8,18 @@ import { Quicksand } from 'next/font/google'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import { TranslationsProvider } from '@/contexts/TranslationContext'
 import { useMemo, useRef } from 'react'
+import Blockly from 'blockly/core'
 import NextNProgress from '@/components/nextNProgress'
 import PageLayout from '@/components/layout/pageLayout'
 import SessionManager from '@/components/auth/sessionManager'
+import locale from 'blockly/msg/en'
 import type { AppProps } from 'next/app'
 
 // TODO: add cookies script
 // TODO: add Reactquery provider and hydration
 // TODO: add progress bar on top using NPProgress
+
+Blockly.setLocale(locale)
 
 const quick_sand = Quicksand({
   subsets: ['latin'],

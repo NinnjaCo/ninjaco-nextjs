@@ -36,6 +36,7 @@
     "axios": "^0.21.1",
     "axios-logger": "^2.5.0",
     "babel-jest": "^29.5.0",
+    "blockly": "^9.2.2",
     "classnames": "^2.3.1",
     "clsx": "^1.1.1",
     "dayjs": "^1.11.7",

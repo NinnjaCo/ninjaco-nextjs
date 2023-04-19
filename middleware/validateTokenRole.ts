@@ -40,6 +40,12 @@ export interface autorizationResposne {
   rewriteUrl?: string
 }
 export const authroizeRequest = async (req: NextRequestWithAuth): Promise<autorizationResposne> => {
+  if (req.nextUrl.pathname.startsWith('/app')) {
+    return {
+      authorized: true,
+    }
+  }
+
   const allCookies = req.cookies
   const baseUrl = process.env.API_URL
   const isHttps = process.env.VERCEL ?? baseUrl?.startsWith('https') ?? false
