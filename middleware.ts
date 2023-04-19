@@ -35,11 +35,15 @@ export default withAuth(
   {
     callbacks: {
       authorized: ({ token, req }) => {
+        console.log('In middleware checking if user is authenticated', token)
+        console.log('nextauth_secret: ', process.env.NEXTAUTH_SECRET)
+        const tokenValue = req.cookies.get('next-auth.session-token')?.value
+        console.log('tokenValue: ', tokenValue)
         if (token) {
           console.log('Next Auth callback middlware returned a token exists')
           return true
         }
-        console.log('Next Auth callback middlware returned no token exists', req)
+        console.log('Next Auth callback middlware returned no token exists')
         return false
       },
     },

@@ -22,6 +22,5 @@ module.exports = withBundleAnalyzer({
     API_URL: process.env.API_URL || 'http://localhost:3200/api',
     NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'http://localhost:3000',
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || 'jwt_access_secret',
-    JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET || 'jwt_access_secret',
   },
 })
