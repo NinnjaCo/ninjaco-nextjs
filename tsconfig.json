@@ -38,6 +38,12 @@
       "@/middleware/*": [
         "middleware/*"
       ],
+      "@/blockly/*": [
+        "blockly/*"
+      ],
+      "@/blockly": [
+        "blockly"
+      ],
     },
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
