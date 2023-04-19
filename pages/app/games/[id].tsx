@@ -32,7 +32,7 @@ const getInitialGrid = (size: number): GridCell[][] => {
       grid[i].push({
         row: i,
         col: j,
-        isPlayer: i === 7 && j === 7,
+        isPlayer: i === 13 && j === 13,
         isGoal: false,
         isWall: i === 0 || j === 0 || i === size - 1 || j === size - 1,
       })
@@ -55,12 +55,8 @@ const ResultType = {
 const ViewGame = ({ user, gameId }: ServerSideProps) => {
   const t = useTranslation()
 
-  const [gameGrid, setGameGrid] = React.useState<GridCell[][]>(getInitialGrid(15))
-  const [currentPlayerDirection, setCurrentPlayerDirection] = React.useState<Direction>(
-    Direction.DOWN
-  )
-  const [playerLocation, setPlayerLocation] = React.useState({ row: 7, col: 7 })
-  const [result, setResult] = React.useState(ResultType.UNSET)
+  // const [gameGrid, setGameGrid] = React.useState<GridCell[][]>(getInitialGrid(15))
+  // use useImmer instead of useState to avoid unnecessary re-renders
   const cellSize = 25
   const gridSize = 15
   const [gameState, setGameState] = useImmer({
@@ -84,17 +80,24 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
   const actionsQueue: Queue<() => void> = new Queue()
 
   // Changes the state of the currentPlayerDirection
-  const turnLeft = () => {
-    setCurrentPlayerDirection((prev) => {
-      switch (prev) {
+  const turnLeft = (carryCheckFunction?: (gameState) => boolean) => {
+    setGameState((draft) => {
+      if (carryCheckFunction && !carryCheckFunction(draft)) {
+        return
+      }
+      switch (draft.currentPlayerDirection) {
         case Direction.UP:
-          return Direction.LEFT
+          draft.currentPlayerDirection = Direction.LEFT
+          break
         case Direction.DOWN:
-          return Direction.RIGHT
+          draft.currentPlayerDirection = Direction.RIGHT
+          break
         case Direction.LEFT:
-          return Direction.DOWN
+          draft.currentPlayerDirection = Direction.DOWN
+          break
         case Direction.RIGHT:
-          return Direction.UP
+          draft.currentPlayerDirection = Direction.UP
+          break
       }
     })
   }
