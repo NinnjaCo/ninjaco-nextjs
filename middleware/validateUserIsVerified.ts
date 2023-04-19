@@ -1,3 +1,4 @@
+import { JWT, decode } from 'next-auth/jwt'
 import { NextRequestWithAuth } from 'next-auth/middleware'
 
 export interface VerifiedResponse {
@@ -9,8 +10,22 @@ export interface VerifiedResponse {
 export const checkIfUserIsVerified = async (
   req: NextRequestWithAuth
 ): Promise<VerifiedResponse> => {
-  const { token } = req.nextauth
+  const allCookies = req.cookies
+  const baseUrl = process.env.API_URL
+  const isHttps = process.env.VERCEL ?? baseUrl?.startsWith('https') ?? false
+  const sessionCookieName = isHttps ? '__Secure-next-auth.session-token' : 'next-auth.session-token'
+  const tokenValue = allCookies.get(sessionCookieName)?.value
 
+  let token: JWT | null = null
+  const secret = process.env.NEXTAUTH_SECRET
+  if (tokenValue && secret) {
+    token = await decode({
+      token: tokenValue,
+      secret: secret,
+    })
+  }
+
+  console.log('checkIfUserIsVerified token is ', token)
   if (token && token.id) {
     try {
       const user = token.user
@@ -29,6 +44,7 @@ export const checkIfUserIsVerified = async (
         isVerified: true,
       }
     } catch (error) {
+      console.log('Error in checkIfUserIsVerified', error)
       return {
         isVerified: false,
         rewriteUrl: '/auth/signin',
@@ -37,6 +53,7 @@ export const checkIfUserIsVerified = async (
     }
   } else {
     // A non signedin user should not be able to access the admin page
+    console.log('User is not signed in in validateUserIsVerified')
     return {
       isVerified: false,
       rewriteUrl: '/auth/signin',
