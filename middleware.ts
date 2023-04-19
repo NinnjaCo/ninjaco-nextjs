@@ -37,6 +37,8 @@ export default withAuth(
       authorized: ({ token, req }) => {
         console.log('In middleware checking if user is authenticated', token)
         console.log('nextauth_secret: ', process.env.NEXTAUTH_SECRET)
+        const allCookies = req.cookies.getAll()
+        console.log('allCookies: ', allCookies)
         const tokenValue = req.cookies.get('next-auth.session-token')?.value
         console.log('tokenValue: ', tokenValue)
         if (token) {
