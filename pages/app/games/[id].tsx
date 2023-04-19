@@ -125,40 +125,34 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
     })
   }
   // Changes the state of the playerLocation and gameGrid
-  const moveForward = () => {
-    const newGrid = [...gameGrid]
-    const { row, col } = playerLocation
-    switch (currentPlayerDirection) {
-      case Direction.UP:
-        if (row - 1 >= 0 && !newGrid[row - 1][col].isWall) {
-          newGrid[row][col].isPlayer = false
-          newGrid[row - 1][col].isPlayer = true
-          setPlayerLocation({ row: row - 1, col })
-        }
-        break
-      case Direction.DOWN:
-        if (row + 1 < gameGrid.length && !newGrid[row + 1][col].isWall) {
-          newGrid[row][col].isPlayer = false
-          newGrid[row + 1][col].isPlayer = true
-          setPlayerLocation({ row: row + 1, col })
-        }
-        break
-      case Direction.LEFT:
-        if (col - 1 >= 0 && !newGrid[row][col - 1].isWall) {
-          newGrid[row][col].isPlayer = false
-          newGrid[row][col - 1].isPlayer = true
-          setPlayerLocation({ row, col: col - 1 })
-        }
-        break
-      case Direction.RIGHT:
-        if (col + 1 < gameGrid.length && !newGrid[row][col + 1].isWall) {
-          newGrid[row][col].isPlayer = false
-          newGrid[row][col + 1].isPlayer = true
-          setPlayerLocation({ row, col: col + 1 })
-        }
-        break
-    }
-    setGameGrid(newGrid)
+  const moveForward = (carryCheckFunction?: (gameState) => boolean) => {
+    setGameState((draft) => {
+      // If the carryCheckFunction is defined and returns false, then do not move forward
+      if (carryCheckFunction && !carryCheckFunction(draft)) {
+        return
+      }
+      // If there is no path ahead of the player, then do not move forward
+      if (!isPathAhead(draft)) {
+        return
+      }
+      const { row, col } = draft.playerLocation
+      switch (draft.currentPlayerDirection) {
+        case Direction.UP:
+          draft.playerLocation.row = row - 1
+          break
+        case Direction.DOWN:
+          draft.playerLocation.row = row + 1
+          break
+        case Direction.LEFT:
+          draft.playerLocation.col = col - 1
+          break
+        case Direction.RIGHT:
+          draft.playerLocation.col = col + 1
+          break
+      }
+      draft.gameGrid[row][col].isPlayer = false
+      draft.gameGrid[draft.playerLocation.row][draft.playerLocation.col].isPlayer = true
+    })
   }
   // Returns true if there is a path ahead of the player (i.e. the player can move forward)
   const isPathAhead = () => {
