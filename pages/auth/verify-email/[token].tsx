@@ -190,7 +190,7 @@ export const getServerSideProps = async (context) => {
   const { query, req, res } = context
   const { token } = query
 
-  const auth_secret = process.env.JWT_ACCESS_SECRET
+  const auth_secret = process.env.NEXTAUTH_SECRET
   if (!auth_secret) {
     return {
       props: {
