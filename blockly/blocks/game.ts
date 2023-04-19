@@ -1,6 +1,6 @@
 import * as Blockly from 'blockly'
 import { BlockDefinition } from 'blockly/core/blocks'
-import marker from '@/images/marker.png'
+import flag from '@/images/flag.svg'
 
 const MOVEMENT_HUE = 230
 const LOGIC_HUE = 210
@@ -80,7 +80,7 @@ Blockly.Blocks['maze_forever'] = {
   init: function () {
     this.appendDummyInput()
       .appendField('repeat until you reach')
-      .appendField(new Blockly.FieldImage(marker.src, 12, 16, '*'))
+      .appendField(new Blockly.FieldImage(flag.src, 12, 16, '*'))
     this.appendStatementInput('DO').setCheck(null)
     this.setPreviousStatement(true, null)
     this.setColour(LOOPS_HUE)
