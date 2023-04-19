@@ -313,62 +313,74 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
 
     const parsedCode: BlockCode[] = parseCode(code)
 
+    console.log('parsedCode', parsedCode)
     const timestep = 1000 / 60
 
     // traverse the code and execute the blocks in order (depth first)
-    const executeCode = (code: BlockCode[] | undefined) => {
-      if (!code) {
-        return
-      }
 
-      for (let i = 0; i < code.length; i++) {
-        const block = code[i]
-        switch (block.type) {
-          case BlockType.MOVE_FORWARD:
-            if (!isPathAhead()) {
-              setResult(ResultType.FAILURE)
-              return
-            }
-            moveForward()
-            break
-          case BlockType.TURN_LEFT:
-            turnLeft()
-            break
-          case BlockType.TURN_RIGHT:
-            turnRight()
-            break
-          case BlockType.IF:
-            switch (block.condition) {
-              case ConditionType.IS_PATH_FORWARD:
-                if (isPathAhead()) {
-                  executeCode(block.body)
-                }
-                break
-              case ConditionType.IS_PATH_LEFT:
-                if (isPathLeft()) {
-                  executeCode(block.body)
-                }
-                break
-              case ConditionType.IS_PATH_RIGHT:
-                if (isPathRight()) {
-                  executeCode(block.body)
-                }
-                break
-            }
-        }
-      }
-    }
     executeCode(parsedCode)
   }
+  const executeCode = (code: BlockCode[] | undefined) => {
+    if (!code) {
+      return
+    }
 
-  const wait = (ms: number) => {
-    const start = new Date().getTime()
-    let end = start
-    while (end < start + ms) {
-      end = new Date().getTime()
+    for (let i = 0; i < code.length; i++) {
+      const block = code[i]
+      switch (block.type) {
+        case BlockType.MOVE_FORWARD:
+          if (!isPathAhead()) {
+            setResult(ResultType.FAILURE)
+            return
+          }
+          moveForward()
+          break
+        case BlockType.TURN_LEFT:
+          turnLeft()
+          break
+        case BlockType.TURN_RIGHT:
+          turnRight()
+          break
+        case BlockType.IF:
+          switch (block.condition) {
+            case ConditionType.IS_PATH_FORWARD:
+              if (isPathAhead()) {
+                executeCode(block.body)
+              }
+              break
+            case ConditionType.IS_PATH_LEFT:
+              if (isPathLeft()) {
+                executeCode(block.body)
+              }
+              break
+            case ConditionType.IS_PATH_RIGHT:
+              if (isPathRight()) {
+                executeCode(block.body)
+              }
+              break
+          }
+          break
+        case BlockType.ELSE:
+          executeCode(block.body)
+          break
+        case BlockType.FOR:
+          if (!block.loopCount) {
+            return
+          }
+
+          if (block.loopCount > 100) {
+            setResult(ResultType.FAILURE)
+            return
+          }
+
+          for (let j = 0; j < block.loopCount; j++) {
+            executeCode(block.body)
+          }
+
+          break
+      }
     }
   }
-
   return (
     <>
       <Head>
