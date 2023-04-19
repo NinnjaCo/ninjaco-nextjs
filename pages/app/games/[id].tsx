@@ -102,17 +102,25 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
     })
   }
   // Changes the state of the currentPlayerDirection
-  const turnRight = () => {
-    setCurrentPlayerDirection((prev) => {
-      switch (prev) {
+  const turnRight = (carryCheckFunction?: (gameState) => boolean) => {
+    setGameState((draft) => {
+      if (carryCheckFunction && !carryCheckFunction(draft)) {
+        return
+      }
+
+      switch (draft.currentPlayerDirection) {
         case Direction.UP:
-          return Direction.LEFT
+          draft.currentPlayerDirection = Direction.RIGHT
+          break
         case Direction.DOWN:
-          return Direction.RIGHT
+          draft.currentPlayerDirection = Direction.LEFT
+          break
         case Direction.LEFT:
-          return Direction.DOWN
+          draft.currentPlayerDirection = Direction.UP
+          break
         case Direction.RIGHT:
-          return Direction.UP
+          draft.currentPlayerDirection = Direction.DOWN
+          break
       }
     })
   }
