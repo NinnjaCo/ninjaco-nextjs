@@ -16,6 +16,14 @@ interface BlocklyBoardProps {
   children?: React.ReactNode
 }
 
+const getBlockIdFromString = (blockString: string) => {
+  // block_id_g2yJbN94^*2e4|i+(-_Y
+  // or block_id_b]_Ysd|r{m@7O84Olv/F
+  // use regex to get the block id, since _ can appear in the actual block id
+  const blockId = blockString.match(/block_id_(.*)/)?.[1]
+  return blockId ?? ''
+}
+
 const BlocklyBoard = React.forwardRef(
   (
     {
@@ -38,8 +46,15 @@ const BlocklyBoard = React.forwardRef(
       return code
     }, [codeGenerator])
 
+    const highlightBlockById = useCallback((blockId: string) => {
+      // blockId is of the form block_id_g2yJbN94^*2e4|i+(-_Y
+      const id = getBlockIdFromString(blockId)
+      if (primaryWorkspace.current) primaryWorkspace.current.highlightBlock(id)
+    }, [])
+
     useImperativeHandle(ref, () => ({
       generateCode,
+      highlightBlockById,
     }))
 
     useEffect(() => {
