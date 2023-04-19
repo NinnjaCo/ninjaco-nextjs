@@ -2,12 +2,15 @@ import { BlockCode, BlockType, ConditionType, parseCode } from '@/blockly/parser
 import { Direction, GridCell } from '@/components/user/game/gridCell'
 import { GetServerSideProps } from 'next'
 import { GridCellComponent } from '@/components/user/game/gridCell'
+import { Queue } from 'datastructure/queue'
 import { User } from '@/models/crud'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { gameBlocks } from '@/blockly/blocks/game'
 import { gameGenerator } from '@/blockly/generetors/game'
 import { gameToolBox } from '@/blockly/toolbox/game'
 import { getServerSession } from 'next-auth'
+import { useImmer } from 'use-immer'
+import Alert from '@/components/shared/alert'
 import Blockly from 'blockly'
 import BlocklyBoard from '@/components/blockly/blockly'
 import Head from 'next/head'
@@ -59,6 +62,26 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
   const [playerLocation, setPlayerLocation] = React.useState({ row: 7, col: 7 })
   const [result, setResult] = React.useState(ResultType.UNSET)
   const cellSize = 25
+  const gridSize = 15
+  const [gameState, setGameState] = useImmer({
+    gameGrid: getInitialGrid(gridSize),
+    currentPlayerDirection: Direction.LEFT,
+    playerLocation: { row: 13, col: 13 },
+    result: ResultType.UNSET,
+  })
+  const [alertData, setAlertData] = React.useState<{
+    message: string
+    variant: 'error' | 'success' | 'info' | 'warning'
+    open: boolean
+    close: () => void
+  }>({
+    message: 'Place blocks and run the program to start the game',
+    variant: 'info',
+    open: true,
+    close: () => setAlertData({ ...alertData, open: false }),
+  })
+
+  const actionsQueue: Queue<() => void> = new Queue()
 
   // Changes the state of the currentPlayerDirection
   const turnLeft = () => {
