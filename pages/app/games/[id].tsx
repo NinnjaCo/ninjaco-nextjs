@@ -155,26 +155,33 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
     })
   }
   // Returns true if there is a path ahead of the player (i.e. the player can move forward)
-  const isPathAhead = () => {
-    const { row, col } = playerLocation
-    switch (currentPlayerDirection) {
+  const isPathAhead = (currentGameState) => {
+    const { row, col } = currentGameState.playerLocation
+    console.log('isPathAhead', row, col, currentGameState.currentPlayerDirection)
+    switch (currentGameState.currentPlayerDirection) {
       case Direction.UP:
-        if (row - 1 >= 0 && !gameGrid[row - 1][col].isWall) {
+        if (row - 1 >= 0 && !currentGameState.gameGrid[row - 1][col].isWall) {
           return true
         }
         break
       case Direction.DOWN:
-        if (row + 1 < gameGrid.length && !gameGrid[row + 1][col].isWall) {
+        if (
+          row + 1 < currentGameState.gameGrid.length &&
+          !currentGameState.gameGrid[row + 1][col].isWall
+        ) {
           return true
         }
         break
       case Direction.LEFT:
-        if (col - 1 >= 0 && !gameGrid[row][col - 1].isWall) {
+        if (col - 1 >= 0 && !currentGameState.gameGrid[row][col - 1].isWall) {
           return true
         }
         break
       case Direction.RIGHT:
-        if (col + 1 < gameGrid.length && !gameGrid[row][col + 1].isWall) {
+        if (
+          col + 1 < currentGameState.gameGrid.length &&
+          !currentGameState.gameGrid[row][col + 1].isWall
+        ) {
           return true
         }
         break
@@ -182,9 +189,10 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
     return false
   }
   // Returns true if there is a path to the left of the player (i.e. the player can turn left)
-  const isPathLeft = () => {
-    const { row, col } = playerLocation
-    switch (currentPlayerDirection) {
+  const isPathLeft = (currentGameState) => {
+    const { row, col } = currentGameState.playerLocation
+    console.log('isPathLeft', row, col, currentGameState.currentPlayerDirection)
+    switch (currentGameState.currentPlayerDirection) {
       case Direction.UP:
         if (col - 1 >= 0 && !gameGrid[row][col - 1].isWall) {
           return true
