@@ -29,6 +29,7 @@ export const checkIfUserIsVerified = async (
         isVerified: true,
       }
     } catch (error) {
+      console.log('Error in checkIfUserIsVerified', error)
       return {
         isVerified: false,
         rewriteUrl: '/auth/signin',
@@ -37,6 +38,7 @@ export const checkIfUserIsVerified = async (
     }
   } else {
     // A non signedin user should not be able to access the admin page
+    console.log('User is not signed in in validateUserIsVerified')
     return {
       isVerified: false,
       rewriteUrl: '/auth/signin',
