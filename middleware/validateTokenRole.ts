@@ -1,3 +1,4 @@
+import { JWT, decode } from 'next-auth/jwt'
 import { NextRequestWithAuth } from 'next-auth/middleware'
 import { RoleEnum } from '@/models/crud'
 
@@ -39,7 +40,22 @@ export interface autorizationResposne {
   rewriteUrl?: string
 }
 export const authroizeRequest = async (req: NextRequestWithAuth): Promise<autorizationResposne> => {
-  const { token } = req.nextauth
+  const allCookies = req.cookies
+  const sessionCookieName = process.env.VERCEL
+    ? '__Secure-next-auth.session-token'
+    : 'next-auth.session-token'
+  const tokenValue = allCookies.get(sessionCookieName)?.value
+
+  let token: JWT | null = null
+  const secret = process.env.NEXTAUTH_SECRET
+  if (tokenValue && secret) {
+    token = await decode({
+      token: tokenValue,
+      secret: secret,
+    })
+  }
+
+  console.log('validateTokenRoleRequest token is ', token)
   if (token) {
     let authorizationData: ValidateTokenRoleRequest | undefined = undefined
 

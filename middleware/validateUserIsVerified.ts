@@ -1,3 +1,4 @@
+import { JWT, decode } from 'next-auth/jwt'
 import { NextRequestWithAuth } from 'next-auth/middleware'
 
 export interface VerifiedResponse {
@@ -9,7 +10,20 @@ export interface VerifiedResponse {
 export const checkIfUserIsVerified = async (
   req: NextRequestWithAuth
 ): Promise<VerifiedResponse> => {
-  const { token } = req.nextauth
+  const allCookies = req.cookies
+  const sessionCookieName = process.env.VERCEL
+    ? '__Secure-next-auth.session-token'
+    : 'next-auth.session-token'
+  const tokenValue = allCookies.get(sessionCookieName)?.value
+
+  let token: JWT | null = null
+  const secret = process.env.NEXTAUTH_SECRET
+  if (tokenValue && secret) {
+    token = await decode({
+      token: tokenValue,
+      secret: secret,
+    })
+  }
 
   console.log('checkIfUserIsVerified token is ', token)
   if (token && token.id) {
