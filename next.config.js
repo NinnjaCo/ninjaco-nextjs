@@ -13,6 +13,7 @@ module.exports = withBundleAnalyzer({
   images: {
     domains: [
       // TODO ADD S3 BUCKETs here
+      'bztf3s.stackhero-network.com',
       's3-us-west-2.amazonaws.com',
       'localhost',
     ],
