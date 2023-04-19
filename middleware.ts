@@ -1,3 +1,4 @@
+import { JWT, decode } from 'next-auth/jwt'
 import { NextResponse } from 'next/server'
 import { addErrorParamToUrl } from './utils/shared'
 import { authroizeRequest } from './middleware/validateTokenRole'
@@ -34,14 +35,23 @@ export default withAuth(
   },
   {
     callbacks: {
-      authorized: ({ token, req }) => {
+      authorized: async ({ token, req }) => {
         console.log('In middleware checking if user is authenticated', token)
-        console.log('nextauth_secret: ', process.env.NEXTAUTH_SECRET)
+        const secret = process.env.NEXTAUTH_SECRET
         const allCookies = req.cookies.getAll()
         console.log('allCookies: ', allCookies)
-        const tokenValue = req.cookies.get('next-auth.session-token')?.value
+        const tokenValue = req.cookies.get('__Secure-next-auth.session-token')?.value
         console.log('tokenValue: ', tokenValue)
-        if (token) {
+
+        let decodedToken: JWT | null = null
+        if (tokenValue && secret) {
+          decodedToken = await decode({
+            token: tokenValue,
+            secret: secret,
+          })
+        }
+        console.log('decodedToken: ', decodedToken)
+        if (token || decodedToken) {
           console.log('Next Auth callback middlware returned a token exists')
           return true
         }
