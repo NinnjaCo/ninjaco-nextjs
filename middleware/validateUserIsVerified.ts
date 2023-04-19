@@ -11,6 +11,7 @@ export const checkIfUserIsVerified = async (
 ): Promise<VerifiedResponse> => {
   const { token } = req.nextauth
 
+  console.log('checkIfUserIsVerified token is ', token)
   if (token && token.id) {
     try {
       const user = token.user
