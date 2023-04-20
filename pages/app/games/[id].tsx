@@ -60,7 +60,7 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
   // use useImmer instead of useState to avoid unnecessary re-renders
   const cellSize = 25
   const gridSize = 15
-  const maxNumberOfBlocks = 5
+  const maxNumberOfBlocks = undefined
   const [gameState, setGameState] = useImmer({
     gameGrid: getInitialGrid(gridSize),
     currentPlayerDirection: Direction.LEFT,
@@ -478,15 +478,18 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
   }
   const runProgram = () => {
     const code = getCodeFromBlockly()
-    console.log(code)
     if (!code) {
       return
     }
     setCurrentCode(code)
-    onHitGoal()
 
     // If the player is already on the goal, don't run the code
+    if (gameState.result === ResultType.SUCCESS) {
+      onHitGoal()
+      return
+    }
 
+    console.log(code)
     const parsedCode: BlockCode[] = parseCode(code)
     console.log('parsedCode', parsedCode)
 
@@ -495,11 +498,6 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
     runQueueActionsWithDelay(1000)
     setTimeout(() => {
       clearHighlightedBlock()
-      // if (isOnGoal()) {
-      //   setResult(ResultType.SUCCESS)
-      // } else {
-      //   setResult(ResultType.FAILURE)
-      // }
     }, 1000 * (actionsQueue.size() + 1))
   }
 
