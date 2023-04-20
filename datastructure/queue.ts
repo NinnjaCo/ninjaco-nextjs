@@ -19,6 +19,18 @@ export class Queue<T> {
   }
 
   /**
+   * @description Clear the queue
+   * @memberof Queue
+   * @returns {void}
+   * @time O(1)
+   * @space O(1)
+   */
+  clear(): void {
+    this.list.clear()
+    this.length = 0
+  }
+
+  /**
    * @description get size
    * @memberof Queue
    * @returns {number}

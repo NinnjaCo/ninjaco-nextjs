@@ -30,6 +30,19 @@ export class LinkedList<T> {
   }
 
   /**
+   * @description clear the list, O(1)
+   * @memberof LinkedList
+   * @returns {void}
+   * @time O(1)
+   * @space O(1)
+   */
+  clear() {
+    this.head = null
+    this.tail = null
+    this.length = 0
+  }
+
+  /**
    * @description append to the end of the list, O(1)
    * @param data
    * @memberof LinkedList
