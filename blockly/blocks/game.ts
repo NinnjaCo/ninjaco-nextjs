@@ -20,7 +20,9 @@ export const gameBlocks: BlockDefinition = Blockly.common.createBlockDefinitions
 
 // Ignore the below error, it works but blockly for some reason did not include the type for this, so typescript is complaining
 // source: https://developers.google.com/blockly/guides/create-custom-blocks/block-colour#defining_the_block_colour
+/** @ts-expect-error HSV_VALUE not decalred it types export*/
 Blockly.HSV_VALUE = 0.9
+/** @ts-expect-error HSV_SATURATION not decalred it types export*/
 Blockly.HSV_SATURATION = 0.65
 
 Blockly.Blocks['maze_moveForward'] = {
