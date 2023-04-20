@@ -81,6 +81,22 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
   const cellSize = 25
   const maxNumberOfBlocks = game.game.numOfBlocks
 
+  const [controlButtonState, setControlButtonState] = React.useState<{
+    run: boolean
+    onClick: () => void
+  }>({
+    run: true,
+    onClick: () => {
+      setControlButtonState({
+        run: false,
+        onClick: () => {
+          resetGameState()
+        },
+      })
+      runProgram()
+    },
+  })
+
   // use useImmer instead of useState to avoid unnecessary re-renders
   const [gameState, setGameState] = useImmer({
     gameGrid: constrcutGridFrom(
@@ -322,7 +338,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
       e.type == Blockly.Events.FINISHED_LOADING ||
       workspaceRefrence.isDragging()
     ) {
-      console.log('Event is UI event or finished loading or workspace is dragging')
+      // Event is UI event or finished loading or workspace is dragging
       return
     }
 
@@ -334,44 +350,40 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
     // If the game already have a numberOfBlocksLeft, then update it
     if (numberOfBlocksLeft !== undefined)
       setNumberOfBlocksLeft(workspaceRefrence.remainingCapacity())
-    console.log('Number of blocks left: ' + workspaceRefrence.remainingCapacity())
     if (e.type == Blockly.Events.BLOCK_CREATE) {
-      console.log('Event is block create')
-      console.log(e)
+      // Event is block create
       return
     }
     if (e.type == Blockly.Events.BLOCK_DELETE) {
-      console.log('Event is block delete')
+      // Event is block delete
       return
     }
     if (e.type == Blockly.Events.BLOCK_CHANGE) {
-      console.log('Event is block change')
+      // Event is block change
       return
     }
     if (e.type == Blockly.Events.BLOCK_MOVE) {
-      const castedEvent = e as Blockly.Events.BlockMove
-      console.log('Event is block move')
+      // Event is block move
       return
     }
     if (e.type == Blockly.Events.BLOCK_DRAG) {
-      console.log('Event is block drag')
+      // Event is block drag
       return
     }
     if (e.type == Blockly.Events.BUBBLE_OPEN) {
-      console.log('Event is bubble open')
+      // Event is bubble open
       return
     }
     if (e.type == Blockly.Events.TOOLBOX_ITEM_SELECT) {
-      console.log('Event is toolbox item select')
+      // Event is toolbox item select
       return
     }
     if (e.type == Blockly.Events.VAR_CREATE) {
-      console.log('Event is var create')
+      // Event is var create
       return
     }
-
-    // generateCode()
   }
+
   const blocklyGameOptions: Blockly.BlocklyOptions = {
     toolbox: gameToolBox,
     theme: Blockly.Themes.Zelos,
@@ -531,9 +543,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
     }
     setCurrentCode(code)
 
-    console.log(code)
     const parsedCode: BlockCode[] = parseCode(code)
-    console.log('parsedCode', parsedCode)
 
     // Set the game state to running
     actionsQueue.enqueue(() => {
@@ -578,6 +588,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
       playerLocation: { row: game.game.playerLocation[0], col: game.game.playerLocation[1] },
       result: ResultType.UNSET,
     })
+    actionsQueue.clear()
   }
 
   const onHitWall = (ExtraInfo?: string) => {
@@ -621,11 +632,10 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
           confirmButtonText="Restart Game"
           confirmButtonClassName="bg-brand text-white hidden"
           backButtonText="Go back to Games"
-          backButtonClassName="bg-brand  text-white"
+          backButtonClassName="bg-brand text-brand"
         >
           <p className="text-brand text-sm">Here is the code you wrote:</p>
           <pre className="text-xs text-brand-400 border-2 p-2">{prettifyCode(currentCode)}</pre>
-          <p className="text-brand text-sm">Do you want to go to the next game?</p>
         </AdminAlertDialog>
 
         <div className="grid md:hidden items-center h-screen grid-cols-1 justify-items-center py-24 px-8 relative flex-auto">
@@ -682,10 +692,10 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
             </div>
           ) : null}
           <button
-            onClick={runProgram}
+            onClick={controlButtonState.onClick}
             className="btn w-fit bg-brand py-3 text-white hover:bg-brand-500 absolute bottom-14 left-4 z-10"
           >
-            Run Program
+            {controlButtonState.run ? 'Run Program' : 'Stop'}
           </button>
         </div>
       </main>

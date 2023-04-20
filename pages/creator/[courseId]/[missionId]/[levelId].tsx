@@ -62,7 +62,6 @@ const EditLevel = ({
   const [defaultStepByStepGuideImages, setDefaultStepByStepGuideImages] = React.useState<string[]>(
     level.stepGuideImages
   )
-  console.log(defaultStepByStepGuideImages)
 
   const [alertData, setAlertData] = React.useState<{
     message: string

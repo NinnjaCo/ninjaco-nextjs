@@ -12,7 +12,6 @@ export const validateTokenRoleRequest = async (
   access_token: string
 ): Promise<ValidateTokenRoleRequest> => {
   try {
-    console.log('validateTokenRoleRequest', process.env.API_URL)
     const data = await (
       await fetch(process.env.API_URL + '/auth/validate-token-role', {
         method: 'POST',
@@ -26,7 +25,6 @@ export const validateTokenRoleRequest = async (
 
     return data
   } catch (error) {
-    console.log('Error in validateTokenRoleRequest', error)
     return {
       payload: false,
       timestamp: Date.now(),
@@ -61,7 +59,6 @@ export const authroizeRequest = async (req: NextRequestWithAuth): Promise<autori
     })
   }
 
-  console.log('validateTokenRoleRequest token is ', token)
   if (token) {
     let authorizationData: ValidateTokenRoleRequest | undefined = undefined
 
@@ -89,7 +86,6 @@ export const authroizeRequest = async (req: NextRequestWithAuth): Promise<autori
     }
   } else {
     // A non signedin user should not be able to access the admin page
-    console.log('User is not signed in in validateTokenRole')
     return {
       authorized: false,
       rewriteUrl: '/auth/signin',

@@ -52,7 +52,6 @@ function parseBlocks(lines: string[], currentLine = 0): BlockCode[] {
       const id = condition?.match(/'([^']*)'/)?.[1]
 
       if (!id || !actualCondition) {
-        console.log(condition, id, actualCondition)
         throw new Error('Invalid condition')
       }
 
