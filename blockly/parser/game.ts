@@ -127,4 +127,12 @@ function getBlock(lines: string[], startIndex: number): { block: string[]; nextL
   return { block: blockLines, nextLine: i + 1 }
 }
 
-export { parseCode }
+const prettifyCode = (code: string) => {
+  // remove prameters from all functions except if and for
+  // e.g. moveForward('block_id_5CoZ_`hU;XeKec`Y*NZA') => moveForward()
+
+  const codeWithoutParams = code.replace(/(\w+)\('([^']*)'\)/g, '$1()')
+
+  return codeWithoutParams
+}
+export { parseCode, prettifyCode }
