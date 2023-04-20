@@ -569,6 +569,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
       playerLocation: { row: game.game.playerLocation[0], col: game.game.playerLocation[1] },
       result: ResultType.UNSET,
     })
+    setRunButtonDisabled(false)
   }
 
   const onHitWall = (ExtraInfo?: string) => {
