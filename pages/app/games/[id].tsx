@@ -621,11 +621,10 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
           confirmButtonText="Restart Game"
           confirmButtonClassName="bg-brand text-white hidden"
           backButtonText="Go back to Games"
-          backButtonClassName="bg-brand  text-white"
+          backButtonClassName="bg-brand text-brand"
         >
           <p className="text-brand text-sm">Here is the code you wrote:</p>
           <pre className="text-xs text-brand-400 border-2 p-2">{prettifyCode(currentCode)}</pre>
-          <p className="text-brand text-sm">Do you want to go to the next game?</p>
         </AdminAlertDialog>
 
         <div className="grid md:hidden items-center h-screen grid-cols-1 justify-items-center py-24 px-8 relative flex-auto">
