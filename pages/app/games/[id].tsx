@@ -81,22 +81,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
   const cellSize = 25
   const maxNumberOfBlocks = game.game.numOfBlocks
 
-  const [controlButtonState, setControlButtonState] = React.useState<{
-    run: boolean
-    onClick: () => void
-  }>({
-    run: true,
-    onClick: () => {
-      setControlButtonState({
-        run: false,
-        onClick: () => {
-          resetGameState()
-        },
-      })
-      runProgram()
-    },
-  })
-
+  const [runButtonDisabled, setRunButtonDisabled] = React.useState(false)
   // use useImmer instead of useState to avoid unnecessary re-renders
   const [gameState, setGameState] = useImmer({
     gameGrid: constrcutGridFrom(
@@ -536,6 +521,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
       ...alertData,
       open: false,
     })
+    actionsQueue.clear()
 
     const code = getCodeFromBlockly()
     if (!code) {
@@ -544,13 +530,6 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
     setCurrentCode(code)
 
     const parsedCode: BlockCode[] = parseCode(code)
-
-    // Set the game state to running
-    actionsQueue.enqueue(() => {
-      setGameState((prevState) => {
-        return { ...prevState, result: ResultType.RUNNING }
-      })
-    })
 
     // traverse the code and execute the blocks in order (depth first)
     executeCode(parsedCode)
@@ -567,6 +546,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
         variant: 'error',
         open: true,
       })
+      setRunButtonDisabled(false)
     })
 
     runQueueActionsWithDelay(1000)
@@ -577,6 +557,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
   }
 
   const resetGameState = () => {
+    actionsQueue.clear()
     setGameState({
       gameGrid: constrcutGridFrom(
         game.game.sizeOfGrid,
@@ -588,7 +569,6 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
       playerLocation: { row: game.game.playerLocation[0], col: game.game.playerLocation[1] },
       result: ResultType.UNSET,
     })
-    actionsQueue.clear()
   }
 
   const onHitWall = (ExtraInfo?: string) => {
@@ -624,7 +604,8 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
           open={adminDialogOpen}
           title="Congratulations, You won!"
           confirm={() => {
-            router.reload()
+            setAdminDialogOpen(false)
+            router.push('/app/games')
           }}
           close={() => {
             setAdminDialogOpen(false)
@@ -692,10 +673,14 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
             </div>
           ) : null}
           <button
-            onClick={controlButtonState.onClick}
-            className="btn w-fit bg-brand py-3 text-white hover:bg-brand-500 absolute bottom-14 left-4 z-10"
+            onClick={() => {
+              runProgram()
+              setRunButtonDisabled(true)
+            }}
+            disabled={runButtonDisabled}
+            className="btn w-fit bg-brand py-3 text-white hover:bg-brand-500 absolute bottom-14 left-4 z-10 disabled:bg-gray-600 disabled:cursor-not-allowed"
           >
-            {controlButtonState.run ? 'Run Program' : 'Stop'}
+            Run Program
           </button>
         </div>
       </main>
