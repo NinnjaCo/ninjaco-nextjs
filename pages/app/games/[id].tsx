@@ -1,4 +1,5 @@
-import { BlockCode, BlockType, ConditionType, parseCode } from '@/blockly/parser/game'
+import { AdminAlertDialog } from '@/components/admin/dialog'
+import { BlockCode, BlockType, ConditionType, parseCode, prettifyCode } from '@/blockly/parser/game'
 import { Direction, GridCell } from '@/components/user/game/gridCell'
 import { GetServerSideProps } from 'next'
 import { GridCellComponent } from '@/components/user/game/gridCell'
@@ -59,12 +60,17 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
   // use useImmer instead of useState to avoid unnecessary re-renders
   const cellSize = 25
   const gridSize = 15
+  const maxNumberOfBlocks = 5
   const [gameState, setGameState] = useImmer({
     gameGrid: getInitialGrid(gridSize),
     currentPlayerDirection: Direction.LEFT,
     playerLocation: { row: 13, col: 13 },
     result: ResultType.UNSET,
   })
+
+  const [numberOfBlocksLeft, setNumberOfBlocksLeft] = React.useState<number | undefined>(
+    maxNumberOfBlocks
+  )
   const [alertData, setAlertData] = React.useState<{
     message: string
     variant: 'error' | 'success' | 'info' | 'warning'
@@ -76,7 +82,8 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
     open: true,
     close: () => setAlertData({ ...alertData, open: false }),
   })
-
+  const [adminDialogOpen, setAdminDialogOpen] = React.useState(false)
+  const [currentCode, setCurrentCode] = React.useState<string>('')
   const actionsQueue: Queue<() => void> = new Queue()
 
   // Changes the state of the currentPlayerDirection
@@ -133,6 +140,7 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
       }
       // If there is no path ahead of the player, then do not move forward
       if (!isPathAhead(draft)) {
+        onHitWall()
         return
       }
       const { row, col } = draft.playerLocation
@@ -157,7 +165,6 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
   // Returns true if there is a path ahead of the player (i.e. the player can move forward)
   const isPathAhead = (currentGameState) => {
     const { row, col } = currentGameState.playerLocation
-    console.log('isPathAhead', row, col, currentGameState.currentPlayerDirection)
     switch (currentGameState.currentPlayerDirection) {
       case Direction.UP:
         if (row - 1 >= 0 && !currentGameState.gameGrid[row - 1][col].isWall) {
@@ -191,7 +198,6 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
   // Returns true if there is a path to the left of the player (i.e. the player can turn left)
   const isPathLeft = (currentGameState) => {
     const { row, col } = currentGameState.playerLocation
-    console.log('isPathLeft', row, col, currentGameState.currentPlayerDirection)
     switch (currentGameState.currentPlayerDirection) {
       case Direction.UP:
         if (col - 1 >= 0 && !currentGameState.gameGrid[row][col - 1].isWall) {
@@ -225,7 +231,6 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
   // Returns true if there is a path to the right of the player (i.e. the player can turn right)
   const isPathRight = (currentGameState) => {
     const { row, col } = currentGameState.playerLocation
-    console.log('isPathRight', row, col, currentGameState.currentPlayerDirection)
     switch (currentGameState.currentPlayerDirection) {
       case Direction.UP:
         if (
@@ -285,6 +290,10 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
       open: false,
     })
 
+    // If the game already have a numberOfBlocksLeft, then update it
+    if (numberOfBlocksLeft !== undefined)
+      setNumberOfBlocksLeft(workspaceRefrence.remainingCapacity())
+    console.log('Number of blocks left: ' + workspaceRefrence.remainingCapacity())
     if (e.type == Blockly.Events.BLOCK_CREATE) {
       console.log('Event is block create')
       console.log(e)
@@ -338,7 +347,7 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
       wheel: true,
     },
     comments: false,
-    maxBlocks: 10,
+    maxBlocks: maxNumberOfBlocks,
     trashcan: true,
     modalInputs: true,
     zoom: {
@@ -473,6 +482,8 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
     if (!code) {
       return
     }
+    setCurrentCode(code)
+    onHitGoal()
 
     // If the player is already on the goal, don't run the code
 
@@ -492,6 +503,19 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
     }, 1000 * (actionsQueue.size() + 1))
   }
 
+  const onHitWall = (ExtraInfo?: string) => {
+    setAlertData({
+      ...alertData,
+      message: 'You hit a wall! ' + (ExtraInfo ?? ''),
+      variant: 'warning',
+      open: true,
+    })
+  }
+
+  const onHitGoal = (ExtraInfo?: string) => {
+    setAdminDialogOpen(true)
+  }
+
   return (
     <>
       <Head>
@@ -502,6 +526,25 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
 
       <main className="relative h-screen w-full flex flex-col">
         <UserMenu isOnCoursePage={false} isOnGamesPage={true} user={user} />
+        <AdminAlertDialog
+          open={adminDialogOpen}
+          title="Congratulations, You won!"
+          confirm={() => {
+            console.log('confirm go to next level')
+          }}
+          close={() => {
+            setAdminDialogOpen(false)
+          }}
+          confirmButtonText="Next Game"
+          confirmButtonClassName="bg-brand text-white"
+          backButtonText="Go back to Games"
+          backButtonClassName="bg-white text-brand"
+        >
+          <p className="text-brand text-sm">Here is the code you wrote:</p>
+          <pre className="text-xs text-brand-400 border-2 p-2">{prettifyCode(currentCode)}</pre>
+          <p className="text-brand text-sm">Do you want to go to the next game?</p>
+        </AdminAlertDialog>
+
         <div className="grid md:hidden items-center h-screen grid-cols-1 justify-items-center py-24 px-8 relative flex-auto">
           <h1 className="self-end divide-x-2 divide-brand text-sm ">
             <span className="px-2 font-bold">{t.Creator.games.createGame.mobileError}</span>
@@ -547,9 +590,14 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
               })
             })}
           </div>
+          {numberOfBlocksLeft !== undefined && numberOfBlocksLeft >= 0 ? (
+            <div className="absolute bottom-32 left-4 z-50 text-xs text-brand-700">
+              # Blocks Left: {numberOfBlocksLeft}
+            </div>
+          ) : null}
           <button
             onClick={runProgram}
-            className="btn w-fit bg-brand py-3 text-white hover:bg-brand-500 absolute bottom-14 left-4 z-50"
+            className="btn w-fit bg-brand py-3 text-white hover:bg-brand-500 absolute bottom-14 left-4 z-10"
           >
             Run Program
           </button>
