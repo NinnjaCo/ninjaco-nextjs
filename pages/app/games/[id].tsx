@@ -1,8 +1,11 @@
 import { BlockCode, BlockType, ConditionType, parseCode } from '@/blockly/parser/game'
 import { Direction, GridCell } from '@/components/user/game/gridCell'
+import { Game } from '@/models/crud/game.model'
+import { GameEnrollmentAPI } from '@/utils/api/game-enrollment/game-enrollment.api'
 import { GetServerSideProps } from 'next'
 import { GridCellComponent } from '@/components/user/game/gridCell'
 import { User } from '@/models/crud'
+import { UserPlayGame } from '@/models/crud/game-enrollment.model'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { gameBlocks } from '@/blockly/blocks/game'
 import { gameGenerator } from '@/blockly/generetors/game'
@@ -15,9 +18,23 @@ import Link from 'next/link'
 import React from 'react'
 import UserMenu from '@/components/user/userMenu'
 import useTranslation from '@/hooks/useTranslation'
+
+enum GameType {
+  enrollment = 'enrollment',
+  game = 'game',
+}
+
+const getTypeOfGame = (game: UserPlayGame | Game): GameType => {
+  if ((game as UserPlayGame).game) {
+    return GameType.enrollment
+  } else {
+    return GameType.game
+  }
+}
+
 interface ServerSideProps {
   user: User
-  gameId: string
+  game: UserPlayGame
 }
 
 const getInitialGrid = (size: number): GridCell[][] => {
@@ -37,6 +54,27 @@ const getInitialGrid = (size: number): GridCell[][] => {
   return grid
 }
 
+const constrcutGridFrom = (
+  size: number,
+  playerLocation: { row: number; col: number },
+  goalLocation: { row: number; col: number },
+  walls: number[][]
+) => {
+  const grid: GridCell[][] = []
+  for (let i = 0; i < size; i++) {
+    grid.push([])
+    for (let j = 0; j < size; j++) {
+      grid[i].push({
+        row: i,
+        col: j,
+        isPlayer: i === playerLocation.row && j === playerLocation.col,
+        isGoal: i === goalLocation.row && j === goalLocation.col,
+        isWall: walls.includes([i, j]),
+      })
+    }
+  }
+  return grid
+}
 /**
  * Outcomes of running the user program.
  */
@@ -48,9 +86,10 @@ const ResultType = {
   ERROR: -2,
 }
 
-const ViewGame = ({ user, gameId }: ServerSideProps) => {
+const ViewGame = ({ user, game }: ServerSideProps) => {
   const t = useTranslation()
 
+  console.log(game)
   const [gameGrid, setGameGrid] = React.useState<GridCell[][]>(getInitialGrid(15))
   const [currentPlayerDirection, setCurrentPlayerDirection] = React.useState<Direction>(
     Direction.DOWN
@@ -361,14 +400,6 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
     executeCode(parsedCode)
   }
 
-  const wait = (ms: number) => {
-    const start = new Date().getTime()
-    let end = start
-    while (end < start + ms) {
-      end = new Date().getTime()
-    }
-  }
-
   return (
     <>
       <Head>
@@ -394,7 +425,7 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
             codeGenerator={gameGenerator}
             blocksDefinitions={gameBlocks}
             onChangeListener={onChangeListener}
-            storageKey={`game-${gameId}-${user._id}}`}
+            storageKey={`game-${game.game._id}-${user._id}}`}
           ></BlocklyBoard>
           <div
             className="grid gap-px transition-all w-fit h-fit absolute right-20 top-16"
@@ -445,10 +476,48 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
+  const gameRes = await new GameEnrollmentAPI(session).findByGameId(id as string, session.user._id)
+  if (!gameRes || !gameRes.payload) {
+    return {
+      redirect: {
+        destination: '/app/games',
+        permanent: false,
+      },
+    }
+  }
+
+  const gameType = getTypeOfGame(gameRes.payload)
+
+  // If the game type is normal game and not enrollment, then this is the first time the user is playing the game
+  // thus create a new enrollment
+  if (gameType === GameType.game) {
+    const newEnrollmentRes = await new GameEnrollmentAPI(session).create({
+      gameId: id as string,
+      userId: session.user._id,
+    })
+
+    if (!newEnrollmentRes || !newEnrollmentRes.payload) {
+      return {
+        redirect: {
+          destination: '/app/games',
+          permanent: false,
+        },
+      }
+    }
+
+    return {
+      props: {
+        user: session.user,
+        game: newEnrollmentRes.payload,
+      },
+    }
+  }
+
+  // If we are here, then the game type is enrollment, so we can just return the enrollment
   return {
     props: {
       user: session.user,
-      gameId: id,
+      game: gameRes.payload,
     },
   }
 }
