@@ -1,26 +1,54 @@
-import { BlockCode, BlockType, ConditionType, parseCode } from '@/blockly/parser/game'
+import { AdminAlertDialog } from '@/components/admin/dialog'
+import { BlockCode, BlockType, ConditionType, parseCode, prettifyCode } from '@/blockly/parser/game'
 import { Direction, GridCell } from '@/components/user/game/gridCell'
+import { Game } from '@/models/crud/game.model'
+import { GameEnrollmentAPI } from '@/utils/api/game-enrollment/game-enrollment.api'
 import { GetServerSideProps } from 'next'
 import { GridCellComponent } from '@/components/user/game/gridCell'
+import { Queue } from 'datastructure/queue'
 import { User } from '@/models/crud'
+import { UserPlayGame } from '@/models/crud/game-enrollment.model'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { gameBlocks } from '@/blockly/blocks/game'
 import { gameGenerator } from '@/blockly/generetors/game'
 import { gameToolBox } from '@/blockly/toolbox/game'
 import { getServerSession } from 'next-auth'
+import { useImmer } from 'use-immer'
+import { useRouter } from 'next/router'
+import Alert from '@/components/shared/alert'
 import Blockly from 'blockly'
 import BlocklyBoard from '@/components/blockly/blockly'
 import Head from 'next/head'
 import Link from 'next/link'
 import React from 'react'
 import UserMenu from '@/components/user/userMenu'
+import party from 'party-js'
 import useTranslation from '@/hooks/useTranslation'
-interface ServerSideProps {
-  user: User
-  gameId: string
+
+enum GameType {
+  enrollment = 'enrollment',
+  game = 'game',
 }
 
-const getInitialGrid = (size: number): GridCell[][] => {
+const getTypeOfGame = (game: UserPlayGame | Game): GameType => {
+  if ((game as UserPlayGame).game) {
+    return GameType.enrollment
+  } else {
+    return GameType.game
+  }
+}
+
+interface ServerSideProps {
+  user: User
+  game: UserPlayGame
+}
+
+const constrcutGridFrom = (
+  size: number,
+  playerLocation: number[],
+  goalLocation: number[],
+  walls: number[][]
+) => {
   const grid: GridCell[][] = []
   for (let i = 0; i < size; i++) {
     grid.push([])
@@ -28,128 +56,182 @@ const getInitialGrid = (size: number): GridCell[][] => {
       grid[i].push({
         row: i,
         col: j,
-        isPlayer: i === 1 && j === 1,
-        isGoal: false,
-        isWall: i === 0 || j === 0 || i === size - 1 || j === size - 1,
+        isPlayer: i === playerLocation[0] && j === playerLocation[1],
+        isGoal: i === goalLocation[0] && j === goalLocation[1],
+        isWall: walls.some((wall) => wall[0] === i && wall[1] === j),
       })
     }
   }
   return grid
 }
-
 /**
  * Outcomes of running the user program.
  */
 const ResultType = {
   UNSET: 0,
   SUCCESS: 1,
-  FAILURE: -1,
-  TIMEOUT: 2,
-  ERROR: -2,
+  RUNNING: 2,
 }
 
-const ViewGame = ({ user, gameId }: ServerSideProps) => {
+const ViewGame = ({ user, game }: ServerSideProps) => {
   const t = useTranslation()
+  const router = useRouter()
+  const parentRef = React.useRef<any>()
 
-  const [gameGrid, setGameGrid] = React.useState<GridCell[][]>(getInitialGrid(15))
-  const [currentPlayerDirection, setCurrentPlayerDirection] = React.useState<Direction>(
-    Direction.DOWN
-  )
-  const [playerLocation, setPlayerLocation] = React.useState({ row: 1, col: 1 })
-  const [result, setResult] = React.useState(ResultType.UNSET)
   const cellSize = 25
+  const maxNumberOfBlocks = game.game.numOfBlocks
+
+  // use useImmer instead of useState to avoid unnecessary re-renders
+  const [gameState, setGameState] = useImmer({
+    gameGrid: constrcutGridFrom(
+      game.game.sizeOfGrid,
+      game.game.playerLocation,
+      game.game.goalLocation,
+      game.game.wallsLocations
+    ),
+    currentPlayerDirection: game.game.playerDirection as Direction,
+    playerLocation: { row: game.game.playerLocation[0], col: game.game.playerLocation[1] },
+    result: ResultType.UNSET,
+  })
+
+  const [numberOfBlocksLeft, setNumberOfBlocksLeft] = React.useState<number | undefined>(
+    maxNumberOfBlocks
+  )
+  const [alertData, setAlertData] = React.useState<{
+    message: string
+    variant: 'error' | 'success' | 'info' | 'warning'
+    open: boolean
+    close: () => void
+  }>({
+    message: 'Place blocks and run the program to start the game',
+    variant: 'info',
+    open: true,
+    close: () => setAlertData({ ...alertData, open: false }),
+  })
+  const [adminDialogOpen, setAdminDialogOpen] = React.useState(false)
+  const [currentCode, setCurrentCode] = React.useState<string>('')
+  const actionsQueue: Queue<() => void> = new Queue()
 
   // Changes the state of the currentPlayerDirection
-  const turnLeft = () => {
-    switch (currentPlayerDirection) {
-      case Direction.UP:
-        setCurrentPlayerDirection(Direction.LEFT)
-        break
-      case Direction.DOWN:
-        setCurrentPlayerDirection(Direction.RIGHT)
-        break
-      case Direction.LEFT:
-        setCurrentPlayerDirection(Direction.DOWN)
-        break
-      case Direction.RIGHT:
-        setCurrentPlayerDirection(Direction.UP)
-        break
-    }
+  const turnLeft = (carryCheckFunction?: (gameState) => boolean) => {
+    setGameState((draft) => {
+      if (carryCheckFunction && !carryCheckFunction(draft)) {
+        return
+      }
+      switch (draft.currentPlayerDirection) {
+        case Direction.UP:
+          draft.currentPlayerDirection = Direction.LEFT
+          break
+        case Direction.DOWN:
+          draft.currentPlayerDirection = Direction.RIGHT
+          break
+        case Direction.LEFT:
+          draft.currentPlayerDirection = Direction.DOWN
+          break
+        case Direction.RIGHT:
+          draft.currentPlayerDirection = Direction.UP
+          break
+      }
+    })
   }
   // Changes the state of the currentPlayerDirection
-  const turnRight = () => {
-    switch (currentPlayerDirection) {
-      case Direction.UP:
-        setCurrentPlayerDirection(Direction.RIGHT)
-        break
-      case Direction.DOWN:
-        setCurrentPlayerDirection(Direction.LEFT)
-        break
-      case Direction.LEFT:
-        setCurrentPlayerDirection(Direction.UP)
-        break
-      case Direction.RIGHT:
-        setCurrentPlayerDirection(Direction.DOWN)
-        break
-    }
+  const turnRight = (carryCheckFunction?: (gameState) => boolean) => {
+    setGameState((draft) => {
+      if (carryCheckFunction && !carryCheckFunction(draft)) {
+        return
+      }
+
+      switch (draft.currentPlayerDirection) {
+        case Direction.UP:
+          draft.currentPlayerDirection = Direction.RIGHT
+          break
+        case Direction.DOWN:
+          draft.currentPlayerDirection = Direction.LEFT
+          break
+        case Direction.LEFT:
+          draft.currentPlayerDirection = Direction.UP
+          break
+        case Direction.RIGHT:
+          draft.currentPlayerDirection = Direction.DOWN
+          break
+      }
+    })
   }
   // Changes the state of the playerLocation and gameGrid
-  const moveForward = () => {
-    const newGrid = [...gameGrid]
-    const { row, col } = playerLocation
-    switch (currentPlayerDirection) {
-      case Direction.UP:
-        if (row - 1 >= 0 && !newGrid[row - 1][col].isWall) {
-          newGrid[row][col].isPlayer = false
-          newGrid[row - 1][col].isPlayer = true
-          setPlayerLocation({ row: row - 1, col })
-        }
-        break
-      case Direction.DOWN:
-        if (row + 1 < gameGrid.length && !newGrid[row + 1][col].isWall) {
-          newGrid[row][col].isPlayer = false
-          newGrid[row + 1][col].isPlayer = true
-          setPlayerLocation({ row: row + 1, col })
-        }
-        break
-      case Direction.LEFT:
-        if (col - 1 >= 0 && !newGrid[row][col - 1].isWall) {
-          newGrid[row][col].isPlayer = false
-          newGrid[row][col - 1].isPlayer = true
-          setPlayerLocation({ row, col: col - 1 })
-        }
-        break
-      case Direction.RIGHT:
-        if (col + 1 < gameGrid.length && !newGrid[row][col + 1].isWall) {
-          newGrid[row][col].isPlayer = false
-          newGrid[row][col + 1].isPlayer = true
-          setPlayerLocation({ row, col: col + 1 })
-        }
-        break
-    }
-    setGameGrid(newGrid)
+  const moveForward = (carryCheckFunction?: (gameState) => boolean) => {
+    setGameState((draft) => {
+      // If the carryCheckFunction is defined and returns false, then do not move forward
+      if (carryCheckFunction && !carryCheckFunction(draft)) {
+        return
+      }
+      // If there is no path ahead of the player, then show an alert and do not move forward
+      if (!isPathAhead(draft)) {
+        onHitWall()
+        return
+      }
+
+      const { row, col } = draft.playerLocation
+      switch (draft.currentPlayerDirection) {
+        case Direction.UP:
+          if (row - 1 >= 0) {
+            draft.playerLocation.row = row - 1
+          }
+          break
+        case Direction.DOWN:
+          if (row + 1 < draft.gameGrid.length) {
+            draft.playerLocation.row = row + 1
+          }
+          break
+        case Direction.LEFT:
+          if (col - 1 >= 0) {
+            draft.playerLocation.col = col - 1
+          }
+          break
+        case Direction.RIGHT:
+          if (col + 1 < draft.gameGrid.length) {
+            draft.playerLocation.col = col + 1
+          }
+          break
+      }
+      draft.gameGrid[row][col].isPlayer = false
+      draft.gameGrid[draft.playerLocation.row][draft.playerLocation.col].isPlayer = true
+
+      // If the player has reached the goal, then set the result to success
+      if (isOnGoal(draft)) {
+        draft.result = ResultType.SUCCESS
+        onHitGoal()
+        // Clear the actionsQueue to stop the game
+        actionsQueue.clear()
+      }
+    })
   }
   // Returns true if there is a path ahead of the player (i.e. the player can move forward)
-  const isPathAhead = () => {
-    const { row, col } = playerLocation
-    switch (currentPlayerDirection) {
+  const isPathAhead = (currentGameState) => {
+    const { row, col } = currentGameState.playerLocation
+    switch (currentGameState.currentPlayerDirection) {
       case Direction.UP:
-        if (row - 1 >= 0 && !gameGrid[row - 1][col].isWall) {
+        if (row - 1 >= 0 && !currentGameState.gameGrid[row - 1][col].isWall) {
           return true
         }
         break
       case Direction.DOWN:
-        if (row + 1 < gameGrid.length && !gameGrid[row + 1][col].isWall) {
+        if (
+          row + 1 < currentGameState.gameGrid.length &&
+          !currentGameState.gameGrid[row + 1][col].isWall
+        ) {
           return true
         }
         break
       case Direction.LEFT:
-        if (col - 1 >= 0 && !gameGrid[row][col - 1].isWall) {
+        if (col - 1 >= 0 && !currentGameState.gameGrid[row][col - 1].isWall) {
           return true
         }
         break
       case Direction.RIGHT:
-        if (col + 1 < gameGrid.length && !gameGrid[row][col + 1].isWall) {
+        if (
+          col + 1 < currentGameState.gameGrid.length &&
+          !currentGameState.gameGrid[row][col + 1].isWall
+        ) {
           return true
         }
         break
@@ -157,26 +239,32 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
     return false
   }
   // Returns true if there is a path to the left of the player (i.e. the player can turn left)
-  const isPathLeft = () => {
-    const { row, col } = playerLocation
-    switch (currentPlayerDirection) {
+  const isPathLeft = (currentGameState) => {
+    const { row, col } = currentGameState.playerLocation
+    switch (currentGameState.currentPlayerDirection) {
       case Direction.UP:
-        if (col - 1 >= 0 && !gameGrid[row][col - 1].isWall) {
+        if (col - 1 >= 0 && !currentGameState.gameGrid[row][col - 1].isWall) {
           return true
         }
         break
       case Direction.DOWN:
-        if (col + 1 < gameGrid.length && !gameGrid[row][col + 1].isWall) {
+        if (
+          col + 1 < currentGameState.gameGrid.length &&
+          !currentGameState.gameGrid[row][col + 1].isWall
+        ) {
           return true
         }
         break
       case Direction.LEFT:
-        if (row + 1 < gameGrid.length && !gameGrid[row + 1][col].isWall) {
+        if (
+          row + 1 < currentGameState.gameGrid.length &&
+          !currentGameState.gameGrid[row + 1][col].isWall
+        ) {
           return true
         }
         break
       case Direction.RIGHT:
-        if (row - 1 >= 0 && !gameGrid[row - 1][col].isWall) {
+        if (row - 1 >= 0 && !currentGameState.gameGrid[row - 1][col].isWall) {
           return true
         }
         break
@@ -184,26 +272,32 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
     return false
   }
   // Returns true if there is a path to the right of the player (i.e. the player can turn right)
-  const isPathRight = () => {
-    const { row, col } = playerLocation
-    switch (currentPlayerDirection) {
+  const isPathRight = (currentGameState) => {
+    const { row, col } = currentGameState.playerLocation
+    switch (currentGameState.currentPlayerDirection) {
       case Direction.UP:
-        if (col + 1 < gameGrid.length && !gameGrid[row][col + 1].isWall) {
+        if (
+          col + 1 < currentGameState.gameGrid.length &&
+          !currentGameState.gameGrid[row][col + 1].isWall
+        ) {
           return true
         }
         break
       case Direction.DOWN:
-        if (col - 1 >= 0 && !gameGrid[row][col - 1].isWall) {
+        if (col - 1 >= 0 && !currentGameState.gameGrid[row][col - 1].isWall) {
           return true
         }
         break
       case Direction.LEFT:
-        if (row - 1 >= 0 && !gameGrid[row - 1][col].isWall) {
+        if (row - 1 >= 0 && !currentGameState.gameGrid[row - 1][col].isWall) {
           return true
         }
         break
       case Direction.RIGHT:
-        if (row + 1 < gameGrid.length && !gameGrid[row + 1][col].isWall) {
+        if (
+          row + 1 < currentGameState.gameGrid.length &&
+          !currentGameState.gameGrid[row + 1][col].isWall
+        ) {
           return true
         }
         break
@@ -211,13 +305,11 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
     return false
   }
   // Returns true if the player is on the goal
-  const isOnGoal = () => {
-    const { row, col } = playerLocation
-    return gameGrid[row][col].isGoal
+  const isOnGoal = (currentGameState) => {
+    const { row, col } = currentGameState.playerLocation
+    return currentGameState.gameGrid[row][col].isGoal
   }
-
-  const parentRef = React.useRef<any>()
-
+  // Change listener passed to Blockly compoenent as a callback
   const onChangeListener = (
     e: Blockly.Events.Abstract,
     workspaceRefrence: Blockly.WorkspaceSvg
@@ -233,8 +325,19 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
       console.log('Event is UI event or finished loading or workspace is dragging')
       return
     }
+
+    setAlertData({
+      ...alertData,
+      open: false,
+    })
+
+    // If the game already have a numberOfBlocksLeft, then update it
+    if (numberOfBlocksLeft !== undefined)
+      setNumberOfBlocksLeft(workspaceRefrence.remainingCapacity())
+    console.log('Number of blocks left: ' + workspaceRefrence.remainingCapacity())
     if (e.type == Blockly.Events.BLOCK_CREATE) {
       console.log('Event is block create')
+      console.log(e)
       return
     }
     if (e.type == Blockly.Events.BLOCK_DELETE) {
@@ -246,6 +349,7 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
       return
     }
     if (e.type == Blockly.Events.BLOCK_MOVE) {
+      const castedEvent = e as Blockly.Events.BlockMove
       console.log('Event is block move')
       return
     }
@@ -284,7 +388,7 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
       wheel: true,
     },
     comments: false,
-    maxBlocks: 10,
+    maxBlocks: maxNumberOfBlocks,
     trashcan: true,
     modalInputs: true,
     zoom: {
@@ -302,71 +406,197 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
     }
     return null
   }
+  const highlightBlock = (blockId: string | undefined) => {
+    if (parentRef.current) {
+      parentRef.current.highlightBlockById(blockId)
+    }
+  }
+  const clearHighlightedBlock = () => {
+    if (parentRef.current) {
+      parentRef.current.clearHighlightedBlock()
+    }
+  }
+  const executeCode = (
+    code: BlockCode[] | undefined,
+    carryCheckFunction?: (gameState) => boolean
+  ) => {
+    if (!code || code.length === 0) {
+      return
+    }
+
+    const block = code[0]
+    const remainingCode = code.slice(1)
+    // Execute block
+    switch (block.type) {
+      case BlockType.MOVE_FORWARD:
+        actionsQueue.enqueue(() => {
+          highlightBlock(block.id)
+          moveForward(carryCheckFunction)
+        })
+
+        break
+      case BlockType.TURN_LEFT:
+        actionsQueue.enqueue(() => {
+          highlightBlock(block.id)
+          turnLeft(carryCheckFunction)
+        })
+        break
+      case BlockType.TURN_RIGHT:
+        actionsQueue.enqueue(() => {
+          highlightBlock(block.id)
+          turnRight(carryCheckFunction)
+        })
+        break
+      case BlockType.IF:
+        actionsQueue.enqueue(() => {
+          highlightBlock(block.id)
+        })
+        switch (block.condition) {
+          case ConditionType.IS_PATH_FORWARD:
+            executeCode(
+              block.body,
+              carryCheckFunction
+                ? (aGameState) => carryCheckFunction(aGameState) && isPathAhead(aGameState)
+                : isPathAhead
+            )
+            break
+          case ConditionType.IS_PATH_LEFT:
+            executeCode(
+              block.body,
+              carryCheckFunction
+                ? (aGameState) => carryCheckFunction(aGameState) && isPathLeft(aGameState)
+                : isPathLeft
+            )
+            break
+          case ConditionType.IS_PATH_RIGHT:
+            executeCode(
+              block.body,
+              carryCheckFunction
+                ? (aGameState) => carryCheckFunction(aGameState) && isPathRight(aGameState)
+                : isPathRight
+            )
+            break
+        }
+        break
+      case BlockType.ELSE:
+        actionsQueue.enqueue(() => {
+          highlightBlock(block.id)
+        })
+        executeCode(block.body, carryCheckFunction)
+        break
+      case BlockType.FOR:
+        if (!block.loopCount) {
+          return
+        }
+        if (block.loopCount > 100) {
+          setAlertData({
+            ...alertData,
+            message: 'You have a loop with more than 100 iterations',
+            variant: 'warning',
+            open: true,
+          })
+          return
+        }
+
+        // each iteration of the loop should wait for the previous iteration WAIT_TIME
+        for (let i = 0; i < block.loopCount; i++) {
+          executeCode(block.body, carryCheckFunction)
+        }
+
+        break
+    }
+    executeCode(remainingCode, carryCheckFunction)
+  }
+  const runQueueActionsWithDelay = (delay: number) => {
+    if (actionsQueue.isEmpty()) {
+      return
+    }
+    const action = actionsQueue.dequeue()
+    if (action) {
+      action()
+    }
+    setTimeout(() => {
+      runQueueActionsWithDelay(delay)
+    }, delay)
+  }
   const runProgram = () => {
+    setAlertData({
+      ...alertData,
+      open: false,
+    })
+
     const code = getCodeFromBlockly()
     if (!code) {
       return
     }
-    if (result === ResultType.SUCCESS) {
-      return
-    }
+    setCurrentCode(code)
 
+    console.log(code)
     const parsedCode: BlockCode[] = parseCode(code)
+    console.log('parsedCode', parsedCode)
 
-    const timestep = 1000 / 60
+    // Set the game state to running
+    actionsQueue.enqueue(() => {
+      setGameState((prevState) => {
+        return { ...prevState, result: ResultType.RUNNING }
+      })
+    })
 
     // traverse the code and execute the blocks in order (depth first)
-    const executeCode = (code: BlockCode[] | undefined) => {
-      if (!code) {
-        return
-      }
-
-      for (let i = 0; i < code.length; i++) {
-        const block = code[i]
-        switch (block.type) {
-          case BlockType.MOVE_FORWARD:
-            if (!isPathAhead()) {
-              setResult(ResultType.FAILURE)
-              return
-            }
-            moveForward()
-            break
-          case BlockType.TURN_LEFT:
-            turnLeft()
-            break
-          case BlockType.TURN_RIGHT:
-            turnRight()
-            break
-          case BlockType.IF:
-            switch (block.condition) {
-              case ConditionType.IS_PATH_FORWARD:
-                if (isPathAhead()) {
-                  executeCode(block.body)
-                }
-                break
-              case ConditionType.IS_PATH_LEFT:
-                if (isPathLeft()) {
-                  executeCode(block.body)
-                }
-                break
-              case ConditionType.IS_PATH_RIGHT:
-                if (isPathRight()) {
-                  executeCode(block.body)
-                }
-                break
-            }
-        }
-      }
-    }
     executeCode(parsedCode)
+
+    // After the code is executed, if we reached the end of the queue then the goal was never reached by a moveForward
+    // thus, setAlertData that you didnt reach the goal
+    actionsQueue.enqueue(() => {
+      setGameState((prevState) => {
+        return { ...prevState, result: ResultType.UNSET }
+      })
+      setAlertData({
+        ...alertData,
+        message: 'Ugh ☹️ You did not reach the goal, try again!',
+        variant: 'error',
+        open: true,
+      })
+    })
+
+    runQueueActionsWithDelay(1000)
+    setTimeout(() => {
+      clearHighlightedBlock()
+      resetGameState()
+    }, 1000 * (actionsQueue.size() + 1))
   }
 
-  const wait = (ms: number) => {
-    const start = new Date().getTime()
-    let end = start
-    while (end < start + ms) {
-      end = new Date().getTime()
-    }
+  const resetGameState = () => {
+    setGameState({
+      gameGrid: constrcutGridFrom(
+        game.game.sizeOfGrid,
+        game.game.playerLocation,
+        game.game.goalLocation,
+        game.game.wallsLocations
+      ),
+      currentPlayerDirection: game.game.playerDirection as Direction,
+      playerLocation: { row: game.game.playerLocation[0], col: game.game.playerLocation[1] },
+      result: ResultType.UNSET,
+    })
+  }
+
+  const onHitWall = (ExtraInfo?: string) => {
+    setAlertData({
+      ...alertData,
+      message: 'You hit a wall! ' + (ExtraInfo ?? ''),
+      variant: 'warning',
+      open: true,
+    })
+  }
+
+  const onHitGoal = (ExtraInfo?: string) => {
+    party.confetti(party.Rect.fromScreen(), {
+      count: 200,
+      shapes: ['roundedRectangle', 'star', 'circle', 'rectangle'],
+      speed: 10,
+      spread: 30,
+    })
+    setAdminDialogOpen(true)
   }
 
   return (
@@ -379,6 +609,25 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
 
       <main className="relative h-screen w-full flex flex-col">
         <UserMenu isOnCoursePage={false} isOnGamesPage={true} user={user} />
+        <AdminAlertDialog
+          open={adminDialogOpen}
+          title="Congratulations, You won!"
+          confirm={() => {
+            router.reload()
+          }}
+          close={() => {
+            setAdminDialogOpen(false)
+          }}
+          confirmButtonText="Restart Game"
+          confirmButtonClassName="bg-brand text-white hidden"
+          backButtonText="Go back to Games"
+          backButtonClassName="bg-brand  text-white"
+        >
+          <p className="text-brand text-sm">Here is the code you wrote:</p>
+          <pre className="text-xs text-brand-400 border-2 p-2">{prettifyCode(currentCode)}</pre>
+          <p className="text-brand text-sm">Do you want to go to the next game?</p>
+        </AdminAlertDialog>
+
         <div className="grid md:hidden items-center h-screen grid-cols-1 justify-items-center py-24 px-8 relative flex-auto">
           <h1 className="self-end divide-x-2 divide-brand text-sm ">
             <span className="px-2 font-bold">{t.Creator.games.createGame.mobileError}</span>
@@ -388,21 +637,29 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
           </Link>
         </div>
         <div className="hidden md:flex w-full h-full flex-col relative">
+          <div className="absolute bottom-12 right-12 z-20">
+            <Alert
+              variant={alertData.variant}
+              message={alertData.message}
+              open={alertData.open}
+              close={alertData.close}
+            />
+          </div>
           <BlocklyBoard
             ref={parentRef}
             blocklyOptions={blocklyGameOptions}
             codeGenerator={gameGenerator}
             blocksDefinitions={gameBlocks}
             onChangeListener={onChangeListener}
-            storageKey={`game-${gameId}-${user._id}}`}
+            storageKey={`game-${game.game._id}-${user._id}}`}
           ></BlocklyBoard>
           <div
             className="grid gap-px transition-all w-fit h-fit absolute right-20 top-16"
             style={{
-              gridTemplateColumns: `repeat(${gameGrid[0].length}, minmax(0, 1fr))`,
+              gridTemplateColumns: `repeat(${game.game.sizeOfGrid}, minmax(0, 1fr))`,
             }}
           >
-            {gameGrid.map((row, rowIndex) => {
+            {gameState.gameGrid.map((row, rowIndex) => {
               return row.map((cell, colIndex) => {
                 return (
                   <GridCellComponent
@@ -410,15 +667,23 @@ const ViewGame = ({ user, gameId }: ServerSideProps) => {
                     cell={cell}
                     size={cellSize}
                     onClick={() => {}}
-                    currentPlayerDirection={currentPlayerDirection}
+                    currentPlayerDirection={gameState.currentPlayerDirection}
                   />
                 )
               })
             })}
           </div>
+          <div className="absolute bottom-32 left-4 z-50 text-xs font-semibold text-brand-700">
+            {game.game.title}
+          </div>
+          {numberOfBlocksLeft !== undefined && numberOfBlocksLeft >= 0 ? (
+            <div className="absolute bottom-48 left-4 z-50 text-xs text-brand-700">
+              # Blocks Left: {numberOfBlocksLeft}
+            </div>
+          ) : null}
           <button
             onClick={runProgram}
-            className="btn w-fit bg-brand py-3 text-white hover:bg-brand-500 absolute bottom-14 left-4 z-50"
+            className="btn w-fit bg-brand py-3 text-white hover:bg-brand-500 absolute bottom-14 left-4 z-10"
           >
             Run Program
           </button>
@@ -445,10 +710,48 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
+  const gameRes = await new GameEnrollmentAPI(session).findByGameId(id as string, session.user._id)
+  if (!gameRes || !gameRes.payload) {
+    return {
+      redirect: {
+        destination: '/app/games',
+        permanent: false,
+      },
+    }
+  }
+
+  const gameType = getTypeOfGame(gameRes.payload)
+
+  // If the game type is normal game and not enrollment, then this is the first time the user is playing the game
+  // thus create a new enrollment
+  if (gameType === GameType.game) {
+    const newEnrollmentRes = await new GameEnrollmentAPI(session).create({
+      gameId: id as string,
+      userId: session.user._id,
+    })
+
+    if (!newEnrollmentRes || !newEnrollmentRes.payload) {
+      return {
+        redirect: {
+          destination: '/app/games',
+          permanent: false,
+        },
+      }
+    }
+
+    return {
+      props: {
+        user: session.user,
+        game: newEnrollmentRes.payload,
+      },
+    }
+  }
+
+  // If we are here, then the game type is enrollment, so we can just return the enrollment
   return {
     props: {
       user: session.user,
-      gameId: id,
+      game: gameRes.payload,
     },
   }
 }

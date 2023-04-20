@@ -1,14 +1,14 @@
 import * as Blockly from 'blockly'
 import { BlockDefinition } from 'blockly/core/blocks'
-import marker from '@/images/marker.png'
+import flag from '@/images/flag.svg'
 
-const MOVEMENT_HUE = 230
-const LOGIC_HUE = 210
-const LOOPS_HUE = 347
+const MOVEMENT_HUE = 245
+const LOGIC_HUE = 35
+const LOOPS_HUE = 5
 
 const TURN_DIRECTIONS = [
-  ['turn left', 'turnLeft'],
-  ['turn right', 'turnRight'],
+  ['turn left ↺', 'turnLeft'],
+  ['turn right ⟳', 'turnRight'],
 ]
 const PATH_DIRECTIONS = [
   ['ahead', 'isPathForward'],
@@ -17,6 +17,13 @@ const PATH_DIRECTIONS = [
 ]
 
 export const gameBlocks: BlockDefinition = Blockly.common.createBlockDefinitionsFromJsonArray([])
+
+// Ignore the below error, it works but blockly for some reason did not include the type for this, so typescript is complaining
+// source: https://developers.google.com/blockly/guides/create-custom-blocks/block-colour#defining_the_block_colour
+/** @ts-expect-error HSV_VALUE not decalred it types export*/
+Blockly.HSV_VALUE = 0.9
+/** @ts-expect-error HSV_SATURATION not decalred it types export*/
+Blockly.HSV_SATURATION = 0.65
 
 Blockly.Blocks['maze_moveForward'] = {
   init: function () {
@@ -80,8 +87,8 @@ Blockly.Blocks['maze_forever'] = {
   init: function () {
     this.appendDummyInput()
       .appendField('repeat until you reach')
-      .appendField(new Blockly.FieldImage(marker.src, 12, 16, '*'))
-    this.appendStatementInput('DO').setCheck(null)
+      .appendField(new Blockly.FieldImage(flag.src, 12, 16, '*'))
+    this.appendStatementInput('DO').setCheck(null).appendField('do')
     this.setPreviousStatement(true, null)
     this.setColour(LOOPS_HUE)
     this.setTooltip('A loop that runs forever')
@@ -96,7 +103,7 @@ Blockly.Blocks['maze_repeat'] = {
       .appendField('repeat')
       .appendField(new Blockly.FieldNumber(0, 0), 'TIMES')
       .appendField('times')
-    this.appendStatementInput('DO').setCheck(null)
+    this.appendStatementInput('DO').setCheck(null).appendField('do')
     this.setPreviousStatement(true, null)
     this.setNextStatement(true, null)
     this.setColour(LOOPS_HUE)
