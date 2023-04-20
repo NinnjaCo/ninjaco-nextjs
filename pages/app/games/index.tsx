@@ -13,7 +13,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import dayjs from 'dayjs'
-import twoBlocksWithRobot from '@/images/twoBlocksWithRobot.svg'
+import twoBlocksWithRobot from '@/images/twoBlocksRobotAnimated.gif'
 import useTranslation from '@/hooks/useTranslation'
 
 enum GameType {
@@ -66,8 +66,16 @@ export default function Home({ user, games }: { user: User; games: (UserPlayGame
               <div className="text-brand-700 font-semibold text-xl lg:text-2xl">
                 {t.Creator.games.viewGames.title}
               </div>
-              <div className="text-brand-700 font-semibold">
-                <Image src={twoBlocksWithRobot} alt="" className="w-auto" />
+              <div className="text-brand-700 font-semibold w-44 md:w-80 h-fit">
+                <Image
+                  src={twoBlocksWithRobot}
+                  alt="Animated Robot"
+                  className="w-44 md:w-80 h-fit"
+                  sizes="(max-width: 768px) 11rem,
+                        20rem"
+                  placeholder="blur"
+                  blurDataURL={twoBlocksWithRobot.blurDataURL ?? twoBlocksWithRobot.src}
+                />
               </div>
             </div>
             <div className="flex gap-10 justify-start items-center">
