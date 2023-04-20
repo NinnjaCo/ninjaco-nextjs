@@ -111,11 +111,9 @@ export const getServerSideProps = async (context) => {
   const gamesResponse = await new GameApi(session).find()
   if (!gamesResponse || !gamesResponse.payload) {
     return {
-      props: {
-        redirect: {
-          destination: '/auth/signin',
-          permanent: false,
-        },
+      redirect: {
+        destination: '/auth/signin',
+        permanent: false,
       },
     }
   }

@@ -146,11 +146,9 @@ export const getServerSideProps = async (context) => {
   const gamesEnrollmentResponse = await new GameEnrollmentAPI(session).findAll(session.user._id)
   if (!gamesEnrollmentResponse || !gamesEnrollmentResponse.payload) {
     return {
-      props: {
-        redirect: {
-          destination: '/auth/signin',
-          permanent: false,
-        },
+      redirect: {
+        destination: '/auth/signin',
+        permanent: false,
       },
     }
   }

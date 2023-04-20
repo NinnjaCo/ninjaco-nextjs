@@ -640,11 +640,9 @@ export const getServerSideProps = async (context) => {
 
   if (!gameResponse || !gameResponse.payload) {
     return {
-      props: {
-        redirect: {
-          destination: '/creator/games',
-          permanent: false,
-        },
+      redirect: {
+        destination: '/creator/games',
+        permanent: false,
       },
     }
   }

@@ -13,10 +13,11 @@ import Head from 'next/head'
 import ImageCard from '@/components/creator/imageCard'
 import Link from 'next/link'
 import MissionCard from '@/components/creator/missionCard'
+import UserMenu from '@/components/user/userMenu'
 import dayjs from 'dayjs'
 import useTranslation from '@/hooks/useTranslation'
 
-export default function CourseView({ user, course }: { user: User; course: Course }) {
+export default function UserCourseView({ user, course }: { user: User; course: Course }) {
   const [filteredMissions, setFilteredMissions] = useState<Mission[]>(course.missions)
   const t = useTranslation()
 
@@ -28,7 +29,7 @@ export default function CourseView({ user, course }: { user: User; course: Cours
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main className="relative w-full">
-        <CreatorMenu isOnCoursePage={true} isOnGamesPage={false} creator={user} />
+        <UserMenu isOnCoursePage={true} isOnGamesPage={false} user={user} />
         <div className="flex gap-4 px-6 my-12 w-full md:flex-row flex-col">
           <ImageCard image={course.image} />
           <div className="flex flex-col gap-9 w-full">
@@ -172,9 +173,11 @@ export const getServerSideProps = async (context) => {
 
   if (!course || !course.payload) {
     return {
-      redirect: {
-        destination: '/creator',
-        permanent: false,
+      props: {
+        redirect: {
+          destination: '/creator',
+          permanent: false,
+        },
       },
     }
   }

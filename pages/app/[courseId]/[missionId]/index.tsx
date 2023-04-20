@@ -7,14 +7,14 @@ import { User } from '@/models/crud'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import Chip from '@/components/shared/chip'
-import CreatorMenu from '@/components/creator/creatorMenu'
 import Head from 'next/head'
 import ImageCard from '@/components/creator/imageCard'
 import Link from 'next/link'
+import UserMenu from '@/components/user/userMenu'
 import clsx from 'clsx'
 import useTranslation from '@/hooks/useTranslation'
 
-export default function MissionPage({
+export default function UserMissionPage({
   user,
   mission,
   course,
@@ -34,7 +34,7 @@ export default function MissionPage({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main className="relative w-full">
-        <CreatorMenu isOnCoursePage={true} isOnGamesPage={false} creator={user} />
+        <UserMenu isOnCoursePage={true} isOnGamesPage={false} user={user} />
         <div className="flex gap-4 px-6 my-12 w-full md:flex-row flex-col">
           <div className="w-52 h-32 relative">
             <ImageCard image={mission.image} />

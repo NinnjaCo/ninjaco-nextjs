@@ -111,11 +111,9 @@ export const getServerSideProps = async (context) => {
   const coursesResponse = await new CourseApi(session).find()
   if (!coursesResponse || !coursesResponse.payload) {
     return {
-      props: {
-        redirect: {
-          destination: '/auth/signin',
-          permanent: false,
-        },
+      redirect: {
+        destination: '/auth/signin',
+        permanent: false,
       },
     }
   }

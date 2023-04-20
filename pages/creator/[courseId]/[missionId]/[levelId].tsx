@@ -342,11 +342,9 @@ export const getServerSideProps = async (context) => {
 
   if (!course || !course.payload) {
     return {
-      props: {
-        redirect: {
-          destination: '/creator',
-          permanent: false,
-        },
+      redirect: {
+        destination: '/creator',
+        permanent: false,
       },
     }
   }
@@ -354,11 +352,9 @@ export const getServerSideProps = async (context) => {
 
   if (!mission) {
     return {
-      props: {
-        redirect: {
-          destination: '/creator/' + courseId,
-          permanent: false,
-        },
+      redirect: {
+        destination: '/creator/' + courseId,
+        permanent: false,
       },
     }
   }
@@ -367,11 +363,9 @@ export const getServerSideProps = async (context) => {
 
   if (!level) {
     return {
-      props: {
-        redirect: {
-          destination: '/creator/' + courseId + '/' + missionId,
-          permanent: false,
-        },
+      redirect: {
+        destination: '/creator/' + courseId + '/' + missionId,
+        permanent: false,
       },
     }
   }
