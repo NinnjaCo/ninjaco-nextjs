@@ -1,5 +1,6 @@
 import * as yup from 'yup'
 import { AuthError } from '@/models/shared'
+import { Direction } from '@/components/user/game/gridCell'
 import { Game } from '@/models/crud/game.model'
 import { GameApi } from '@/utils/api/game/game.api'
 import { GridCell, GridCellComponent } from '@/components/creator/game/gridCell'
@@ -12,6 +13,7 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { useForm } from 'react-hook-form'
+import { useImmer } from 'use-immer'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -30,44 +32,39 @@ import clsx from 'clsx'
 import underLineImage from '@/images/lightlyWavedLine.svg'
 import useTranslation from '@/hooks/useTranslation'
 
-const createGrid = (rows: number, cols: number, initialGameState): GridCell[][] => {
+const generateEmptyGrid = (size: number) => {
   const grid: GridCell[][] = []
-
-  if (initialGameState) {
-    const { playerLocation, goalLocation, wallsLocations } = initialGameState
-    for (let row = 0; row < rows; row++) {
-      grid.push([])
-      for (let col = 0; col < cols; col++) {
-        // if it is a border cell, make it a wall
-        grid[row].push({
-          row,
-          col,
-          isWall: false,
-          isPlayer: playerLocation && playerLocation.row === row && playerLocation.col === col,
-          isGoal: goalLocation && goalLocation.row === row && goalLocation.col === col,
-        })
-      }
-    }
-
-    if (wallsLocations) {
-      wallsLocations.forEach((wall) => {
-        if (wall.row >= rows || wall.col >= cols) return
-        grid[wall.row][wall.col] = wall
-      })
-    }
-    return grid
-  }
-
-  for (let row = 0; row < rows; row++) {
+  for (let i = 0; i < size; i++) {
     grid.push([])
-    for (let col = 0; col < cols; col++) {
-      // if it is a border cell, make it a wall
-      grid[row].push({
-        row,
-        col,
-        isWall: row === 0 || row === rows - 1 || col === 0 || col === cols - 1,
+    for (let j = 0; j < size; j++) {
+      grid[i].push({
+        row: i,
+        col: j,
         isPlayer: false,
         isGoal: false,
+        isWall: i === 0 || j === 0 || i === size - 1 || j === size - 1,
+      })
+    }
+  }
+  return grid
+}
+
+const constrcutGridFrom = (
+  size: number,
+  playerLocation: number[],
+  goalLocation: number[],
+  walls: number[][]
+) => {
+  const grid: GridCell[][] = []
+  for (let i = 0; i < size; i++) {
+    grid.push([])
+    for (let j = 0; j < size; j++) {
+      grid[i].push({
+        row: i,
+        col: j,
+        isPlayer: i === playerLocation[0] && j === playerLocation[1],
+        isGoal: i === goalLocation[0] && j === goalLocation[1],
+        isWall: walls.some((wall) => wall[0] === i && wall[1] === j),
       })
     }
   }
@@ -94,14 +91,35 @@ enum Tools {
   NONE = 'None',
 }
 
+interface GameState {
+  isPlayerSet: boolean
+  isGoalSet: boolean
+  currentPlayerDirection: Direction
+  numberOfBlocks?: number
+  grid: GridCell[][]
+}
+
 const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
   const session = useSession()
   const router = useRouter()
   const t = useTranslation()
-  const [gameTitle, setGameTitle] = React.useState(game.title)
+
   const MIN_COLUMNS = 5
   const MAX_COLUMNS = 20
-  const [numberOfColumns, setNumberOfColumns] = React.useState(game.sizeOfGrid)
+
+  const [gameTitle, setGameTitle] = React.useState(game.title)
+  const [gameState, setGameState] = useImmer<GameState>({
+    grid: constrcutGridFrom(
+      game.sizeOfGrid,
+      game.playerLocation,
+      game.goalLocation,
+      game.wallsLocations
+    ),
+    currentPlayerDirection: game.playerDirection as Direction,
+    isPlayerSet: true,
+    isGoalSet: true,
+    numberOfBlocks: game.numOfBlocks,
+  })
 
   const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false)
   const [selectedTool, setSelectedTool] = React.useState<Tools>(Tools.NONE)
@@ -109,47 +127,6 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
 
   const [toogleLimitedBlocks, setToogleLimitedBlocks] = React.useState(
     game.numOfBlocks ? true : false
-  )
-  const [numberOfBlocks, setNumberOfBlocks] = React.useState<number | undefined>(undefined)
-  const [gameState, setGameState] = React.useState<{
-    isPlayerSet: boolean
-    isGoalSet: boolean
-    playerLocation: GridCell | undefined
-    goalLocation: GridCell | undefined
-    wallsLocations?: GridCell[] | undefined
-  }>({
-    isPlayerSet: true,
-    isGoalSet: true,
-    playerLocation:
-      game && game.playerLocation
-        ? {
-            row: game.playerLocation[0],
-            col: game.playerLocation[1],
-            isWall: false,
-            isPlayer: true,
-            isGoal: false,
-          }
-        : undefined,
-    goalLocation:
-      game && game.goalLocation
-        ? {
-            row: game.goalLocation[0],
-            col: game.goalLocation[1],
-            isWall: false,
-            isPlayer: false,
-            isGoal: true,
-          }
-        : undefined,
-    wallsLocations:
-      game && game.wallsLocations
-        ? game.wallsLocations.map((wall) => {
-            return { row: wall[0], col: wall[1], isWall: true, isPlayer: false, isGoal: false }
-          })
-        : undefined,
-  })
-
-  const [gameGrid, setGameGrid] = React.useState<GridCell[][]>(
-    createGrid(numberOfColumns, numberOfColumns, gameState)
   )
 
   const {
@@ -224,62 +201,51 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
 
   const clickOnSquare = (rowIndex: number, colIndex: number) => {
     if (selectedTool === Tools.PLAYER) {
-      // Only 1 player allowed
-      const newGrid = gameGrid.map((row) => {
-        return row.map((cell) => {
-          return {
-            ...cell,
-            isPlayer: false,
-          }
+      setGameState((draft) => {
+        // Only 1 player allowed, set all other players to false
+        draft.grid = draft.grid.map((row) => {
+          return row.map((cell) => {
+            return {
+              ...cell,
+              isPlayer: false,
+            }
+          })
         })
-      })
-      newGrid[rowIndex][colIndex].isPlayer = true
-      newGrid[rowIndex][colIndex].isWall = false
-      newGrid[rowIndex][colIndex].isGoal = false
-      setGameGrid(newGrid)
-      setGameState({
-        ...gameState,
-        isPlayerSet: true,
-        playerLocation: newGrid[rowIndex][colIndex],
+
+        draft.grid[rowIndex][colIndex].isPlayer = true
+        draft.grid[rowIndex][colIndex].isWall = false
+        draft.grid[rowIndex][colIndex].isGoal = false
+        draft.isPlayerSet = true
       })
     } else if (selectedTool === Tools.GOAL) {
       // Only 1 goal allowed
-      const newGrid = gameGrid.map((row) => {
-        return row.map((cell) => {
-          return {
-            ...cell,
-            isGoal: false,
-          }
-        })
-      })
-      newGrid[rowIndex][colIndex].isGoal = true
-      newGrid[rowIndex][colIndex].isWall = false
-      newGrid[rowIndex][colIndex].isPlayer = false
-      setGameGrid(newGrid)
-      setGameState({
-        ...gameState,
-        isGoalSet: true,
-        goalLocation: newGrid[rowIndex][colIndex],
-      })
-    } else if (selectedTool === Tools.WALL) {
-      const newGrid = gameGrid.map((row) => {
-        return row.map((cell) => {
-          if (cell.row === rowIndex && cell.col === colIndex) {
-            // if cell already has a wall, remove it
-            // if cell doesn't have a wall, add it
-            // if cell has a player or goal, don't allow it to be a wall
+      setGameState((draft) => {
+        // Only 1 player allowed, set all other players to false
+        draft.grid = draft.grid.map((row) => {
+          return row.map((cell) => {
             return {
               ...cell,
-              isWall: !cell.isWall && !cell.isPlayer && !cell.isGoal,
+              isGoal: false,
             }
-          }
-          return cell
+          })
         })
+
+        draft.grid[rowIndex][colIndex].isGoal = true
+        draft.grid[rowIndex][colIndex].isWall = false
+        // if the player was on this square, remove it
+        draft.isPlayerSet = draft.grid[rowIndex][colIndex].isPlayer ? false : true
+        draft.grid[rowIndex][colIndex].isPlayer = false
+        draft.isGoalSet = true
       })
-      setGameGrid(newGrid)
-      setGameState({
-        ...gameState,
-        wallsLocations: newGrid.flat().filter((cell) => cell.isWall),
+    } else if (selectedTool === Tools.WALL) {
+      setGameState((draft) => {
+        draft.grid[rowIndex][colIndex].isWall = !draft.grid[rowIndex][colIndex].isWall
+        // if the player was on this square, remove it
+        draft.isPlayerSet = draft.grid[rowIndex][colIndex].isPlayer ? false : true
+        draft.grid[rowIndex][colIndex].isPlayer = false
+        // if the goal was on this square, remove it
+        draft.isGoalSet = draft.grid[rowIndex][colIndex].isGoal ? false : true
+        draft.grid[rowIndex][colIndex].isGoal = false
       })
     } else {
       setAlertData({
@@ -292,17 +258,20 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
 
   const changeTool = (tool: Tools) => {
     if (tool === Tools.ERASER) {
-      const newGrid = gameGrid.map((row) => {
-        return row.map((cell) => {
-          return {
-            ...cell,
-            isWall: false,
-            isPlayer: false,
-            isGoal: false,
-          }
+      setGameState((draft) => {
+        draft.grid = draft.grid.map((row) => {
+          return row.map((cell) => {
+            return {
+              ...cell,
+              isPlayer: false,
+              isGoal: false,
+              isWall: false,
+            }
+          })
         })
+        draft.isPlayerSet = false
+        draft.isGoalSet = false
       })
-      setGameGrid(newGrid)
     }
 
     setSelectedTool(tool)
@@ -311,7 +280,25 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
   const saveGame = async (data: { gameImage: ImageType }) => {
     closeAlert()
 
-    if (!gameState.isPlayerSet || gameState.playerLocation === undefined) {
+    const playerLocation = gameState.grid
+      .map((row, rowIndex) => {
+        return row.map((cell, colIndex) => {
+          return cell.isPlayer ? [rowIndex, colIndex] : undefined
+        })
+      })
+      .flat()
+      .filter((cell) => cell !== undefined)[0]
+
+    const goalLocation = gameState.grid
+      .map((row, rowIndex) => {
+        return row.map((cell, colIndex) => {
+          return cell.isGoal ? [rowIndex, colIndex] : undefined
+        })
+      })
+      .flat()
+      .filter((cell) => cell !== undefined)[0]
+
+    if (!gameState.isPlayerSet || playerLocation === undefined) {
       setAlertData({
         message: t.Creator.games.editGame.alerts.pleaseSetAPlayer as string,
         variant: 'error',
@@ -319,7 +306,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
       })
       return
     }
-    if (!gameState.isGoalSet || gameState.goalLocation === undefined) {
+    if (!gameState.isGoalSet || goalLocation === undefined) {
       setAlertData({
         message: t.Creator.games.editGame.alerts.pleaseSetAGoal as string,
         variant: 'error',
@@ -341,9 +328,14 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
     setSaveButtonDisabled(true)
     // Save game
     try {
-      const playerLocation = [gameState.playerLocation.row, gameState.playerLocation.col]
-      const goalLocation = [gameState.goalLocation.row, gameState.goalLocation.col]
-      const wallsLocations = gameState.wallsLocations?.map((wall) => [wall.row, wall.col]) || []
+      const wallsLocations: number[][] = []
+      gameState.grid.forEach((row, rowIndex) => {
+        row.forEach((cell, colIndex) => {
+          if (cell.isWall) {
+            wallsLocations.push([rowIndex, colIndex])
+          }
+        })
+      })
 
       let image_url = game.image || ''
       if (data.gameImage && data.gameImage.file) {
@@ -356,8 +348,8 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
       await new GameApi(session.data).update(game._id, {
         title: gameTitle,
         image: image_url,
-        numOfBlocks: numberOfBlocks as number,
-        sizeOfGrid: numberOfColumns as number,
+        numOfBlocks: gameState.numberOfBlocks,
+        sizeOfGrid: gameState.grid.length,
         playerLocation: playerLocation,
         goalLocation: goalLocation,
         wallsLocations: wallsLocations,
@@ -440,10 +432,10 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
               <div
                 className="grid gap-px transition-all w-fit h-fit"
                 style={{
-                  gridTemplateColumns: `repeat(${gameGrid[0].length}, minmax(0, 1fr))`,
+                  gridTemplateColumns: `repeat(${gameState.grid.length}, minmax(0, 1fr))`,
                 }}
               >
-                {gameGrid.map((row, rowIndex) => {
+                {gameState.grid.map((row, rowIndex) => {
                   return row.map((cell, colIndex) => {
                     return (
                       <GridCellComponent
@@ -451,6 +443,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
                         cell={cell}
                         size={cellSize}
                         onClick={clickOnSquare}
+                        currentPlayerDirection={gameState.currentPlayerDirection}
                       />
                     )
                   })
@@ -460,7 +453,8 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
                 <div className="flex flex-col gap-8 justify-normal">
                   <div className="flex flex-col gap-2">
                     <label htmlFor="default-range" className="block text-sm font-medium text-brand">
-                      {t.Creator.games.editGame.sizeOfTheGrid} {numberOfColumns} x {numberOfColumns}
+                      {t.Creator.games.editGame.sizeOfTheGrid} {gameState.grid.length} x{' '}
+                      {gameState.grid.length}
                     </label>
                     <div className="flex gap-2 items-center">
                       <span className="text-brand-500">{MIN_COLUMNS}</span>
@@ -471,48 +465,15 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
                         min={MIN_COLUMNS}
                         step={1}
                         onChange={(e) => {
-                          const newNumberOfColumns = parseInt(e.target.value, 10)
-                          setNumberOfColumns(newNumberOfColumns)
-                          setGameState({
-                            isGoalSet: false,
-                            isPlayerSet: false,
-                            playerLocation: undefined,
-                            goalLocation: undefined,
-                            wallsLocations: [],
-                          })
-
-                          // update the grid
-                          const newGrid = createGrid(
-                            newNumberOfColumns,
-                            newNumberOfColumns,
-                            undefined
-                          )
-                          setGameGrid(newGrid)
-                          setGameState({
-                            isGoalSet: false,
-                            isPlayerSet: false,
-                            playerLocation: undefined,
-                            goalLocation: undefined,
-                            wallsLocations: newGrid
-                              .map((row, rowIndex) => {
-                                const wallLocations: GridCell[] = []
-                                row.forEach((cell, colIndex) => {
-                                  if (cell.isWall) {
-                                    wallLocations.push({
-                                      row: rowIndex,
-                                      col: colIndex,
-                                      isWall: true,
-                                      isPlayer: false,
-                                      isGoal: false,
-                                    })
-                                  }
-                                })
-                                return wallLocations
-                              })
-                              .flat(),
+                          const newGridSize = parseInt(e.target.value, 10)
+                          setGameState((draft) => {
+                            draft.grid = generateEmptyGrid(newGridSize)
+                            draft.isGoalSet = false
+                            draft.isPlayerSet = false
+                            return draft
                           })
                         }}
-                        value={numberOfColumns}
+                        value={gameState.grid.length}
                         className="w-full h-2 rounded-lg appearance-none cursor-pointer bg-secondary accent-brand"
                       ></input>
                       <span className="text-brand-500">{MAX_COLUMNS}</span>
@@ -524,7 +485,10 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
                         checked={toogleLimitedBlocks}
                         onChange={(isChecked) => {
                           setToogleLimitedBlocks(isChecked)
-                          setNumberOfBlocks(undefined)
+                          setGameState((draft) => {
+                            draft.numberOfBlocks = 0
+                            return draft
+                          })
                         }}
                         className={`${toogleLimitedBlocks ? 'bg-brand-700' : 'bg-brand-500'}
                       relative inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
@@ -547,10 +511,13 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
                       placeholder="Number of Allowed Blocks"
                       type="number"
                       disabled={!toogleLimitedBlocks}
-                      value={numberOfBlocks}
+                      value={gameState.numberOfBlocks}
                       onChange={(e) => {
                         const newNumberOfBlocks = parseInt(e.target.value, 10)
-                        setNumberOfBlocks(newNumberOfBlocks)
+                        setGameState((draft) => {
+                          draft.numberOfBlocks = newNumberOfBlocks
+                          return draft
+                        })
                       }}
                       className={clsx({
                         'bg-brand-50 cursor-not-allowed': !toogleLimitedBlocks,
@@ -580,7 +547,12 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
                   <button
                     className="btn btn-secondary rounded-lg hover:bg-brand-400 hover:text-white py-2 h-fit"
                     onClick={() => {
-                      setGameGrid(createGrid(numberOfColumns, numberOfColumns, undefined))
+                      setGameState((draft) => {
+                        draft.grid = generateEmptyGrid(draft.grid.length)
+                        draft.isGoalSet = false
+                        draft.isPlayerSet = false
+                        return draft
+                      })
                     }}
                   >
                     {t.Creator.games.editGame.resetGrid}
