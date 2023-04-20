@@ -14,6 +14,7 @@ import { gameGenerator } from '@/blockly/generetors/game'
 import { gameToolBox } from '@/blockly/toolbox/game'
 import { getServerSession } from 'next-auth'
 import { useImmer } from 'use-immer'
+import { useRouter } from 'next/router'
 import Alert from '@/components/shared/alert'
 import Blockly from 'blockly'
 import BlocklyBoard from '@/components/blockly/blockly'
@@ -21,6 +22,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import React from 'react'
 import UserMenu from '@/components/user/userMenu'
+import party from 'party-js'
 import useTranslation from '@/hooks/useTranslation'
 
 enum GameType {
@@ -41,27 +43,10 @@ interface ServerSideProps {
   game: UserPlayGame
 }
 
-const getInitialGrid = (size: number): GridCell[][] => {
-  const grid: GridCell[][] = []
-  for (let i = 0; i < size; i++) {
-    grid.push([])
-    for (let j = 0; j < size; j++) {
-      grid[i].push({
-        row: i,
-        col: j,
-        isPlayer: i === 13 && j === 13,
-        isGoal: false,
-        isWall: i === 0 || j === 0 || i === size - 1 || j === size - 1,
-      })
-    }
-  }
-  return grid
-}
-
 const constrcutGridFrom = (
   size: number,
-  playerLocation: { row: number; col: number },
-  goalLocation: { row: number; col: number },
+  playerLocation: number[],
+  goalLocation: number[],
   walls: number[][]
 ) => {
   const grid: GridCell[][] = []
@@ -71,9 +56,9 @@ const constrcutGridFrom = (
       grid[i].push({
         row: i,
         col: j,
-        isPlayer: i === playerLocation.row && j === playerLocation.col,
-        isGoal: i === goalLocation.row && j === goalLocation.col,
-        isWall: walls.includes([i, j]),
+        isPlayer: i === playerLocation[0] && j === playerLocation[1],
+        isGoal: i === goalLocation[0] && j === goalLocation[1],
+        isWall: walls.some((wall) => wall[0] === i && wall[1] === j),
       })
     }
   }
@@ -85,23 +70,27 @@ const constrcutGridFrom = (
 const ResultType = {
   UNSET: 0,
   SUCCESS: 1,
-  FAILURE: -1,
-  TIMEOUT: 2,
-  ERROR: -2,
+  RUNNING: 2,
 }
 
 const ViewGame = ({ user, game }: ServerSideProps) => {
   const t = useTranslation()
+  const router = useRouter()
+  const parentRef = React.useRef<any>()
 
-  // const [gameGrid, setGameGrid] = React.useState<GridCell[][]>(getInitialGrid(15))
-  // use useImmer instead of useState to avoid unnecessary re-renders
   const cellSize = 25
-  const gridSize = 15
-  const maxNumberOfBlocks = undefined
+  const maxNumberOfBlocks = game.game.numOfBlocks
+
+  // use useImmer instead of useState to avoid unnecessary re-renders
   const [gameState, setGameState] = useImmer({
-    gameGrid: getInitialGrid(gridSize),
-    currentPlayerDirection: Direction.LEFT,
-    playerLocation: { row: 13, col: 13 },
+    gameGrid: constrcutGridFrom(
+      game.game.sizeOfGrid,
+      game.game.playerLocation,
+      game.game.goalLocation,
+      game.game.wallsLocations
+    ),
+    currentPlayerDirection: game.game.playerDirection as Direction,
+    playerLocation: { row: game.game.playerLocation[0], col: game.game.playerLocation[1] },
     result: ResultType.UNSET,
   })
 
@@ -175,28 +164,45 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
       if (carryCheckFunction && !carryCheckFunction(draft)) {
         return
       }
-      // If there is no path ahead of the player, then do not move forward
+      // If there is no path ahead of the player, then show an alert and do not move forward
       if (!isPathAhead(draft)) {
         onHitWall()
         return
       }
+
       const { row, col } = draft.playerLocation
       switch (draft.currentPlayerDirection) {
         case Direction.UP:
-          draft.playerLocation.row = row - 1
+          if (row - 1 >= 0) {
+            draft.playerLocation.row = row - 1
+          }
           break
         case Direction.DOWN:
-          draft.playerLocation.row = row + 1
+          if (row + 1 < draft.gameGrid.length) {
+            draft.playerLocation.row = row + 1
+          }
           break
         case Direction.LEFT:
-          draft.playerLocation.col = col - 1
+          if (col - 1 >= 0) {
+            draft.playerLocation.col = col - 1
+          }
           break
         case Direction.RIGHT:
-          draft.playerLocation.col = col + 1
+          if (col + 1 < draft.gameGrid.length) {
+            draft.playerLocation.col = col + 1
+          }
           break
       }
       draft.gameGrid[row][col].isPlayer = false
       draft.gameGrid[draft.playerLocation.row][draft.playerLocation.col].isPlayer = true
+
+      // If the player has reached the goal, then set the result to success
+      if (isOnGoal(draft)) {
+        draft.result = ResultType.SUCCESS
+        onHitGoal()
+        // Clear the actionsQueue to stop the game
+        actionsQueue.clear()
+      }
     })
   }
   // Returns true if there is a path ahead of the player (i.e. the player can move forward)
@@ -303,9 +309,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
     const { row, col } = currentGameState.playerLocation
     return currentGameState.gameGrid[row][col].isGoal
   }
-
-  const parentRef = React.useRef<any>()
-
+  // Change listener passed to Blockly compoenent as a callback
   const onChangeListener = (
     e: Blockly.Events.Abstract,
     workspaceRefrence: Blockly.WorkspaceSvg
@@ -485,10 +489,12 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
           return
         }
         if (block.loopCount > 100) {
-          setGameState((prevState) => ({
-            ...prevState,
-            result: ResultType.FAILURE,
-          }))
+          setAlertData({
+            ...alertData,
+            message: 'You have a loop with more than 100 iterations',
+            variant: 'warning',
+            open: true,
+          })
           return
         }
 
@@ -514,28 +520,64 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
     }, delay)
   }
   const runProgram = () => {
+    setAlertData({
+      ...alertData,
+      open: false,
+    })
+
     const code = getCodeFromBlockly()
     if (!code) {
       return
     }
     setCurrentCode(code)
 
-    // If the player is already on the goal, don't run the code
-    if (gameState.result === ResultType.SUCCESS) {
-      onHitGoal()
-      return
-    }
-
     console.log(code)
     const parsedCode: BlockCode[] = parseCode(code)
     console.log('parsedCode', parsedCode)
 
+    // Set the game state to running
+    actionsQueue.enqueue(() => {
+      setGameState((prevState) => {
+        return { ...prevState, result: ResultType.RUNNING }
+      })
+    })
+
     // traverse the code and execute the blocks in order (depth first)
     executeCode(parsedCode)
+
+    // After the code is executed, if we reached the end of the queue then the goal was never reached by a moveForward
+    // thus, setAlertData that you didnt reach the goal
+    actionsQueue.enqueue(() => {
+      setGameState((prevState) => {
+        return { ...prevState, result: ResultType.UNSET }
+      })
+      setAlertData({
+        ...alertData,
+        message: 'Ugh ☹️ You did not reach the goal, try again!',
+        variant: 'error',
+        open: true,
+      })
+    })
+
     runQueueActionsWithDelay(1000)
     setTimeout(() => {
       clearHighlightedBlock()
+      resetGameState()
     }, 1000 * (actionsQueue.size() + 1))
+  }
+
+  const resetGameState = () => {
+    setGameState({
+      gameGrid: constrcutGridFrom(
+        game.game.sizeOfGrid,
+        game.game.playerLocation,
+        game.game.goalLocation,
+        game.game.wallsLocations
+      ),
+      currentPlayerDirection: game.game.playerDirection as Direction,
+      playerLocation: { row: game.game.playerLocation[0], col: game.game.playerLocation[1] },
+      result: ResultType.UNSET,
+    })
   }
 
   const onHitWall = (ExtraInfo?: string) => {
@@ -548,6 +590,12 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
   }
 
   const onHitGoal = (ExtraInfo?: string) => {
+    party.confetti(party.Rect.fromScreen(), {
+      count: 200,
+      shapes: ['roundedRectangle', 'star', 'circle', 'rectangle'],
+      speed: 10,
+      spread: 30,
+    })
     setAdminDialogOpen(true)
   }
 
@@ -565,15 +613,15 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
           open={adminDialogOpen}
           title="Congratulations, You won!"
           confirm={() => {
-            console.log('confirm go to next level')
+            router.reload()
           }}
           close={() => {
             setAdminDialogOpen(false)
           }}
-          confirmButtonText="Next Game"
-          confirmButtonClassName="bg-brand text-white"
+          confirmButtonText="Restart Game"
+          confirmButtonClassName="bg-brand text-white hidden"
           backButtonText="Go back to Games"
-          backButtonClassName="bg-white text-brand"
+          backButtonClassName="bg-brand  text-white"
         >
           <p className="text-brand text-sm">Here is the code you wrote:</p>
           <pre className="text-xs text-brand-400 border-2 p-2">{prettifyCode(currentCode)}</pre>
@@ -608,7 +656,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
           <div
             className="grid gap-px transition-all w-fit h-fit absolute right-20 top-16"
             style={{
-              gridTemplateColumns: `repeat(${gridSize}, minmax(0, 1fr))`,
+              gridTemplateColumns: `repeat(${game.game.sizeOfGrid}, minmax(0, 1fr))`,
             }}
           >
             {gameState.gameGrid.map((row, rowIndex) => {
@@ -625,8 +673,11 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
               })
             })}
           </div>
+          <div className="absolute bottom-32 left-4 z-50 text-xs font-semibold text-brand-700">
+            {game.game.title}
+          </div>
           {numberOfBlocksLeft !== undefined && numberOfBlocksLeft >= 0 ? (
-            <div className="absolute bottom-32 left-4 z-50 text-xs text-brand-700">
+            <div className="absolute bottom-48 left-4 z-50 text-xs text-brand-700">
               # Blocks Left: {numberOfBlocksLeft}
             </div>
           ) : null}
