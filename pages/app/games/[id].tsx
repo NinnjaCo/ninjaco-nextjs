@@ -81,6 +81,22 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
   const cellSize = 25
   const maxNumberOfBlocks = game.game.numOfBlocks
 
+  const [controlButtonState, setControlButtonState] = React.useState<{
+    run: boolean
+    onClick: () => void
+  }>({
+    run: true,
+    onClick: () => {
+      setControlButtonState({
+        run: false,
+        onClick: () => {
+          resetGameState()
+        },
+      })
+      runProgram()
+    },
+  })
+
   // use useImmer instead of useState to avoid unnecessary re-renders
   const [gameState, setGameState] = useImmer({
     gameGrid: constrcutGridFrom(
@@ -572,6 +588,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
       playerLocation: { row: game.game.playerLocation[0], col: game.game.playerLocation[1] },
       result: ResultType.UNSET,
     })
+    actionsQueue.clear()
   }
 
   const onHitWall = (ExtraInfo?: string) => {
@@ -675,10 +692,10 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
             </div>
           ) : null}
           <button
-            onClick={runProgram}
+            onClick={controlButtonState.onClick}
             className="btn w-fit bg-brand py-3 text-white hover:bg-brand-500 absolute bottom-14 left-4 z-10"
           >
-            Run Program
+            {controlButtonState.run ? 'Run Program' : 'Stop'}
           </button>
         </div>
       </main>
