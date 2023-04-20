@@ -16,19 +16,34 @@ import dayjs from 'dayjs'
 import twoBlocksWithRobot from '@/images/twoBlocksWithRobot.svg'
 import useTranslation from '@/hooks/useTranslation'
 
+enum GameType {
+  enrollment = 'enrollment',
+  game = 'game',
+}
+
+const getTypeOfGame = (game: UserPlayGame | Game): GameType => {
+  if ((game as UserPlayGame).game) {
+    return GameType.enrollment
+  } else {
+    return GameType.game
+  }
+}
+
 export default function Home({ user, games }: { user: User; games: (UserPlayGame | Game)[] }) {
   const [filteredGames, setFilteredGames] = useState<(UserPlayGame | Game)[]>(games)
   const t = useTranslation()
   const renderGameCard = (game: UserPlayGame | Game) => {
-    if ('gameProgress' in game) {
+    if (getTypeOfGame(game) === GameType.enrollment) {
+      game = game as UserPlayGame
       return (
-        <Link href={`/creator/games/${game.game._id}`}>
-          <GameEnrollmentCard game={game.game} />
+        <Link href={`/app/games/${game.game._id}`}>
+          <GameEnrollmentCard game={game} />
         </Link>
       )
     } else {
+      game = game as Game
       return (
-        <Link href={`/creator/games/${game._id}`}>
+        <Link href={`/app/games/${game._id}`}>
           <GameCard game={game} />
         </Link>
       )
@@ -97,23 +112,9 @@ export default function Home({ user, games }: { user: User; games: (UserPlayGame
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center mt-7 px-10 place-items-center">
-          {games.map((game) => (
-            // eslint-disable-next-line react/jsx-key
-            <div>{renderGameCard(game)}</div>
+          {filteredGames.map((game, index) => (
+            <div key={index}>{renderGameCard(game)}</div>
           ))}
-          {/* {filteredGames.map((game, index) => (
-            <>
-              {game instanceof UserPlayGame ? (
-                <Link href={`/creator/games/${game._id}`} key={index}>
-                  <GameEnrollmentCard game={game.game} />
-                </Link>
-              ) : (
-                <Link href={`/creator/games/${game._id}`} key={index}>
-                  <GameCard game={game} />
-                </Link>
-              )}
-            </> */}
-          {/* ))} */}
         </div>
       </main>
     </>
@@ -134,7 +135,7 @@ export const getServerSideProps = async (context) => {
     }
   }
 
-  const gamesEnrollmentResponse = await new GameEnrollmentAPI(session).findAll()
+  const gamesEnrollmentResponse = await new GameEnrollmentAPI(session).findAll(session.user._id)
   if (!gamesEnrollmentResponse || !gamesEnrollmentResponse.payload) {
     return {
       props: {
