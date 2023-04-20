@@ -104,7 +104,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
     open: boolean
     close: () => void
   }>({
-    message: 'Place blocks and run the program to start the game',
+    message: 'Place blocks on top of each other to create a program',
     variant: 'info',
     open: true,
     close: () => setAlertData({ ...alertData, open: false }),
