@@ -26,6 +26,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Player from '@/components/creator/game/player'
 import React from 'react'
+import Select from '@/components/forms/select'
 import SingleImageUpload from '@/components/forms/singleImageUpload'
 import Wall from '@/components/creator/game/wall'
 import clsx from 'clsx'
@@ -94,7 +95,6 @@ enum Tools {
 interface GameState {
   isPlayerSet: boolean
   isGoalSet: boolean
-  currentPlayerDirection: Direction
   numberOfBlocks?: number
   grid: GridCell[][]
 }
@@ -115,7 +115,6 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
       game.goalLocation,
       game.wallsLocations
     ),
-    currentPlayerDirection: game.playerDirection as Direction,
     isPlayerSet: true,
     isGoalSet: true,
     numberOfBlocks: game.numOfBlocks,
@@ -132,16 +131,26 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
   const {
     control,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<{
     gameImage: ImageType
+    playerDirection: Direction
   }>({
     resolver: yupResolver(
       yup.object().shape({
         gameImage: yup.object().nullable(),
+        playerDirection: yup
+          .mixed()
+          .oneOf([Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT])
+          .required('Player direction is required'),
       })
     ),
+    defaultValues: {
+      playerDirection: (game.playerDirection as Direction) ?? Direction.UP,
+    },
   })
+  const playerDirection = watch('playerDirection')
 
   const [alertData, setAlertData] = React.useState<{
     message: string
@@ -277,7 +286,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
     setSelectedTool(tool)
   }
 
-  const saveGame = async (data: { gameImage: ImageType }) => {
+  const saveGame = async (data: { gameImage: ImageType; playerDirection: Direction }) => {
     closeAlert()
 
     const playerLocation = gameState.grid
@@ -349,6 +358,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
         title: gameTitle,
         image: image_url,
         numOfBlocks: gameState.numberOfBlocks,
+        playerDirection: data.playerDirection ?? Direction.UP,
         sizeOfGrid: gameState.grid.length,
         playerLocation: playerLocation,
         goalLocation: goalLocation,
@@ -443,7 +453,7 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
                         cell={cell}
                         size={cellSize}
                         onClick={clickOnSquare}
-                        currentPlayerDirection={gameState.currentPlayerDirection}
+                        currentPlayerDirection={playerDirection}
                       />
                     )
                   })
@@ -524,6 +534,14 @@ const GameViewAndEditPage = ({ user, game }: { user: User; game: Game }) => {
                       })}
                     />
                   </div>
+                  <Select
+                    name="playerDirection"
+                    label={'Player Direction'}
+                    control={control}
+                    error={errors.playerDirection?.message}
+                    isRequired={true}
+                    selectList={Object.values(Direction).map((direction) => direction.toString())}
+                  />
                 </div>
 
                 <SingleImageUpload
