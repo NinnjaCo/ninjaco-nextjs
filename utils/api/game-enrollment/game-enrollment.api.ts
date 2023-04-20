@@ -12,13 +12,30 @@ export class GameEnrollmentAPI extends CrudApi<UserPlayGame, UserPlayGameRequest
   }
 
   async findAll(
-    filter?: ApiFilter | undefined,
+    userId: string,
     options?: AxiosRequestConfig | undefined
   ): Promise<CrudResponse<(UserPlayGame | Game)[]>> {
     return (
       await this.client.get<CrudResponse<(UserPlayGame | Game)[]>>(this.path, {
         ...options,
-        params: filter,
+        params: {
+          userId: userId,
+        },
+      })
+    ).data
+  }
+
+  async findByGameId(
+    gameId: string,
+    userId: string,
+    options?: AxiosRequestConfig | undefined
+  ): Promise<CrudResponse<UserPlayGame | Game>> {
+    return (
+      await this.client.get<CrudResponse<UserPlayGame | Game>>(`${this.path}/${gameId}`, {
+        ...options,
+        params: {
+          userId: userId,
+        },
       })
     ).data
   }
