@@ -628,7 +628,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
           </Link>
         </div>
         <div className="hidden md:flex w-full h-full flex-col relative">
-          <div className="absolute bottom-12 right-12 z-20">
+          <div className="absolute top-1 right-12 z-20">
             <Alert
               variant={alertData.variant}
               message={alertData.message}
@@ -706,6 +706,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   const gameRes = await new GameEnrollmentAPI(session).findByGameId(id as string, session.user._id)
+
+  console.log('game res', gameRes.payload)
   if (!gameRes || !gameRes.payload) {
     return {
       redirect: {
