@@ -7,7 +7,6 @@ import { authOptions } from '../../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { useState } from 'react'
 import Chip from '@/components/shared/chip'
-import CreatorMenu from '@/components/creator/creatorMenu'
 import Filter from '@/components/creator/filter'
 import Head from 'next/head'
 import ImageCard from '@/components/creator/imageCard'
@@ -139,7 +138,7 @@ export default function UserCourseView({ user, course }: { user: User; course: C
               ))}
             </div>
           ) : (
-            <div className="text-brand font-medium text-lg">{t.Creator.coursePage.noMissions}</div>
+            <div className="text-brand font-medium text-lg">{t.User.viewCoursePage.noMissions}</div>
           )}
         </div>
       </main>
