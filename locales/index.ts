@@ -407,6 +407,9 @@ export interface WebsiteTranslations {
       stepByStepImages: translationElement
       cancel: translationElement
       createLevel: translationElement
+      websitePreviewImage: translationElement
+      oneImageIsNotValid: translationElement
+      oneImageIsTooBig: translationElement
     }
     editLevelPage: {
       atLeastOneImage: translationElement
@@ -422,6 +425,9 @@ export interface WebsiteTranslations {
       buildingPartImages: translationElement
       stepByStepImages: translationElement
       cancel: translationElement
+      websitePreviewImage: translationElement
+      oneImageIsNotValid: translationElement
+      oneImageIsTooBig: translationElement
     }
     games: {
       viewGames: {

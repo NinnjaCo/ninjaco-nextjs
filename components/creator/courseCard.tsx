@@ -33,7 +33,7 @@ const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
           <Image src={profileIcon} alt="age" className="w-4 h-4" width={16} height={16} />
           <div className="text-brand-500 font-normal text-xs">age:</div>
           <div className="text-brand-500 font-normal text-xs">
-            {course.ageRange ? course.ageRange[0] : ''}
+            {course.ageRange ? course.ageRange[0] : 'Not Specified'}
           </div>
         </div>
       </div>
