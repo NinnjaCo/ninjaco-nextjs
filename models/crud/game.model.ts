@@ -8,6 +8,8 @@ export interface Game {
   playerLocation: number[]
   goalLocation: number[]
   wallsLocations: number[][]
+  createdAt: string
+  updatedAt: string
 }
 
 export interface GameRequest {
