@@ -69,8 +69,8 @@ export default function UserCourseView({
   const [openDropCourse, setOpenCourse] = React.useState(false)
 
   const performDropCourse = async () => {
-    await new CourseEnrollmentAPI(session.data).delete(course._id)
-    router.reload()
+    await new CourseEnrollmentAPI(session.data).delete(getAFieldInCourse(course, '_id'))
+    router.push('/app')
   }
 
   const renderMissionCard = (mission: MissionEnrollment | Mission) => {
@@ -88,6 +88,28 @@ export default function UserCourseView({
           <MissionCard mission={mission} />
         </Link>
       )
+    }
+  }
+
+  const getAFieldInCourse = (course: Course | CourseEnrollment, field: string) => {
+    if (getTypeOfCourse(course) === CourseType.course) {
+      course = course as Course
+      return course[field]
+    } else {
+      course = course as CourseEnrollment
+      return course.course[field]
+    }
+  }
+
+  const enrollInCourse = async () => {
+    try {
+      await new CourseEnrollmentAPI(session.data).create({
+        courseId: getAFieldInCourse(course, '_id'),
+        userId: user._id,
+      })
+      router.reload()
+    } catch (e) {
+      console.log(e)
     }
   }
 
@@ -114,55 +136,51 @@ export default function UserCourseView({
       <main className="relative w-full">
         <UserMenu isOnCoursePage={true} isOnGamesPage={false} user={user} />
         <div className="flex gap-4 px-6 my-12 w-full md:flex-row flex-col">
-          {getTypeOfCourse(course) === CourseType.course ? (
-            <ImageCard image={course.image} />
-          ) : (
-            <ImageCard image={course.course.image} />
-          )}
+          <ImageCard image={getAFieldInCourse(course, 'image')} />
 
           <div className="flex flex-col gap-9 w-full">
             <div className="flex justify-between gap-6 items-center">
-              <div className=" text-brand font-semibold text-xl md:text-3xl">{course.title}</div>
+              <div className=" text-brand font-semibold text-xl md:text-3xl">
+                {getAFieldInCourse(course, 'title')}
+              </div>
               {/* if the course is a Course, put the enroll button, if it is en enrollment course print hello, if completed put the completed button */}
 
               <div>
                 {getTypeOfCourse(course) === CourseType.course ? (
                   <button
-                    className="text-xs md:text-base font-semibold btn btn-secondary bg-secondary
+                    className="text-xs whitespace-nowrap md:text-base font-semibold btn btn-secondary bg-secondary
                                  rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800
                                  h-fit"
-                    //on click post to the course enrollment api
-                    onClick={async () => {
-                      await new CourseEnrollmentAPI(session.data).create({
-                        courseId: course._id,
-                        userId: user._id,
-                      })
-                      router.reload()
+                    onClick={() => {
+                      enrollInCourse()
                     }}
                   >
                     {t.User.viewCoursePage.enrollCourse}
                   </button>
                 ) : getTypeOfCourse(course) === CourseType.enrollment &&
-                  course.completed === false ? (
+                  (course as CourseEnrollment).completed === false ? (
                   <button
-                    className="text-xs  md:text-base font-semibold btn btn-secondary bg-rose-500 rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-rose-400 h-fit"
+                    className="text-xs md:text-base font-semibold btn btn-secondary bg-rose-500 rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-rose-400 h-fit"
                     onClick={() => setOpenCourse(true)}
                   >
                     {t.User.viewCoursePage.dropCourse}
                   </button>
                 ) : (
                   <div className="flex flex-col gap-3 bg-teal-50 rounded-lg px-3 py-2">
-                    <div className=" flex gap-3 items-center">
+                    <div className=" flex gap-2 items-center">
                       <CheckCircleIcon className=" h-6 w-6 ml-2 text-teal-600" />
-                      <div className=" text-teal-600 font-bold text-sm md:text-base px-4 py-2 rounded-md">
+                      <div className=" text-teal-600 font-bold text-xs md:text-base py-2 rounded-md">
                         {t.User.viewCoursePage.courseCompleted}
                       </div>
                     </div>
-                    <div className=" flex items-center justify-end gap-0">
+                    <div className=" flex items-center justify-end gap-2">
                       <PrinterIcon className=" h-5 w-5 ml-2 text-brand" />
-                      <button className=" text-brand font-semibold text-sm md:text-base px-4 py-2 rounded-md underline">
+                      <Link
+                        href={`/app/${getAFieldInCourse(course, '_id')}/certificate`}
+                        className=" text-brand font-semibold text-xs md:text-base py-2 rounded-md underline"
+                      >
                         {t.User.viewCoursePage.printCertificate}
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 )}
@@ -170,7 +188,7 @@ export default function UserCourseView({
             </div>
 
             <div className=" text-brand-500 font-medium text-xs md:text-base w-full">
-              {course.description}
+              {getAFieldInCourse(course, 'description')}
             </div>
           </div>
         </div>
@@ -180,14 +198,18 @@ export default function UserCourseView({
             <div className="flex gap-3 items-center text-brand font-medium text-xs md:text-base">
               {t.User.viewCoursePage.courseType}:
               <div className=" text-brand font-medium text-xs md:text-base"></div>
-              <div className="text-brand font-semibold text-sm md:text-lg">{course.type}</div>
+              <div className="text-brand font-semibold text-sm md:text-lg">
+                {getAFieldInCourse(course, 'type')}
+              </div>
             </div>
             <div className="flex gap-3 items-center w-full flex-wrap">
               <div className=" text-brand font-medium text-xs md:text-base">
                 {t.User.viewCoursePage.ageRange}:
               </div>
-              {course.ageRange?.length !== 0 ? (
-                course?.ageRange?.map((age, index) => <Chip text={age} key={index} />)
+              {getAFieldInCourse(course, 'ageRange')?.length !== 0 ? (
+                getAFieldInCourse(course, 'ageRange').map((age, index) => (
+                  <Chip text={age} key={index} />
+                ))
               ) : (
                 <Chip text="Not Specified" />
               )}
@@ -198,8 +220,8 @@ export default function UserCourseView({
               <div className=" text-brand font-medium text-xs md:text-base">
                 {t.User.viewCoursePage.coursePrerequisites}:
               </div>
-              {course.preRequisites?.length !== 0 ? (
-                course?.preRequisites?.map((prerequisite, index) => (
+              {getAFieldInCourse(course, 'preRequisites')?.length !== 0 ? (
+                getAFieldInCourse(course, 'preRequisites')?.map((prerequisite, index) => (
                   <Chip text={prerequisite} key={index} />
                 ))
               ) : (
@@ -210,8 +232,10 @@ export default function UserCourseView({
               <div className=" text-brand font-medium text-xs md:text-base">
                 {t.User.viewCoursePage.courseObjectives}:
               </div>
-              {course.objectives?.length !== 0 ? (
-                course?.objectives?.map((objective, index) => <Chip text={objective} key={index} />)
+              {getAFieldInCourse(course, 'objectives')?.length !== 0 ? (
+                getAFieldInCourse(course, 'objectives')?.map((objective, index) => (
+                  <Chip text={objective} key={index} />
+                ))
               ) : (
                 <Chip text="None" />
               )}
@@ -222,7 +246,7 @@ export default function UserCourseView({
           <div className="font-semibold text-2xl">{t.User.viewCoursePage.missions}</div>
 
           <div className="flex gap-4 items-center">
-            <div className="text-brand font-medium text-xs">{missions.length} missions</div>
+            <div className="text-brand font-medium text-xs">{missions.length ?? 0} missions</div>
             <Filter
               filterFields={[
                 {
@@ -230,9 +254,24 @@ export default function UserCourseView({
                   setter: setFilteredMissions,
                   previousStateModifier: () => {
                     return [
-                      ...course.missions.sort((a, b) =>
-                        dayjs(a.createdAt).isAfter(b.createdAt) ? -1 : 1
-                      ),
+                      ...missions.sort((a, b) => {
+                        {
+                          const missionAType = getTypeOfMission(a)
+                          const missionBType = getTypeOfMission(b)
+
+                          const missionACreatedAt =
+                            missionAType === MissionType.enrollment
+                              ? (a as MissionEnrollment).mission.createdAt
+                              : (a as Mission).createdAt
+
+                          const missionBCreatedAt =
+                            missionBType === MissionType.enrollment
+                              ? (b as MissionEnrollment).mission.createdAt
+                              : (b as Mission).createdAt
+
+                          return dayjs(missionACreatedAt).isAfter(missionBCreatedAt) ? -1 : 1
+                        }
+                      }),
                     ]
                   },
                 },
@@ -240,9 +279,24 @@ export default function UserCourseView({
                   name: 'Recently Updated',
                   previousStateModifier: () => {
                     return [
-                      ...course.missions.sort((a, b) =>
-                        dayjs(a.updatedAt).isAfter(b.updatedAt) ? -1 : 1
-                      ),
+                      ...missions.sort((a, b) => {
+                        {
+                          const missionAType = getTypeOfMission(a)
+                          const missionBType = getTypeOfMission(b)
+
+                          const missionAUdpatedAt =
+                            missionAType === MissionType.enrollment
+                              ? (a as MissionEnrollment).mission.updatedAt
+                              : (a as Mission).updatedAt
+
+                          const missionBUdpatedAt =
+                            missionBType === MissionType.enrollment
+                              ? (b as MissionEnrollment).mission.updatedAt
+                              : (b as Mission).updatedAt
+
+                          return dayjs(missionAUdpatedAt).isAfter(missionBUdpatedAt) ? -1 : 1
+                        }
+                      }),
                     ]
                   },
                   setter: setFilteredMissions,
@@ -251,9 +305,24 @@ export default function UserCourseView({
                   name: 'Oldest',
                   previousStateModifier: () => {
                     return [
-                      ...course.missions.sort((a, b) =>
-                        dayjs(a.createdAt).isAfter(b.createdAt) ? 1 : -1
-                      ),
+                      ...missions.sort((a, b) => {
+                        {
+                          const missionAType = getTypeOfMission(a)
+                          const missionBType = getTypeOfMission(b)
+
+                          const missionACreatedAt =
+                            missionAType === MissionType.enrollment
+                              ? (a as MissionEnrollment).mission.createdAt
+                              : (a as Mission).createdAt
+
+                          const missionBCreatedAt =
+                            missionBType === MissionType.enrollment
+                              ? (b as MissionEnrollment).mission.createdAt
+                              : (b as Mission).createdAt
+
+                          return dayjs(missionACreatedAt).isAfter(missionBCreatedAt) ? 1 : -1
+                        }
+                      }),
                     ]
                   },
                   setter: setFilteredMissions,
@@ -261,14 +330,52 @@ export default function UserCourseView({
                 {
                   name: 'Name (A-Z)',
                   previousStateModifier: () => {
-                    return [...course.missions.sort((a, b) => a.title.localeCompare(b.title))]
+                    return [
+                      ...missions.sort((a, b) => {
+                        {
+                          const missionAType = getTypeOfMission(a)
+                          const missionBType = getTypeOfMission(b)
+
+                          const missionAtitle =
+                            missionAType === MissionType.enrollment
+                              ? (a as MissionEnrollment).mission.title
+                              : (a as Mission).title
+
+                          const missionBtitle =
+                            missionBType === MissionType.enrollment
+                              ? (b as MissionEnrollment).mission.title
+                              : (b as Mission).title
+
+                          return missionAtitle.localeCompare(missionBtitle)
+                        }
+                      }),
+                    ]
                   },
                   setter: setFilteredMissions,
                 },
                 {
                   name: 'Name (Z-A)',
                   previousStateModifier: () => {
-                    return [...course.missions.sort((a, b) => b.title.localeCompare(a.title))]
+                    return [
+                      ...missions.sort((a, b) => {
+                        {
+                          const missionAType = getTypeOfMission(a)
+                          const missionBType = getTypeOfMission(b)
+
+                          const missionAtitle =
+                            missionAType === MissionType.enrollment
+                              ? (a as MissionEnrollment).mission.title
+                              : (a as Mission).title
+
+                          const missionBtitle =
+                            missionBType === MissionType.enrollment
+                              ? (b as MissionEnrollment).mission.title
+                              : (b as Mission).title
+
+                          return missionBtitle.localeCompare(missionAtitle)
+                        }
+                      }),
+                    ]
                   },
                   setter: setFilteredMissions,
                 },
@@ -276,9 +383,24 @@ export default function UserCourseView({
                   name: 'Number of Levels (Low-High)',
                   previousStateModifier: () => {
                     return [
-                      ...course.missions.sort((a, b) =>
-                        a.levels.length > b.levels.length ? -1 : 1
-                      ),
+                      ...missions.sort((a, b) => {
+                        {
+                          const missionAType = getTypeOfMission(a)
+                          const missionBType = getTypeOfMission(b)
+
+                          const missionALevels =
+                            missionAType === MissionType.enrollment
+                              ? (a as MissionEnrollment).mission.levels
+                              : (a as Mission).levels
+
+                          const missionBLevels =
+                            missionBType === MissionType.enrollment
+                              ? (b as MissionEnrollment).mission.levels
+                              : (b as Mission).levels
+
+                          return missionALevels.length > missionBLevels.length ? -1 : 1
+                        }
+                      }),
                     ]
                   },
                   setter: setFilteredMissions,
@@ -316,7 +438,7 @@ export const getServerSideProps = async (context) => {
     }
   }
 
-  const course = await new CourseEnrollmentAPI(session).findOne(courseId)
+  const course = await new CourseEnrollmentAPI(session).findByCourseId(courseId)
 
   if (!course || !course.payload) {
     return {
@@ -329,15 +451,13 @@ export const getServerSideProps = async (context) => {
     }
   }
 
-  const missions = await new MissionEnrollmentApi(course.payload._id, session).find({
-    course: courseId,
-  })
+  const missions = await new MissionEnrollmentApi(courseId, session).findAll()
 
   return {
     props: {
       user: session.user,
       course: course.payload,
-      mission: missions.payload,
+      missions: missions.payload,
     },
   }
 }
