@@ -360,7 +360,7 @@ const CreateLevel = ({
             name={registerHTML('websiteImage').name}
             error={errorsHTML.websiteImage?.message as unknown as string}
             isRequired={true}
-            label={t.Creator.createLevelPage.websiteImage as string}
+            label={t.Creator.createLevelPage.websitePreviewImage as string}
           ></SingleImageUpload>
         </>
       )
