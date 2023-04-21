@@ -1,6 +1,6 @@
 import { Mission } from './mission.model'
 
-enum CourseType {
+export enum CourseType {
   ARDUINO = 'ARDUINO',
   HTML = 'HTML',
 }

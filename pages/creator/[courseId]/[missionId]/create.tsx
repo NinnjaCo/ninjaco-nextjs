@@ -1,6 +1,17 @@
 import * as yup from 'yup'
-import { Course } from '@/models/crud/course.model'
+import { Course, CourseType } from '@/models/crud/course.model'
 import { CourseApi } from '@/utils/api/course/course.api'
+import {
+  FieldArray,
+  FieldArrayPath,
+  FieldError,
+  FieldErrors,
+  FieldValues,
+  FormState,
+  RegisterOptions,
+  UseFormRegisterReturn,
+  useForm,
+} from 'react-hook-form'
 import { ImageApi } from '@/utils/api/images/image-upload.api'
 import { ImageListType } from 'react-images-uploading'
 import { LevelApi } from '@/utils/api/level/level.api'
@@ -8,7 +19,6 @@ import { Mission } from '@/models/crud/mission.model'
 import { User } from '@/models/crud'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
-import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -18,20 +28,32 @@ import CreatorMenu from '@/components/creator/creatorMenu'
 import Head from 'next/head'
 import MultipleImageUpload from '@/components/forms/multipleImageUpload'
 import React from 'react'
+import SingleImageUpload from '@/components/forms/singleImageUpload'
 import floatingLegos from '@/images/floatingLegos.svg'
 import underLineImage from '@/images/lightlyWavedLine.svg'
 import useTranslation from '@/hooks/useTranslation'
 
-type CreateLevelFormDataType = {
+type CreateArduinoLevelFormDataType = {
   buildingPartsImages: ImageListType
   stepByStepGuideImages: ImageListType
 }
 
-const CreateLevelFormSchema = yup
+type CreateHTMLLevelFormDataType = {
+  websiteImage: ImageListType
+}
+
+const CreateArduinoLevelFormSchema = yup
   .object()
   .shape({
     buildingPartsImages: yup.array().min(1).required(),
     stepByStepGuideImages: yup.array().min(1).required(),
+  })
+  .required()
+
+const CreateHTMLLevelFormSchema = yup
+  .object()
+  .shape({
+    websiteImage: yup.object().required(),
   })
   .required()
 
@@ -68,15 +90,32 @@ const CreateLevel = ({
   }
 
   const {
-    register,
-    handleSubmit,
+    register: registerArduino,
+    handleSubmit: handleSubmitArduino,
+    control: controlArduino,
+    formState: { errors: errorsArduino },
+  } = useForm<CreateArduinoLevelFormDataType>({
+    resolver: yupResolver(CreateArduinoLevelFormSchema),
+  })
+  const {
+    register: registerHTML,
+    handleSubmit: handleSubmitHTML,
     control,
-    formState: { errors },
-  } = useForm<CreateLevelFormDataType>({
-    resolver: yupResolver(CreateLevelFormSchema),
+    formState: { errors: errorsHTML },
+  } = useForm<CreateHTMLLevelFormDataType>({
+    resolver: yupResolver(CreateHTMLLevelFormSchema),
   })
 
-  const onSubmitHandler = async (data: CreateLevelFormDataType) => {
+  const onSubmitHandlerHTML = async (data: CreateHTMLLevelFormDataType) => {
+    setAlertData({
+      message: t.Creator.createLevelPage.creatingLevel as string,
+      variant: 'info',
+      open: true,
+    })
+    scrollToTop()
+  }
+
+  const onSubmitHandlerArduino = async (data: CreateArduinoLevelFormDataType) => {
     setAlertData({
       message: t.Creator.createLevelPage.creatingLevel as string,
       variant: 'info',
@@ -103,7 +142,15 @@ const CreateLevel = ({
       scrollToTop()
       return
     }
-
+    // const onSubmitHandler = (
+    //   data: CreateArduinoLevelFormDataType | CreateHTMLLevelFormDataType
+    // ) => {
+    //   if (course.type === CourseType.ARDUINO) {
+    //     return handleSubmitArduino(onSubmitHandlerArduino(data as CreateArduinoLevelFormDataType))
+    //   } else if (course.type === CourseType.HTML) {
+    //     return handleSubmitHTML(onSubmitHandlerHTML(data as CreateHTMLLevelFormDataType))
+    //   }
+    // }
     // go over the images and upload them using ImageApi
     // then get the urls and save them in the database
 
@@ -241,6 +288,41 @@ const CreateLevel = ({
     }
   }
 
+  const displayLevelType = () => {
+    if (course.type === CourseType.ARDUINO) {
+      return (
+        <>
+          <MultipleImageUpload
+            control={controlArduino}
+            name={registerArduino('buildingPartsImages').name}
+            error={errorsArduino.buildingPartsImages?.message as unknown as string} // Convert to string since it returned a FieldError
+            isRequired={true}
+            label={t.Creator.createLevelPage.buildingPartImages as string}
+          />
+          <MultipleImageUpload
+            control={control}
+            name={registerArduino('stepByStepGuideImages').name}
+            error={errorsArduino.stepByStepGuideImages?.message as unknown as string} // Convert to string since it returned a FieldError
+            isRequired={true}
+            label={t.Creator.createLevelPage.stepByStepImages as string}
+          />
+        </>
+      )
+    } else {
+      return (
+        <>
+          <SingleImageUpload
+            control={control}
+            name={registerHTML('websiteImage').name}
+            error={errorsHTML.websiteImage?.message as unknown as string}
+            isRequired={true}
+            label="website image"
+          ></SingleImageUpload>
+        </>
+      )
+    }
+  }
+
   return (
     <>
       <Head>
@@ -261,24 +343,48 @@ const CreateLevel = ({
             open={alertData.open}
             close={closeAlert}
           />
-          <form onSubmit={handleSubmit(onSubmitHandler)} className="flex flex-col gap-8" id="form">
+          {course.type === CourseType.ARDUINO && (
+            <form
+              onSubmit={handleSubmitArduino(onSubmitHandlerArduino)}
+              className="flex flex-col gap-8"
+              id="form"
+            >
+              <div className="text-2xl text-brand">
+                {t.Creator.createLevelPage.creatingLevelNumber} {mission.levels.length + 1}
+              </div>
+              {displayLevelType()}
+
+              <div className="flex w-full justify-between gap-4 md:gap-12 h-fit md:flex-row flex-col-reverse">
+                <button
+                  className="w-full md:w-40 h-fit btn bg-error text-brand hover:bg-error-dark hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    router.back()
+                  }}
+                >
+                  {t.Creator.createLevelPage.cancel}
+                </button>
+                <button
+                  type="submit"
+                  form="form"
+                  value="Submit"
+                  className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+                >
+                  {t.Creator.createLevelPage.createLevel}
+                </button>
+              </div>
+            </form>
+          )} 
+          {course.type === CourseType.HTML && (
+            <form
+            onSubmit={handleSubmitHTML(onSubmitHandlerHTML)}
+            className="flex flex-col gap-8"
+            id="form"
+          >
             <div className="text-2xl text-brand">
               {t.Creator.createLevelPage.creatingLevelNumber} {mission.levels.length + 1}
             </div>
-            <MultipleImageUpload
-              control={control}
-              name={register('buildingPartsImages').name}
-              error={errors.buildingPartsImages?.message as unknown as string} // Convert to string since it returned a FieldError
-              isRequired={true}
-              label={t.Creator.createLevelPage.buildingPartImages as string}
-            />
-            <MultipleImageUpload
-              control={control}
-              name={register('stepByStepGuideImages').name}
-              error={errors.stepByStepGuideImages?.message as unknown as string} // Convert to string since it returned a FieldError
-              isRequired={true}
-              label={t.Creator.createLevelPage.stepByStepImages as string}
-            />
+            {displayLevelType()}
 
             <div className="flex w-full justify-between gap-4 md:gap-12 h-fit md:flex-row flex-col-reverse">
               <button
