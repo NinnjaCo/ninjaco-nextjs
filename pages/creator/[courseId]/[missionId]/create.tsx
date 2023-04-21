@@ -142,15 +142,15 @@ const CreateLevel = ({
       scrollToTop()
       return
     }
-    // const onSubmitHandler = (
-    //   data: CreateArduinoLevelFormDataType | CreateHTMLLevelFormDataType
-    // ) => {
-    //   if (course.type === CourseType.ARDUINO) {
-    //     return handleSubmitArduino(onSubmitHandlerArduino(data as CreateArduinoLevelFormDataType))
-    //   } else if (course.type === CourseType.HTML) {
-    //     return handleSubmitHTML(onSubmitHandlerHTML(data as CreateHTMLLevelFormDataType))
-    //   }
-    // }
+    const onSubmitHandler = (
+      data: CreateArduinoLevelFormDataType | CreateHTMLLevelFormDataType
+    ) => {
+      if (course.type === CourseType.ARDUINO) {
+        return handleSubmitArduino(onSubmitHandlerArduino(data as CreateArduinoLevelFormDataType))
+      } else if (course.type === CourseType.HTML) {
+        return handleSubmitHTML(onSubmitHandlerHTML(data as CreateHTMLLevelFormDataType))
+      }
+    }
     // go over the images and upload them using ImageApi
     // then get the urls and save them in the database
 
@@ -374,38 +374,39 @@ const CreateLevel = ({
                 </button>
               </div>
             </form>
-          )} 
+          )}
           {course.type === CourseType.HTML && (
             <form
-            onSubmit={handleSubmitHTML(onSubmitHandlerHTML)}
-            className="flex flex-col gap-8"
-            id="form"
-          >
-            <div className="text-2xl text-brand">
-              {t.Creator.createLevelPage.creatingLevelNumber} {mission.levels.length + 1}
-            </div>
-            {displayLevelType()}
+              onSubmit={handleSubmitHTML(onSubmitHandlerHTML)}
+              className="flex flex-col gap-8"
+              id="form"
+            >
+              <div className="text-2xl text-brand">
+                {t.Creator.createLevelPage.creatingLevelNumber} {mission.levels.length + 1}
+              </div>
+              {displayLevelType()}
 
-            <div className="flex w-full justify-between gap-4 md:gap-12 h-fit md:flex-row flex-col-reverse">
-              <button
-                className="w-full md:w-40 h-fit btn bg-error text-brand hover:bg-error-dark hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
-                onClick={(e) => {
-                  e.preventDefault()
-                  router.back()
-                }}
-              >
-                {t.Creator.createLevelPage.cancel}
-              </button>
-              <button
-                type="submit"
-                form="form"
-                value="Submit"
-                className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
-              >
-                {t.Creator.createLevelPage.createLevel}
-              </button>
-            </div>
-          </form>
+              <div className="flex w-full justify-between gap-4 md:gap-12 h-fit md:flex-row flex-col-reverse">
+                <button
+                  className="w-full md:w-40 h-fit btn bg-error text-brand hover:bg-error-dark hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    router.back()
+                  }}
+                >
+                  {t.Creator.createLevelPage.cancel}
+                </button>
+                <button
+                  type="submit"
+                  form="form"
+                  value="Submit"
+                  className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+                >
+                  {t.Creator.createLevelPage.createLevel}
+                </button>
+              </div>
+            </form>
+          )}
         </CreateResourceCard>
       </main>
     </>
