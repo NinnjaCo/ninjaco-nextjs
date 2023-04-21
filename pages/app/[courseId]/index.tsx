@@ -37,9 +37,9 @@ export default function UserCourseView({ user, course }: { user: User; course: C
               <div className=" text-brand font-semibold text-xl md:text-3xl">{course.title}</div>
               <Link
                 className="text-xs  md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit"
-                href={`/creator/${course._id}/edit`}
+                href={`/app/${course._id}`}
               >
-                {t.Creator.coursePage.editCourse}
+                {t.User.viewCoursePage.enrollCourse}
               </Link>
             </div>
             <div className=" text-brand-500 font-medium text-xs md:text-base w-full">
@@ -49,14 +49,14 @@ export default function UserCourseView({ user, course }: { user: User; course: C
         </div>
         <div className="grid grid-cols-1 gap-4 md:gap-0 md:grid-cols-2 justify-between px-6 my-6 border-b-2 py-6 border-brand-50">
           <div className="flex flex-col gap-4 border-r-0 md:border-r-2 mr-0 md:mr-12 border-brand-50">
-            <div className="flex gap-3 items-center">
-              {t.Creator.coursePage.courseType}:
+            <div className="flex gap-3 items-center text-brand font-medium text-xs md:text-base">
+              {t.User.viewCoursePage.courseType}:
               <div className=" text-brand font-medium text-xs md:text-base"></div>
               <div className="text-brand font-semibold text-sm md:text-lg">{course.type}</div>
             </div>
             <div className="flex gap-3 items-center w-full flex-wrap">
               <div className=" text-brand font-medium text-xs md:text-base">
-                {t.Creator.coursePage.ageRange}:
+                {t.User.viewCoursePage.ageRange}:
               </div>
               {course.ageRange?.length !== 0 ? (
                 course?.ageRange?.map((age, index) => <Chip text={age} key={index} />)
@@ -68,7 +68,7 @@ export default function UserCourseView({ user, course }: { user: User; course: C
           <div className="flex flex-col gap-4">
             <div className="flex gap-3 items-center w-full flex-wrap">
               <div className=" text-brand font-medium text-xs md:text-base">
-                {t.Creator.coursePage.coursePrerequisites}:
+                {t.User.viewCoursePage.coursePrerequisites}:
               </div>
               {course.preRequisites?.length !== 0 ? (
                 course?.preRequisites?.map((prerequisite, index) => (
@@ -80,7 +80,7 @@ export default function UserCourseView({ user, course }: { user: User; course: C
             </div>
             <div className="flex gap-3 items-center w-full flex-wrap">
               <div className=" text-brand font-medium text-xs md:text-base">
-                {t.Creator.coursePage.courseObjectives}:
+                {t.User.viewCoursePage.courseObjectives}:
               </div>
               {course.objectives?.length !== 0 ? (
                 course?.objectives?.map((objective, index) => <Chip text={objective} key={index} />)
@@ -91,15 +91,8 @@ export default function UserCourseView({ user, course }: { user: User; course: C
           </div>
         </div>
         <div className="flex flex-col px-6 pb-12 pt-6 gap-6">
-          <div className="flex justify-between gap-10">
-            <div className="font-semibold text-2xl">{t.Creator.coursePage.missions}</div>
-            <Link
-              className=" text-xs md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit"
-              href={`/creator/${course._id}/create`}
-            >
-              {t.Creator.coursePage.addMission}
-            </Link>
-          </div>
+          <div className="font-semibold text-2xl">{t.User.viewCoursePage.missions}</div>
+
           <div className="flex gap-4 items-center">
             <div className="text-brand font-medium text-xs">{course.missions.length} missions</div>
             <Filter
@@ -140,7 +133,7 @@ export default function UserCourseView({ user, course }: { user: User; course: C
           {filteredMissions.length !== 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center place-items-center">
               {filteredMissions.map((mission, index) => (
-                <Link href={`/creator/${course._id}/${mission._id}`} key={index}>
+                <Link href={`/app/${course._id}/${mission._id}`} key={index}>
                   <MissionCard mission={mission} />
                 </Link>
               ))}
