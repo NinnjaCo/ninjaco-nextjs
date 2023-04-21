@@ -12,6 +12,7 @@ import GameEnrollmentCard from '@/components/user/game/enrollmentGameCard'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
+import UserMenu from '@/components/user/userMenu'
 import dayjs from 'dayjs'
 import twoBlocksWithRobot from '@/images/twoBlocksRobotAnimated.gif'
 import useTranslation from '@/hooks/useTranslation'
@@ -59,7 +60,7 @@ export default function Home({ user, games }: { user: User; games: (UserPlayGame
       </Head>
 
       <main className="relative h-screen w-full">
-        <CreatorMenu isOnCoursePage={false} isOnGamesPage={true} creator={user} />
+        <UserMenu isOnCoursePage={false} isOnGamesPage={true} user={user}></UserMenu>
         <div className="flex flex-row mt-7 justify-between">
           <div className="flex flex-col mx-6 gap-6 w-full">
             <div className="flex w-full justify-between items-center">
