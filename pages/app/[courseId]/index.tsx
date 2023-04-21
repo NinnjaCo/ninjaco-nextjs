@@ -1,13 +1,15 @@
 import { AlertDialog } from '@/components/shared/alertDialog'
 import { CheckCircleIcon, PrinterIcon } from '@heroicons/react/24/solid'
 import { Course } from '@/models/crud/course.model'
-import { CourseApi } from '@/utils/api/course/course.api'
+import { CourseEnrollment } from '@/models/crud/course-enrollment.model'
 import { CourseEnrollmentAPI } from '@/utils/api/courseEnrollment/course-enrollment.api'
-import { FunnelIcon } from '@heroicons/react/24/outline'
 import { Mission } from '@/models/crud/mission.model'
+import { MissionEnrollment } from '@/models/crud/mission-enrollment.model'
+import { MissionEnrollmentApi } from '@/utils/api/missionEnrollment/mission-enrollment.api'
 import { User } from '@/models/crud'
 import { authOptions } from '../../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
+import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 import Chip from '@/components/shared/chip'
 import Filter from '@/components/creator/filter'
@@ -15,18 +17,79 @@ import Head from 'next/head'
 import ImageCard from '@/components/creator/imageCard'
 import Link from 'next/link'
 import MissionCard from '@/components/creator/missionCard'
+import MissionEnrollmentCard from '@/components/user/mission/enrollmentMissionCard'
 import React from 'react'
 import UserMenu from '@/components/user/userMenu'
 import dayjs from 'dayjs'
+import router from 'next/router'
 import useTranslation from '@/hooks/useTranslation'
 
-export default function UserCourseView({ user, course }: { user: User; course: Course }) {
-  const [filteredMissions, setFilteredMissions] = useState<Mission[]>(course.missions)
+enum CourseType {
+  enrollment = 'enrollment',
+  course = 'course',
+}
+
+const getTypeOfCourse = (course: CourseEnrollment | Course): CourseType => {
+  if ((course as CourseEnrollment).course) {
+    return CourseType.enrollment
+  } else {
+    return CourseType.course
+  }
+}
+
+enum MissionType {
+  enrollment = 'enrollment',
+  mission = 'mission',
+}
+
+const getTypeOfMission = (mission: MissionEnrollment | Mission): MissionType => {
+  if ((mission as MissionEnrollment).mission) {
+    return MissionType.enrollment
+  } else {
+    return MissionType.mission
+  }
+}
+
+export default function UserCourseView({
+  user,
+  course,
+  missions,
+}: {
+  user: User
+  course: Course | CourseEnrollment
+  missions: (Mission | MissionEnrollment)[]
+}) {
+  const [filteredMissions, setFilteredMissions] =
+    useState<(Mission | MissionEnrollment)[]>(missions)
+
   const t = useTranslation()
+
+  const session = useSession()
 
   const [openDropCourse, setOpenCourse] = React.useState(false)
 
-  const performDropCourse = async () => {}
+  const performDropCourse = async () => {
+    await new CourseEnrollmentAPI(session.data).delete(course._id)
+    router.reload()
+  }
+
+  const renderMissionCard = (mission: MissionEnrollment | Mission) => {
+    if (getTypeOfMission(mission) === MissionType.enrollment) {
+      mission = mission as MissionEnrollment
+      return (
+        <Link href={`/app/missions/${mission.mission._id}`}>
+          <MissionEnrollmentCard mission={mission} />
+        </Link>
+      )
+    } else {
+      mission = mission as Mission
+      return (
+        <Link href={`/app/games/${mission._id}`}>
+          <MissionCard mission={mission} />
+        </Link>
+      )
+    }
+  }
 
   return (
     <>
@@ -51,20 +114,36 @@ export default function UserCourseView({ user, course }: { user: User; course: C
       <main className="relative w-full">
         <UserMenu isOnCoursePage={true} isOnGamesPage={false} user={user} />
         <div className="flex gap-4 px-6 my-12 w-full md:flex-row flex-col">
-          <ImageCard image={course.image} />
+          {getTypeOfCourse(course) === CourseType.course ? (
+            <ImageCard image={course.image} />
+          ) : (
+            <ImageCard image={course.course.image} />
+          )}
+
           <div className="flex flex-col gap-9 w-full">
             <div className="flex justify-between gap-6 items-center">
               <div className=" text-brand font-semibold text-xl md:text-3xl">{course.title}</div>
-              {/* if the course is of type course, put the enroll button, if not put drop course button instead, if completed put the completed button */}
+              {/* if the course is a Course, put the enroll button, if it is en enrollment course print hello, if completed put the completed button */}
+
               <div>
-                {course === course ? (
-                  <Link
-                    className="text-xs  md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit"
-                    href={`/app/${course._id}`}
+                {getTypeOfCourse(course) === CourseType.course ? (
+                  <button
+                    className="text-xs md:text-base font-semibold btn btn-secondary bg-secondary
+                                 rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800
+                                 h-fit"
+                    //on click post to the course enrollment api
+                    onClick={async () => {
+                      await new CourseEnrollmentAPI(session.data).create({
+                        courseId: course._id,
+                        userId: user._id,
+                      })
+                      router.reload()
+                    }}
                   >
                     {t.User.viewCoursePage.enrollCourse}
-                  </Link>
-                ) : course !== course ? (
+                  </button>
+                ) : getTypeOfCourse(course) === CourseType.enrollment &&
+                  course.completed === false ? (
                   <button
                     className="text-xs  md:text-base font-semibold btn btn-secondary bg-rose-500 rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-rose-400 h-fit"
                     onClick={() => setOpenCourse(true)}
@@ -143,7 +222,7 @@ export default function UserCourseView({ user, course }: { user: User; course: C
           <div className="font-semibold text-2xl">{t.User.viewCoursePage.missions}</div>
 
           <div className="flex gap-4 items-center">
-            <div className="text-brand font-medium text-xs">{course.missions.length} missions</div>
+            <div className="text-brand font-medium text-xs">{missions.length} missions</div>
             <Filter
               filterFields={[
                 {
@@ -182,9 +261,7 @@ export default function UserCourseView({ user, course }: { user: User; course: C
           {filteredMissions.length !== 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center place-items-center">
               {filteredMissions.map((mission, index) => (
-                <Link href={`/app/${course._id}/${mission._id}`} key={index}>
-                  <MissionCard mission={mission} />
-                </Link>
+                <div key={index}> {renderMissionCard(mission)}</div>
               ))}
             </div>
           ) : (
@@ -211,7 +288,7 @@ export const getServerSideProps = async (context) => {
     }
   }
 
-  const course = await new CourseApi(session).findOne(courseId)
+  const course = await new CourseEnrollmentAPI(session).findOne(courseId)
 
   if (!course || !course.payload) {
     return {
@@ -224,10 +301,15 @@ export const getServerSideProps = async (context) => {
     }
   }
 
+  const missions = await new MissionEnrollmentApi(course.payload._id, session).find({
+    course: courseId,
+  })
+
   return {
     props: {
       user: session.user,
       course: course.payload,
+      mission: missions.payload,
     },
   }
 }
