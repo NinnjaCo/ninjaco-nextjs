@@ -116,7 +116,6 @@ const CreateLevel = ({
     scrollToTop()
 
     if (!data.websiteImage.file) {
-      console.log('no file')
       setAlertData({
         message: t.Creator.createLevelPage.imageIsNotValid as string,
         variant: 'error',
@@ -127,7 +126,6 @@ const CreateLevel = ({
     }
 
     if (data.websiteImage.file.size > 1000000) {
-      console.log('too big')
       setAlertData({
         message: t.Creator.createLevelPage.imageIsTooBig as string,
         variant: 'error',
@@ -142,7 +140,6 @@ const CreateLevel = ({
       url = await new ImageApi(session.data).uploadImage({
         image: data.websiteImage.file,
       })
-      console.log('url', url)
     } catch (err) {
       setAlertData({
         message: t.Creator.createLevelPage.errorUploadingImage as string,
@@ -155,12 +152,10 @@ const CreateLevel = ({
 
     if (!url) return
     try {
-      console.log('creating level')
       await new LevelApi(course._id, mission._id, session.data).create({
         levelNumber: mission.levels.length + 1,
         websitePreviewImage: url.payload.image_url,
       })
-      console.log('level created image link is', url.payload.image_url)
 
       router.push(`/creator/${course._id}/${mission._id}/`)
     } catch (err) {
