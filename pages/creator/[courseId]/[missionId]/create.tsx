@@ -13,7 +13,7 @@ import {
   useForm,
 } from 'react-hook-form'
 import { ImageApi } from '@/utils/api/images/image-upload.api'
-import { ImageListType } from 'react-images-uploading'
+import { ImageListType, ImageType } from 'react-images-uploading'
 import { LevelApi } from '@/utils/api/level/level.api'
 import { Mission } from '@/models/crud/mission.model'
 import { User } from '@/models/crud'
@@ -39,7 +39,7 @@ type CreateArduinoLevelFormDataType = {
 }
 
 type CreateHTMLLevelFormDataType = {
-  websiteImage: ImageListType
+  websiteImage: ImageType
 }
 
 const CreateArduinoLevelFormSchema = yup
@@ -100,19 +100,77 @@ const CreateLevel = ({
   const {
     register: registerHTML,
     handleSubmit: handleSubmitHTML,
-    control,
+    control: controlHTML,
     formState: { errors: errorsHTML },
   } = useForm<CreateHTMLLevelFormDataType>({
     resolver: yupResolver(CreateHTMLLevelFormSchema),
   })
 
   const onSubmitHandlerHTML = async (data: CreateHTMLLevelFormDataType) => {
+    console.log('data', data)
     setAlertData({
       message: t.Creator.createLevelPage.creatingLevel as string,
       variant: 'info',
       open: true,
     })
     scrollToTop()
+
+    if (!data.websiteImage.file) {
+      console.log('no file')
+      setAlertData({
+        message: t.Creator.createLevelPage.imageIsNotValid as string,
+        variant: 'error',
+        open: true,
+      })
+      scrollToTop()
+      return
+    }
+
+    if (data.websiteImage.file.size > 1000000) {
+      console.log('too big')
+      setAlertData({
+        message: t.Creator.createLevelPage.imageIsTooBig as string,
+        variant: 'error',
+        open: true,
+      })
+      scrollToTop()
+      return
+    }
+
+    let url
+    try {
+      url = await new ImageApi(session.data).uploadImage({
+        image: data.websiteImage.file,
+      })
+      console.log('url', url)
+    } catch (err) {
+      setAlertData({
+        message: t.Creator.createLevelPage.errorUploadingImage as string,
+        variant: 'error',
+        open: true,
+      })
+      scrollToTop()
+      return
+    }
+
+    if (!url) return
+    try {
+      console.log('creating level')
+      await new LevelApi(course._id, mission._id, session.data).create({
+        levelNumber: mission.levels.length + 1,
+        websitePreviewImage: url.payload.image_url,
+      })
+      console.log('level created image link is', url.payload.image_url)
+
+      router.push(`/creator/${course._id}/${mission._id}/`)
+    } catch (err) {
+      setAlertData({
+        message: t.Creator.createLevelPage.errorCreatingLevel as string,
+        variant: 'error',
+        open: true,
+      })
+      scrollToTop()
+    }
   }
 
   const onSubmitHandlerArduino = async (data: CreateArduinoLevelFormDataType) => {
@@ -291,7 +349,7 @@ const CreateLevel = ({
             label={t.Creator.createLevelPage.buildingPartImages as string}
           />
           <MultipleImageUpload
-            control={control}
+            control={controlArduino}
             name={registerArduino('stepByStepGuideImages').name}
             error={errorsArduino.stepByStepGuideImages?.message as unknown as string} // Convert to string since it returned a FieldError
             isRequired={true}
@@ -303,11 +361,11 @@ const CreateLevel = ({
       return (
         <>
           <SingleImageUpload
-            control={control}
+            control={controlHTML}
             name={registerHTML('websiteImage').name}
             error={errorsHTML.websiteImage?.message as unknown as string}
             isRequired={true}
-            label="Website Final Image"
+            label="Website Preview Image"
           ></SingleImageUpload>
         </>
       )
