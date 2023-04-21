@@ -85,7 +85,7 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
       wheel: true,
     },
     comments: false,
-    maxBlocks: 10,
+    maxBlocks: undefined,
     trashcan: true,
     modalInputs: true,
     zoom: {
