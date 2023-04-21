@@ -108,6 +108,84 @@ const EditLevel = ({
     resolver: yupResolver(EditHTMLLevelFormSchema),
   })
 
+  const onSubmitHandlerHTML = async (data: EditHTMLLevelFormDataType) => {
+    if (!data.websitePreviewImage) {
+      data.websitePreviewImage = { file: undefined, dataURL: undefined }
+    }
+
+    //if there is no new image and the old image has been deleted
+    if (data.websitePreviewImage.dataURL === undefined && defaultWebsitePreviewImage === '') {
+      setAlertData({
+        message: t.Creator.editLevelPage.atLeastOneImage as string,
+        variant: 'error',
+        open: true,
+      })
+      scrollToTop()
+      return
+    }
+    //if there is no new image and the old image has not been changed
+    if (
+      data.websitePreviewImage.dataURL === undefined &&
+      defaultWebsitePreviewImage === level.websitePreviewImage
+    ) {
+      setAlertData({
+        message: t.Creator.editLevelPage.noChangesMade as string,
+        variant: 'warning',
+        open: true,
+      })
+      scrollToTop()
+      return
+    }
+
+    if (!data.websitePreviewImage.file) {
+      setAlertData({
+        message: t.Creator.editLevelPage.imageIsNotValid as string,
+        variant: 'error',
+        open: true,
+      })
+      scrollToTop()
+      return
+    }
+
+    if (data.websitePreviewImage.file.size > 1000000) {
+      //here we need to translate the error message
+      setAlertData({
+        message: t.Creator.editLevelPage.imageIsTooBig as string,
+        variant: 'error',
+        open: true,
+      })
+      scrollToTop()
+      return
+    }
+
+    try {
+      const url = await new ImageApi(session.data).uploadImage({
+        image: data.websitePreviewImage.file,
+      })
+    } catch (err) {
+      setAlertData({
+        message: t.Creator.editLevelPage.errorUploadingImage as string,
+        variant: 'error',
+        open: true,
+      })
+      scrollToTop()
+      return
+    }
+    try {
+      await new LevelApi(course._id, mission._id, session.data).update(level._id, {
+        websitePreviewImage: data.websitePreviewImage.dataURL,
+      })
+
+      router.push(`/creator/${course._id}/${mission._id}/`)
+    } catch (err) {
+      setAlertData({
+        message: t.Creator.editLevelPage.errorUpdatingLevel as string,
+        variant: 'error',
+        open: true,
+      })
+      scrollToTop()
+    }
+  }
   const onSubmitHandlerArduino = async (data: EditArduinoLevelFormDataType) => {
     if (!data.buildingPartsImages) {
       data.buildingPartsImages = []
@@ -135,8 +213,8 @@ const EditLevel = ({
     if (
       data.buildingPartsImages?.length === 0 &&
       data.stepByStepGuideImages?.length === 0 &&
-      defaultBuildingPartsImages.length === level.buildingPartsImages.length &&
-      defaultStepByStepGuideImages.length === level.stepGuideImages.length
+      defaultBuildingPartsImages.length === level.buildingPartsImages?.length &&
+      defaultStepByStepGuideImages.length === level.stepGuideImages?.length
     ) {
       setAlertData({
         message: t.Creator.editLevelPage.noChangesMade as string,
@@ -307,6 +385,8 @@ const EditLevel = ({
             error={errorsHTML.websitePreviewImage?.message as unknown as string}
             isRequired={true}
             label="Website Preview Image"
+            //here we need to translate the error message
+
             defaultImage={defaultWebsitePreviewImage}
           ></SingleImageUpload>
         </>
@@ -334,7 +414,70 @@ const EditLevel = ({
             open={alertData.open}
             close={closeAlert}
           />
-          {displayLevelType()}
+          {course.type === CourseType.ARDUINO && (
+            <form
+              onSubmit={handleSubmitArduino(onSubmitHandlerArduino)}
+              className="flex flex-col gap-8"
+              id="form"
+            >
+              <div className="text-2xl text-brand">
+                {t.Creator.editLevelPage.editLevelNumber} {level.levelNumber}
+              </div>
+              {displayLevelType()}
+
+              <div className="flex w-full justify-between gap-4 md:gap-12 h-fit md:flex-row flex-col-reverse">
+                <button
+                  className="w-full md:w-40 h-fit btn bg-error text-brand hover:bg-error-dark hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    router.back()
+                  }}
+                >
+                  {t.Creator.editLevelPage.cancel}
+                </button>
+                <button
+                  type="submit"
+                  form="form"
+                  value="Submit"
+                  className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+                >
+                  {t.Creator.editLevelPage.editLevel}
+                </button>
+              </div>
+            </form>
+          )}
+          {course.type === CourseType.HTML && (
+            <form
+              onSubmit={handleSubmitHTML(onSubmitHandlerHTML)}
+              className="flex flex-col gap-8"
+              id="form"
+            >
+              <div className="text-2xl text-brand">
+                {t.Creator.editLevelPage.editLevelNumber} {level.levelNumber}
+              </div>
+              {displayLevelType()}
+
+              <div className="flex w-full justify-between gap-4 md:gap-12 h-fit md:flex-row flex-col-reverse">
+                <button
+                  className="w-full md:w-40 h-fit btn bg-error text-brand hover:bg-error-dark hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    router.back()
+                  }}
+                >
+                  {t.Creator.editLevelPage.cancel}
+                </button>
+                <button
+                  type="submit"
+                  form="form"
+                  value="Submit"
+                  className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+                >
+                  {t.Creator.editLevelPage.editLevel}
+                </button>
+              </div>
+            </form>
+          )}
         </CreateResourceCard>
       </main>
     </>
