@@ -114,15 +114,20 @@ export default function UserCourseView({
       <main className="relative w-full">
         <UserMenu isOnCoursePage={true} isOnGamesPage={false} user={user} />
         <div className="flex gap-4 px-6 my-12 w-full md:flex-row flex-col">
-          {getTypeOfCourse(course) === CourseType.course ? (
-            <ImageCard image={course.image} />
-          ) : (
-            <ImageCard image={course.course.image} />
-          )}
-
+          <ImageCard
+            image={
+              getTypeOfCourse(course) === CourseType.course
+                ? (course as Course).image
+                : (course as CourseEnrollment).course.image
+            }
+          />
           <div className="flex flex-col gap-9 w-full">
             <div className="flex justify-between gap-6 items-center">
-              <div className=" text-brand font-semibold text-xl md:text-3xl">{course.title}</div>
+              <div className=" text-brand font-semibold text-xl md:text-3xl">
+                {getTypeOfCourse(course) === CourseType.course
+                  ? (course as Course).title
+                  : (course as CourseEnrollment).course.title}
+              </div>
               {/* if the course is a Course, put the enroll button, if it is en enrollment course print hello, if completed put the completed button */}
 
               <div>
@@ -170,7 +175,9 @@ export default function UserCourseView({
             </div>
 
             <div className=" text-brand-500 font-medium text-xs md:text-base w-full">
-              {course.description}
+              {getTypeOfCourse(course) === CourseType.course
+                ? (course as Course).description
+                : (course as CourseEnrollment).course.description}
             </div>
           </div>
         </div>
@@ -180,7 +187,12 @@ export default function UserCourseView({
             <div className="flex gap-3 items-center text-brand font-medium text-xs md:text-base">
               {t.User.viewCoursePage.courseType}:
               <div className=" text-brand font-medium text-xs md:text-base"></div>
-              <div className="text-brand font-semibold text-sm md:text-lg">{course.type}</div>
+              <div className="text-brand font-semibold text-sm md:text-lg">
+                {' '}
+                {getTypeOfCourse(course) === CourseType.course
+                  ? (course as Course).type
+                  : (course as CourseEnrollment).course.type}
+              </div>
             </div>
             <div className="flex gap-3 items-center w-full flex-wrap">
               <div className=" text-brand font-medium text-xs md:text-base">
