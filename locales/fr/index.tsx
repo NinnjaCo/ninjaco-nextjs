@@ -580,6 +580,9 @@ const frenchTranslations: WebsiteTranslations = {
       stepByStepImages: 'Images étape par étape',
       cancel: 'Annuler',
       createLevel: 'Créer un Niveau',
+      websitePreviewImage: "Image d'aperçu du site Web",
+      oneImageIsNotValid: 'Une des images n est pas validé',
+      oneImageIsTooBig: 'Une des images est trop grande, elle ne doit pas dépasser 1MB',
     },
     editLevelPage: {
       atLeastOneImage: 'Vous devez avoir au moins une image',
@@ -595,6 +598,9 @@ const frenchTranslations: WebsiteTranslations = {
       buildingPartImages: 'Images de pièces de construction',
       stepByStepImages: 'Images étape par étape',
       cancel: 'Annuler',
+      websitePreviewImage: "Image d'aperçu du site Web",
+      oneImageIsNotValid: 'Une des images n est pas validé',
+      oneImageIsTooBig: 'Une des images est trop grande, elle ne doit pas dépasser 1MB',
     },
     games: {
       viewGames: {

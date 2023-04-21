@@ -567,6 +567,9 @@ const englishTranslations: WebsiteTranslations = {
       stepByStepImages: 'Step by Step Guide Images',
       cancel: 'Cancel',
       createLevel: ' Create Level',
+      websitePreviewImage: 'Website Preview Image',
+      oneImageIsNotValid: 'The image not valid',
+      oneImageIsTooBig: 'The image is too big, please make sure it is less than 1MB',
     },
     editLevelPage: {
       atLeastOneImage: 'You need to upload at least one image',
@@ -582,6 +585,9 @@ const englishTranslations: WebsiteTranslations = {
       buildingPartImages: 'Building Parts Images',
       stepByStepImages: 'Step by Step Guide Images',
       cancel: 'Cancel',
+      websitePreviewImage: 'Website Preview Image',
+      oneImageIsNotValid: 'The image not valid',
+      oneImageIsTooBig: 'The image is too big, please make sure it is less than 1MB',
     },
     games: {
       viewGames: {

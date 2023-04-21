@@ -13,30 +13,22 @@ export class CourseEnrollmentAPI extends CrudApi<CourseEnrollment, CourseEnrollm
   }
 
   async findAll(
-    userId: string,
     options?: AxiosRequestConfig | undefined
   ): Promise<CrudResponse<(CourseEnrollment | Course)[]>> {
     return (
       await this.client.get<CrudResponse<(CourseEnrollment | Course)[]>>(this.path, {
         ...options,
-        params: {
-          userId: userId,
-        },
       })
     ).data
   }
 
   async findByCourseId(
     courseId: string,
-    userId: string,
     options?: AxiosRequestConfig | undefined
   ): Promise<CrudResponse<CourseEnrollment | Course>> {
     return (
       await this.client.get<CrudResponse<CourseEnrollment | Course>>(`${this.path}/${courseId}`, {
         ...options,
-        params: {
-          userId: userId,
-        },
       })
     ).data
   }

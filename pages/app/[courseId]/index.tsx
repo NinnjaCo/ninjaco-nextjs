@@ -228,31 +228,59 @@ export default function UserCourseView({
                 {
                   name: 'Newest',
                   setter: setFilteredMissions,
-                  sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? -1 : 1),
+                  previousStateModifier: () => {
+                    return [
+                      ...course.missions.sort((a, b) =>
+                        dayjs(a.createdAt).isAfter(b.createdAt) ? -1 : 1
+                      ),
+                    ]
+                  },
                 },
                 {
                   name: 'Recently Updated',
-                  sortFunction: (a, b) => (dayjs(a.updatedAt).isAfter(b.updatedAt) ? -1 : 1),
+                  previousStateModifier: () => {
+                    return [
+                      ...course.missions.sort((a, b) =>
+                        dayjs(a.updatedAt).isAfter(b.updatedAt) ? -1 : 1
+                      ),
+                    ]
+                  },
                   setter: setFilteredMissions,
                 },
                 {
                   name: 'Oldest',
-                  sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? 1 : -1),
+                  previousStateModifier: () => {
+                    return [
+                      ...course.missions.sort((a, b) =>
+                        dayjs(a.createdAt).isAfter(b.createdAt) ? 1 : -1
+                      ),
+                    ]
+                  },
                   setter: setFilteredMissions,
                 },
                 {
                   name: 'Name (A-Z)',
-                  sortFunction: (a, b) => (a.title > b.title ? 1 : -1),
+                  previousStateModifier: () => {
+                    return [...course.missions.sort((a, b) => a.title.localeCompare(b.title))]
+                  },
                   setter: setFilteredMissions,
                 },
                 {
                   name: 'Name (Z-A)',
-                  sortFunction: (a, b) => (a.title > b.title ? -1 : 1),
+                  previousStateModifier: () => {
+                    return [...course.missions.sort((a, b) => b.title.localeCompare(a.title))]
+                  },
                   setter: setFilteredMissions,
                 },
                 {
                   name: 'Number of Levels (Low-High)',
-                  sortFunction: (a, b) => (a.levels.length > b.levels.length ? -1 : 1),
+                  previousStateModifier: () => {
+                    return [
+                      ...course.missions.sort((a, b) =>
+                        a.levels.length > b.levels.length ? -1 : 1
+                      ),
+                    ]
+                  },
                   setter: setFilteredMissions,
                 },
               ]}
