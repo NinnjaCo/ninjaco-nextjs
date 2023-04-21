@@ -139,7 +139,7 @@ const EditLevel = ({
 
     if (!data.websitePreviewImage.file) {
       setAlertData({
-        message: t.Creator.editLevelPage.imageIsNotValid as string,
+        message: t.Creator.editLevelPage.oneImageIsNotValid as string,
         variant: 'error',
         open: true,
       })
@@ -148,9 +148,8 @@ const EditLevel = ({
     }
 
     if (data.websitePreviewImage.file.size > 1000000) {
-      //here we need to translate the error message
       setAlertData({
-        message: t.Creator.editLevelPage.imageIsTooBig as string,
+        message: t.Creator.editLevelPage.oneImageIsTooBig as string,
         variant: 'error',
         open: true,
       })
@@ -384,9 +383,7 @@ const EditLevel = ({
             name={registerHTML('websitePreviewImage').name}
             error={errorsHTML.websitePreviewImage?.message as unknown as string}
             isRequired={true}
-            label="Website Preview Image"
-            //here we need to translate the error message
-
+            label={t.Creator.editLevelPage.websitePreviewImage as string}
             defaultImage={defaultWebsitePreviewImage}
           ></SingleImageUpload>
         </>

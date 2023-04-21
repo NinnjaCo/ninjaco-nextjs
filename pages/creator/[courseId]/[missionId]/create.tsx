@@ -117,7 +117,7 @@ const CreateLevel = ({
 
     if (!data.websiteImage.file) {
       setAlertData({
-        message: t.Creator.createLevelPage.imageIsNotValid as string,
+        message: t.Creator.createLevelPage.oneImageIsNotValid as string,
         variant: 'error',
         open: true,
       })
@@ -127,7 +127,7 @@ const CreateLevel = ({
 
     if (data.websiteImage.file.size > 1000000) {
       setAlertData({
-        message: t.Creator.createLevelPage.imageIsTooBig as string,
+        message: t.Creator.createLevelPage.oneImageIsTooBig as string,
         variant: 'error',
         open: true,
       })
@@ -360,7 +360,7 @@ const CreateLevel = ({
             name={registerHTML('websiteImage').name}
             error={errorsHTML.websiteImage?.message as unknown as string}
             isRequired={true}
-            label="Website Preview Image"
+            label={t.Creator.createLevelPage.websiteImage as string}
           ></SingleImageUpload>
         </>
       )
