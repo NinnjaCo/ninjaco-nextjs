@@ -68,7 +68,9 @@ export default function MainApp({
         <div className="flex flex-row mt-7 justify-between">
           <div className="flex flex-col mx-6 gap-6 w-full">
             <div className="flex w-full justify-between items-center">
-              <div className="text-brand-700 font-semibold text-xl lg:text-2xl">Courses</div>
+              <div className="text-brand-700 font-semibold text-xl lg:text-2xl">
+                {t.Creator.viewCourses.courses}
+              </div>
               <div className="text-brand-700 font-semibold w-44 md:w-80 h-fit">
                 <Image
                   src={twoBlocksWithRobot}
@@ -82,9 +84,9 @@ export default function MainApp({
               </div>
             </div>
             <div className="flex gap-10 justify-start items-center">
-              <div className="text-base text-brand ">
-                {filteredCourses.length}
-                entries found
+              <div className="text-base text-brand flex flex-row gap-3">
+                <div>{filteredCourses.length}</div>
+                <div>{t.Creator.viewCourses.entries} </div>
               </div>{' '}
               <Filter
                 filterFields={[
