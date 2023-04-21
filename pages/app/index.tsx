@@ -5,9 +5,24 @@ import { GameEnrollmentAPI } from '@/utils/api/game-enrollment/game-enrollment.a
 import { User } from '@/models/crud'
 import { authOptions } from '../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
+import CourseCard from '@/components/creator/courseCard'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import Head from 'next/head'
+import Link from 'next/link'
 import React from 'react'
+import enrollmentCourseCard from '@/components/user/course/enrollmentCourseCard'
+
+enum CourseType {
+  enrollment = 'enrollment',
+  course = 'course',
+}
+const getTypeOfCourse = (course: CourseEnrollment | Course): CourseType => {
+  if ((course as CourseEnrollment).course) {
+    return CourseType.enrollment
+  } else {
+    return CourseType.course
+  }
+}
 
 export default function MainApp({
   user,
@@ -16,6 +31,24 @@ export default function MainApp({
   user: User
   courses: (CourseEnrollment | Course)[]
 }) {
+  //  fix routesss !!!!!!
+  const renderCourseCard = (course: CourseEnrollment | Course) => {
+    if (getTypeOfCourse(course) === CourseType.enrollment) {
+      course = course as CourseEnrollment
+      return (
+        <Link href={`/app/courses/${course.course._id}`}>
+          <enrollmentCourseCard course={course} />
+        </Link>
+      )
+    } else {
+      course = course as Course
+      return (
+        <Link href={`/app/courses/${course._id}`}>
+          <CourseCard course={course} />
+        </Link>
+      )
+    }
+  }
   return (
     <>
       <Head>
