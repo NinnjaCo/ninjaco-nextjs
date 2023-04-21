@@ -513,6 +513,10 @@ export interface WebsiteTranslations {
       filter: translationElement
       missions: translationElement
       noMissions: translationElement
+      dropCourseTitle: translationElement
+      dropCourseMessage: translationElement
+      cancel: translationElement
+      drop: translationElement
     }
   }
   Filter: {

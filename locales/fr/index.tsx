@@ -686,6 +686,10 @@ const frenchTranslations: WebsiteTranslations = {
       filter: 'Filtre',
       missions: 'Missions',
       noMissions: 'Aucune mission',
+      dropCourseTitle: 'Êtes-vous sûr de vouloir abandonner ce cours?',
+      dropCourseMessage: 'Tout progrès sera perdu à jamais',
+      cancel: 'Annuler',
+      drop: 'Abandonner',
     },
   },
   Filter: {

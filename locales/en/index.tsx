@@ -663,7 +663,7 @@ const englishTranslations: WebsiteTranslations = {
   User: {
     viewCoursePage: {
       enrollCourse: 'Enroll in Course',
-      dropCourse: 'Drop Course',
+      dropCourse: 'Drop The Course',
       courseCompleted: 'Course Completed',
       printCertificate: 'Print Certificate',
       courseType: 'Course Type',
@@ -673,6 +673,10 @@ const englishTranslations: WebsiteTranslations = {
       filter: 'Filters',
       missions: 'Missions',
       noMissions: 'No missions yet',
+      dropCourseTitle: 'Are you sure you want to drop this course?',
+      dropCourseMessage: 'All progress will be lost forever',
+      cancel: 'Cancel',
+      drop: 'Drop',
     },
   },
   Filter: {
