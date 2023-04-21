@@ -39,7 +39,7 @@ export default function MainApp({
   const [filteredCourses, setFilteredCourses] =
     React.useState<(CourseEnrollment | Course)[]>(courses)
   const t = useTranslation()
-  //  fix routesss !!!!!!
+
   const renderCourseCard = (course: CourseEnrollment | Course) => {
     if (getTypeOfCourse(course) === CourseType.enrollment) {
       course = course as CourseEnrollment
@@ -60,12 +60,11 @@ export default function MainApp({
   return (
     <>
       <Head>
-        <title>User courses page</title>
-        <meta name="description" content="Leading online platform for visual programming" />
+        <title>NinjaCo | Courses</title>
+        <meta name="description" content="Explore all courses offered by NinjaCo" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main className="relative h-screen w-full">
-        {/* userMenu */}
         <UserMenu isOnCoursePage={true} isOnGamesPage={false} user={user}></UserMenu>
         <div className="flex flex-row mt-7 justify-between">
           <div className="flex flex-col mx-6 gap-3 w-full">
@@ -73,7 +72,7 @@ export default function MainApp({
               <div className="text-brand-700 font-semibold text-xl lg:text-2xl">
                 {t.Creator.viewCourses.courses}
               </div>
-              <div className="text-brand-700 font-semibold w-44 md:w-80 h-fit">
+              <div className="text-brand-700 font-semibold w-44 md:w-80 h-fit animate-floatSlow">
                 <Image
                   src={twoBlocksWithRobot}
                   alt="Animated Robot"
@@ -95,29 +94,132 @@ export default function MainApp({
                   {
                     name: t.Creator.games.viewGames.filter.newest as string,
                     setter: setFilteredCourses,
-                    sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? -1 : 1),
+                    previousStateModifier: () => {
+                      return [
+                        ...courses.sort((a: any, b: any) => {
+                          const courseAType = getTypeOfCourse(a)
+                          const courseBType = getTypeOfCourse(b)
+
+                          const aCreatedAt =
+                            courseAType === CourseType.course ? a.createdAt : a.course.createdAt
+                          const bCreatedAt =
+                            courseBType === CourseType.course ? b.createdAt : b.course.createdAt
+
+                          return dayjs(aCreatedAt).isAfter(bCreatedAt) ? -1 : 1
+                        }),
+                      ]
+                    },
                   },
                   {
                     name: t.Creator.games.viewGames.filter.recentlyUpdated as string,
-                    sortFunction: (a, b) => (dayjs(a.updatedAt).isAfter(b.updatedAt) ? -1 : 1),
+                    previousStateModifier: () => {
+                      return [
+                        ...courses.sort((a: any, b: any) => {
+                          const courseAType = getTypeOfCourse(a)
+                          const courseBType = getTypeOfCourse(b)
+
+                          const aUpdatedAt =
+                            courseAType === CourseType.course ? a.updatedAt : a.course.updatedAt
+                          const bUpdatedAt =
+                            courseBType === CourseType.course ? b.updatedAt : b.course.updatedAt
+
+                          return dayjs(aUpdatedAt).isAfter(bUpdatedAt) ? 1 : -1
+                        }),
+                      ]
+                    },
                     setter: setFilteredCourses,
                   },
                   {
                     name: t.Creator.games.viewGames.filter.oldest as string,
-                    sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? 1 : -1),
+                    previousStateModifier: () => {
+                      return [
+                        ...courses.sort((a: any, b: any) => {
+                          const courseAType = getTypeOfCourse(a)
+                          const courseBType = getTypeOfCourse(b)
+
+                          const aCreatedAt =
+                            courseAType === CourseType.course ? a.createdAt : a.course.createdAt
+                          const bCreatedAt =
+                            courseBType === CourseType.course ? b.createdAt : b.course.createdAt
+
+                          return dayjs(aCreatedAt).isAfter(bCreatedAt) ? 1 : -1
+                        }),
+                      ]
+                    },
                     setter: setFilteredCourses,
                   },
                   {
                     name: t.Creator.games.viewGames.filter.NameAZ as string,
-                    sortFunction: (a, b) => (a.title > b.title ? 1 : -1),
+                    previousStateModifier: () => {
+                      return [
+                        ...courses.sort((a: any, b: any) => {
+                          const courseAType = getTypeOfCourse(a)
+                          const courseBType = getTypeOfCourse(b)
+
+                          const aTitle =
+                            courseAType === CourseType.course ? a.title : a.course.title
+                          const bTitle =
+                            courseBType === CourseType.course ? b.title : b.course.title
+
+                          return aTitle.localeCompare(bTitle)
+                        }),
+                      ]
+                    },
                     setter: setFilteredCourses,
                   },
                   {
                     name: t.Creator.games.viewGames.filter.NameZA as string,
-                    sortFunction: (a, b) => (a.title > b.title ? -1 : 1),
+                    previousStateModifier: () => {
+                      return [
+                        ...courses.sort((a: any, b: any) => {
+                          const courseAType = getTypeOfCourse(a)
+                          const courseBType = getTypeOfCourse(b)
+
+                          const aTitle =
+                            courseAType === CourseType.course ? a.title : a.course.title
+                          const bTitle =
+                            courseBType === CourseType.course ? b.title : b.course.title
+                          return bTitle.localeCompare(aTitle)
+                        }),
+                      ]
+                    },
                     setter: setFilteredCourses,
                   },
-                  // set a filter named course type bases on the course type (html or arduino)
+                  {
+                    name: 'HTML',
+                    previousStateModifier: () => {
+                      return courses.filter((course) => {
+                        const courseType = getTypeOfCourse(course)
+                        console.log(courseType)
+                        if (courseType === CourseType.course) {
+                          course = course as Course
+                          return course.type === 'HTML'
+                        } else {
+                          course = course as CourseEnrollment
+                          return course.course.type === 'HTML'
+                        }
+                      })
+                    },
+                    setter: setFilteredCourses,
+                  },
+                  {
+                    name: 'ARDUINO',
+                    previousStateModifier: () => {
+                      const filterd = courses.filter((course) => {
+                        const courseType = getTypeOfCourse(course)
+                        if (courseType === CourseType.course) {
+                          course = course as Course
+                          return course.type === 'ARDUINO'
+                        } else {
+                          course = course as CourseEnrollment
+                          return course.course.type === 'ARDUINO'
+                        }
+                      })
+                      console.log(filterd)
+                      return filterd
+                    },
+                    setter: setFilteredCourses,
+                  },
                 ]}
               />
             </div>
@@ -147,7 +249,7 @@ export const getServerSideProps = async (context) => {
     }
   }
 
-  const courseEnrollmentResponse = await new CourseEnrollmentAPI(session).findAll(session.user._id)
+  const courseEnrollmentResponse = await new CourseEnrollmentAPI(session).findAll()
   if (!courseEnrollmentResponse || !courseEnrollmentResponse.payload) {
     return {
       redirect: {
