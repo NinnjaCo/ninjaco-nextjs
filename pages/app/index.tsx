@@ -14,6 +14,7 @@ import Link from 'next/link'
 import React from 'react'
 import dayjs from 'dayjs'
 import twoBlocksWithRobot from '@/images/twoBlocksRobotAnimated.gif'
+import useTranslation from '@/hooks/useTranslation'
 
 enum CourseType {
   enrollment = 'enrollment',
@@ -36,6 +37,7 @@ export default function MainApp({
 }) {
   const [filteredCourses, setFilteredCourses] =
     React.useState<(CourseEnrollment | Course)[]>(courses)
+  const t = useTranslation()
   //  fix routesss !!!!!!
   const renderCourseCard = (course: CourseEnrollment | Course) => {
     if (getTypeOfCourse(course) === CourseType.enrollment) {
@@ -87,27 +89,27 @@ export default function MainApp({
               <Filter
                 filterFields={[
                   {
-                    name: 'newest',
+                    name: t.Creator.games.viewGames.filter.newest as string,
                     setter: setFilteredCourses,
                     sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? -1 : 1),
                   },
                   {
-                    name: 'recently updated' as string,
+                    name: t.Creator.games.viewGames.filter.recentlyUpdated as string,
                     sortFunction: (a, b) => (dayjs(a.updatedAt).isAfter(b.updatedAt) ? -1 : 1),
                     setter: setFilteredCourses,
                   },
                   {
-                    name: 'oldest',
+                    name: t.Creator.games.viewGames.filter.oldest as string,
                     sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? 1 : -1),
                     setter: setFilteredCourses,
                   },
                   {
-                    name: 'Name a-z',
+                    name: t.Creator.games.viewGames.filter.NameAZ as string,
                     sortFunction: (a, b) => (a.title > b.title ? 1 : -1),
                     setter: setFilteredCourses,
                   },
                   {
-                    name: 'name z-a',
+                    name: t.Creator.games.viewGames.filter.NameZA as string,
                     sortFunction: (a, b) => (a.title > b.title ? -1 : 1),
                     setter: setFilteredCourses,
                   },
