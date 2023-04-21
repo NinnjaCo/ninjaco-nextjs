@@ -113,6 +113,20 @@ export const htmlToolBox: ToolboxDefinition = {
             },
           ],
         },
+        {
+          kind: 'block',
+          type: 'span',
+          contents: [
+            {
+              kind: 'block',
+              type: 'style',
+            },
+          ],
+        },
+        {
+          kind: 'block',
+          type: 'division',
+        },
       ],
     },
     {
@@ -268,20 +282,6 @@ export const htmlToolBox: ToolboxDefinition = {
               ],
             },
           ],
-        },
-        {
-          kind: 'block',
-          type: 'span',
-          contents: [
-            {
-              kind: 'block',
-              type: 'style',
-            },
-          ],
-        },
-        {
-          kind: 'block',
-          type: 'division',
         },
       ],
     },
