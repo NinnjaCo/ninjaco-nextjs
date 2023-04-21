@@ -142,15 +142,6 @@ const CreateLevel = ({
       scrollToTop()
       return
     }
-    const onSubmitHandler = (
-      data: CreateArduinoLevelFormDataType | CreateHTMLLevelFormDataType
-    ) => {
-      if (course.type === CourseType.ARDUINO) {
-        return handleSubmitArduino(onSubmitHandlerArduino(data as CreateArduinoLevelFormDataType))
-      } else if (course.type === CourseType.HTML) {
-        return handleSubmitHTML(onSubmitHandlerHTML(data as CreateHTMLLevelFormDataType))
-      }
-    }
     // go over the images and upload them using ImageApi
     // then get the urls and save them in the database
 
@@ -316,7 +307,7 @@ const CreateLevel = ({
             name={registerHTML('websiteImage').name}
             error={errorsHTML.websiteImage?.message as unknown as string}
             isRequired={true}
-            label="website image"
+            label="Website Final Image"
           ></SingleImageUpload>
         </>
       )
