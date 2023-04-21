@@ -1,17 +1,18 @@
 import { Course } from '@/models/crud/course.model'
 import { CourseEnrollment } from '@/models/crud/course-enrollment.model'
 import { CourseEnrollmentAPI } from '@/utils/api/courseEnrollment/course-enrollment.api'
-import { GameEnrollmentAPI } from '@/utils/api/game-enrollment/game-enrollment.api'
 import { User } from '@/models/crud'
 import { authOptions } from '../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import CourseCard from '@/components/creator/courseCard'
 import CreatorMenu from '@/components/creator/creatorMenu'
+import EnrollmentCourseCard from '@/components/user/course/enrollmentCourseCard'
+import Filter from '@/components/creator/filter'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
-import enrollmentCourseCard from '@/components/user/course/enrollmentCourseCard'
+import dayjs from 'dayjs'
 import twoBlocksWithRobot from '@/images/twoBlocksRobotAnimated.gif'
 
 enum CourseType {
@@ -40,14 +41,14 @@ export default function MainApp({
     if (getTypeOfCourse(course) === CourseType.enrollment) {
       course = course as CourseEnrollment
       return (
-        <Link href={`/app/courses/${course.course._id}`}>
-          <enrollmentCourseCard course={course} />
+        <Link href={`/app/${course.course._id}`}>
+          <EnrollmentCourseCard course={course} />
         </Link>
       )
     } else {
       course = course as Course
       return (
-        <Link href={`/app/courses/${course._id}`}>
+        <Link href={`/app/${course._id}`}>
           <CourseCard course={course} />
         </Link>
       )
@@ -109,6 +110,7 @@ export default function MainApp({
                 sortFunction: (a, b) => (a.title > b.title ? -1 : 1),
                 setter: setFilteredCourses,
               },
+              // set a filter named course type bases on the course type (html or arduino)
             ]}
           />
         </div>

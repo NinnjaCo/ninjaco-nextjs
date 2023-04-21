@@ -4,7 +4,7 @@ import Image from 'next/image'
 import profileIcon from '@/images/profileIcon.svg'
 import suitCase from '@/images/suitCase.svg'
 
-const enrollmentCourseCard: React.FC<{ course: CourseEnrollment }> = ({ course }) => {
+const EnrollmentCourseCard: React.FC<{ course: CourseEnrollment }> = ({ course }) => {
   return (
     <div className="bg-brand-50 w-fit h-fit rounded-lg p-2 flex flex-col gap-2 relative shadow-md">
       <div className="flex flex-col gap-2 w-fit h-fit">
@@ -47,4 +47,4 @@ const enrollmentCourseCard: React.FC<{ course: CourseEnrollment }> = ({ course }
   )
 }
 
-export default enrollmentCourseCard
+export default EnrollmentCourseCard
