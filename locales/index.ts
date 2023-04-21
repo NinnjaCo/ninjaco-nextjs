@@ -512,6 +512,7 @@ export interface WebsiteTranslations {
       ageRange: translationElement
       filter: translationElement
       missions: translationElement
+      noMissions: translationElement
     }
   }
   Filter: {

@@ -685,6 +685,7 @@ const frenchTranslations: WebsiteTranslations = {
       ageRange: "Tranche d'âge",
       filter: 'Filtre',
       missions: 'Missions',
+      noMissions: 'Aucune mission',
     },
   },
   Filter: {

@@ -672,6 +672,7 @@ const englishTranslations: WebsiteTranslations = {
       ageRange: 'Age Range',
       filter: 'Filters',
       missions: 'Missions',
+      noMissions: 'No missions yet',
     },
   },
   Filter: {
