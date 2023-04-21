@@ -660,6 +660,20 @@ const englishTranslations: WebsiteTranslations = {
       },
     },
   },
+  User: {
+    viewCoursePage: {
+      enrollCourse: 'Enroll in Course',
+      dropCourse: 'Drop Course',
+      courseCompleted: 'Course Completed',
+      printCertificate: 'Print Certificate',
+      courseType: 'Course Type',
+      coursePrerequisites: 'Course Prerequisites',
+      courseObjectives: 'Course Objectives',
+      ageRange: 'Age Range',
+      filter: 'Filters',
+      missions: 'Missions',
+    },
+  },
   Filter: {
     filter: 'Filter',
   },
