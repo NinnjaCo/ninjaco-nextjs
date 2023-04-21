@@ -1,14 +1,17 @@
 import { Course } from '@/models/crud/course.model'
 import { Level } from '@/models/crud/level.model'
 import { Mission } from '@/models/crud/mission.model'
-import { gameGenerator } from '@/blockly/generetors/game'
+import { Switch } from '@headlessui/react'
 import { htmlBlocks } from '@/blockly/blocks/html'
+import { htmlGenerator } from '@/blockly/generetors/html'
 import { htmlToolBox } from '@/blockly/toolbox/html'
 import Blockly from 'blockly'
 import BlocklyBoard from '@/components/blockly/blockly'
 import DOMPurify from 'isomorphic-dompurify'
+import Image from 'next/image'
 import React from 'react'
 import convertHtmlToReact from '@hedgedoc/html-to-react'
+import targetwebsite from '@/images/targetwebsite.png'
 
 interface Props {
   course: Course
@@ -17,7 +20,17 @@ interface Props {
 }
 
 const HtmlLevel = ({ course, level, mission }: Props) => {
+  const [showWebsitePreview, setShowWebsitePreview] = React.useState(true)
+  const [htmlCode, setHtmlCode] = React.useState('')
+
   const parentRef = React.useRef<any>()
+
+  React.useEffect(() => {
+    const code = getCodeFromBlockly()
+    if (code) {
+      setHtmlCode(code)
+    }
+  }, [])
 
   const onChangeListener = (
     e: Blockly.Events.Abstract,
@@ -34,7 +47,10 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
       // Event is UI event or finished loading or workspace is dragging
       return
     }
-
+    const code = getCodeFromBlockly()
+    if (code) {
+      setHtmlCode(code)
+    }
     if (e.type == Blockly.Events.BLOCK_CREATE) {
       // Event is block create
       return
@@ -48,7 +64,6 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
       return
     }
     if (e.type == Blockly.Events.BLOCK_MOVE) {
-      // Event is block move
       return
     }
     if (e.type == Blockly.Events.BLOCK_DRAG) {
@@ -98,36 +113,71 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
     },
   }
 
-  const html = `Some text <strong>wrapped with strong</strong>
-      <h1>h</h1>`
-
   const getCleanReactHtml = (html: string) => {
     const cleanHtml = DOMPurify.sanitize(html)
     return convertHtmlToReact(cleanHtml)
   }
 
+  const getCodeFromBlockly = () => {
+    if (parentRef.current) {
+      return parentRef.current.generateCode()
+    }
+    return null
+  }
+
   return (
-    <div className="w-full h-full flex relative">
+    <div className="w-full h-full flex relative overflow-hidden">
       <BlocklyBoard
         ref={parentRef}
         blocklyOptions={blocklyGameOptions}
-        codeGenerator={gameGenerator}
+        codeGenerator={htmlGenerator}
         blocksDefinitions={htmlBlocks}
         onChangeListener={onChangeListener}
         storageKey={`course-${course._id}-mission-${mission._id}-level-${level._id}`}
       ></BlocklyBoard>
-      <div className="basis-2/3 bg-brand-50 border-l-2 border-l-brand-400 h-full flex flex-col">
-        <div className="basis-1/2 w-full">{getCleanReactHtml(html)}</div>
-        <div className="basis-1/2 w-full border-t-2 border-brand-400"></div>
+      <div className="basis-2/3 border-l-2 border-l-brand-400 h-full flex flex-col">
+        <div className="basis-1/2 w-full text-xs bg-brand-100">
+          <p className="pl-2 pt-1 text-brand font-semibold">
+            This is how your website should look like:
+          </p>
+          <div className="w-full h-full relative">
+            <Image
+              src={targetwebsite}
+              alt="Target Website Preview"
+              className="w-full h-full max-w-full max-h-full"
+              fill
+              style={{
+                objectFit: 'contain',
+              }}
+            ></Image>
+          </div>
+        </div>
+        <div className="basis-1/2 w-full border-t-2 border-brand-400  overflow-y-scroll">
+          {showWebsitePreview ? (
+            <div>{getCleanReactHtml(htmlCode)}</div>
+          ) : (
+            <pre className="text-xs">{htmlCode}</pre>
+          )}
+        </div>
       </div>
-      <button
-        onClick={() => {
-          console.log('hi')
-        }}
-        className="btn w-fit bg-brand py-3 text-white hover:bg-brand-500 absolute bottom-14 left-4 z-10"
-      >
-        Show Preview
-      </button>
+      <div className="absolute top-3/4 left-4 flex gap-4 items-center">
+        <div>{showWebsitePreview ? 'Show Code' : 'Show Website'}</div>
+        <Switch
+          checked={showWebsitePreview}
+          onChange={(isChecked) => {
+            setShowWebsitePreview(isChecked)
+          }}
+          className={`${!showWebsitePreview ? 'bg-brand-700' : 'bg-brand-500'}
+                      inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+        >
+          <span className="sr-only">{showWebsitePreview ? 'Show Code' : 'Show Website'}</span>
+          <span
+            aria-hidden="true"
+            className={`${!showWebsitePreview ? 'translate-x-7' : 'translate-x-0'}
+                        pointer-events-none inline-block h-[34px] w-[34px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+          />
+        </Switch>
+      </div>
     </div>
   )
 }
