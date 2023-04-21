@@ -1,3 +1,4 @@
+import { AlertDialog } from '@/components/shared/alertDialog'
 import { CheckCircleIcon, PrinterIcon } from '@heroicons/react/24/solid'
 import { Course } from '@/models/crud/course.model'
 import { CourseApi } from '@/utils/api/course/course.api'
@@ -14,6 +15,7 @@ import Head from 'next/head'
 import ImageCard from '@/components/creator/imageCard'
 import Link from 'next/link'
 import MissionCard from '@/components/creator/missionCard'
+import React from 'react'
 import UserMenu from '@/components/user/userMenu'
 import dayjs from 'dayjs'
 import useTranslation from '@/hooks/useTranslation'
@@ -22,8 +24,25 @@ export default function UserCourseView({ user, course }: { user: User; course: C
   const [filteredMissions, setFilteredMissions] = useState<Mission[]>(course.missions)
   const t = useTranslation()
 
+  const [openDropCourse, setOpenCourse] = React.useState(false)
+
+  const performDropCourse = async () => {}
+
   return (
     <>
+      {
+        <AlertDialog
+          open={openDropCourse}
+          close={() => {
+            setOpenCourse(false)
+          }}
+          confirm={performDropCourse}
+          title={t.User.viewCoursePage.dropCourseTitle as string}
+          message={t.User.viewCoursePage.dropCourseMessage as string}
+          confirmButtonText={t.User.viewCoursePage.drop as string}
+          backButtonText={t.User.viewCoursePage.cancel as string}
+        />
+      }
       <Head>
         <title>NinjaCo | View Course</title>
         <meta name="description" content="Leading online platform for visual programming" />
@@ -46,12 +65,12 @@ export default function UserCourseView({ user, course }: { user: User; course: C
                     {t.User.viewCoursePage.enrollCourse}
                   </Link>
                 ) : course !== course ? (
-                  <Link
-                    className="text-xs  md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit"
-                    href={`/app/${course._id}`}
+                  <button
+                    className="text-xs  md:text-base font-semibold btn btn-secondary bg-rose-500 rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-rose-400 h-fit"
+                    onClick={() => setOpenCourse(true)}
                   >
                     {t.User.viewCoursePage.dropCourse}
-                  </Link>
+                  </button>
                 ) : (
                   <div className="flex flex-col gap-3 bg-teal-50 rounded-lg px-3 py-2">
                     <div className=" flex gap-3 items-center">
