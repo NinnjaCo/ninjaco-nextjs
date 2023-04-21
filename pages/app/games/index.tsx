@@ -88,31 +88,112 @@ export default function Home({ user, games }: { user: User; games: (UserPlayGame
                   {
                     name: t.Creator.games.viewGames.filter.newest as string,
                     setter: setFilteredGames,
-                    sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? -1 : 1),
+                    previousStateModifier: () => {
+                      return [
+                        ...games.sort((a: any, b: any) => {
+                          const aGameType = getTypeOfGame(a)
+                          const bGameType = getTypeOfGame(b)
+
+                          const aCreatedAt =
+                            aGameType === GameType.enrollment ? a.game.createdAt : a.createdAt
+                          const bCreatedAt =
+                            bGameType === GameType.enrollment ? b.game.createdAt : b.createdAt
+
+                          return dayjs(aCreatedAt).isAfter(bCreatedAt) ? -1 : 1
+                        }),
+                      ]
+                    },
                   },
                   {
                     name: t.Creator.games.viewGames.filter.recentlyUpdated as string,
-                    sortFunction: (a, b) => (dayjs(a.updatedAt).isAfter(b.updatedAt) ? -1 : 1),
+                    previousStateModifier: () => {
+                      return [
+                        ...games.sort((a: any, b: any) => {
+                          const aGameType = getTypeOfGame(a)
+                          const bGameType = getTypeOfGame(b)
+
+                          const aUpdatedAt =
+                            aGameType === GameType.enrollment ? a.game.updatedAt : a.updatedAt
+                          const bUpdatedAt =
+                            bGameType === GameType.enrollment ? b.game.updatedAt : b.updatedAt
+
+                          return dayjs(aUpdatedAt).isAfter(bUpdatedAt) ? -1 : 1
+                        }),
+                      ]
+                    },
+
                     setter: setFilteredGames,
                   },
                   {
                     name: t.Creator.games.viewGames.filter.oldest as string,
-                    sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? 1 : -1),
+                    previousStateModifier: () => {
+                      return [
+                        ...games.sort((a: any, b: any) => {
+                          const aGameType = getTypeOfGame(a)
+                          const bGameType = getTypeOfGame(b)
+
+                          const aCreatedAt =
+                            aGameType === GameType.enrollment ? a.game.createdAt : a.createdAt
+                          const bCreatedAt =
+                            bGameType === GameType.enrollment ? b.game.createdAt : b.createdAt
+
+                          return dayjs(aCreatedAt).isAfter(bCreatedAt) ? 1 : -1
+                        }),
+                      ]
+                    },
                     setter: setFilteredGames,
                   },
                   {
                     name: t.Creator.games.viewGames.filter.NameAZ as string,
-                    sortFunction: (a, b) => (a.title > b.title ? 1 : -1),
+                    previousStateModifier: () => {
+                      return [
+                        ...games.sort((a: any, b: any) => {
+                          const aGameType = getTypeOfGame(a)
+                          const bGameType = getTypeOfGame(b)
+
+                          const aTitle = aGameType === GameType.enrollment ? a.game.title : a.title
+                          const bTitle = bGameType === GameType.enrollment ? b.game.title : b.title
+
+                          return aTitle.localeCompare(bTitle)
+                        }),
+                      ]
+                    },
                     setter: setFilteredGames,
                   },
                   {
                     name: t.Creator.games.viewGames.filter.NameZA as string,
-                    sortFunction: (a, b) => (a.title > b.title ? -1 : 1),
+                    previousStateModifier: () => {
+                      return [
+                        ...games.sort((a: any, b: any) => {
+                          const aGameType = getTypeOfGame(a)
+                          const bGameType = getTypeOfGame(b)
+
+                          const aTitle = aGameType === GameType.enrollment ? a.game.title : a.title
+                          const bTitle = bGameType === GameType.enrollment ? b.game.title : b.title
+
+                          return bTitle.localeCompare(aTitle)
+                        }),
+                      ]
+                    },
                     setter: setFilteredGames,
                   },
                   {
                     name: t.Creator.games.viewGames.filter.SizeOfGame as string,
-                    sortFunction: (a, b) => (a.sizeOfGrid.length > b.sizeOfGrid.length ? -1 : 1),
+                    previousStateModifier: () => {
+                      return [
+                        ...games.sort((a: any, b: any) => {
+                          const aGameType = getTypeOfGame(a)
+                          const bGameType = getTypeOfGame(b)
+
+                          const aSize =
+                            aGameType === GameType.enrollment ? a.game.sizeOfGrid : a.sizeOfGrid
+                          const bSize =
+                            bGameType === GameType.enrollment ? b.game.sizeOfGrid : b.sizeOfGrid
+
+                          return aSize > bSize ? -1 : 1
+                        }),
+                      ]
+                    },
                     setter: setFilteredGames,
                   },
                 ]}
