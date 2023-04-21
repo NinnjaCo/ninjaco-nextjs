@@ -7,7 +7,7 @@ import CrudApi from '../crud/crud.api'
 
 export class CourseEnrollmentAPI extends CrudApi<CourseEnrollment, CourseEnrollmentRequest> {
   // change the path
-  path = '/users-play-courses'
+  path = '/course-enrollements'
   constructor(param?: ApiParam) {
     super(param)
   }
