@@ -107,7 +107,7 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
   }
 
   return (
-    <div className="w-full h-full flex">
+    <div className="w-full h-full flex relative">
       <BlocklyBoard
         ref={parentRef}
         blocklyOptions={blocklyGameOptions}
@@ -120,6 +120,14 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
         <div className="basis-1/2 w-full">{getCleanReactHtml(html)}</div>
         <div className="basis-1/2 w-full border-t-2 border-brand-400"></div>
       </div>
+      <button
+        onClick={() => {
+          console.log('hi')
+        }}
+        className="btn w-fit bg-brand py-3 text-white hover:bg-brand-500 absolute bottom-14 left-4 z-10"
+      >
+        Show Preview
+      </button>
     </div>
   )
 }
