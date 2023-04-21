@@ -673,6 +673,20 @@ const frenchTranslations: WebsiteTranslations = {
       },
     },
   },
+  User: {
+    viewCoursePage: {
+      enrollCourse: "S'inscrire au cours",
+      dropCourse: 'Abandonner le cours',
+      courseCompleted: 'Cours terminé',
+      printCertificate: 'Imprimer le certificat',
+      courseType: 'Type de cours',
+      coursePrerequisites: 'Prérequis du cours',
+      courseObjectives: 'Objectifs du cours',
+      ageRange: "Tranche d'âge",
+      filter: 'Filtre',
+      missions: 'Missions',
+    },
+  },
   Filter: {
     filter: 'Filtre',
   },
