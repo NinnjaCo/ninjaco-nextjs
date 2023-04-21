@@ -506,6 +506,25 @@ export interface WebsiteTranslations {
       }
     }
   }
+  User: {
+    viewCoursePage: {
+      enrollCourse: translationElement
+      dropCourse: translationElement
+      courseCompleted: translationElement
+      printCertificate: translationElement
+      courseType: translationElement
+      coursePrerequisites: translationElement
+      courseObjectives: translationElement
+      ageRange: translationElement
+      filter: translationElement
+      missions: translationElement
+      noMissions: translationElement
+      dropCourseTitle: translationElement
+      dropCourseMessage: translationElement
+      cancel: translationElement
+      drop: translationElement
+    }
+  }
   Filter: {
     filter: translationElement
   }

@@ -1,28 +1,133 @@
+import { AlertDialog } from '@/components/shared/alertDialog'
+import { CheckCircleIcon, PrinterIcon } from '@heroicons/react/24/solid'
 import { Course } from '@/models/crud/course.model'
-import { CourseApi } from '@/utils/api/course/course.api'
-import { FunnelIcon } from '@heroicons/react/24/outline'
+import { CourseEnrollment } from '@/models/crud/course-enrollment.model'
+import { CourseEnrollmentAPI } from '@/utils/api/courseEnrollment/course-enrollment.api'
 import { Mission } from '@/models/crud/mission.model'
+import { MissionEnrollment } from '@/models/crud/mission-enrollment.model'
+import { MissionEnrollmentApi } from '@/utils/api/missionEnrollment/mission-enrollment.api'
 import { User } from '@/models/crud'
 import { authOptions } from '../../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
+import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 import Chip from '@/components/shared/chip'
-import CreatorMenu from '@/components/creator/creatorMenu'
 import Filter from '@/components/creator/filter'
 import Head from 'next/head'
 import ImageCard from '@/components/creator/imageCard'
 import Link from 'next/link'
 import MissionCard from '@/components/creator/missionCard'
+import MissionEnrollmentCard from '@/components/user/mission/enrollmentMissionCard'
+import React from 'react'
 import UserMenu from '@/components/user/userMenu'
 import dayjs from 'dayjs'
+import router from 'next/router'
 import useTranslation from '@/hooks/useTranslation'
 
-export default function UserCourseView({ user, course }: { user: User; course: Course }) {
-  const [filteredMissions, setFilteredMissions] = useState<Mission[]>(course.missions)
+enum CourseType {
+  enrollment = 'enrollment',
+  course = 'course',
+}
+
+const getTypeOfCourse = (course: CourseEnrollment | Course): CourseType => {
+  if ((course as CourseEnrollment).course) {
+    return CourseType.enrollment
+  } else {
+    return CourseType.course
+  }
+}
+
+enum MissionType {
+  enrollment = 'enrollment',
+  mission = 'mission',
+}
+
+const getTypeOfMission = (mission: MissionEnrollment | Mission): MissionType => {
+  if ((mission as MissionEnrollment).mission) {
+    return MissionType.enrollment
+  } else {
+    return MissionType.mission
+  }
+}
+
+export default function UserCourseView({
+  user,
+  course,
+  missions,
+}: {
+  user: User
+  course: Course | CourseEnrollment
+  missions: (Mission | MissionEnrollment)[]
+}) {
+  const [filteredMissions, setFilteredMissions] =
+    useState<(Mission | MissionEnrollment)[]>(missions)
+
   const t = useTranslation()
+
+  const session = useSession()
+
+  const [openDropCourse, setOpenCourse] = React.useState(false)
+
+  const performDropCourse = async () => {
+    await new CourseEnrollmentAPI(session.data).delete(getAFieldInCourse(course, '_id'))
+    router.push('/app')
+  }
+
+  const renderMissionCard = (mission: MissionEnrollment | Mission) => {
+    if (getTypeOfMission(mission) === MissionType.enrollment) {
+      mission = mission as MissionEnrollment
+      return (
+        <Link href={`/app/missions/${mission.mission._id}`}>
+          <MissionEnrollmentCard mission={mission} />
+        </Link>
+      )
+    } else {
+      mission = mission as Mission
+      return (
+        <Link href={`/app/games/${mission._id}`}>
+          <MissionCard mission={mission} />
+        </Link>
+      )
+    }
+  }
+
+  const getAFieldInCourse = (course: Course | CourseEnrollment, field: string) => {
+    if (getTypeOfCourse(course) === CourseType.course) {
+      course = course as Course
+      return course[field]
+    } else {
+      course = course as CourseEnrollment
+      return course.course[field]
+    }
+  }
+
+  const enrollInCourse = async () => {
+    try {
+      await new CourseEnrollmentAPI(session.data).create({
+        courseId: getAFieldInCourse(course, '_id'),
+        userId: user._id,
+      })
+      router.reload()
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   return (
     <>
+      {
+        <AlertDialog
+          open={openDropCourse}
+          close={() => {
+            setOpenCourse(false)
+          }}
+          confirm={performDropCourse}
+          title={t.User.viewCoursePage.dropCourseTitle as string}
+          message={t.User.viewCoursePage.dropCourseMessage as string}
+          confirmButtonText={t.User.viewCoursePage.drop as string}
+          backButtonText={t.User.viewCoursePage.cancel as string}
+        />
+      }
       <Head>
         <title>NinjaCo | View Course</title>
         <meta name="description" content="Leading online platform for visual programming" />
@@ -31,35 +136,80 @@ export default function UserCourseView({ user, course }: { user: User; course: C
       <main className="relative w-full">
         <UserMenu isOnCoursePage={true} isOnGamesPage={false} user={user} />
         <div className="flex gap-4 px-6 my-12 w-full md:flex-row flex-col">
-          <ImageCard image={course.image} />
+          <ImageCard image={getAFieldInCourse(course, 'image')} />
+
           <div className="flex flex-col gap-9 w-full">
             <div className="flex justify-between gap-6 items-center">
-              <div className=" text-brand font-semibold text-xl md:text-3xl">{course.title}</div>
-              <Link
-                className="text-xs  md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit"
-                href={`/creator/${course._id}/edit`}
-              >
-                {t.Creator.coursePage.editCourse}
-              </Link>
+              <div className=" text-brand font-semibold text-xl md:text-3xl">
+                {getAFieldInCourse(course, 'title')}
+              </div>
+              {/* if the course is a Course, put the enroll button, if it is en enrollment course print hello, if completed put the completed button */}
+
+              <div>
+                {getTypeOfCourse(course) === CourseType.course ? (
+                  <button
+                    className="text-xs whitespace-nowrap md:text-base font-semibold btn btn-secondary bg-secondary
+                                 rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800
+                                 h-fit"
+                    onClick={() => {
+                      enrollInCourse()
+                    }}
+                  >
+                    {t.User.viewCoursePage.enrollCourse}
+                  </button>
+                ) : getTypeOfCourse(course) === CourseType.enrollment &&
+                  (course as CourseEnrollment).completed === false ? (
+                  <button
+                    className="text-xs md:text-base font-semibold btn btn-secondary bg-rose-500 rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-rose-400 h-fit"
+                    onClick={() => setOpenCourse(true)}
+                  >
+                    {t.User.viewCoursePage.dropCourse}
+                  </button>
+                ) : (
+                  <div className="flex flex-col gap-3 bg-teal-50 rounded-lg px-3 py-2">
+                    <div className=" flex gap-2 items-center">
+                      <CheckCircleIcon className=" h-6 w-6 ml-2 text-teal-600" />
+                      <div className=" text-teal-600 font-bold text-xs md:text-base py-2 rounded-md">
+                        {t.User.viewCoursePage.courseCompleted}
+                      </div>
+                    </div>
+                    <div className=" flex items-center justify-end gap-2">
+                      <PrinterIcon className=" h-5 w-5 ml-2 text-brand" />
+                      <Link
+                        href={`/app/${getAFieldInCourse(course, '_id')}/certificate`}
+                        className=" text-brand font-semibold text-xs md:text-base py-2 rounded-md underline"
+                      >
+                        {t.User.viewCoursePage.printCertificate}
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
+
             <div className=" text-brand-500 font-medium text-xs md:text-base w-full">
-              {course.description}
+              {getAFieldInCourse(course, 'description')}
             </div>
           </div>
         </div>
+
         <div className="grid grid-cols-1 gap-4 md:gap-0 md:grid-cols-2 justify-between px-6 my-6 border-b-2 py-6 border-brand-50">
           <div className="flex flex-col gap-4 border-r-0 md:border-r-2 mr-0 md:mr-12 border-brand-50">
-            <div className="flex gap-3 items-center">
-              {t.Creator.coursePage.courseType}:
+            <div className="flex gap-3 items-center text-brand font-medium text-xs md:text-base">
+              {t.User.viewCoursePage.courseType}:
               <div className=" text-brand font-medium text-xs md:text-base"></div>
-              <div className="text-brand font-semibold text-sm md:text-lg">{course.type}</div>
+              <div className="text-brand font-semibold text-sm md:text-lg">
+                {getAFieldInCourse(course, 'type')}
+              </div>
             </div>
             <div className="flex gap-3 items-center w-full flex-wrap">
               <div className=" text-brand font-medium text-xs md:text-base">
-                {t.Creator.coursePage.ageRange}:
+                {t.User.viewCoursePage.ageRange}:
               </div>
-              {course.ageRange?.length !== 0 ? (
-                course?.ageRange?.map((age, index) => <Chip text={age} key={index} />)
+              {getAFieldInCourse(course, 'ageRange')?.length !== 0 ? (
+                getAFieldInCourse(course, 'ageRange').map((age, index) => (
+                  <Chip text={age} key={index} />
+                ))
               ) : (
                 <Chip text="Not Specified" />
               )}
@@ -68,10 +218,10 @@ export default function UserCourseView({ user, course }: { user: User; course: C
           <div className="flex flex-col gap-4">
             <div className="flex gap-3 items-center w-full flex-wrap">
               <div className=" text-brand font-medium text-xs md:text-base">
-                {t.Creator.coursePage.coursePrerequisites}:
+                {t.User.viewCoursePage.coursePrerequisites}:
               </div>
-              {course.preRequisites?.length !== 0 ? (
-                course?.preRequisites?.map((prerequisite, index) => (
+              {getAFieldInCourse(course, 'preRequisites')?.length !== 0 ? (
+                getAFieldInCourse(course, 'preRequisites')?.map((prerequisite, index) => (
                   <Chip text={prerequisite} key={index} />
                 ))
               ) : (
@@ -80,10 +230,12 @@ export default function UserCourseView({ user, course }: { user: User; course: C
             </div>
             <div className="flex gap-3 items-center w-full flex-wrap">
               <div className=" text-brand font-medium text-xs md:text-base">
-                {t.Creator.coursePage.courseObjectives}:
+                {t.User.viewCoursePage.courseObjectives}:
               </div>
-              {course.objectives?.length !== 0 ? (
-                course?.objectives?.map((objective, index) => <Chip text={objective} key={index} />)
+              {getAFieldInCourse(course, 'objectives')?.length !== 0 ? (
+                getAFieldInCourse(course, 'objectives')?.map((objective, index) => (
+                  <Chip text={objective} key={index} />
+                ))
               ) : (
                 <Chip text="None" />
               )}
@@ -91,17 +243,10 @@ export default function UserCourseView({ user, course }: { user: User; course: C
           </div>
         </div>
         <div className="flex flex-col px-6 pb-12 pt-6 gap-6">
-          <div className="flex justify-between gap-10">
-            <div className="font-semibold text-2xl">{t.Creator.coursePage.missions}</div>
-            <Link
-              className=" text-xs md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit"
-              href={`/creator/${course._id}/create`}
-            >
-              {t.Creator.coursePage.addMission}
-            </Link>
-          </div>
+          <div className="font-semibold text-2xl">{t.User.viewCoursePage.missions}</div>
+
           <div className="flex gap-4 items-center">
-            <div className="text-brand font-medium text-xs">{course.missions.length} missions</div>
+            <div className="text-brand font-medium text-xs">{missions.length ?? 0} missions</div>
             <Filter
               filterFields={[
                 {
@@ -109,9 +254,24 @@ export default function UserCourseView({ user, course }: { user: User; course: C
                   setter: setFilteredMissions,
                   previousStateModifier: () => {
                     return [
-                      ...course.missions.sort((a, b) =>
-                        dayjs(a.createdAt).isAfter(b.createdAt) ? -1 : 1
-                      ),
+                      ...missions.sort((a, b) => {
+                        {
+                          const missionAType = getTypeOfMission(a)
+                          const missionBType = getTypeOfMission(b)
+
+                          const missionACreatedAt =
+                            missionAType === MissionType.enrollment
+                              ? (a as MissionEnrollment).mission.createdAt
+                              : (a as Mission).createdAt
+
+                          const missionBCreatedAt =
+                            missionBType === MissionType.enrollment
+                              ? (b as MissionEnrollment).mission.createdAt
+                              : (b as Mission).createdAt
+
+                          return dayjs(missionACreatedAt).isAfter(missionBCreatedAt) ? -1 : 1
+                        }
+                      }),
                     ]
                   },
                 },
@@ -119,9 +279,24 @@ export default function UserCourseView({ user, course }: { user: User; course: C
                   name: 'Recently Updated',
                   previousStateModifier: () => {
                     return [
-                      ...course.missions.sort((a, b) =>
-                        dayjs(a.updatedAt).isAfter(b.updatedAt) ? -1 : 1
-                      ),
+                      ...missions.sort((a, b) => {
+                        {
+                          const missionAType = getTypeOfMission(a)
+                          const missionBType = getTypeOfMission(b)
+
+                          const missionAUdpatedAt =
+                            missionAType === MissionType.enrollment
+                              ? (a as MissionEnrollment).mission.updatedAt
+                              : (a as Mission).updatedAt
+
+                          const missionBUdpatedAt =
+                            missionBType === MissionType.enrollment
+                              ? (b as MissionEnrollment).mission.updatedAt
+                              : (b as Mission).updatedAt
+
+                          return dayjs(missionAUdpatedAt).isAfter(missionBUdpatedAt) ? -1 : 1
+                        }
+                      }),
                     ]
                   },
                   setter: setFilteredMissions,
@@ -130,9 +305,24 @@ export default function UserCourseView({ user, course }: { user: User; course: C
                   name: 'Oldest',
                   previousStateModifier: () => {
                     return [
-                      ...course.missions.sort((a, b) =>
-                        dayjs(a.createdAt).isAfter(b.createdAt) ? 1 : -1
-                      ),
+                      ...missions.sort((a, b) => {
+                        {
+                          const missionAType = getTypeOfMission(a)
+                          const missionBType = getTypeOfMission(b)
+
+                          const missionACreatedAt =
+                            missionAType === MissionType.enrollment
+                              ? (a as MissionEnrollment).mission.createdAt
+                              : (a as Mission).createdAt
+
+                          const missionBCreatedAt =
+                            missionBType === MissionType.enrollment
+                              ? (b as MissionEnrollment).mission.createdAt
+                              : (b as Mission).createdAt
+
+                          return dayjs(missionACreatedAt).isAfter(missionBCreatedAt) ? 1 : -1
+                        }
+                      }),
                     ]
                   },
                   setter: setFilteredMissions,
@@ -140,14 +330,52 @@ export default function UserCourseView({ user, course }: { user: User; course: C
                 {
                   name: 'Name (A-Z)',
                   previousStateModifier: () => {
-                    return [...course.missions.sort((a, b) => a.title.localeCompare(b.title))]
+                    return [
+                      ...missions.sort((a, b) => {
+                        {
+                          const missionAType = getTypeOfMission(a)
+                          const missionBType = getTypeOfMission(b)
+
+                          const missionAtitle =
+                            missionAType === MissionType.enrollment
+                              ? (a as MissionEnrollment).mission.title
+                              : (a as Mission).title
+
+                          const missionBtitle =
+                            missionBType === MissionType.enrollment
+                              ? (b as MissionEnrollment).mission.title
+                              : (b as Mission).title
+
+                          return missionAtitle.localeCompare(missionBtitle)
+                        }
+                      }),
+                    ]
                   },
                   setter: setFilteredMissions,
                 },
                 {
                   name: 'Name (Z-A)',
                   previousStateModifier: () => {
-                    return [...course.missions.sort((a, b) => b.title.localeCompare(a.title))]
+                    return [
+                      ...missions.sort((a, b) => {
+                        {
+                          const missionAType = getTypeOfMission(a)
+                          const missionBType = getTypeOfMission(b)
+
+                          const missionAtitle =
+                            missionAType === MissionType.enrollment
+                              ? (a as MissionEnrollment).mission.title
+                              : (a as Mission).title
+
+                          const missionBtitle =
+                            missionBType === MissionType.enrollment
+                              ? (b as MissionEnrollment).mission.title
+                              : (b as Mission).title
+
+                          return missionBtitle.localeCompare(missionAtitle)
+                        }
+                      }),
+                    ]
                   },
                   setter: setFilteredMissions,
                 },
@@ -155,9 +383,24 @@ export default function UserCourseView({ user, course }: { user: User; course: C
                   name: 'Number of Levels (Low-High)',
                   previousStateModifier: () => {
                     return [
-                      ...course.missions.sort((a, b) =>
-                        a.levels.length > b.levels.length ? -1 : 1
-                      ),
+                      ...missions.sort((a, b) => {
+                        {
+                          const missionAType = getTypeOfMission(a)
+                          const missionBType = getTypeOfMission(b)
+
+                          const missionALevels =
+                            missionAType === MissionType.enrollment
+                              ? (a as MissionEnrollment).mission.levels
+                              : (a as Mission).levels
+
+                          const missionBLevels =
+                            missionBType === MissionType.enrollment
+                              ? (b as MissionEnrollment).mission.levels
+                              : (b as Mission).levels
+
+                          return missionALevels.length > missionBLevels.length ? -1 : 1
+                        }
+                      }),
                     ]
                   },
                   setter: setFilteredMissions,
@@ -168,13 +411,11 @@ export default function UserCourseView({ user, course }: { user: User; course: C
           {filteredMissions.length !== 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center place-items-center">
               {filteredMissions.map((mission, index) => (
-                <Link href={`/creator/${course._id}/${mission._id}`} key={index}>
-                  <MissionCard mission={mission} />
-                </Link>
+                <div key={index}> {renderMissionCard(mission)}</div>
               ))}
             </div>
           ) : (
-            <div className="text-brand font-medium text-lg">{t.Creator.coursePage.noMissions}</div>
+            <div className="text-brand font-medium text-lg">{t.User.viewCoursePage.noMissions}</div>
           )}
         </div>
       </main>
@@ -197,23 +438,26 @@ export const getServerSideProps = async (context) => {
     }
   }
 
-  const course = await new CourseApi(session).findOne(courseId)
+  const course = await new CourseEnrollmentAPI(session).findByCourseId(courseId)
 
   if (!course || !course.payload) {
     return {
       props: {
         redirect: {
-          destination: '/creator',
+          destination: '/app',
           permanent: false,
         },
       },
     }
   }
 
+  const missions = await new MissionEnrollmentApi(courseId, session).findAll()
+
   return {
     props: {
       user: session.user,
       course: course.payload,
+      missions: missions.payload,
     },
   }
 }
