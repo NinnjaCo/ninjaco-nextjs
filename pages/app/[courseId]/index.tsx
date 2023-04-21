@@ -1,5 +1,7 @@
+import { CheckCircleIcon, PrinterIcon } from '@heroicons/react/24/solid'
 import { Course } from '@/models/crud/course.model'
 import { CourseApi } from '@/utils/api/course/course.api'
+import { CourseEnrollmentAPI } from '@/utils/api/courseEnrollment/course-enrollment.api'
 import { FunnelIcon } from '@heroicons/react/24/outline'
 import { Mission } from '@/models/crud/mission.model'
 import { User } from '@/models/crud'
@@ -34,18 +36,47 @@ export default function UserCourseView({ user, course }: { user: User; course: C
           <div className="flex flex-col gap-9 w-full">
             <div className="flex justify-between gap-6 items-center">
               <div className=" text-brand font-semibold text-xl md:text-3xl">{course.title}</div>
-              <Link
-                className="text-xs  md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit"
-                href={`/app/${course._id}`}
-              >
-                {t.User.viewCoursePage.enrollCourse}
-              </Link>
+              {/* if the course is of type course, put the enroll button, if not put drop course button instead, if completed put the completed button */}
+              <div>
+                {course === course ? (
+                  <Link
+                    className="text-xs  md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit"
+                    href={`/app/${course._id}`}
+                  >
+                    {t.User.viewCoursePage.enrollCourse}
+                  </Link>
+                ) : course !== course ? (
+                  <Link
+                    className="text-xs  md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit"
+                    href={`/app/${course._id}`}
+                  >
+                    {t.User.viewCoursePage.dropCourse}
+                  </Link>
+                ) : (
+                  <div className="flex flex-col gap-3 bg-teal-50 rounded-lg px-3 py-2">
+                    <div className=" flex gap-3 items-center">
+                      <CheckCircleIcon className=" h-6 w-6 ml-2 text-teal-600" />
+                      <div className=" text-teal-600 font-bold text-sm md:text-base px-4 py-2 rounded-md">
+                        {t.User.viewCoursePage.courseCompleted}
+                      </div>
+                    </div>
+                    <div className=" flex items-center justify-end gap-0">
+                      <PrinterIcon className=" h-5 w-5 ml-2 text-brand" />
+                      <button className=" text-brand font-semibold text-sm md:text-base px-4 py-2 rounded-md underline">
+                        {t.User.viewCoursePage.printCertificate}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
+
             <div className=" text-brand-500 font-medium text-xs md:text-base w-full">
               {course.description}
             </div>
           </div>
         </div>
+
         <div className="grid grid-cols-1 gap-4 md:gap-0 md:grid-cols-2 justify-between px-6 my-6 border-b-2 py-6 border-brand-50">
           <div className="flex flex-col gap-4 border-r-0 md:border-r-2 mr-0 md:mr-12 border-brand-50">
             <div className="flex gap-3 items-center text-brand font-medium text-xs md:text-base">
@@ -167,7 +198,7 @@ export const getServerSideProps = async (context) => {
     return {
       props: {
         redirect: {
-          destination: '/creator',
+          destination: '/app',
           permanent: false,
         },
       },
