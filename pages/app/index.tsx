@@ -8,9 +8,11 @@ import { getServerSession } from 'next-auth'
 import CourseCard from '@/components/creator/courseCard'
 import CreatorMenu from '@/components/creator/creatorMenu'
 import Head from 'next/head'
+import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import enrollmentCourseCard from '@/components/user/course/enrollmentCourseCard'
+import twoBlocksWithRobot from '@/images/twoBlocksRobotAnimated.gif'
 
 enum CourseType {
   enrollment = 'enrollment',
@@ -31,6 +33,8 @@ export default function MainApp({
   user: User
   courses: (CourseEnrollment | Course)[]
 }) {
+  const [filteredCourses, setFilteredCourses] =
+    React.useState<(CourseEnrollment | Course)[]>(courses)
   //  fix routesss !!!!!!
   const renderCourseCard = (course: CourseEnrollment | Course) => {
     if (getTypeOfCourse(course) === CourseType.enrollment) {
@@ -58,6 +62,61 @@ export default function MainApp({
       </Head>
       <main className="relative h-screen w-full">
         <CreatorMenu isOnCoursePage={false} isOnGamesPage={true} creator={user} />
+        <div className="flex flex-row mt-7 justify-between">
+          <div className="flex flex-col mx-6 gap-6 w-full">
+            <div className="flex w-full justify-between items-center">
+              <div className="text-brand-700 font-semibold text-xl lg:text-2xl">title here</div>
+              <div className="text-brand-700 font-semibold w-44 md:w-80 h-fit">
+                <Image
+                  src={twoBlocksWithRobot}
+                  alt="Animated Robot"
+                  className="w-44 md:w-80 h-fit"
+                  sizes="(max-width: 768px) 11rem,
+                        20rem"
+                  placeholder="blur"
+                  blurDataURL={twoBlocksWithRobot.blurDataURL ?? twoBlocksWithRobot.src}
+                />
+              </div>
+            </div>
+            <div className="flex gap-10 justify-start items-center">
+              <div className="text-base text-brand">1023 entries found</div> {/* here filter  */}
+            </div>
+          </div>
+          <Filter
+            filterFields={[
+              {
+                name: 'newest',
+                setter: setFilteredCourses,
+                sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? -1 : 1),
+              },
+              {
+                name: 'recently updated' as string,
+                sortFunction: (a, b) => (dayjs(a.updatedAt).isAfter(b.updatedAt) ? -1 : 1),
+                setter: setFilteredCourses,
+              },
+              {
+                name: 'oldest',
+                sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? 1 : -1),
+                setter: setFilteredCourses,
+              },
+              {
+                name: 'Name a-z',
+                sortFunction: (a, b) => (a.title > b.title ? 1 : -1),
+                setter: setFilteredCourses,
+              },
+              {
+                name: 'name z-a',
+                sortFunction: (a, b) => (a.title > b.title ? -1 : 1),
+                setter: setFilteredCourses,
+              },
+            ]}
+          />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center mt-7 px-10 place-items-center">
+          {filteredCourses.map((course, index) => (
+            <div key={index}>{renderCourseCard(course)}</div>
+          ))}
+        </div>
       </main>
     </>
   )
