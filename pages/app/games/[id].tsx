@@ -41,6 +41,7 @@ const getTypeOfGame = (game: UserPlayGame | Game): GameType => {
 interface ServerSideProps {
   user: User
   game: UserPlayGame
+  session: any
 }
 
 const constrcutGridFrom = (
@@ -73,7 +74,7 @@ const ResultType = {
   RUNNING: 2,
 }
 
-const ViewGame = ({ user, game }: ServerSideProps) => {
+const ViewGame = ({ user, game, session }: ServerSideProps) => {
   const t = useTranslation()
   const router = useRouter()
   const parentRef = React.useRef<any>()
@@ -581,7 +582,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
     })
   }
 
-  const onHitGoal = (ExtraInfo?: string) => {
+  const onHitGoal = async (ExtraInfo?: string) => {
     party.confetti(party.Rect.fromScreen(), {
       count: 200,
       shapes: ['roundedRectangle', 'star', 'circle', 'rectangle'],
@@ -589,6 +590,12 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
       spread: 30,
     })
     setAdminDialogOpen(true)
+    console.log('You won!')
+    console.log('user id', user._id)
+    console.log('...game', game)
+    //update userPlayGame to be completed
+    await new GameEnrollmentAPI(session).update(game._id, { completed: true })
+    console.log('updated game ', game)
   }
 
   return (
@@ -741,6 +748,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       props: {
         user: session.user,
         game: newEnrollmentRes.payload,
+        session,
       },
     }
   }
@@ -750,6 +758,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       user: session.user,
       game: gameRes.payload,
+      session,
     },
   }
 }

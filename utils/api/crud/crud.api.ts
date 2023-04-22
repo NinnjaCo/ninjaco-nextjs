@@ -38,6 +38,7 @@ export default class CrudApi<Model, RequestModel> extends CoreApi {
   }
 
   async update(id: Uid, toUpdate: Partial<RequestModel>): Promise<CrudResponse<Model>> {
+    console.log('toUpdate', toUpdate)
     return (await this.client.put<CrudResponse<Model>>(`${this.path}/${id}`, toUpdate)).data
   }
 
