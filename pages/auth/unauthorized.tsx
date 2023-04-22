@@ -9,6 +9,20 @@ interface ServerProps {
 }
 const Unauthorized = ({ error }: ServerProps) => {
   const t = useTranslation()
+
+  const resendEmail = async () => {
+    const response = await fetch('/api/auth/resend-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    const data = await response.json()
+    if (data.error) {
+      console.log(data.error)
+    }
+  }
+
   return (
     <>
       <Head>
@@ -65,15 +79,36 @@ const Unauthorized = ({ error }: ServerProps) => {
                   </div>
                 </div>
               </div>
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse justify-start">
-                <Link
-                  type="button"
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-brand-100 shadow-sm px-4 py-2 bg-white text-base font-medium text-brand hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                  href="/"
-                >
-                  {t.Auth.unauthorized.goBack}
-                </Link>
-              </div>
+              {error.includes('Verify your email to access this page') && (
+                <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse justify-start">
+                  <Link
+                    type="button"
+                    className="mt-3 w-full inline-flex justify-center rounded-md border border-brand-100 shadow-sm px-4 py-2 bg-brand text-base font-medium text-white hover:bg-brand-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                    href="/"
+                    onSubmit={resendEmail}
+                  >
+                    resend email
+                  </Link>
+                  <Link
+                    type="button"
+                    className="mt-3 w-full inline-flex justify-center rounded-md border border-brand-100 shadow-sm px-4 py-2 bg-white text-base font-medium text-brand hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                    href="/"
+                  >
+                    {t.Auth.unauthorized.goBack}
+                  </Link>
+                </div>
+              )}
+              {!error.includes('Verify your email to access this page') && (
+                <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse justify-start">
+                  <Link
+                    type="button"
+                    className="mt-3 w-full inline-flex justify-center rounded-md border border-brand-100 shadow-sm px-4 py-2 bg-white text-base font-medium text-brand hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                    href="/"
+                  >
+                    {t.Auth.unauthorized.goBack}
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </div>
