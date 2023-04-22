@@ -85,7 +85,10 @@ export default function UserCourseView({
       open: true,
     })
 
-    // display the alert
+    // remove the alert after 3 seconds
+    setTimeout(() => {
+      setAlertData({ ...alertData, open: false })
+    }, 3000)
   }
 
   const t = useTranslation()
