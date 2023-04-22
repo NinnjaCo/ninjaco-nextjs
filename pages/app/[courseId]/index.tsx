@@ -11,6 +11,7 @@ import { authOptions } from '../../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { useSession } from 'next-auth/react'
 import { useState } from 'react'
+import Alert from '@/components/shared/alert'
 import Chip from '@/components/shared/chip'
 import Filter from '@/components/creator/filter'
 import Head from 'next/head'
@@ -62,6 +63,34 @@ export default function UserCourseView({
   const [filteredMissions, setFilteredMissions] =
     useState<(Mission | MissionEnrollment)[]>(missions)
 
+  const [alertData, setAlertData] = React.useState<{
+    message: string
+    variant: 'success' | 'info' | 'warning' | 'error'
+    open: boolean
+  }>({
+    message: '',
+    variant: 'info',
+    open: false,
+  })
+  const closeAlert = () => {
+    setAlertData({ ...alertData, open: true })
+  }
+
+  const preventClickOnMission = () => {
+    // render the alert
+
+    setAlertData({
+      message: 'Enroll in the course to unlock this mission',
+      variant: 'error',
+      open: true,
+    })
+
+    // remove the alert after 3 seconds
+    setTimeout(() => {
+      setAlertData({ ...alertData, open: false })
+    }, 300000)
+  }
+
   const t = useTranslation()
 
   const session = useSession()
@@ -74,19 +103,34 @@ export default function UserCourseView({
   }
 
   const renderMissionCard = (mission: MissionEnrollment | Mission) => {
-    if (getTypeOfMission(mission) === MissionType.enrollment) {
-      mission = mission as MissionEnrollment
-      return (
-        <Link href={`/app/missions/${mission.mission._id}`}>
-          <MissionEnrollmentCard mission={mission} />
-        </Link>
-      )
+    const courseId = getAFieldInCourse(course, '_id')
+
+    if (getTypeOfCourse(course) === CourseType.enrollment) {
+      if (getTypeOfMission(mission) === MissionType.enrollment) {
+        mission = mission as MissionEnrollment
+        return (
+          <Link href={`/app/${courseId}/${mission.mission._id}`}>
+            <MissionEnrollmentCard mission={mission} />
+          </Link>
+        )
+      } else {
+        mission = mission as Mission
+        return (
+          <Link href={`/app/${courseId}/${mission._id}`}>
+            <MissionCard mission={mission} />
+          </Link>
+        )
+      }
     } else {
       mission = mission as Mission
       return (
-        <Link href={`/app/games/${mission._id}`}>
+        <button
+          onClick={() => {
+            preventClickOnMission()
+          }}
+        >
           <MissionCard mission={mission} />
-        </Link>
+        </button>
       )
     }
   }
@@ -243,7 +287,10 @@ export default function UserCourseView({
           </div>
         </div>
         <div className="flex flex-col px-6 pb-12 pt-6 gap-6">
-          <div className="font-semibold text-2xl">{t.User.viewCoursePage.missions}</div>
+          <div className="flex justify-between flex-col md:flex-row">
+            <div className="font-semibold text-2xl">{t.User.viewCoursePage.missions}</div>
+            <Alert message={alertData.message} variant={alertData.variant} open={alertData.open} />
+          </div>
 
           <div className="flex gap-4 items-center">
             <div className="text-brand font-medium text-xs">{missions.length ?? 0} missions</div>
