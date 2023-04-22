@@ -697,6 +697,12 @@ const frenchTranslations: WebsiteTranslations = {
       cancel: 'Annuler',
       drop: 'Abandonner',
     },
+    viewMissionPage: {
+      missionCategory: ' Catégorie de mission',
+      startMission: ' Commencer la mission',
+      continue: ' Continuer',
+      completed: ' Tous les niveaux sont terminés',
+    },
   },
   Filter: {
     filter: 'Filtre',

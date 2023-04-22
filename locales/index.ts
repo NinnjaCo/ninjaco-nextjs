@@ -524,6 +524,12 @@ export interface WebsiteTranslations {
       cancel: translationElement
       drop: translationElement
     }
+    viewMissionPage: {
+      missionCategory: translationElement
+      startMission: translationElement
+      continue: translationElement
+      completed: translationElement
+    }
   }
   Filter: {
     filter: translationElement

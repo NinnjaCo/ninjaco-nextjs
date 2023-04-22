@@ -1,12 +1,14 @@
 import { Course } from './course.model'
+import { MissionEnrollment } from './mission-enrollment.model'
 import { User } from 'next-auth'
 
 export interface CourseEnrollment {
   _id: string
   course: Course
   user: User
+  missions: MissionEnrollment[]
   completed: boolean
-  startedAt: string
+  enrolledAt: string
   createdAt: string
   updatedAt: string
 }

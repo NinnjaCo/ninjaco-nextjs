@@ -684,6 +684,12 @@ const englishTranslations: WebsiteTranslations = {
       cancel: 'Cancel',
       drop: 'Drop',
     },
+    viewMissionPage: {
+      missionCategory: 'Mission Category',
+      startMission: 'Start Mission',
+      continue: 'Continue',
+      completed: 'All levels completed',
+    },
   },
   Filter: {
     filter: 'Filter',

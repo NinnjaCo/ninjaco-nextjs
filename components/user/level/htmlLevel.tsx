@@ -142,7 +142,7 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
           </p>
           <div className="w-full h-full relative">
             <Image
-              src={targetwebsite}
+              src={level.websitePreviewImage || targetwebsite}
               alt="Target Website Preview"
               className="w-full h-full max-w-full max-h-full"
               fill

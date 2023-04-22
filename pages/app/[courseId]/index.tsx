@@ -73,7 +73,7 @@ export default function UserCourseView({
     open: false,
   })
   const closeAlert = () => {
-    setAlertData({ ...alertData, open: true })
+    setAlertData({ ...alertData, open: false })
   }
 
   const preventClickOnMission = () => {
@@ -88,7 +88,7 @@ export default function UserCourseView({
     // remove the alert after 3 seconds
     setTimeout(() => {
       setAlertData({ ...alertData, open: false })
-    }, 300000)
+    }, 3000)
   }
 
   const t = useTranslation()
@@ -204,7 +204,7 @@ export default function UserCourseView({
                 ) : getTypeOfCourse(course) === CourseType.enrollment &&
                   (course as CourseEnrollment).completed === false ? (
                   <button
-                    className="text-xs md:text-base font-semibold btn btn-secondary bg-rose-500 rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-rose-400 h-fit"
+                    className="text-xs md:text-base font-semibold btn btn-secondary bg-error hover:bg-error-dark rounded-lg md:rounded-xl text-brand-700 border-brand-700 h-fit"
                     onClick={() => setOpenCourse(true)}
                   >
                     {t.User.viewCoursePage.dropCourse}
@@ -289,7 +289,12 @@ export default function UserCourseView({
         <div className="flex flex-col px-6 pb-12 pt-6 gap-6">
           <div className="flex justify-between flex-col md:flex-row">
             <div className="font-semibold text-2xl">{t.User.viewCoursePage.missions}</div>
-            <Alert message={alertData.message} variant={alertData.variant} open={alertData.open} />
+            <Alert
+              message={alertData.message}
+              variant={alertData.variant}
+              open={alertData.open}
+              close={closeAlert}
+            />
           </div>
 
           <div className="flex gap-4 items-center">
@@ -456,7 +461,7 @@ export default function UserCourseView({
             />
           </div>
           {filteredMissions.length !== 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center place-items-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-start place-items-center">
               {filteredMissions.map((mission, index) => (
                 <div key={index}> {renderMissionCard(mission)}</div>
               ))}
@@ -499,6 +504,17 @@ export const getServerSideProps = async (context) => {
   }
 
   const missions = await new MissionEnrollmentApi(courseId, session).findAll()
+
+  if (!missions || !missions.payload) {
+    return {
+      props: {
+        redirect: {
+          destination: '/app',
+          permanent: false,
+        },
+      },
+    }
+  }
 
   return {
     props: {
