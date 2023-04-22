@@ -22,7 +22,7 @@ const MissionCard: React.FC<{ mission: Mission }> = ({ mission }) => {
             blurDataURL={mission.image}
           />
         </div>
-        <div className="text-brand font-semibold text-sm">{mission.title}</div>
+        <div className="text-brand font-semibold text-sm text-start">{mission.title}</div>
         <div className=" flex gap-2">
           <Image src={suitCase} alt="suitcase" className="w-4 h-4" width={16} height={16} />
           <div className="text-brand-500 font-normal text-xs"> levels: </div>
