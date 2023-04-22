@@ -84,7 +84,7 @@ const Unauthorized = ({ error }: ServerProps) => {
                     href="/"
                     onClick={resendEmail}
                   >
-                    resend email
+                    {t.Auth.unauthorized.resendEmail}
                   </Link>
                   <Link
                     type="button"

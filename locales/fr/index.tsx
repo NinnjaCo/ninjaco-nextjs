@@ -323,6 +323,7 @@ const frenchTranslations: WebsiteTranslations = {
       headTitle: 'NinjaCo | Unauthorized',
       title: 'Unauthorized',
       goBack: "Retourner à la page d'accueil",
+      resendEmail: 'Renvoyer le mail',
     },
   },
   Profile: {

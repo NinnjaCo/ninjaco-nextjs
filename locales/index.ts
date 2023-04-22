@@ -154,6 +154,7 @@ export interface WebsiteTranslations {
       headTitle: translationElement
       title: translationElement
       goBack: translationElement
+      resendEmail: translationElement
     }
   }
   Profile: {

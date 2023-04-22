@@ -312,6 +312,7 @@ const englishTranslations: WebsiteTranslations = {
       headTitle: 'NinjaCo | Unauthorized',
       title: 'Unauthorized',
       goBack: 'Go Back',
+      resendEmail: 'Resend Email',
     },
   },
   Profile: {
