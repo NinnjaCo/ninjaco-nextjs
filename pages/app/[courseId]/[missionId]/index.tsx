@@ -16,7 +16,9 @@ import { useSession } from 'next-auth/react'
 import Chip from '@/components/shared/chip'
 import Head from 'next/head'
 import ImageCard from '@/components/creator/imageCard'
+import Link from 'next/link'
 import UserMenu from '@/components/user/userMenu'
+import clsx from 'clsx'
 import router from 'next/router'
 import useTranslation from '@/hooks/useTranslation'
 
@@ -146,9 +148,44 @@ export default function UserMissionPage({
           <Chip text={missionCategory.categoryName} />
         </div>
         <div className="flex flex-col px-6 pb-12 gap-6">
-          // if the mission is of type Mission, display the levels locked except the first one // if
-          the mission is of type MissionEnrollment, display the levels that are of type //
-          evelEnrollment as unlocked and the rest as locked
+          {/* if the mission is of type Mission, display the levels locked except the first one  
+           the mission is of type MissionEnrollment, display the levels that are of type //
+          levelEnrollment as unlocked and the rest as locked
+          should use the function getTypeOfLevel to determine the type of level */}
+          <div className="flex justify-between gap-10">
+            <div className="font-semibold text-2xl">{t.Creator.viewMissionPage.levels}</div>
+            <Link
+              className=" text-xs md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit"
+              href={`/creator/${course._id}/${mission._id}/create`}
+            >
+              {t.Creator.viewMissionPage.addLevel}
+            </Link>
+          </div>
+
+          {getAFieldInMission(mission, 'levels').length !== 0 ? (
+            <div className="grid grid-cols-4 sm:grid-cols-7 md:grid-cols-10 lg:grid-cols-11 xl:grid-cols-12 w-full gap-8 items-center place-items-center">
+              {getAFieldInMission(mission, 'levels').map((level, index) => (
+                <Link
+                  className={clsx(
+                    'rounded-full w-16 h-16 flex justify-center items-center text-center text-2xl font-semibold text-brand shadow-inner',
+                    {
+                      'bg-brand-300 shadow-brand-400 hover:bg-brand': level.levelNumber % 2 === 0,
+                      'bg-secondary-300 shadow-secondary-900 hover:bg-secondary':
+                        level.levelNumber % 2 !== 0,
+                    }
+                  )}
+                  key={index}
+                  href={`/creator/${course._id}/${mission._id}/${level._id}`}
+                >
+                  {level.levelNumber}
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="text-brand-500 font-medium text-xs md:text-base w-full">
+              No levels yet
+            </div>
+          )}
         </div>
       </main>
     </>
