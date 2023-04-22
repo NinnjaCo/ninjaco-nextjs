@@ -74,17 +74,18 @@ export default function UserCourseView({
   }
 
   const renderMissionCard = (mission: MissionEnrollment | Mission) => {
+    const courseId = getAFieldInCourse(course, '_id')
     if (getTypeOfMission(mission) === MissionType.enrollment) {
       mission = mission as MissionEnrollment
       return (
-        <Link href={`/app/missions/${mission.mission._id}`}>
+        <Link href={`/app/${courseId}/${mission.mission._id}`}>
           <MissionEnrollmentCard mission={mission} />
         </Link>
       )
     } else {
       mission = mission as Mission
       return (
-        <Link href={`/app/games/${mission._id}`}>
+        <Link href={`/app/${courseId}/${mission._id}`}>
           <MissionCard mission={mission} />
         </Link>
       )
