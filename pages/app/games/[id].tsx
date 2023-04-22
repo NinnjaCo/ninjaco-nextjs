@@ -15,6 +15,7 @@ import { gameToolBox } from '@/blockly/toolbox/game'
 import { getServerSession } from 'next-auth'
 import { useImmer } from 'use-immer'
 import { useRouter } from 'next/router'
+import { useSession } from 'next-auth/react'
 import Alert from '@/components/shared/alert'
 import Blockly from 'blockly'
 import BlocklyBoard from '@/components/blockly/blockly'
@@ -41,7 +42,6 @@ const getTypeOfGame = (game: UserPlayGame | Game): GameType => {
 interface ServerSideProps {
   user: User
   game: UserPlayGame
-  session: any
 }
 
 const constrcutGridFrom = (
@@ -74,9 +74,11 @@ const ResultType = {
   RUNNING: 2,
 }
 
-const ViewGame = ({ user, game, session }: ServerSideProps) => {
+const ViewGame = ({ user, game }: ServerSideProps) => {
   const t = useTranslation()
   const router = useRouter()
+  const { data: session } = useSession()
+
   const parentRef = React.useRef<any>()
 
   const cellSize = 25
@@ -753,7 +755,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       user: session.user,
       game: gameRes.payload,
-      session,
     },
   }
 }
