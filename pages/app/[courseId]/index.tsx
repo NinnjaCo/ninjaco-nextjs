@@ -88,7 +88,7 @@ export default function UserCourseView({
     // remove the alert after 3 seconds
     setTimeout(() => {
       setAlertData({ ...alertData, open: false })
-    }, 3000)
+    }, 300000)
   }
 
   const t = useTranslation()
@@ -287,7 +287,7 @@ export default function UserCourseView({
           </div>
         </div>
         <div className="flex flex-col px-6 pb-12 pt-6 gap-6">
-          <div className="flex justify-between">
+          <div className="flex justify-between flex-col md:flex-row">
             <div className="font-semibold text-2xl">{t.User.viewCoursePage.missions}</div>
             <Alert message={alertData.message} variant={alertData.variant} open={alertData.open} />
           </div>
