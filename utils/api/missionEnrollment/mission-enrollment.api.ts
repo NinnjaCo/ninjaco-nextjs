@@ -9,7 +9,7 @@ export class MissionEnrollmentApi extends CrudApi<MissionEnrollment, MissionEnro
   path = '/course-enrollements'
   constructor(courseId: string, param?: ApiParam) {
     super(param)
-    this.path = `/courses/${courseId}/missions`
+    this.path = `/course-enrollements/${courseId}/missions`
   }
 
   async findAll(
