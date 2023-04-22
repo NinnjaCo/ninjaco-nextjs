@@ -126,7 +126,7 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
   }
 
   return (
-    <div className="w-full h-full flex relative overflow-hidden">
+    <div className="w-full h-full relative overflow-hidden hidden lg:flex">
       <BlocklyBoard
         ref={parentRef}
         blocklyOptions={blocklyGameOptions}
