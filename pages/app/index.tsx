@@ -190,7 +190,6 @@ export default function MainApp({
                     previousStateModifier: () => {
                       return courses.filter((course) => {
                         const courseType = getTypeOfCourse(course)
-                        console.log(courseType)
                         if (courseType === CourseType.course) {
                           course = course as Course
                           return course.type === 'HTML'
@@ -215,7 +214,6 @@ export default function MainApp({
                           return course.course.type === 'ARDUINO'
                         }
                       })
-                      console.log(filterd)
                       return filterd
                     },
                     setter: setFilteredCourses,

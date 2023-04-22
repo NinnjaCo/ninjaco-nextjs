@@ -107,7 +107,6 @@ const CreateLevel = ({
   })
 
   const onSubmitHandlerHTML = async (data: CreateHTMLLevelFormDataType) => {
-    console.log('data', data)
     setAlertData({
       message: t.Creator.createLevelPage.creatingLevel as string,
       variant: 'info',

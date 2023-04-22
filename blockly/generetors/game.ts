@@ -1,5 +1,4 @@
 import * as Blockly from 'blockly'
-import { JavaScript } from 'blockly'
 
 export class GameGenerator extends Blockly.Generator {
   constructor() {

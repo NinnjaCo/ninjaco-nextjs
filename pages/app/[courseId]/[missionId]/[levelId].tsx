@@ -1,29 +1,18 @@
-import * as yup from 'yup'
 import { Course, CourseType } from '@/models/crud/course.model'
 import { CourseApi } from '@/utils/api/course/course.api'
-import { ImageApi } from '@/utils/api/images/image-upload.api'
-import { ImageListType } from 'react-images-uploading'
 import { Level } from '@/models/crud/level.model'
-import { LevelApi } from '@/utils/api/level/level.api'
 import { Mission } from '@/models/crud/mission.model'
 import { User } from '@/models/crud'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
-import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
-import { yupResolver } from '@hookform/resolvers/yup'
-import Alert from '@/components/shared/alert'
 import ArduinoLevel from '@/components/user/level/arduinoLevel'
-import CreateResourceCard from '@/components/creator/creationCard'
-import CreatorMenu from '@/components/creator/creatorMenu'
 import Head from 'next/head'
 import HtmlLevel from '@/components/user/level/htmlLevel'
-import MultipleImageUpload from '@/components/forms/multipleImageUpload'
+import Link from 'next/link'
 import React from 'react'
 import UserMenu from '@/components/user/userMenu'
-import floatingLegos from '@/images/floatingLegos.svg'
-import underLineImage from '@/images/lightlyWavedLine.svg'
 import useTranslation from '@/hooks/useTranslation'
 
 const PlayLevel = ({
@@ -47,8 +36,19 @@ const PlayLevel = ({
         <title>NinjaCo | Play Level</title>
         <meta name="description" content="Create Level" />
       </Head>
-      <main className="w-full">
+      <main className="w-full relative h-screen flex flex-col">
         <UserMenu user={user} isOnCoursePage={true} isOnGamesPage={false} />
+        <div className="grid md:hidden items-center h-screen grid-cols-1 justify-items-center py-24 px-8 relative flex-auto">
+          <h1 className="self-end divide-x-2 divide-brand text-sm ">
+            <span className="px-2 font-bold">{t.Creator.games.createGame.mobileError}</span>
+          </h1>
+          <Link
+            href={`/app/${course._id}/${mission._id}`}
+            className="self-start my-4 text-sm btn btn-brand"
+          >
+            {t.Creator.games.createGame.goBack}
+          </Link>
+        </div>
         {course.type === CourseType.HTML ? (
           <HtmlLevel course={course} level={level} mission={mission} />
         ) : (
