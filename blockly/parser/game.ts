@@ -13,6 +13,7 @@ export enum BlockType {
   IF = 'if',
   ELSE = 'else',
   FOR = 'for',
+  WHILE = 'while',
 }
 
 export enum ConditionType {
@@ -90,6 +91,13 @@ function parseBlocks(lines: string[], currentLine = 0): BlockCode[] {
       const id = line.match(/'([^']*)'/)?.[1]
       blocks.push({ type: BlockType.TURN_RIGHT, id })
       i++
+    } else if (line.startsWith('while')) {
+      const block: BlockCode = { type: BlockType.WHILE }
+      const { block: codeInsideTheWhile, nextLine } = getBlock(lines, i)
+      const parsedCodeIntoBlocks = parseBlocks(codeInsideTheWhile)
+      block.body = parsedCodeIntoBlocks
+      blocks.push(block)
+      i = nextLine
     } else {
       i++
     }

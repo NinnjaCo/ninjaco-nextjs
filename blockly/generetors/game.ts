@@ -48,7 +48,7 @@ gameGenerator['maze_forever'] = function (block) {
   if (gameGenerator.INFINITE_LOOP_TRAP) {
     branch = gameGenerator.INFINITE_LOOP_TRAP.replace(/%1/g, `'block_id_${block.id}'`) + branch
   }
-  return `while (notDone()) {\n${branch}}\n`
+  return `while (not reachedGoal()) {\n${branch}}\n`
 }
 
 gameGenerator['maze_repeat'] = function (block) {
