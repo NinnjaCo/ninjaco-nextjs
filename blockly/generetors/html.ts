@@ -249,20 +249,23 @@ htmlGenerator['variable'] = function (block) {
 }
 
 htmlGenerator['table'] = function (block) {
+  const value_name = htmlGenerator.valueToCode(block, 'NAME', htmlGenerator.ORDER_ATOMIC)
   const statements_content = htmlGenerator.statementToCode(block, 'content')
-  const code = '<table>\n' + statements_content + '</table>\n'
+  const code = '<table' + value_name + '>' + statements_content.trim() + '</table>'
   return code
 }
 
 htmlGenerator['tablerow'] = function (block) {
+  const value_name = htmlGenerator.valueToCode(block, 'NAME', htmlGenerator.ORDER_ATOMIC)
   const statements_content = htmlGenerator.statementToCode(block, 'content')
-  const code = '<tr>\n' + statements_content + '</tr>\n'
+  const code = '<tr' + value_name + '>' + statements_content.trim() + '</tr>'
   return code
 }
 
 htmlGenerator['tablecell'] = function (block) {
+  const value_name = htmlGenerator.valueToCode(block, 'NAME', htmlGenerator.ORDER_ATOMIC)
   const statements_content = htmlGenerator.statementToCode(block, 'content')
-  const code = '<td>' + statements_content.trim() + '</td>\n'
+  const code = '<td' + value_name + '>' + statements_content.trim() + '</td>'
   return code
 }
 
