@@ -41,7 +41,7 @@ export default function Select({
         name={name}
         control={control}
         render={({ field }) => (
-          <div className="w-full relative">
+          <div className="w-full relative ">
             <Listbox
               value={field.value}
               onChange={(e) => {
@@ -74,7 +74,7 @@ export default function Select({
                   leaveTo="opacity-0"
                 >
                   {disabled ? null : (
-                    <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-brand ring-opacity-5 focus:outline-none sm:text-sm">
+                    <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-brand ring-opacity-5 focus:outline-none sm:text-sm list-none">
                       {selectList.map((option, optionIdx) => (
                         <Listbox.Option
                           key={optionIdx}
