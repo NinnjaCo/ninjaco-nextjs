@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import Courses from '@/images/courses.svg'
 import Footer from '@/components/layout/footer'
@@ -25,6 +27,15 @@ import useTranslation from '@/hooks/useTranslation'
 
 export default function Home() {
   const t = useTranslation()
+  const router = useRouter()
+
+  // scroll to #aboutSection if #about is in url on page load,
+  useEffect(() => {
+    if (router.asPath.includes('#about')) {
+      const aboutSection = document.getElementById('aboutSection')
+      aboutSection?.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [router])
 
   const testimonials = [
     {
@@ -167,7 +178,7 @@ export default function Home() {
         </div>
 
         {/* About section */}
-        <div className="w-full grid grid-cols-8 my-16">
+        <div className="w-full grid grid-cols-8 my-16" id="aboutSection">
           <div className="bg-brand-100 rounded-none md:rounded-3xl lg:rounded-[56px] shadow-lg shadow-brand-300 col-start-1 md:col-start-2 col-span-8 md:col-span-6 relative pb-12 px-6 flex flex-col gap-6 w-full z-0">
             <div className="flex flex-row w-full justify-between items-start relative">
               <div className="relative mt-4">

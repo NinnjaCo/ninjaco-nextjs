@@ -259,7 +259,7 @@ export default function Profile({ serverUser }: ServerProps) {
             onSubmit={handleSubmit(submitHandler)}
             className="flex flex-col w-full gap-6 md:gap-12"
           >
-            <div className="flex w-full justify-between items-center">
+            <div className="flex w-full  flex-col md:flex-row justify-start md:justify-between items-center gap-4 md:gap-0">
               <div className="text-brand text-lg md:text-xl lg:text-2xl font-semibold">
                 {user?.firstName} {user?.lastName}
               </div>

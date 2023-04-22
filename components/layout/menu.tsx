@@ -39,7 +39,7 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
     {
       name: t.Menu.courses,
       description: t.Menu.coursesDescription,
-      href: '/courses',
+      href: '/app',
     },
   ]
 
@@ -196,7 +196,7 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
           </Link>
         )}
         <Link
-          href={'/courses'}
+          href={'/app'}
           className={clsx(
             'md:text-base lg:text-xl hover-underline-animation',
             getTextColorClassName()
