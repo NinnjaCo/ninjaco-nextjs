@@ -150,7 +150,7 @@ export interface WebsiteTranslations {
       backToHome: translationElement
       signIn: translationElement
     }
-    unauhorized: {
+    unauthorized: {
       headTitle: translationElement
       title: translationElement
       goBack: translationElement

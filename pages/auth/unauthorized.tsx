@@ -12,7 +12,7 @@ const Unauthorized = ({ error }: ServerProps) => {
   return (
     <>
       <Head>
-        <title>{t.Auth.unauhorized.headTitle}</title>
+        <title>{t.Auth.unauthorized.headTitle}</title>
         <meta name="description" content="Unauthorized Access" />
       </Head>
       <Menu
@@ -57,7 +57,7 @@ const Unauthorized = ({ error }: ServerProps) => {
                   </div>
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                     <h3 className="text-lg leading-6 font-medium text-brand" id="modal-title">
-                      {t.Auth.unauhorized.title}
+                      {t.Auth.unauthorized.title}
                     </h3>
                     <div className="mt-2">
                       <p className="text-sm text-brand-500">{error}</p>
@@ -71,7 +71,7 @@ const Unauthorized = ({ error }: ServerProps) => {
                   className="mt-3 w-full inline-flex justify-center rounded-md border border-brand-100 shadow-sm px-4 py-2 bg-white text-base font-medium text-brand hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
                   href="/"
                 >
-                  {t.Auth.unauhorized.goBack}
+                  {t.Auth.unauthorized.goBack}
                 </Link>
               </div>
             </div>
