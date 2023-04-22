@@ -163,6 +163,7 @@ const EditCourse = ({ user, course }: { user: User; course: Course }) => {
               selectList={Object.values(CourseType)}
               isRequired={true}
               rootClassName="w-48"
+              disabled={true}
             />
             <SingleImageUpload
               control={control}

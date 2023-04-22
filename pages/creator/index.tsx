@@ -50,31 +50,57 @@ export default function Home({ user, courses }: { user: User; courses: Course[] 
                   {
                     name: 'Newest',
                     setter: setFilteredCourses,
-                    sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? -1 : 1),
+                    previousStateModifier: () => {
+                      return [
+                        ...courses.sort((a, b) =>
+                          dayjs(a.createdAt).isAfter(b.createdAt) ? -1 : 1
+                        ),
+                      ]
+                    },
                   },
                   {
                     name: 'Recently Updated',
-                    sortFunction: (a, b) => (dayjs(a.updatedAt).isAfter(b.updatedAt) ? -1 : 1),
+                    previousStateModifier: () => {
+                      return [
+                        ...courses.sort((a, b) =>
+                          dayjs(a.updatedAt).isAfter(b.updatedAt) ? -1 : 1
+                        ),
+                      ]
+                    },
                     setter: setFilteredCourses,
                   },
                   {
                     name: 'Oldest',
-                    sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? 1 : -1),
+                    previousStateModifier: () => {
+                      return [
+                        ...courses.sort((a, b) =>
+                          dayjs(a.createdAt).isAfter(b.createdAt) ? 1 : -1
+                        ),
+                      ]
+                    },
                     setter: setFilteredCourses,
                   },
                   {
                     name: 'Name (A-Z)',
-                    sortFunction: (a, b) => (a.title > b.title ? 1 : -1),
+                    previousStateModifier: () => {
+                      return [...courses.sort((a, b) => a.title.localeCompare(b.title))]
+                    },
                     setter: setFilteredCourses,
                   },
                   {
                     name: 'Name (Z-A)',
-                    sortFunction: (a, b) => (a.title > b.title ? -1 : 1),
+                    previousStateModifier: () => {
+                      return [...courses.sort((a, b) => b.title.localeCompare(a.title))]
+                    },
                     setter: setFilteredCourses,
                   },
                   {
                     name: 'Number of Missions',
-                    sortFunction: (a, b) => (a.missions.length > b.missions.length ? -1 : 1),
+                    previousStateModifier: () => {
+                      return [
+                        ...courses.sort((a, b) => (a.missions.length > b.missions.length ? -1 : 1)),
+                      ]
+                    },
                     setter: setFilteredCourses,
                   },
                 ]}

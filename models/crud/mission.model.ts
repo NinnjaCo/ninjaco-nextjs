@@ -7,6 +7,8 @@ export interface Mission {
   image: string
   categoryId: string
   levels: Level[]
+  createdAt: string
+  updatedAt: string
 }
 
 export interface MissionRequest {

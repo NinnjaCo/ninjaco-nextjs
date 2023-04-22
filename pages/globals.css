@@ -19,6 +19,7 @@ html,
 body {
   height: 100%;
   cursor: url('/images/cursor.png'), auto !important;
+  scroll-behavior: smooth;
 }
 
 a {

@@ -202,7 +202,7 @@ export const getServerSideProps = async (context) => {
 
     return {
       redirect: {
-        destination: (query.redirectTo as string | undefined) || '/',
+        destination: (query.redirectTo as string | undefined) || '/app',
         permanent: false,
       },
     }

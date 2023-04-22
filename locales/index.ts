@@ -407,6 +407,9 @@ export interface WebsiteTranslations {
       stepByStepImages: translationElement
       cancel: translationElement
       createLevel: translationElement
+      websitePreviewImage: translationElement
+      oneImageIsNotValid: translationElement
+      oneImageIsTooBig: translationElement
     }
     editLevelPage: {
       atLeastOneImage: translationElement
@@ -422,6 +425,9 @@ export interface WebsiteTranslations {
       buildingPartImages: translationElement
       stepByStepImages: translationElement
       cancel: translationElement
+      websitePreviewImage: translationElement
+      oneImageIsNotValid: translationElement
+      oneImageIsTooBig: translationElement
     }
     games: {
       viewGames: {
@@ -498,6 +504,25 @@ export interface WebsiteTranslations {
           errorCreatingGame: translationElement
         }
       }
+    }
+  }
+  User: {
+    viewCoursePage: {
+      enrollCourse: translationElement
+      dropCourse: translationElement
+      courseCompleted: translationElement
+      printCertificate: translationElement
+      courseType: translationElement
+      coursePrerequisites: translationElement
+      courseObjectives: translationElement
+      ageRange: translationElement
+      filter: translationElement
+      missions: translationElement
+      noMissions: translationElement
+      dropCourseTitle: translationElement
+      dropCourseMessage: translationElement
+      cancel: translationElement
+      drop: translationElement
     }
   }
   Filter: {

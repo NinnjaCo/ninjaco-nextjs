@@ -17,6 +17,7 @@ module.exports = {
       animation: {
         float: 'float 2s ease infinite',
         floatDelay: 'float 2s ease infinite 1s',
+        floatSlow: 'float 5s ease infinite',
       },
       keyframes: {
         float: {

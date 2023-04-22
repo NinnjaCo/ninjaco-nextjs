@@ -567,6 +567,9 @@ const englishTranslations: WebsiteTranslations = {
       stepByStepImages: 'Step by Step Guide Images',
       cancel: 'Cancel',
       createLevel: ' Create Level',
+      websitePreviewImage: 'Website Preview Image',
+      oneImageIsNotValid: 'The image not valid',
+      oneImageIsTooBig: 'The image is too big, please make sure it is less than 1MB',
     },
     editLevelPage: {
       atLeastOneImage: 'You need to upload at least one image',
@@ -582,6 +585,9 @@ const englishTranslations: WebsiteTranslations = {
       buildingPartImages: 'Building Parts Images',
       stepByStepImages: 'Step by Step Guide Images',
       cancel: 'Cancel',
+      websitePreviewImage: 'Website Preview Image',
+      oneImageIsNotValid: 'The image not valid',
+      oneImageIsTooBig: 'The image is too big, please make sure it is less than 1MB',
     },
     games: {
       viewGames: {
@@ -658,6 +664,25 @@ const englishTranslations: WebsiteTranslations = {
           errorCreatingGame: 'Error editing game',
         },
       },
+    },
+  },
+  User: {
+    viewCoursePage: {
+      enrollCourse: 'Enroll in Course',
+      dropCourse: 'Drop The Course',
+      courseCompleted: 'Course Completed',
+      printCertificate: 'Print Certificate',
+      courseType: 'Course Type',
+      coursePrerequisites: 'Course Prerequisites',
+      courseObjectives: 'Course Objectives',
+      ageRange: 'Age Range',
+      filter: 'Filters',
+      missions: 'Missions',
+      noMissions: 'No missions yet',
+      dropCourseTitle: 'Are you sure you want to drop this course?',
+      dropCourseMessage: 'All progress will be lost forever',
+      cancel: 'Cancel',
+      drop: 'Drop',
     },
   },
   Filter: {

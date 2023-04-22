@@ -50,31 +50,68 @@ export default function Home({ user, games }: { user: User; games: Game[] }) {
                   {
                     name: t.Creator.games.viewGames.filter.newest as string,
                     setter: setFilteredGames,
-                    sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? -1 : 1),
+                    previousStateModifier: () => {
+                      return [
+                        ...games.sort((a, b) => {
+                          return dayjs(a.createdAt).isAfter(b.createdAt) ? -1 : 1
+                        }),
+                      ]
+                    },
                   },
                   {
                     name: t.Creator.games.viewGames.filter.recentlyUpdated as string,
-                    sortFunction: (a, b) => (dayjs(a.updatedAt).isAfter(b.updatedAt) ? -1 : 1),
+                    previousStateModifier: () => {
+                      return [
+                        ...games.sort((a, b) => {
+                          return dayjs(a.updatedAt).isAfter(b.updatedAt) ? -1 : 1
+                        }),
+                      ]
+                    },
+
                     setter: setFilteredGames,
                   },
                   {
                     name: t.Creator.games.viewGames.filter.oldest as string,
-                    sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? 1 : -1),
+                    previousStateModifier: () => {
+                      return [
+                        ...games.sort((a, b) => {
+                          return dayjs(a.createdAt).isAfter(b.createdAt) ? 1 : -1
+                        }),
+                      ]
+                    },
                     setter: setFilteredGames,
                   },
                   {
                     name: t.Creator.games.viewGames.filter.NameAZ as string,
-                    sortFunction: (a, b) => (a.title > b.title ? 1 : -1),
+                    previousStateModifier: () => {
+                      return [
+                        ...games.sort((a, b) => {
+                          return a.title.localeCompare(b.title)
+                        }),
+                      ]
+                    },
                     setter: setFilteredGames,
                   },
                   {
                     name: t.Creator.games.viewGames.filter.NameZA as string,
-                    sortFunction: (a, b) => (a.title > b.title ? -1 : 1),
+                    previousStateModifier: () => {
+                      return [
+                        ...games.sort((a, b) => {
+                          return b.title.localeCompare(a.title)
+                        }),
+                      ]
+                    },
                     setter: setFilteredGames,
                   },
                   {
                     name: t.Creator.games.viewGames.filter.SizeOfGame as string,
-                    sortFunction: (a, b) => (a.sizeOfGrid.length > b.sizeOfGrid.length ? -1 : 1),
+                    previousStateModifier: () => {
+                      return [
+                        ...games.sort((a, b) => {
+                          return a.sizeOfGrid > b.sizeOfGrid ? -1 : 1
+                        }),
+                      ]
+                    },
                     setter: setFilteredGames,
                   },
                 ]}

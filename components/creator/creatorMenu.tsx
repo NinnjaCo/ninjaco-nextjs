@@ -134,7 +134,7 @@ const CreatorMenu = ({ isOnCoursePage, creator, isOnGamesPage }: CreatorMenuPros
                 leaveFrom="opacity-100 translate-y-0"
                 leaveTo="opacity-0 translate-y-1"
               >
-                <Popover.Panel className="absolute z-10 right-0 -translate-x-8">
+                <Popover.Panel className="absolute z-30 right-0 -translate-x-8">
                   <div className="overflow-hidden rounded shadow-lg ring-1 ring-brand ring-opacity-5 bg-brand-50">
                     <div className="relative flex flex-col divide-y-2 divide-brand-300">
                       {linkForMenu.map((item, i) => (
