@@ -116,6 +116,9 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
   const [currentCode, setCurrentCode] = React.useState<string>('')
   const actionsQueue: Queue<() => void> = new Queue()
 
+  // At max it is 1000 and at min it is 300, and linearly proportional to the size of the grid, the bigger the faster
+  const waitTimeBetweenActions = 1000 - (game.game.sizeOfGrid - 5) * 35
+
   // Changes the state of the currentPlayerDirection
   const turnLeft = (carryCheckFunction?: (gameState) => boolean) => {
     setGameState((draft) => {
@@ -504,6 +507,12 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
         }
 
         break
+      case BlockType.WHILE:
+        // limit the number of iterations to 50, since the game is not designed to handle infinite loops
+        for (let i = 0; i < 100; i++) {
+          executeCode(block.body, carryCheckFunction)
+        }
+        break
     }
     executeCode(remainingCode, carryCheckFunction)
   }
@@ -552,11 +561,11 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
       setRunButtonDisabled(false)
     })
 
-    runQueueActionsWithDelay(1000)
+    runQueueActionsWithDelay(waitTimeBetweenActions)
     setTimeout(() => {
       clearHighlightedBlock()
       resetGameState()
-    }, 1000 * (actionsQueue.size() + 1))
+    }, waitTimeBetweenActions * (actionsQueue.size() + 1))
   }
 
   const resetGameState = () => {
@@ -592,6 +601,12 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
       spread: 30,
     })
     setAdminDialogOpen(true)
+
+    // if the user already completed the game before, return
+    if (game.completed) {
+      return
+    }
+
     //update userPlayGame to be completed
     await new GameEnrollmentAPI(session).update(game._id, { completed: true })
   }
@@ -608,7 +623,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
         <UserMenu isOnCoursePage={false} isOnGamesPage={true} user={user} />
         <AdminAlertDialog
           open={adminDialogOpen}
-          title="Congratulations, You won!"
+          title="Congratulations, You won! 🥳"
           confirm={() => {
             setAdminDialogOpen(false)
             router.push('/app/games')
@@ -616,10 +631,10 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
           close={() => {
             setAdminDialogOpen(false)
           }}
-          confirmButtonText="Restart Game"
-          confirmButtonClassName="bg-brand text-white hidden"
-          backButtonText="Go back to Games"
-          backButtonClassName="bg-brand text-brand"
+          confirmButtonText="Go Back to Games"
+          confirmButtonClassName="bg-brand text-white"
+          backButtonText="Go Back to Games"
+          backButtonClassName="bg-brand text-brand hidden"
         >
           <p className="text-brand text-sm">Here is the code you wrote:</p>
           <pre className="text-xs text-brand-400 border-2 p-2">{prettifyCode(currentCode)}</pre>
