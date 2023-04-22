@@ -590,12 +590,8 @@ const ViewGame = ({ user, game, session }: ServerSideProps) => {
       spread: 30,
     })
     setAdminDialogOpen(true)
-    console.log('You won!')
-    console.log('user id', user._id)
-    console.log('...game', game)
     //update userPlayGame to be completed
     await new GameEnrollmentAPI(session).update(game._id, { completed: true })
-    console.log('updated game ', game)
   }
 
   return (
