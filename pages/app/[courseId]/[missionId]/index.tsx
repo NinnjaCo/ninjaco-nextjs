@@ -1,7 +1,9 @@
 import { Category } from '@/models/crud/category.model'
 import { CategoryApi } from '@/utils/api/category/category.api'
 import { CheckCircleIcon } from '@heroicons/react/20/solid'
+import { ClockIcon } from '@heroicons/react/24/outline'
 import { Course } from '@/models/crud/course.model'
+import { CourseEnrollment } from '@/models/crud/course-enrollment.model'
 import { CourseEnrollmentAPI } from '@/utils/api/courseEnrollment/course-enrollment.api'
 import { Level } from '@/models/crud/level.model'
 import { LevelEnrollment } from '@/models/crud/level-enrollment.model'
@@ -11,7 +13,9 @@ import { MissionEnrollment } from '@/models/crud/mission-enrollment.model'
 import { MissionEnrollmentApi } from '@/utils/api/missionEnrollment/mission-enrollment.api'
 import { User } from '@/models/crud'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
+import { getReadableDateFromISO } from '@/utils/shared'
 import { getServerSession } from 'next-auth'
+import { useMemo } from 'react'
 import { useSession } from 'next-auth/react'
 import Chip from '@/components/shared/chip'
 import Head from 'next/head'
@@ -35,29 +39,20 @@ const getTypeOfMission = (mission: MissionEnrollment | Mission): MissionType => 
   }
 }
 
-enum LevelType {
-  enrollment = 'enrollment',
-  level = 'level',
-}
-
-const getTypeOfLevel = (level: LevelEnrollment | Level): LevelType => {
-  if ((level as LevelEnrollment).level) {
-    return LevelType.enrollment
-  } else {
-    return LevelType.level
-  }
-}
-
 const getAFieldInMission = (mission: Mission | MissionEnrollment, field: string) => {
   if (getTypeOfMission(mission) === MissionType.mission) {
     mission = mission as Mission
-    console.log(mission[field])
     return mission[field]
   } else {
     mission = mission as MissionEnrollment
-    console.log(mission[field])
     return mission.mission[field]
   }
+}
+
+interface LevelComponent {
+  level: Level
+  locked: boolean
+  completed: boolean
 }
 
 export default function UserMissionPage({
@@ -65,27 +60,94 @@ export default function UserMissionPage({
   mission,
   course,
   missionCategory,
-  levels,
 }: {
   user: User
   mission: Mission | MissionEnrollment
-  course: Course
+  course: CourseEnrollment
   missionCategory: Category
-  levels: (LevelEnrollment | Level)[]
 }) {
   const session = useSession()
   const t = useTranslation()
+
   const startMission = async () => {
+    const missionType = getTypeOfMission(mission)
+    if (missionType === MissionType.enrollment) {
+      return
+    }
+
+    const typedMission = mission as Mission
     try {
-      await new MissionEnrollmentApi(course._id, session.data).create({
-        missionId: getAFieldInMission(mission, '_id'),
+      // start the mission
+      await new MissionEnrollmentApi(course.course._id, session.data).create({
+        missionId: typedMission._id,
       })
-      router.reload()
+
+      // start the first level since the mission is started
+      await new LevelEnrollmentApi(course.course._id, typedMission._id, session.data).create({
+        levelId: typedMission.levels[0]._id,
+      })
+
+      router.push(`/app/${course.course._id}/${typedMission._id}/${typedMission.levels[0]._id}`)
     } catch (e) {
       console.log(e)
     }
   }
 
+  const levels: LevelComponent[] = useMemo(() => {
+    const missionType = getTypeOfMission(mission)
+    const levels = getAFieldInMission(mission, 'levels')
+
+    if (missionType === MissionType.mission) {
+      return levels.map((level) => {
+        return {
+          level,
+          locked: true,
+          completed: false,
+        }
+      })
+    }
+
+    // Here we are sure that the mission is of type enrollment
+    const levelsWhoThisUserHaveProgressIn = (mission as MissionEnrollment).levels
+
+    return levels.map((level: Level) => {
+      const levelEnrollment = levelsWhoThisUserHaveProgressIn.find(
+        (levelEnrollment) => (levelEnrollment.level as unknown as string) === level._id
+      )
+
+      if (levelEnrollment) {
+        if (levelEnrollment.completed) {
+          return {
+            level,
+            locked: false,
+            completed: true,
+          }
+        }
+
+        return {
+          level,
+          locked: false,
+          completed: false,
+        }
+      }
+
+      return {
+        level,
+        locked: true,
+        completed: false,
+      }
+    })
+  }, [mission])
+
+  const clickOnLevel = (level: LevelComponent) => {
+    // they have not started the mission yet
+    if (getTypeOfMission(mission) === MissionType.mission) return
+    const missionEnrollment = mission as MissionEnrollment
+    console.log(level.level)
+    if (level.locked) return
+    if (level.completed) return
+    router.push(`/app/${course.course._id}/${missionEnrollment.mission._id}/${level.level._id}`)
+  }
   return (
     <>
       <Head>
@@ -117,19 +179,22 @@ export default function UserMissionPage({
                     {t.User.viewMissionPage.startMission}
                   </button>
                 ) : getTypeOfMission(mission) === MissionType.enrollment &&
-                  (mission as MissionEnrollment).completed === false ? (
-                  <button
-                    className="text-xs md:text-base font-semibold btn btn-secondary bg-rose-500 rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-rose-400 h-fit"
-                    // onClick={() => continue(true)}
-                  >
-                    {t.User.viewMissionPage.continue}
-                  </button>
-                ) : (
-                  <div className="flex flex-col gap-3 bg-teal-50 rounded-lg px-3 py-2">
+                  (mission as MissionEnrollment).completed ? (
+                  <div className="flex flex-col gap-3 bg-success-light rounded-lg px-3 py-2">
                     <div className=" flex gap-2 items-center">
-                      <CheckCircleIcon className=" h-6 w-6 ml-2 text-teal-600" />
-                      <div className=" text-teal-600 font-bold text-xs md:text-base py-2 rounded-md">
+                      <CheckCircleIcon className=" h-6 w-6 ml-2 text-success-dark" />
+                      <div className=" text-success-dark font-bold text-xs md:text-base py-2 rounded-md">
                         {t.User.viewMissionPage.completed}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-3 bg-brand-200 rounded-lg px-3 py-2">
+                    <div className=" flex gap-2 items-center">
+                      <ClockIcon className=" h-4 w-4 ml-2 text-brand"></ClockIcon>
+                      <div className=" text-brand font-bold text-xs py-2 rounded-md">
+                        Started at:{' '}
+                        {getReadableDateFromISO((mission as MissionEnrollment).startedAt)}
                       </div>
                     </div>
                   </div>
@@ -148,37 +213,39 @@ export default function UserMissionPage({
           <Chip text={missionCategory.categoryName} />
         </div>
         <div className="flex flex-col px-6 pb-12 gap-6">
-          {/* if the mission is of type Mission, display the levels locked except the first one  
-           the mission is of type MissionEnrollment, display the levels that are of type //
-          levelEnrollment as unlocked and the rest as locked
-          should use the function getTypeOfLevel to determine the type of level */}
           <div className="flex justify-between gap-10">
             <div className="font-semibold text-2xl">{t.Creator.viewMissionPage.levels}</div>
-            <Link
-              className=" text-xs md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit"
-              href={`/creator/${course._id}/${mission._id}/create`}
-            >
-              {t.Creator.viewMissionPage.addLevel}
-            </Link>
           </div>
 
-          {getAFieldInMission(mission, 'levels').length !== 0 ? (
-            <div className="grid grid-cols-4 sm:grid-cols-7 md:grid-cols-10 lg:grid-cols-11 xl:grid-cols-12 w-full gap-8 items-center place-items-center">
-              {getAFieldInMission(mission, 'levels').map((level, index) => (
-                <Link
+          {levels.length !== 0 ? (
+            <div className="grid grid-cols-4 sm:grid-cols-7 md:grid-cols-10 lg:grid-cols-11 xl:grid-cols-12 w-full items-center place-items-center">
+              {levels.map((level, index) => (
+                <button
                   className={clsx(
-                    'rounded-full w-16 h-16 flex justify-center items-center text-center text-2xl font-semibold text-brand shadow-inner',
+                    'rounded-full w-16 h-16 flex justify-center items-center text-center text-2xl font-semibold text-brand shadow-inner relative',
                     {
-                      'bg-brand-300 shadow-brand-400 hover:bg-brand': level.levelNumber % 2 === 0,
+                      'bg-brand-300 shadow-brand-400 hover:bg-brand-400':
+                        level.level.levelNumber % 2 === 0,
                       'bg-secondary-300 shadow-secondary-900 hover:bg-secondary':
-                        level.levelNumber % 2 !== 0,
+                        level.level.levelNumber % 2 !== 0,
+                      'bg-gray-500 shadow-none text-brand-800 cursor-not-allowed hover:bg-gray-500':
+                        level.locked && level.level.levelNumber % 2 === 0,
+                      'bg-gray-400 shadow-none text-brand-800 cursor-not-allowed hover:bg-gray-400':
+                        level.locked && level.level.levelNumber % 2 !== 0,
                     }
                   )}
                   key={index}
-                  href={`/creator/${course._id}/${mission._id}/${level._id}`}
+                  onClick={() => {
+                    clickOnLevel(level)
+                  }}
                 >
-                  {level.levelNumber}
-                </Link>
+                  {level.completed ? (
+                    <div className="bg-success-dark stroke-2 rounded-full w-6 h-6 flex items-center justify-center text-white absolute top-1 right-1 text-xs">
+                      ✓
+                    </div>
+                  ) : null}
+                  {level.level.levelNumber}
+                </button>
               ))}
             </div>
           ) : (
@@ -212,30 +279,56 @@ export const getServerSideProps = async (context) => {
 
   if (!course || !course.payload) {
     return {
-      props: {
-        redirect: {
-          destination: '/app',
-          permanent: false,
-        },
+      redirect: {
+        destination: '/app',
+        permanent: false,
+      },
+    }
+  }
+
+  if (!('course' in course.payload)) {
+    // not an enrollment course
+    return {
+      redirect: {
+        destination: '/app',
+        permanent: false,
       },
     }
   }
 
   const mission = await new MissionEnrollmentApi(courseId, session).findMissionById(missionId)
 
+  if (!mission || !mission.payload) {
+    return {
+      redirect: {
+        destination: '/app',
+        permanent: false,
+      },
+    }
+  }
+
   const missionCategory = await new CategoryApi(session).findOne(
     getAFieldInMission(mission.payload, 'categoryId')
   )
 
-  const levels = await new LevelEnrollmentApi(courseId, missionId, session).findAll()
+  if (!missionCategory || !missionCategory.payload) {
+    return {
+      redirect: {
+        destination: '/app',
+        permanent: false,
+      },
+    }
+  }
+
+  const missionType = getTypeOfMission(mission.payload)
+  const actualLevels = []
 
   return {
     props: {
       user: session.user,
-      mission: mission,
+      mission: mission.payload,
       course: course.payload,
       missionCategory: missionCategory.payload,
-      levels: levels.payload,
     },
   }
 }
