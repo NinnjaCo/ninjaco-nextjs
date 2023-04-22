@@ -57,6 +57,14 @@ h6 {
   font-weight: 700;
 }
 
+ul {
+  list-style: inside disc;
+}
+
+ol {
+  list-style: inside decimal;
+}
+
 @layer components {
   .btn {
     @apply inline-flex items-center justify-center px-6 py-[0.65rem] text-sm rounded cursor-pointer border focus:outline-none font-semibold;
