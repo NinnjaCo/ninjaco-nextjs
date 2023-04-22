@@ -78,6 +78,15 @@ export class AuthApi extends CoreApi {
     const res = await this.client.post<ApiResponse<AuthResponse>>(`${this.path2}/logout`)
     return res.data
   }
+
+  async resendVerificationEmail(email: string): Promise<ApiResponse<AuthResponse>> {
+    console.log('resendVerificationEmail in auth.api.ts')
+    const res = await this.client.post<ApiResponse<AuthResponse>>(
+      `${this.path2}/resend-verification-email`,
+      { email }
+    )
+    return res.data
+  }
 }
 
 export function useAuthApi(param?: ApiParam): AuthApi {

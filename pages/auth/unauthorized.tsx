@@ -1,26 +1,23 @@
+import { AuthApi } from '@/utils/api/auth'
+import { useSession } from 'next-auth/react'
 import Head from 'next/head'
 import Link from 'next/link'
 import Menu from '@/components/layout/menu'
 import React from 'react'
 import useTranslation from '@/hooks/useTranslation'
-
 interface ServerProps {
   error: string
 }
 const Unauthorized = ({ error }: ServerProps) => {
+  const session = useSession()
   const t = useTranslation()
 
   const resendEmail = async () => {
-    const response = await fetch('/api/auth/resend-email', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    const data = await response.json()
-    if (data.error) {
-      console.log(data.error)
+    if (!session.data) {
+      console.log('no session data')
+      return
     }
+    await new AuthApi().resendVerificationEmail(session.data.user.email)
   }
 
   return (
@@ -85,7 +82,7 @@ const Unauthorized = ({ error }: ServerProps) => {
                     type="button"
                     className="mt-3 w-full inline-flex justify-center rounded-md border border-brand-100 shadow-sm px-4 py-2 bg-brand text-base font-medium text-white hover:bg-brand-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
                     href="/"
-                    onSubmit={resendEmail}
+                    onClick={resendEmail}
                   >
                     resend email
                   </Link>
@@ -120,7 +117,6 @@ const Unauthorized = ({ error }: ServerProps) => {
 export default Unauthorized
 export const getServerSideProps = async (context) => {
   const { error } = context.query
-
   if (error) {
     return {
       props: { error },
