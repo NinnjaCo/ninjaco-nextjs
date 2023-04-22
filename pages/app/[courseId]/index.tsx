@@ -11,6 +11,7 @@ import { authOptions } from '../../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { useSession } from 'next-auth/react'
 import { useState } from 'react'
+import Alert from '@/components/shared/alert'
 import Chip from '@/components/shared/chip'
 import Filter from '@/components/creator/filter'
 import Head from 'next/head'
@@ -62,6 +63,33 @@ export default function UserCourseView({
   const [filteredMissions, setFilteredMissions] =
     useState<(Mission | MissionEnrollment)[]>(missions)
 
+  const [alertData, setAlertData] = React.useState<{
+    message: string
+    variant: 'success' | 'info' | 'warning' | 'error'
+    open: boolean
+  }>({
+    message: '',
+    variant: 'info',
+    open: false,
+  })
+  const closeAlert = () => {
+    setAlertData({ ...alertData, open: true })
+  }
+
+  const preventClickOnMission = () => {
+    // render the alert
+
+    setAlertData({
+      message: 'Enroll in the course to unlock this mission',
+      variant: 'error',
+      open: true,
+    })
+
+    // display the alert
+    <Alert message={alertData.message} variant={alertData.variant} open={alertData.open} />
+    
+  }
+
   const t = useTranslation()
 
   const session = useSession()
@@ -75,19 +103,33 @@ export default function UserCourseView({
 
   const renderMissionCard = (mission: MissionEnrollment | Mission) => {
     const courseId = getAFieldInCourse(course, '_id')
-    if (getTypeOfMission(mission) === MissionType.enrollment) {
-      mission = mission as MissionEnrollment
-      return (
-        <Link href={`/app/${courseId}/${mission.mission._id}`}>
-          <MissionEnrollmentCard mission={mission} />
-        </Link>
-      )
+
+    if (getTypeOfCourse(course) === CourseType.enrollment) {
+      if (getTypeOfMission(mission) === MissionType.enrollment) {
+        mission = mission as MissionEnrollment
+        return (
+          <Link href={`/app/${courseId}/${mission.mission._id}`}>
+            <MissionEnrollmentCard mission={mission} />
+          </Link>
+        )
+      } else {
+        mission = mission as Mission
+        return (
+          <Link href={`/app/${courseId}/${mission._id}`}>
+            <MissionCard mission={mission} />
+          </Link>
+        )
+      }
     } else {
       mission = mission as Mission
       return (
-        <Link href={`/app/${courseId}/${mission._id}`}>
+        <button
+          onClick={() => {
+            preventClickOnMission
+          }}
+        >
           <MissionCard mission={mission} />
-        </Link>
+        </button>
       )
     }
   }
