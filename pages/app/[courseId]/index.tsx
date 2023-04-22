@@ -86,8 +86,6 @@ export default function UserCourseView({
     })
 
     // display the alert
-    <Alert message={alertData.message} variant={alertData.variant} open={alertData.open} />
-    
   }
 
   const t = useTranslation()
@@ -125,7 +123,7 @@ export default function UserCourseView({
       return (
         <button
           onClick={() => {
-            preventClickOnMission
+            preventClickOnMission()
           }}
         >
           <MissionCard mission={mission} />
@@ -286,7 +284,10 @@ export default function UserCourseView({
           </div>
         </div>
         <div className="flex flex-col px-6 pb-12 pt-6 gap-6">
-          <div className="font-semibold text-2xl">{t.User.viewCoursePage.missions}</div>
+          <div className="flex justify-between">
+            <div className="font-semibold text-2xl">{t.User.viewCoursePage.missions}</div>
+            <Alert message={alertData.message} variant={alertData.variant} open={alertData.open} />
+          </div>
 
           <div className="flex gap-4 items-center">
             <div className="text-brand font-medium text-xs">{missions.length ?? 0} missions</div>
