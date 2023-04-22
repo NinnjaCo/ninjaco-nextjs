@@ -1,18 +1,28 @@
+import { AuthApi } from '@/utils/api/auth'
+import { useSession } from 'next-auth/react'
 import Head from 'next/head'
 import Link from 'next/link'
 import Menu from '@/components/layout/menu'
 import React from 'react'
 import useTranslation from '@/hooks/useTranslation'
-
 interface ServerProps {
   error: string
 }
 const Unauthorized = ({ error }: ServerProps) => {
+  const session = useSession()
   const t = useTranslation()
+
+  const resendEmail = async () => {
+    if (!session.data) {
+      return
+    }
+    await new AuthApi(session.data).resendVerificationEmail(session.data.user.email)
+  }
+
   return (
     <>
       <Head>
-        <title>{t.Auth.unauhorized.headTitle}</title>
+        <title>{t.Auth.unauthorized.headTitle}</title>
         <meta name="description" content="Unauthorized Access" />
       </Head>
       <Menu
@@ -57,7 +67,7 @@ const Unauthorized = ({ error }: ServerProps) => {
                   </div>
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                     <h3 className="text-lg leading-6 font-medium text-brand" id="modal-title">
-                      {t.Auth.unauhorized.title}
+                      {t.Auth.unauthorized.title}
                     </h3>
                     <div className="mt-2">
                       <p className="text-sm text-brand-500">{error}</p>
@@ -65,15 +75,36 @@ const Unauthorized = ({ error }: ServerProps) => {
                   </div>
                 </div>
               </div>
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse justify-start">
-                <Link
-                  type="button"
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-brand-100 shadow-sm px-4 py-2 bg-white text-base font-medium text-brand hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                  href="/"
-                >
-                  {t.Auth.unauhorized.goBack}
-                </Link>
-              </div>
+              {error.includes('Verify your email to access this page') && (
+                <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse justify-start">
+                  <Link
+                    type="button"
+                    className="mt-3 w-full inline-flex justify-center rounded-md border border-brand-100 shadow-sm px-4 py-2 bg-brand text-base font-medium text-white hover:bg-brand-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                    href="/"
+                    onClick={resendEmail}
+                  >
+                    {t.Auth.unauthorized.resendEmail}
+                  </Link>
+                  <Link
+                    type="button"
+                    className="mt-3 w-full inline-flex justify-center rounded-md border border-brand-100 shadow-sm px-4 py-2 bg-white text-base font-medium text-brand hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                    href="/"
+                  >
+                    {t.Auth.unauthorized.goBack}
+                  </Link>
+                </div>
+              )}
+              {!error.includes('Verify your email to access this page') && (
+                <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse justify-start">
+                  <Link
+                    type="button"
+                    className="mt-3 w-full inline-flex justify-center rounded-md border border-brand-100 shadow-sm px-4 py-2 bg-white text-base font-medium text-brand hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                    href="/"
+                  >
+                    {t.Auth.unauthorized.goBack}
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -85,7 +116,6 @@ const Unauthorized = ({ error }: ServerProps) => {
 export default Unauthorized
 export const getServerSideProps = async (context) => {
   const { error } = context.query
-
   if (error) {
     return {
       props: { error },

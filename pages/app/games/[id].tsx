@@ -15,6 +15,7 @@ import { gameToolBox } from '@/blockly/toolbox/game'
 import { getServerSession } from 'next-auth'
 import { useImmer } from 'use-immer'
 import { useRouter } from 'next/router'
+import { useSession } from 'next-auth/react'
 import Alert from '@/components/shared/alert'
 import Blockly from 'blockly'
 import BlocklyBoard from '@/components/blockly/blockly'
@@ -76,6 +77,8 @@ const ResultType = {
 const ViewGame = ({ user, game }: ServerSideProps) => {
   const t = useTranslation()
   const router = useRouter()
+  const { data: session } = useSession()
+
   const parentRef = React.useRef<any>()
 
   const cellSize = 25
@@ -581,7 +584,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
     })
   }
 
-  const onHitGoal = (ExtraInfo?: string) => {
+  const onHitGoal = async (ExtraInfo?: string) => {
     party.confetti(party.Rect.fromScreen(), {
       count: 200,
       shapes: ['roundedRectangle', 'star', 'circle', 'rectangle'],
@@ -589,6 +592,8 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
       spread: 30,
     })
     setAdminDialogOpen(true)
+    //update userPlayGame to be completed
+    await new GameEnrollmentAPI(session).update(game._id, { completed: true })
   }
 
   return (
@@ -740,6 +745,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       props: {
         user: session.user,
         game: newEnrollmentRes.payload,
+        session,
       },
     }
   }

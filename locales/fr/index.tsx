@@ -319,10 +319,11 @@ const frenchTranslations: WebsiteTranslations = {
       backToHome: "Retour à la page d'accueil",
       signIn: 'Connectez-vous',
     },
-    unauhorized: {
-      headTitle: 'NinjaCo | Unauhorized',
-      title: 'Unauhorized',
+    unauthorized: {
+      headTitle: 'NinjaCo | Unauthorized',
+      title: 'Unauthorized',
       goBack: "Retourner à la page d'accueil",
+      resendEmail: 'Renvoyer le mail',
     },
   },
   Profile: {
