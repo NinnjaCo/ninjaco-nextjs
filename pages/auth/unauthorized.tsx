@@ -17,7 +17,7 @@ const Unauthorized = ({ error }: ServerProps) => {
       console.log('no session data')
       return
     }
-    await new AuthApi().resendVerificationEmail(session.data.user.email)
+    await new AuthApi(session.data).resendVerificationEmail(session.data.user.email)
   }
 
   return (
