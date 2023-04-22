@@ -1,11 +1,11 @@
 import { ApiFilter } from '../shared'
 import { ApiParam } from '../client'
 import { AxiosRequestConfig } from 'axios'
-import { Mission, MissionRequest } from '@/models/crud/mission.model'
-import { MissionEnrollment } from '@/models/crud/mission-enrollment.model'
+import { Mission } from '@/models/crud/mission.model'
+import { MissionEnrollment, MissionEnrollmentRequest } from '@/models/crud/mission-enrollment.model'
 import CrudApi, { CrudResponse } from '../crud/crud.api'
 
-export class MissionEnrollmentApi extends CrudApi<Mission, MissionRequest> {
+export class MissionEnrollmentApi extends CrudApi<MissionEnrollment, MissionEnrollmentRequest> {
   path = '/course-enrollements'
   constructor(courseId: string, param?: ApiParam) {
     super(param)
@@ -18,5 +18,19 @@ export class MissionEnrollmentApi extends CrudApi<Mission, MissionRequest> {
   ): Promise<CrudResponse<(Mission | MissionEnrollment)[]>> {
     const { data } = await this.client.get(`${this.path}`, { params: filter, ...options })
     return data
+  }
+
+  async findMissionById(
+    missionId: string,
+    options?: AxiosRequestConfig | undefined
+  ): Promise<CrudResponse<MissionEnrollment | Mission>> {
+    return (
+      await this.client.get<CrudResponse<MissionEnrollment | Mission>>(
+        `${this.path}/${missionId}`,
+        {
+          ...options,
+        }
+      )
+    ).data
   }
 }
