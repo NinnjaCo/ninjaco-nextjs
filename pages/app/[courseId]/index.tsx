@@ -11,6 +11,7 @@ import { authOptions } from '../../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { useSession } from 'next-auth/react'
 import { useState } from 'react'
+import Alert from '@/components/shared/alert'
 import Chip from '@/components/shared/chip'
 import Filter from '@/components/creator/filter'
 import Head from 'next/head'
@@ -62,6 +63,34 @@ export default function UserCourseView({
   const [filteredMissions, setFilteredMissions] =
     useState<(Mission | MissionEnrollment)[]>(missions)
 
+  const [alertData, setAlertData] = React.useState<{
+    message: string
+    variant: 'success' | 'info' | 'warning' | 'error'
+    open: boolean
+  }>({
+    message: '',
+    variant: 'info',
+    open: false,
+  })
+  const closeAlert = () => {
+    setAlertData({ ...alertData, open: false })
+  }
+
+  const preventClickOnMission = () => {
+    // render the alert
+
+    setAlertData({
+      message: 'Enroll in the course to unlock this mission',
+      variant: 'error',
+      open: true,
+    })
+
+    // remove the alert after 3 seconds
+    setTimeout(() => {
+      setAlertData({ ...alertData, open: false })
+    }, 3000)
+  }
+
   const t = useTranslation()
 
   const session = useSession()
@@ -74,19 +103,34 @@ export default function UserCourseView({
   }
 
   const renderMissionCard = (mission: MissionEnrollment | Mission) => {
-    if (getTypeOfMission(mission) === MissionType.enrollment) {
-      mission = mission as MissionEnrollment
-      return (
-        <Link href={`/app/missions/${mission.mission._id}`}>
-          <MissionEnrollmentCard mission={mission} />
-        </Link>
-      )
+    const courseId = getAFieldInCourse(course, '_id')
+
+    if (getTypeOfCourse(course) === CourseType.enrollment) {
+      if (getTypeOfMission(mission) === MissionType.enrollment) {
+        mission = mission as MissionEnrollment
+        return (
+          <Link href={`/app/${courseId}/${mission.mission._id}`}>
+            <MissionEnrollmentCard mission={mission} />
+          </Link>
+        )
+      } else {
+        mission = mission as Mission
+        return (
+          <Link href={`/app/${courseId}/${mission._id}`}>
+            <MissionCard mission={mission} />
+          </Link>
+        )
+      }
     } else {
       mission = mission as Mission
       return (
-        <Link href={`/app/games/${mission._id}`}>
+        <button
+          onClick={() => {
+            preventClickOnMission()
+          }}
+        >
           <MissionCard mission={mission} />
-        </Link>
+        </button>
       )
     }
   }
@@ -160,7 +204,7 @@ export default function UserCourseView({
                 ) : getTypeOfCourse(course) === CourseType.enrollment &&
                   (course as CourseEnrollment).completed === false ? (
                   <button
-                    className="text-xs md:text-base font-semibold btn btn-secondary bg-rose-500 rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-rose-400 h-fit"
+                    className="text-xs md:text-base font-semibold btn btn-secondary bg-error hover:bg-error-dark rounded-lg md:rounded-xl text-brand-700 border-brand-700 h-fit"
                     onClick={() => setOpenCourse(true)}
                   >
                     {t.User.viewCoursePage.dropCourse}
@@ -243,7 +287,15 @@ export default function UserCourseView({
           </div>
         </div>
         <div className="flex flex-col px-6 pb-12 pt-6 gap-6">
-          <div className="font-semibold text-2xl">{t.User.viewCoursePage.missions}</div>
+          <div className="flex justify-between flex-col md:flex-row">
+            <div className="font-semibold text-2xl">{t.User.viewCoursePage.missions}</div>
+            <Alert
+              message={alertData.message}
+              variant={alertData.variant}
+              open={alertData.open}
+              close={closeAlert}
+            />
+          </div>
 
           <div className="flex gap-4 items-center">
             <div className="text-brand font-medium text-xs">{missions.length ?? 0} missions</div>
@@ -409,7 +461,7 @@ export default function UserCourseView({
             />
           </div>
           {filteredMissions.length !== 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center place-items-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-start place-items-center">
               {filteredMissions.map((mission, index) => (
                 <div key={index}> {renderMissionCard(mission)}</div>
               ))}
@@ -452,6 +504,17 @@ export const getServerSideProps = async (context) => {
   }
 
   const missions = await new MissionEnrollmentApi(courseId, session).findAll()
+
+  if (!missions || !missions.payload) {
+    return {
+      props: {
+        redirect: {
+          destination: '/app',
+          permanent: false,
+        },
+      },
+    }
+  }
 
   return {
     props: {

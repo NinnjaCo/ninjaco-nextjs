@@ -711,7 +711,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const gameRes = await new GameEnrollmentAPI(session).findByGameId(id as string, session.user._id)
 
-  console.log('game res', gameRes.payload)
   if (!gameRes || !gameRes.payload) {
     return {
       redirect: {
