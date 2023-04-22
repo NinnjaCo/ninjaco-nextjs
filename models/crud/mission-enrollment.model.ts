@@ -1,3 +1,4 @@
+import { Level } from './level.model'
 import { Mission } from './mission.model'
 
 export interface MissionEnrollment {
@@ -5,6 +6,7 @@ export interface MissionEnrollment {
   mission: Mission
   startedAt: string
   completed: boolean
+  levels: Level[]
 }
 
 export interface MissionEnrollmentRequest {
