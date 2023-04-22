@@ -182,10 +182,6 @@ export const htmlToolBox: ToolboxDefinition = {
           kind: 'block',
           type: 'variable',
         },
-        {
-          kind: 'block',
-          type: 'division',
-        },
       ],
     },
     {
