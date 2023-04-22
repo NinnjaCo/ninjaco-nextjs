@@ -675,7 +675,9 @@ export const htmlBlocks: BlockDefinition = Blockly.common.createBlockDefinitions
     message0: 'table %1 %2',
     args0: [
       {
-        type: 'input_dummy',
+        type: 'input_value',
+        name: 'NAME',
+        check: 'attribute',
       },
       {
         type: 'input_statement',
@@ -694,7 +696,9 @@ export const htmlBlocks: BlockDefinition = Blockly.common.createBlockDefinitions
     message0: 'row %1 %2',
     args0: [
       {
-        type: 'input_dummy',
+        type: 'input_value',
+        name: 'NAME',
+        check: 'attribute',
       },
       {
         type: 'input_statement',
@@ -713,7 +717,9 @@ export const htmlBlocks: BlockDefinition = Blockly.common.createBlockDefinitions
     message0: 'entry %1 %2',
     args0: [
       {
-        type: 'input_dummy',
+        type: 'input_value',
+        name: 'NAME',
+        check: 'attribute',
       },
       {
         type: 'input_statement',
