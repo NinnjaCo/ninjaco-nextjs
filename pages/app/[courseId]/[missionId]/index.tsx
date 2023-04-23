@@ -161,16 +161,14 @@ export default function UserMissionPage({
             <ImageCard image={getAFieldInMission(mission, 'image')} />
           </div>
           <div className="flex flex-col gap-9 w-full">
-            <div className="flex justify-between gap-6 items-center">
+            <div className="flex justify-between gap-6 items-start md:items-center flex-col md:flex-row">
               <div className=" text-brand font-semibold text-xl md:text-3xl">
                 {getAFieldInMission(mission, 'title')}
               </div>
               <div>
                 {getTypeOfMission(mission) === MissionType.mission ? (
                   <button
-                    className="text-xs whitespace-nowrap md:text-base font-semibold btn btn-secondary bg-secondary
-                                 rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800
-                                 h-fit"
+                    className="btn btn-cta text-xs md:text-sm"
                     onClick={() => {
                       startMission()
                     }}

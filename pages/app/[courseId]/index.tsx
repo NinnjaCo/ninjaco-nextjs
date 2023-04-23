@@ -183,7 +183,7 @@ export default function UserCourseView({
           <ImageCard image={getAFieldInCourse(course, 'image')} />
 
           <div className="flex flex-col gap-9 w-full">
-            <div className="flex justify-between gap-6 items-center">
+            <div className="flex justify-between gap-6 items-start md:items-center flex-col md:flex-row">
               <div className=" text-brand font-semibold text-xl md:text-3xl">
                 {getAFieldInCourse(course, 'title')}
               </div>
@@ -192,9 +192,7 @@ export default function UserCourseView({
               <div>
                 {getTypeOfCourse(course) === CourseType.course ? (
                   <button
-                    className="text-xs whitespace-nowrap md:text-base font-semibold btn btn-secondary bg-secondary
-                                 rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800
-                                 h-fit"
+                    className="btn btn-cta text-xs md:text-sm"
                     onClick={() => {
                       enrollInCourse()
                     }}
@@ -204,14 +202,14 @@ export default function UserCourseView({
                 ) : getTypeOfCourse(course) === CourseType.enrollment &&
                   (course as CourseEnrollment).completed === false ? (
                   <button
-                    className="text-xs md:text-base font-semibold btn btn-secondary bg-error hover:bg-error-dark rounded-lg md:rounded-xl text-brand-700 border-brand-700 h-fit"
+                    className="btn btn-cta bg-error hover:bg-error-dark"
                     onClick={() => setOpenCourse(true)}
                   >
                     {t.User.viewCoursePage.dropCourse}
                   </button>
                 ) : (
                   <div className="flex flex-col gap-3 bg-teal-50 rounded-lg px-3 py-2">
-                    <div className=" flex gap-2 items-center">
+                    <div className="flex gap-2 items-center">
                       <CheckCircleIcon className=" h-6 w-6 ml-2 text-teal-600" />
                       <div className=" text-teal-600 font-bold text-xs md:text-base py-2 rounded-md">
                         {t.User.viewCoursePage.courseCompleted}
