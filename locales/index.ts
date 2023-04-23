@@ -530,6 +530,7 @@ export interface WebsiteTranslations {
       startMission: translationElement
       continue: translationElement
       completed: translationElement
+      startedAt: translationElement
     }
     profile: {
       somethingWentWrong: translationElement

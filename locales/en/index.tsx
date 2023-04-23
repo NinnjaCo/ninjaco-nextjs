@@ -690,6 +690,7 @@ const englishTranslations: WebsiteTranslations = {
       startMission: 'Start Mission',
       continue: 'Continue',
       completed: 'All levels completed',
+      startedAt: 'Started At:',
     },
     profile: {
       somethingWentWrong: 'Something went wrong',

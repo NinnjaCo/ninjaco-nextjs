@@ -703,6 +703,7 @@ const frenchTranslations: WebsiteTranslations = {
       startMission: ' Commencer la mission',
       continue: ' Continuer',
       completed: ' Tous les niveaux sont terminés',
+      startedAt: 'Commencé le:',
     },
     profile: {
       somethingWentWrong: "Quelque chose s'est mal passé",
