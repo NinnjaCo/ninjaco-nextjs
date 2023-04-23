@@ -546,6 +546,15 @@ export interface WebsiteTranslations {
       errorUpdatingProfile: translationElement
       logout: translationElement
     }
+    game: {
+      placeBlocks: translationElement
+      loop: translationElement
+      didNotReachGoal: translationElement
+      hitAWall: translationElement
+      congratulations: translationElement
+      hereIsTheCodeYouWrote: translationElement
+      runProgram: translationElement
+    }
   }
   Filter: {
     filter: translationElement
