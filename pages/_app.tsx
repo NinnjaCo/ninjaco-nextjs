@@ -1,10 +1,10 @@
 import '@/components/nextNProgress'
 import '@/pages/globals.css'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { Caveat, Quicksand } from 'next/font/google'
 import { Hydrate } from 'react-query/hydration'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import { Quicksand } from 'next/font/google'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import { TranslationsProvider } from '@/contexts/TranslationContext'
 import { useMemo, useRef } from 'react'
@@ -24,6 +24,11 @@ Blockly.setLocale(locale)
 const quick_sand = Quicksand({
   subsets: ['latin'],
   variable: '--font-quicksand',
+})
+
+export const caveat = Caveat({
+  subsets: ['latin'],
+  variable: '--font-caveat',
 })
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -56,7 +61,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <Hydrate state={dehydratedState}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <TranslationsProvider initialLocale={pageProps.initialLocale}>
-                <main className={`${quick_sand.variable} font-quicksand`}>
+                <main className={`${quick_sand.variable} font-quicksand ${caveat.variable}`}>
                   <PageLayout>
                     <Component {...pageProps} />
                   </PageLayout>

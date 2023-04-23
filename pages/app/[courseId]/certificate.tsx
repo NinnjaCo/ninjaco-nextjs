@@ -34,7 +34,9 @@ export default function UserCourseView({ user, course }: { user: User; course: C
             {t.Creator.games.createGame.goBack}
           </Link>
         </div>
-        <div className="hidden md:block w-full h-full border-[50px] border-brand bg-brand-50 p-10 relative">
+
+        <div className="hidden md:block w-full h-full border-[50px]  p-10 border-secondary relative">
+          <div className="absolute w-full h-full  background-zigzag3d-pattern top-0 left-0"></div>
           <div className="w-36 md:w-36 lg:w-52 h-24 absolute top-10 left-12 cursor-pointer">
             <Image src={logo_black} alt="Hero Image" fill priority></Image>
           </div>
@@ -42,23 +44,24 @@ export default function UserCourseView({ user, course }: { user: User; course: C
             <div className="text-center w-full text-3xl md:text-5xl font-medium font-serif">
               Certificate of Completion
             </div>
-            <div className="text-center w-full text-xl md:text-2xl font-serif">
-              This is to certify that
-            </div>
-            <div className="text-center w-full text-4xl font-semibold font-serif">
+            <div className="text-center w-full text-xl  font-serif">This is to certify that</div>
+            <div className="text-center w-full text-7xl font-caveat">
               {user.firstName + ' ' + user.lastName}
             </div>
             <div className="w-1/12 h-1 bg-secondary"></div>
-            <div className="text-center w-full text-xl md:text-2xl font-serif">
+            <div className="text-center w-full text-xl font-serif">
               has successfully completed the course
             </div>
-            <div className="text-center w-full text-4xl font-semibold font-serif">
+            <div className="text-center w-full text-5xl font-semibold font-serif">
               {course.course.title}
             </div>
             <div className="w-1/6 h-1 bg-secondary"></div>
           </div>
-          <div className="w-full flex justify-between">
-            <p>Issued on {new Date().toDateString()}</p>
+          <div className="w-full flex justify-between items-start">
+            <div className="font-serif flex flex-col items-start text-2xs">
+              <p>Automatically issued on:</p>
+              <p>{new Date().toDateString()}</p>
+            </div>
             <p>Issued by NinjaCo</p>
           </div>
         </div>

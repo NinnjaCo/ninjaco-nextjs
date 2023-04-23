@@ -78,6 +78,7 @@ module.exports = {
       fontFamily: {
         sans: ['var(--font-quicksand)', ...fontFamily.sans],
         quicksand: ['var(--font-quicksand)', ...fontFamily.sans],
+        caveat: ['var(--font-caveat)', ...fontFamily.sans],
       },
     },
   },
