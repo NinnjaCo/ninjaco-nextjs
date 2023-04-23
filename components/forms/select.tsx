@@ -41,7 +41,7 @@ export default function Select({
         name={name}
         control={control}
         render={({ field }) => (
-          <div className="w-full relative ">
+          <div className="w-full relative">
             <Listbox
               value={field.value}
               onChange={(e) => {
