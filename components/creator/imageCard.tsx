@@ -3,7 +3,7 @@ import React from 'react'
 
 const ImageCard = ({ image }: { image: string }) => {
   return (
-    <div className="relative bg-brand-100 border-brand-200 border-2 flex items-center justify-center rounded-md shadow-md">
+    <div className="relative bg-brand-100 border-brand-200 border-2 flex items-center justify-center rounded-md shadow-md w-fit">
       <div className="w-52 h-32 relative m-[3px]">
         <Image
           className="bg-brand-50 border-2 border-brand-200 rounded-md w-52 h-32"
