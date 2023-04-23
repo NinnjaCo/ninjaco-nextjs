@@ -719,6 +719,15 @@ const frenchTranslations: WebsiteTranslations = {
       errorUpdatingProfile: 'Erreur lors de la mise à jour du profil',
       logout: 'Déconnecter',
     },
+    game: {
+      placeBlocks: 'Placer des blocs les uns sur les autres pour créer un programme',
+      loop: 'Vous avez une boucle avec plus de 100 itérations',
+      didNotReachGoal: "Ugh ☹️ Vous n'avez pas atteint l'objectif, réessayez !",
+      hitAWall: 'Vous avez heurté un mur',
+      congratulations: 'Félicitations, vous avez gagné ! 🥳',
+      hereIsTheCodeYouWrote: 'Voici le code que vous avez écrit',
+      runProgram: 'exécuter ',
+    },
   },
   Filter: {
     filter: 'Filtre',
