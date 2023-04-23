@@ -61,7 +61,7 @@ export default function Profile({ serverUser }: ServerProps) {
         if (isAxiosError(error)) {
           const errors = unWrapAuthError(error as AxiosError<AuthError> | undefined)
           setAlertData({
-            message: errors[0].message || 'Something went wrong',
+            message: errors[0].message || (t.User.profile.somethingWentWrong as string),
             variant: 'error',
             open: true,
           })
@@ -91,21 +91,25 @@ export default function Profile({ serverUser }: ServerProps) {
     .object()
     .shape(
       {
-        firstName: yup.string().required('First Name is required'),
-        lastName: yup.string().required('Last Name is required'),
+        firstName: yup.string().required(t.User.profile.firstNameIsRequired as string),
+        lastName: yup.string().required(t.User.profile.lastNameIsRequired as string),
         profilePictureState: yup.object(),
         dateOfBirth: yup
           .date()
-          .max(new Date(), 'Date of Birth cannot be in the future')
-          .required('Date of Birth is required'),
-        email: yup.string().email('Invalid email').required('Email is required'),
+          .max(new Date(), t.User.profile.dateOfBirthIsNotValid as string)
+          .required(t.User.profile.dateOfBirthIsRequired as string),
+        email: yup
+          .string()
+          .email(t.User.profile.invalidEmail as string)
+          .required(t.User.profile.emailIsRequired as string),
         password: yup.string().when('password', {
           is: (val) => val && val.length > 0,
-          then: (schema) => schema.min(8, 'Password must be at least 8 characters'),
+          then: (schema) => schema.min(8, t.User.profile.passwordIsRequired as string),
         }),
         passwordConfirmation: yup.string().when('password', {
           is: (val) => val && val.length > 0,
-          then: (schema) => schema.oneOf([yup.ref('password')], 'Passwords must match'),
+          then: (schema) =>
+            schema.oneOf([yup.ref('password')], t.User.profile.passwordMustMatch as string),
         }),
       },
       [['password', 'password']]
@@ -163,7 +167,7 @@ export default function Profile({ serverUser }: ServerProps) {
     if (Object.keys(dirtyData).length === 0) {
       setSaveButtonDisabled(false)
       setAlertData({
-        message: 'No changes made',
+        message: t.User.profile.noChangesMade as string,
         variant: 'warning',
         open: true,
       })
@@ -194,7 +198,7 @@ export default function Profile({ serverUser }: ServerProps) {
       // refetch the user data
       await queryClient.invalidateQueries('user')
       setAlertData({
-        message: 'Profile updated successfully',
+        message: t.User.profile.profileUpdatedSuccessfully as string,
         variant: 'success',
         open: true,
       })
@@ -221,13 +225,13 @@ export default function Profile({ serverUser }: ServerProps) {
       if (isAxiosError<AuthError>(error)) {
         const errors = unWrapAuthError(error)
         setAlertData({
-          message: errors[0].message || 'Something went wrong',
+          message: errors[0].message || (t.User.profile.somethingWentWrong as string),
           variant: 'error',
           open: true,
         })
       } else {
         setAlertData({
-          message: 'Error updating profile',
+          message: t.User.profile.errorUpdatingProfile as string,
           variant: 'error',
           open: true,
         })
@@ -271,7 +275,7 @@ export default function Profile({ serverUser }: ServerProps) {
                     signOut()
                   }}
                 >
-                  Log Out
+                  {t.User.profile.logout}
                 </button>
                 <button
                   type="submit"
