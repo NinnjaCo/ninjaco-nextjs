@@ -531,6 +531,21 @@ export interface WebsiteTranslations {
       continue: translationElement
       completed: translationElement
     }
+    profile: {
+      somethingWentWrong: translationElement
+      firstNameIsRequired: translationElement
+      lastNameIsRequired: translationElement
+      dateOfBirthIsRequired: translationElement
+      dateOfBirthIsNotValid: translationElement
+      invalidEmail: translationElement
+      emailIsRequired: translationElement
+      passwordIsRequired: translationElement
+      passwordMustMatch: translationElement
+      noChangesMade: translationElement
+      profileUpdatedSuccessfully: translationElement
+      errorUpdatingProfile: translationElement
+      logout: translationElement
+    }
   }
   Filter: {
     filter: translationElement
