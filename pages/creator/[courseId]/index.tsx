@@ -32,12 +32,9 @@ export default function CourseView({ user, course }: { user: User; course: Cours
         <div className="flex gap-4 px-6 my-12 w-full md:flex-row flex-col">
           <ImageCard image={course.image} />
           <div className="flex flex-col gap-9 w-full">
-            <div className="flex justify-between gap-6 items-center">
+            <div className="flex justify-between gap-6 items-start md:items-center flex-col md:flex-row">
               <div className=" text-brand font-semibold text-xl md:text-3xl">{course.title}</div>
-              <Link
-                className="text-xs  md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit"
-                href={`/creator/${course._id}/edit`}
-              >
+              <Link className="btn btn-cta text-xs md:text-sm" href={`/creator/${course._id}/edit`}>
                 {t.Creator.coursePage.editCourse}
               </Link>
             </div>
@@ -92,10 +89,7 @@ export default function CourseView({ user, course }: { user: User; course: Cours
         <div className="flex flex-col px-6 pb-12 pt-6 gap-6">
           <div className="flex justify-between gap-10">
             <div className="font-semibold text-2xl">{t.Creator.coursePage.missions}</div>
-            <Link
-              className=" text-xs md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit"
-              href={`/creator/${course._id}/create`}
-            >
+            <Link className="btn btn-cta text-xs md:text-sm" href={`/creator/${course._id}/create`}>
               {t.Creator.coursePage.addMission}
             </Link>
           </div>

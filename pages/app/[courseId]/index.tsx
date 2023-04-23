@@ -183,7 +183,7 @@ export default function UserCourseView({
           <ImageCard image={getAFieldInCourse(course, 'image')} />
 
           <div className="flex flex-col gap-9 w-full">
-            <div className="flex justify-between gap-6 items-center">
+            <div className="flex justify-between gap-6 items-start md:items-center flex-col md:flex-row">
               <div className=" text-brand font-semibold text-xl md:text-3xl">
                 {getAFieldInCourse(course, 'title')}
               </div>
@@ -192,9 +192,7 @@ export default function UserCourseView({
               <div>
                 {getTypeOfCourse(course) === CourseType.course ? (
                   <button
-                    className="text-xs whitespace-nowrap md:text-base font-semibold btn btn-secondary bg-secondary
-                                 rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800
-                                 h-fit"
+                    className="btn btn-cta text-xs md:text-sm"
                     onClick={() => {
                       enrollInCourse()
                     }}
@@ -204,14 +202,14 @@ export default function UserCourseView({
                 ) : getTypeOfCourse(course) === CourseType.enrollment &&
                   (course as CourseEnrollment).completed === false ? (
                   <button
-                    className="text-xs md:text-base font-semibold btn btn-secondary bg-error hover:bg-error-dark rounded-lg md:rounded-xl text-brand-700 border-brand-700 h-fit"
+                    className="btn btn-cta bg-error hover:bg-error-dark"
                     onClick={() => setOpenCourse(true)}
                   >
                     {t.User.viewCoursePage.dropCourse}
                   </button>
                 ) : (
                   <div className="flex flex-col gap-3 bg-teal-50 rounded-lg px-3 py-2">
-                    <div className=" flex gap-2 items-center">
+                    <div className="flex gap-2 items-center">
                       <CheckCircleIcon className=" h-6 w-6 ml-2 text-teal-600" />
                       <div className=" text-teal-600 font-bold text-xs md:text-base py-2 rounded-md">
                         {t.User.viewCoursePage.courseCompleted}
@@ -328,32 +326,6 @@ export default function UserCourseView({
                   },
                 },
                 {
-                  name: 'Recently Updated',
-                  previousStateModifier: () => {
-                    return [
-                      ...missions.sort((a, b) => {
-                        {
-                          const missionAType = getTypeOfMission(a)
-                          const missionBType = getTypeOfMission(b)
-
-                          const missionAUdpatedAt =
-                            missionAType === MissionType.enrollment
-                              ? (a as MissionEnrollment).mission.updatedAt
-                              : (a as Mission).updatedAt
-
-                          const missionBUdpatedAt =
-                            missionBType === MissionType.enrollment
-                              ? (b as MissionEnrollment).mission.updatedAt
-                              : (b as Mission).updatedAt
-
-                          return dayjs(missionAUdpatedAt).isAfter(missionBUdpatedAt) ? -1 : 1
-                        }
-                      }),
-                    ]
-                  },
-                  setter: setFilteredMissions,
-                },
-                {
                   name: 'Oldest',
                   previousStateModifier: () => {
                     return [
@@ -373,6 +345,32 @@ export default function UserCourseView({
                               : (b as Mission).createdAt
 
                           return dayjs(missionACreatedAt).isAfter(missionBCreatedAt) ? 1 : -1
+                        }
+                      }),
+                    ]
+                  },
+                  setter: setFilteredMissions,
+                },
+                {
+                  name: 'Recently Updated',
+                  previousStateModifier: () => {
+                    return [
+                      ...missions.sort((a, b) => {
+                        {
+                          const missionAType = getTypeOfMission(a)
+                          const missionBType = getTypeOfMission(b)
+
+                          const missionAUdpatedAt =
+                            missionAType === MissionType.enrollment
+                              ? (a as MissionEnrollment).mission.updatedAt
+                              : (a as Mission).updatedAt
+
+                          const missionBUdpatedAt =
+                            missionBType === MissionType.enrollment
+                              ? (b as MissionEnrollment).mission.updatedAt
+                              : (b as Mission).updatedAt
+
+                          return dayjs(missionAUdpatedAt).isAfter(missionBUdpatedAt) ? -1 : 1
                         }
                       }),
                     ]
@@ -432,7 +430,7 @@ export default function UserCourseView({
                   setter: setFilteredMissions,
                 },
                 {
-                  name: 'Number of Levels (Low-High)',
+                  name: 'Number of Missions (Low-High)',
                   previousStateModifier: () => {
                     return [
                       ...missions.sort((a, b) => {
@@ -451,6 +449,46 @@ export default function UserCourseView({
                               : (b as Mission).levels
 
                           return missionALevels.length > missionBLevels.length ? -1 : 1
+                        }
+                      }),
+                    ]
+                  },
+                  setter: setFilteredMissions,
+                },
+                {
+                  name: 'Completed',
+                  previousStateModifier: () => {
+                    return [
+                      ...missions.filter((misison) => {
+                        const missionType = getTypeOfMission(misison)
+
+                        if (missionType === MissionType.enrollment) {
+                          misison = misison as MissionEnrollment
+
+                          if (misison.completed) {
+                            return misison
+                          }
+                        }
+                      }),
+                    ]
+                  },
+                  setter: setFilteredMissions,
+                },
+                {
+                  name: 'Not Completed',
+                  previousStateModifier: () => {
+                    return [
+                      ...missions.filter((misison) => {
+                        const missionType = getTypeOfMission(misison)
+
+                        if (missionType === MissionType.enrollment) {
+                          misison = misison as MissionEnrollment
+
+                          if (!misison.completed) {
+                            return misison
+                          }
+                        } else {
+                          return misison
                         }
                       }),
                     ]

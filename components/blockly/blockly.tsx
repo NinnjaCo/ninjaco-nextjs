@@ -54,10 +54,17 @@ const BlocklyBoard = React.forwardRef(
       if (primaryWorkspace.current) primaryWorkspace.current.highlightBlock(null)
     }, [])
 
+    const clearBlocks = useCallback(() => {
+      if (primaryWorkspace.current) {
+        primaryWorkspace.current.clear()
+      }
+    }, [])
+
     useImperativeHandle(ref, () => ({
       generateCode,
       highlightBlockById,
       clearHighlightedBlock,
+      clearBlocks,
     }))
 
     useEffect(() => {
@@ -68,7 +75,9 @@ const BlocklyBoard = React.forwardRef(
           return
         }
         // Start the workspace
-        if (blocksDefinitions) Blockly.common.defineBlocks(blocksDefinitions)
+        if (blocksDefinitions && !loaded) {
+          Blockly.common.defineBlocks(blocksDefinitions)
+        }
         const workspace = Blockly.inject(blocklyDiv.current, {
           // if children are passed, use the toolboxDiv as the toolbox so that it gets populated with the children otherwise use the toolbox prop
           toolbox: children ? toolboxDiv.current : toolbox,

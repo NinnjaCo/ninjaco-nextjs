@@ -33,10 +33,7 @@ export default function Home({ user, courses }: { user: User; courses: Course[] 
                 {t.Creator.viewCourses.courses}
               </div>
               <div className="text-brand-700 font-semibold">
-                <Link
-                  className="btn btn-secondary bg-secondary rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 py-2 h-fit"
-                  href="/creator/create"
-                >
+                <Link className="btn btn-cta" href="/creator/create">
                   {t.Creator.viewCourses.createCourse}
                 </Link>
               </div>

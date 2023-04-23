@@ -130,25 +130,6 @@ export default function MainApp({
                     setter: setFilteredCourses,
                   },
                   {
-                    name: t.Creator.games.viewGames.filter.oldest as string,
-                    previousStateModifier: () => {
-                      return [
-                        ...courses.sort((a: any, b: any) => {
-                          const courseAType = getTypeOfCourse(a)
-                          const courseBType = getTypeOfCourse(b)
-
-                          const aCreatedAt =
-                            courseAType === CourseType.course ? a.createdAt : a.course.createdAt
-                          const bCreatedAt =
-                            courseBType === CourseType.course ? b.createdAt : b.course.createdAt
-
-                          return dayjs(aCreatedAt).isAfter(bCreatedAt) ? 1 : -1
-                        }),
-                      ]
-                    },
-                    setter: setFilteredCourses,
-                  },
-                  {
                     name: t.Creator.games.viewGames.filter.NameAZ as string,
                     previousStateModifier: () => {
                       return [
@@ -162,24 +143,6 @@ export default function MainApp({
                             courseBType === CourseType.course ? b.title : b.course.title
 
                           return aTitle.localeCompare(bTitle)
-                        }),
-                      ]
-                    },
-                    setter: setFilteredCourses,
-                  },
-                  {
-                    name: t.Creator.games.viewGames.filter.NameZA as string,
-                    previousStateModifier: () => {
-                      return [
-                        ...courses.sort((a: any, b: any) => {
-                          const courseAType = getTypeOfCourse(a)
-                          const courseBType = getTypeOfCourse(b)
-
-                          const aTitle =
-                            courseAType === CourseType.course ? a.title : a.course.title
-                          const bTitle =
-                            courseBType === CourseType.course ? b.title : b.course.title
-                          return bTitle.localeCompare(aTitle)
                         }),
                       ]
                     },
@@ -215,6 +178,46 @@ export default function MainApp({
                         }
                       })
                       return filterd
+                    },
+                    setter: setFilteredCourses,
+                  },
+                  {
+                    name: 'Completed',
+                    previousStateModifier: () => {
+                      return [
+                        ...courses.filter((course) => {
+                          const courseType = getTypeOfCourse(course)
+
+                          if (courseType === CourseType.enrollment) {
+                            course = course as CourseEnrollment
+
+                            if (course.completed) {
+                              return course
+                            }
+                          }
+                        }),
+                      ]
+                    },
+                    setter: setFilteredCourses,
+                  },
+                  {
+                    name: 'Not Completed',
+                    previousStateModifier: () => {
+                      return [
+                        ...courses.filter((course) => {
+                          const courseType = getTypeOfCourse(course)
+
+                          if (courseType === CourseType.enrollment) {
+                            course = course as CourseEnrollment
+
+                            if (!course.completed) {
+                              return course
+                            }
+                          } else {
+                            return course
+                          }
+                        }),
+                      ]
                     },
                     setter: setFilteredCourses,
                   },

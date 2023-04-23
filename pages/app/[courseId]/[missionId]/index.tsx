@@ -161,16 +161,14 @@ export default function UserMissionPage({
             <ImageCard image={getAFieldInMission(mission, 'image')} />
           </div>
           <div className="flex flex-col gap-9 w-full">
-            <div className="flex justify-between gap-6 items-center">
+            <div className="flex justify-between gap-6 items-start md:items-center flex-col md:flex-row">
               <div className=" text-brand font-semibold text-xl md:text-3xl">
                 {getAFieldInMission(mission, 'title')}
               </div>
               <div>
                 {getTypeOfMission(mission) === MissionType.mission ? (
                   <button
-                    className="text-xs whitespace-nowrap md:text-base font-semibold btn btn-secondary bg-secondary
-                                 rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800
-                                 h-fit"
+                    className="btn btn-cta text-xs md:text-sm"
                     onClick={() => {
                       startMission()
                     }}
@@ -224,12 +222,12 @@ export default function UserMissionPage({
                     'rounded-full w-16 h-16 flex justify-center items-center text-center text-2xl font-semibold text-brand shadow-inner relative',
                     {
                       'bg-brand-300 shadow-brand-400 hover:bg-brand-400':
-                        level.level.levelNumber % 2 === 0,
+                        level.level.levelNumber % 2 === 0 && !level.locked,
                       'bg-secondary-300 shadow-secondary-900 hover:bg-secondary':
-                        level.level.levelNumber % 2 !== 0,
-                      'bg-gray-500 shadow-none text-brand-800 cursor-not-allowed hover:bg-gray-500':
-                        level.locked && level.level.levelNumber % 2 === 0,
+                        level.level.levelNumber % 2 !== 0 && !level.locked,
                       'bg-gray-400 shadow-none text-brand-800 cursor-not-allowed hover:bg-gray-400':
+                        level.locked && level.level.levelNumber % 2 === 0,
+                      'bg-gray-300 shadow-none text-brand-800 cursor-not-allowed hover:bg-gray-300':
                         level.locked && level.level.levelNumber % 2 !== 0,
                     }
                   )}

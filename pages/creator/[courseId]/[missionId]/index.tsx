@@ -40,10 +40,10 @@ export default function MissionPage({
             <ImageCard image={mission.image} />
           </div>
           <div className="flex flex-col gap-9 w-full">
-            <div className="flex justify-between gap-6 items-center">
+            <div className="flex justify-between gap-6 items-start md:items-center md:flex-row flex-col">
               <div className=" text-brand font-semibold text-xl md:text-3xl">{mission.title}</div>
               <Link
-                className="text-xs  md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit"
+                className="btn btn-cta text-xs md:text-sm"
                 href={`/creator/${course._id}/${mission._id}/edit`}
               >
                 {t.Creator.viewMissionPage.editMission}
@@ -64,7 +64,7 @@ export default function MissionPage({
           <div className="flex justify-between gap-10">
             <div className="font-semibold text-2xl">{t.Creator.viewMissionPage.levels}</div>
             <Link
-              className=" text-xs md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit"
+              className="btn btn-cta text-xs md:text-sm"
               href={`/creator/${course._id}/${mission._id}/create`}
             >
               {t.Creator.viewMissionPage.addLevel}

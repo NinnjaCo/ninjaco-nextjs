@@ -23,7 +23,7 @@ enum GameType {
 }
 
 const getTypeOfGame = (game: UserPlayGame | Game): GameType => {
-  if ((game as UserPlayGame).game) {
+  if ('game' in game) {
     return GameType.enrollment
   } else {
     return GameType.game
@@ -86,6 +86,63 @@ export default function Home({ user, games }: { user: User; games: (UserPlayGame
               <Filter
                 filterFields={[
                   {
+                    name: t.Creator.games.viewGames.filter.SizeOfGame as string,
+                    previousStateModifier: () => {
+                      return [
+                        ...games.sort((a: any, b: any) => {
+                          const aGameType = getTypeOfGame(a)
+                          const bGameType = getTypeOfGame(b)
+
+                          const aSize =
+                            aGameType === GameType.enrollment ? a.game.sizeOfGrid : a.sizeOfGrid
+                          const bSize =
+                            bGameType === GameType.enrollment ? b.game.sizeOfGrid : b.sizeOfGrid
+
+                          return aSize > bSize ? -1 : 1
+                        }),
+                      ]
+                    },
+                    setter: setFilteredGames,
+                  },
+                  {
+                    name: 'Completed',
+                    previousStateModifier: () => {
+                      return [
+                        ...games.filter((game) => {
+                          const gameType = getTypeOfGame(game)
+                          if (gameType === GameType.enrollment) {
+                            game = game as UserPlayGame
+
+                            if (game.completed) {
+                              return game
+                            }
+                          }
+                        }),
+                      ]
+                    },
+                    setter: setFilteredGames,
+                  },
+                  {
+                    name: 'Not Completed',
+                    previousStateModifier: () => {
+                      return [
+                        ...games.filter((game) => {
+                          const gameType = getTypeOfGame(game)
+                          if (gameType === GameType.enrollment) {
+                            game = game as UserPlayGame
+
+                            if (!game.completed) {
+                              return game
+                            }
+                          } else {
+                            return game
+                          }
+                        }),
+                      ]
+                    },
+                    setter: setFilteredGames,
+                  },
+                  {
                     name: t.Creator.games.viewGames.filter.newest as string,
                     setter: setFilteredGames,
                     previousStateModifier: () => {
@@ -103,26 +160,6 @@ export default function Home({ user, games }: { user: User; games: (UserPlayGame
                         }),
                       ]
                     },
-                  },
-                  {
-                    name: t.Creator.games.viewGames.filter.recentlyUpdated as string,
-                    previousStateModifier: () => {
-                      return [
-                        ...games.sort((a: any, b: any) => {
-                          const aGameType = getTypeOfGame(a)
-                          const bGameType = getTypeOfGame(b)
-
-                          const aUpdatedAt =
-                            aGameType === GameType.enrollment ? a.game.updatedAt : a.updatedAt
-                          const bUpdatedAt =
-                            bGameType === GameType.enrollment ? b.game.updatedAt : b.updatedAt
-
-                          return dayjs(aUpdatedAt).isAfter(bUpdatedAt) ? -1 : 1
-                        }),
-                      ]
-                    },
-
-                    setter: setFilteredGames,
                   },
                   {
                     name: t.Creator.games.viewGames.filter.oldest as string,
@@ -144,56 +181,23 @@ export default function Home({ user, games }: { user: User; games: (UserPlayGame
                     setter: setFilteredGames,
                   },
                   {
-                    name: t.Creator.games.viewGames.filter.NameAZ as string,
+                    name: t.Creator.games.viewGames.filter.recentlyUpdated as string,
                     previousStateModifier: () => {
                       return [
                         ...games.sort((a: any, b: any) => {
                           const aGameType = getTypeOfGame(a)
                           const bGameType = getTypeOfGame(b)
 
-                          const aTitle = aGameType === GameType.enrollment ? a.game.title : a.title
-                          const bTitle = bGameType === GameType.enrollment ? b.game.title : b.title
+                          const aUpdatedAt =
+                            aGameType === GameType.enrollment ? a.game.updatedAt : a.updatedAt
+                          const bUpdatedAt =
+                            bGameType === GameType.enrollment ? b.game.updatedAt : b.updatedAt
 
-                          return aTitle.localeCompare(bTitle)
+                          return dayjs(aUpdatedAt).isAfter(bUpdatedAt) ? -1 : 1
                         }),
                       ]
                     },
-                    setter: setFilteredGames,
-                  },
-                  {
-                    name: t.Creator.games.viewGames.filter.NameZA as string,
-                    previousStateModifier: () => {
-                      return [
-                        ...games.sort((a: any, b: any) => {
-                          const aGameType = getTypeOfGame(a)
-                          const bGameType = getTypeOfGame(b)
 
-                          const aTitle = aGameType === GameType.enrollment ? a.game.title : a.title
-                          const bTitle = bGameType === GameType.enrollment ? b.game.title : b.title
-
-                          return bTitle.localeCompare(aTitle)
-                        }),
-                      ]
-                    },
-                    setter: setFilteredGames,
-                  },
-                  {
-                    name: t.Creator.games.viewGames.filter.SizeOfGame as string,
-                    previousStateModifier: () => {
-                      return [
-                        ...games.sort((a: any, b: any) => {
-                          const aGameType = getTypeOfGame(a)
-                          const bGameType = getTypeOfGame(b)
-
-                          const aSize =
-                            aGameType === GameType.enrollment ? a.game.sizeOfGrid : a.sizeOfGrid
-                          const bSize =
-                            bGameType === GameType.enrollment ? b.game.sizeOfGrid : b.sizeOfGrid
-
-                          return aSize > bSize ? -1 : 1
-                        }),
-                      ]
-                    },
                     setter: setFilteredGames,
                   },
                 ]}
