@@ -706,6 +706,15 @@ const englishTranslations: WebsiteTranslations = {
       errorUpdatingProfile: 'Error updating profile',
       logout: 'Logout',
     },
+    game: {
+      placeBlocks: 'Place blocks on top of each other to create a program',
+      loop: 'You have a loop with more than 100 iterations',
+      didNotReachGoal: 'Ugh ☹️ You did not reach the goal, try again!',
+      hitAWall: 'You hit a wall! ',
+      congratulations: 'Congratulations, You won! 🥳',
+      hereIsTheCodeYouWrote: 'Here is the code you wrote:',
+      runProgram: 'Run Program',
+    },
   },
   Filter: {
     filter: 'Filter',
