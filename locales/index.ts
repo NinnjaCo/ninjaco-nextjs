@@ -565,6 +565,11 @@ export interface WebsiteTranslations {
       hereIsTheCodeYouWrote: translationElement
       runProgram: translationElement
     }
+    arduinoLevel: {
+      buildingPart: translationElement
+      buildingPartMayNeed: translationElement
+      stepByStep: translationElement
+    }
   }
   Filter: {
     filter: translationElement

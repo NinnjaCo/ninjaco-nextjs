@@ -738,6 +738,11 @@ const frenchTranslations: WebsiteTranslations = {
       hereIsTheCodeYouWrote: 'Voici le code que vous avez écrit',
       runProgram: 'exécuter ',
     },
+    arduinoLevel: {
+      buildingPart: 'pièces de construction',
+      buildingPartMayNeed: 'Pièces de construction dont vous avez besoin: ',
+      stepByStep: 'Guide étape par étape',
+    },
   },
   Filter: {
     filter: 'Filtre',

@@ -725,6 +725,11 @@ const englishTranslations: WebsiteTranslations = {
       hereIsTheCodeYouWrote: 'Here is the code you wrote:',
       runProgram: 'Run Program',
     },
+    arduinoLevel: {
+      buildingPart: 'Building Parts',
+      buildingPartMayNeed: 'Building Parts that You May Need :',
+      stepByStep: 'Step by Step Guide',
+    },
   },
   Filter: {
     filter: 'Filter',
