@@ -224,12 +224,12 @@ export default function UserMissionPage({
                     'rounded-full w-16 h-16 flex justify-center items-center text-center text-2xl font-semibold text-brand shadow-inner relative',
                     {
                       'bg-brand-300 shadow-brand-400 hover:bg-brand-400':
-                        level.level.levelNumber % 2 === 0,
+                        level.level.levelNumber % 2 === 0 && !level.locked,
                       'bg-secondary-300 shadow-secondary-900 hover:bg-secondary':
-                        level.level.levelNumber % 2 !== 0,
-                      'bg-gray-500 shadow-none text-brand-800 cursor-not-allowed hover:bg-gray-500':
-                        level.locked && level.level.levelNumber % 2 === 0,
+                        level.level.levelNumber % 2 !== 0 && !level.locked,
                       'bg-gray-400 shadow-none text-brand-800 cursor-not-allowed hover:bg-gray-400':
+                        level.locked && level.level.levelNumber % 2 === 0,
+                      'bg-gray-300 shadow-none text-brand-800 cursor-not-allowed hover:bg-gray-300':
                         level.locked && level.level.levelNumber % 2 !== 0,
                     }
                   )}
