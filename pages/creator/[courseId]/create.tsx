@@ -136,11 +136,10 @@ const CreateMissionOrEdit = ({
       return
     }
 
-    const imageUploadRes = await new ImageApi(session.data).uploadImage({
-      image: data.missionImage.file,
-    })
-
     try {
+      const imageUploadRes = await new ImageApi(session.data).uploadImage({
+        image: data.missionImage.file,
+      })
       await new MissionApi(course._id, session.data).create({
         title: data.missionTitle,
         image: imageUploadRes.payload.image_url,

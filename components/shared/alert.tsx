@@ -78,7 +78,7 @@ export const Alert: FC<AlertProps> = ({
             <div className="ml-3">
               <p
                 className={clsx(
-                  'text-sm font-medium text-justify align-middle',
+                  'text-xs md:text-sm font-medium text-justify align-middle',
                   variant === 'info' && 'text-brand-700',
                   variant === 'success' && 'text-success-dark',
                   variant === 'warning' && 'text-yellow-700',
