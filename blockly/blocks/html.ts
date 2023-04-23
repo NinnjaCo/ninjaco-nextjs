@@ -49,7 +49,8 @@ Blockly.Blocks['baseframe'] = {
     //   tooltip: '',
     //   helpUrl: 'http://www.w3schools.com/tags/tag_html.asp',
     // },
-    this.appendDummyInput().appendField('document').appendField('header')
+    this.appendDummyInput().appendField('document')
+    this.appendDummyInput().appendField('header')
     this.appendStatementInput('head').setCheck('header')
     this.appendDummyInput().appendField('content')
     this.appendStatementInput('body').setCheck('html')
@@ -1124,27 +1125,7 @@ Blockly.Blocks['code'] = {
 //   tooltip: '',
 //   helpUrl: 'http://www.w3schools.com/tags/tag_html.asp',
 // },
-// {
-//   type: 'body_attributes',
-//   message0: 'content %1 %2',
-//   args0: [
-//     {
-//       type: 'input_value',
-//       name: 'NAME',
-//       check: 'attribute',
-//     },
-//     {
-//       type: 'input_statement',
-//       name: 'content',
-//       check: 'html',
-//     },
-//   ],
-//   previousStatement: 'document',
-//   nextStatement: 'document',
-//   colour: BASE_FRAME_HUE,
-//   tooltip: '',
-//   helpUrl: 'http://www.w3schools.com/tags/tag_html.asp',
-// },
+//
 
 Blockly.Blocks['quote'] = {
   init: function () {
@@ -1243,6 +1224,27 @@ Blockly.Blocks['tablecell'] = {
 }
 
 Blockly.Blocks['body_attributes'] = {
+  // {
+  //   type: 'body_attributes',
+  //   message0: 'content %1 %2',
+  //   args0: [
+  //     {
+  //       type: 'input_value',
+  //       name: 'NAME',
+  //       check: 'attribute',
+  //     },
+  //     {
+  //       type: 'input_statement',
+  //       name: 'content',
+  //       check: 'html',
+  //     },
+  //   ],
+  //   previousStatement: 'document',
+  //   nextStatement: 'document',
+  //   colour: BASE_FRAME_HUE,
+  //   tooltip: '',
+  //   helpUrl: 'http://www.w3schools.com/tags/tag_html.asp',
+  // },
   init: function () {
     this.appendValueInput('NAME')
     this.appendStatementInput('content')
