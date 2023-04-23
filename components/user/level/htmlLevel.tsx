@@ -2,6 +2,7 @@ import { Course } from '@/models/crud/course.model'
 import { Level } from '@/models/crud/level.model'
 import { Mission } from '@/models/crud/mission.model'
 import { Switch } from '@headlessui/react'
+import { TrashIcon } from '@heroicons/react/24/outline'
 import { htmlBlocks } from '@/blockly/blocks/html'
 import { htmlGenerator } from '@/blockly/generetors/html'
 import { htmlToolBox } from '@/blockly/toolbox/html'
@@ -125,6 +126,13 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
     return null
   }
 
+  const resetCode = () => {
+    if (parentRef.current) {
+      parentRef.current.clearBlocks()
+    }
+    setHtmlCode('')
+  }
+
   return (
     <div className="w-full h-full relative overflow-hidden hidden lg:flex">
       <BlocklyBoard
@@ -177,6 +185,17 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
                         pointer-events-none inline-block h-[34px] w-[34px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
           />
         </Switch>
+      </div>
+      <div className="absolute top-[90%] left-4 z-20">
+        <button
+          className="btn btn-brand rounded-md flex justify-between gap-4 pl-2 pr-4"
+          onClick={() => {
+            resetCode()
+          }}
+        >
+          <TrashIcon className="text-secondary z-20 w-5 h-5"></TrashIcon>
+          <p className="whitespace-nowrap">Reset All</p>
+        </button>
       </div>
     </div>
   )
