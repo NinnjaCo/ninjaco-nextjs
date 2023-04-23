@@ -328,32 +328,6 @@ export default function UserCourseView({
                   },
                 },
                 {
-                  name: 'Recently Updated',
-                  previousStateModifier: () => {
-                    return [
-                      ...missions.sort((a, b) => {
-                        {
-                          const missionAType = getTypeOfMission(a)
-                          const missionBType = getTypeOfMission(b)
-
-                          const missionAUdpatedAt =
-                            missionAType === MissionType.enrollment
-                              ? (a as MissionEnrollment).mission.updatedAt
-                              : (a as Mission).updatedAt
-
-                          const missionBUdpatedAt =
-                            missionBType === MissionType.enrollment
-                              ? (b as MissionEnrollment).mission.updatedAt
-                              : (b as Mission).updatedAt
-
-                          return dayjs(missionAUdpatedAt).isAfter(missionBUdpatedAt) ? -1 : 1
-                        }
-                      }),
-                    ]
-                  },
-                  setter: setFilteredMissions,
-                },
-                {
                   name: 'Oldest',
                   previousStateModifier: () => {
                     return [
@@ -373,6 +347,32 @@ export default function UserCourseView({
                               : (b as Mission).createdAt
 
                           return dayjs(missionACreatedAt).isAfter(missionBCreatedAt) ? 1 : -1
+                        }
+                      }),
+                    ]
+                  },
+                  setter: setFilteredMissions,
+                },
+                {
+                  name: 'Recently Updated',
+                  previousStateModifier: () => {
+                    return [
+                      ...missions.sort((a, b) => {
+                        {
+                          const missionAType = getTypeOfMission(a)
+                          const missionBType = getTypeOfMission(b)
+
+                          const missionAUdpatedAt =
+                            missionAType === MissionType.enrollment
+                              ? (a as MissionEnrollment).mission.updatedAt
+                              : (a as Mission).updatedAt
+
+                          const missionBUdpatedAt =
+                            missionBType === MissionType.enrollment
+                              ? (b as MissionEnrollment).mission.updatedAt
+                              : (b as Mission).updatedAt
+
+                          return dayjs(missionAUdpatedAt).isAfter(missionBUdpatedAt) ? -1 : 1
                         }
                       }),
                     ]
@@ -432,7 +432,7 @@ export default function UserCourseView({
                   setter: setFilteredMissions,
                 },
                 {
-                  name: 'Number of Levels (Low-High)',
+                  name: 'Number of Missions (Low-High)',
                   previousStateModifier: () => {
                     return [
                       ...missions.sort((a, b) => {
@@ -451,6 +451,46 @@ export default function UserCourseView({
                               : (b as Mission).levels
 
                           return missionALevels.length > missionBLevels.length ? -1 : 1
+                        }
+                      }),
+                    ]
+                  },
+                  setter: setFilteredMissions,
+                },
+                {
+                  name: 'Completed',
+                  previousStateModifier: () => {
+                    return [
+                      ...missions.filter((misison) => {
+                        const missionType = getTypeOfMission(misison)
+
+                        if (missionType === MissionType.enrollment) {
+                          misison = misison as MissionEnrollment
+
+                          if (misison.completed) {
+                            return misison
+                          }
+                        }
+                      }),
+                    ]
+                  },
+                  setter: setFilteredMissions,
+                },
+                {
+                  name: 'Not Completed',
+                  previousStateModifier: () => {
+                    return [
+                      ...missions.filter((misison) => {
+                        const missionType = getTypeOfMission(misison)
+
+                        if (missionType === MissionType.enrollment) {
+                          misison = misison as MissionEnrollment
+
+                          if (!misison.completed) {
+                            return misison
+                          }
+                        } else {
+                          return misison
                         }
                       }),
                     ]
