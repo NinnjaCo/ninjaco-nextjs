@@ -524,6 +524,15 @@ export interface WebsiteTranslations {
       dropCourseMessage: translationElement
       cancel: translationElement
       drop: translationElement
+      enrollCourseToUnlock: translationElement
+      newest: translationElement
+      oldest: translationElement
+      recentlyUpdated: translationElement
+      nameAZ: translationElement
+      nameZA: translationElement
+      numberOfmissions: translationElement
+      completed: translationElement
+      notCompleted: translationElement
     }
     viewMissionPage: {
       missionCategory: translationElement
