@@ -13,6 +13,7 @@ import Image from 'next/image'
 import React from 'react'
 import convertHtmlToReact from '@hedgedoc/html-to-react'
 import targetwebsite from '@/images/targetwebsite.png'
+import useTranslation from '@/hooks/useTranslation'
 
 interface Props {
   course: Course
@@ -25,6 +26,8 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
   const [htmlCode, setHtmlCode] = React.useState('')
 
   const parentRef = React.useRef<any>()
+
+  const t = useTranslation()
 
   React.useEffect(() => {
     const code = getCodeFromBlockly()
@@ -146,7 +149,7 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
       <div className="basis-2/3 border-l-2 border-l-brand-400 h-full flex flex-col">
         <div className="basis-1/2 w-full text-xs bg-brand-100">
           <p className="pl-2 pt-1 text-brand font-semibold">
-            This is how your website should look like:
+            {t.User.htmlLevel.thisHowYourWebsiteWillLook}
           </p>
           <div className="w-full h-full relative">
             <Image
@@ -169,7 +172,7 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
         </div>
       </div>
       <div className="absolute top-3/4 left-4 flex gap-4 items-center">
-        <div>{showWebsitePreview ? 'Show Code' : 'Show Website'}</div>
+        <div>{showWebsitePreview ? t.User.htmlLevel.showCode : t.User.htmlLevel.showWebsite}</div>
         <Switch
           checked={showWebsitePreview}
           onChange={(isChecked) => {
@@ -194,7 +197,7 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
           }}
         >
           <TrashIcon className="text-secondary z-20 w-5 h-5"></TrashIcon>
-          <p className="whitespace-nowrap">Reset All</p>
+          <p className="whitespace-nowrap">{t.User.htmlLevel.resetAll}</p>
         </button>
       </div>
     </div>
