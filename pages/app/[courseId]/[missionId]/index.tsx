@@ -143,7 +143,6 @@ export default function UserMissionPage({
     // they have not started the mission yet
     if (getTypeOfMission(mission) === MissionType.mission) return
     const missionEnrollment = mission as MissionEnrollment
-    console.log(level.level)
     if (level.locked) return
     if (level.completed) return
     router.push(`/app/${course.course._id}/${missionEnrollment.mission._id}/${level.level._id}`)

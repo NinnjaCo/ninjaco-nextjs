@@ -43,7 +43,7 @@ const PlayLevel = ({
       </Head>
       <main className="w-full relative h-screen flex flex-col">
         <UserMenu user={user} isOnCoursePage={true} isOnGamesPage={false} />
-        <div className="grid md:hidden items-center h-screen grid-cols-1 justify-items-center py-24 px-8 relative flex-auto">
+        <div className="grid lg:hidden items-center h-screen grid-cols-1 justify-items-center py-24 px-8 relative flex-auto">
           <h1 className="self-end divide-x-2 divide-brand text-sm ">
             <span className="px-2 font-bold">Please use a desktop to play</span>
           </h1>
