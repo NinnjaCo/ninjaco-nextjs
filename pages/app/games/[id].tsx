@@ -107,7 +107,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
     open: boolean
     close: () => void
   }>({
-    message: 'Place blocks on top of each other to create a program',
+    message: t.User.game.placeBlocks as string,
     variant: 'info',
     open: true,
     close: () => setAlertData({ ...alertData, open: false }),
@@ -494,7 +494,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
         if (block.loopCount > 100) {
           setAlertData({
             ...alertData,
-            message: 'You have a loop with more than 100 iterations',
+            message: t.User.game.loop as string,
             variant: 'warning',
             open: true,
           })
@@ -554,7 +554,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
       })
       setAlertData({
         ...alertData,
-        message: 'Ugh ☹️ You did not reach the goal, try again!',
+        message: t.User.game.didNotReachGoal as string,
         variant: 'error',
         open: true,
       })
@@ -587,7 +587,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
   const onHitWall = (ExtraInfo?: string) => {
     setAlertData({
       ...alertData,
-      message: 'You hit a wall! ' + (ExtraInfo ?? ''),
+      message: t.User.game.hitAWall + (ExtraInfo ?? ''),
       variant: 'warning',
       open: true,
     })
@@ -623,7 +623,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
         <UserMenu isOnCoursePage={false} isOnGamesPage={true} user={user} />
         <AdminAlertDialog
           open={adminDialogOpen}
-          title="Congratulations, You won! 🥳"
+          title={t.User.game.congratulations as string}
           confirm={() => {
             setAdminDialogOpen(false)
             router.push('/app/games')
@@ -636,7 +636,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
           backButtonText="Go Back to Games"
           backButtonClassName="bg-brand text-brand hidden"
         >
-          <p className="text-brand text-sm">Here is the code you wrote:</p>
+          <p className="text-brand text-sm">{t.User.game.hereIsTheCodeYouWrote}</p>
           <pre className="text-xs text-brand-400 border-2 p-2">{prettifyCode(currentCode)}</pre>
         </AdminAlertDialog>
 
@@ -701,7 +701,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
             disabled={runButtonDisabled}
             className="btn w-fit bg-brand py-3 text-white hover:bg-brand-500 absolute bottom-14 left-4 z-10 disabled:bg-gray-600 disabled:cursor-not-allowed"
           >
-            Run Program
+            {t.User.game.runProgram}
           </button>
         </div>
       </main>
