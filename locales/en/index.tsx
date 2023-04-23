@@ -730,6 +730,12 @@ const englishTranslations: WebsiteTranslations = {
       buildingPartMayNeed: 'Building Parts that You May Need :',
       stepByStep: 'Step by Step Guide',
     },
+    htmlLevel: {
+      thisHowYourWebsiteWillLook: 'This is how your website should look like:',
+      showCode: 'Show Code',
+      showWebsite: 'Show Website',
+      resetAll: 'Reset All',
+    },
   },
   Filter: {
     filter: 'Filter',

@@ -743,7 +743,14 @@ const frenchTranslations: WebsiteTranslations = {
       buildingPartMayNeed: 'Pièces de construction dont vous avez besoin: ',
       stepByStep: 'Guide étape par étape',
     },
+    htmlLevel: {
+      thisHowYourWebsiteWillLook: 'Voici à quoi ressemblera votre site Web: ',
+      showCode: 'Code',
+      showWebsite: 'Site Web',
+      resetAll: 'Réinitialiser tout',
+    },
   },
+
   Filter: {
     filter: 'Filtre',
   },

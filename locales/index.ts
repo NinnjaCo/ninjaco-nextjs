@@ -570,6 +570,12 @@ export interface WebsiteTranslations {
       buildingPartMayNeed: translationElement
       stepByStep: translationElement
     }
+    htmlLevel: {
+      thisHowYourWebsiteWillLook: translationElement
+      showCode: translationElement
+      showWebsite: translationElement
+      resetAll: translationElement
+    }
   }
   Filter: {
     filter: translationElement
