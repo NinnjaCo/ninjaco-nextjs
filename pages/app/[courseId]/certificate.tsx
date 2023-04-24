@@ -2,16 +2,41 @@ import { CourseEnrollment } from '@/models/crud/course-enrollment.model'
 import { CourseEnrollmentAPI } from '@/utils/api/courseEnrollment/course-enrollment.api'
 import { User } from '@/models/crud'
 import { authOptions } from '../../api/auth/[...nextauth]'
+import { exportAsImage } from '@/utils/exportAsImage'
 import { getServerSession } from 'next-auth'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { useRef } from 'react'
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
 import logo_black from '@/images/logo_black.svg'
 import useTranslation from '@/hooks/useTranslation'
 
 export default function UserCourseView({ user, course }: { user: User; course: CourseEnrollment }) {
   const t = useTranslation()
+  const exportRef = useRef()
+
+  function handleCapture() {
+    const element = document.querySelector('#capture')
+    if (element) {
+      html2canvas(element as HTMLElement).then((canvas) => {
+        document.body.appendChild(canvas)
+      })
+    }
+  }
+
+  const generatePDF = () => {
+    const doc = new jsPDF('p', 'pt', 'a4')
+    const content = document.querySelector('#content') as HTMLElement
+    if (content) {
+      doc.html(content, {
+        callback: function (pdf) {
+          pdf.save('Certificate.pdf')
+        },
+      })
+    }
+  }
 
   return (
     <>
@@ -34,7 +59,12 @@ export default function UserCourseView({ user, course }: { user: User; course: C
             {t.Creator.games.createGame.goBack}
           </Link>
         </div>
-        <div className="hidden md:block w-full h-full border-[50px] border-brand bg-brand-50 p-10 relative">
+        <button onClick={() => handleCapture()}>Capture Image</button>
+
+        <div
+          id="content"
+          className="hidden md:block w-full h-full border-[50px] border-brand bg-brand-50 p-10 relative"
+        >
           <div className="w-36 md:w-36 lg:w-52 h-24 absolute top-10 left-12 cursor-pointer">
             <Image src={logo_black} alt="Hero Image" fill priority></Image>
           </div>
@@ -61,6 +91,7 @@ export default function UserCourseView({ user, course }: { user: User; course: C
             <p>Issued on {new Date().toDateString()}</p>
             <p>Issued by NinjaCo</p>
           </div>
+          <button onClick={generatePDF}>click to download</button>
         </div>
       </main>
     </>
