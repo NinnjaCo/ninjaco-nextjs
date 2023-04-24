@@ -62,7 +62,16 @@ export default function UserCourseView({ user, course }: { user: User; course: C
               <p>Automatically issued on:</p>
               <p>{new Date().toDateString()}</p>
             </div>
-            <p>Issued by NinjaCo</p>
+            <div>
+              <Image
+                src="/images/signature.png"
+                alt="signature"
+                className="absolute bottom-12 right-10"
+                width={145}
+                height={150}
+              />
+              <p>Issued by NinjaCo</p>
+            </div>
           </div>
         </div>
       </main>
