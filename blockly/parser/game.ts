@@ -129,7 +129,7 @@ function getBlock(lines: string[], startIndex: number): { block: string[]; nextL
       break
     }
 
-    if (line.trim().includes('{')) {
+    if (line.trim().endsWith('{')) {
       openBrackets++
     }
     if (openBrackets === 0) {
