@@ -524,12 +524,57 @@ export interface WebsiteTranslations {
       dropCourseMessage: translationElement
       cancel: translationElement
       drop: translationElement
+      enrollCourseToUnlock: translationElement
+      newest: translationElement
+      oldest: translationElement
+      recentlyUpdated: translationElement
+      nameAZ: translationElement
+      nameZA: translationElement
+      numberOfmissions: translationElement
+      completed: translationElement
+      notCompleted: translationElement
     }
     viewMissionPage: {
       missionCategory: translationElement
       startMission: translationElement
       continue: translationElement
       completed: translationElement
+      startedAt: translationElement
+    }
+    profile: {
+      somethingWentWrong: translationElement
+      firstNameIsRequired: translationElement
+      lastNameIsRequired: translationElement
+      dateOfBirthIsRequired: translationElement
+      dateOfBirthIsNotValid: translationElement
+      invalidEmail: translationElement
+      emailIsRequired: translationElement
+      passwordIsRequired: translationElement
+      passwordMustMatch: translationElement
+      noChangesMade: translationElement
+      profileUpdatedSuccessfully: translationElement
+      errorUpdatingProfile: translationElement
+      logout: translationElement
+    }
+    game: {
+      placeBlocks: translationElement
+      loop: translationElement
+      didNotReachGoal: translationElement
+      hitAWall: translationElement
+      congratulations: translationElement
+      hereIsTheCodeYouWrote: translationElement
+      runProgram: translationElement
+    }
+    arduinoLevel: {
+      buildingPart: translationElement
+      buildingPartMayNeed: translationElement
+      stepByStep: translationElement
+    }
+    htmlLevel: {
+      thisHowYourWebsiteWillLook: translationElement
+      showCode: translationElement
+      showWebsite: translationElement
+      resetAll: translationElement
     }
   }
   Filter: {

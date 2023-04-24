@@ -190,7 +190,7 @@ export default function UserMissionPage({
                     <div className=" flex gap-2 items-center">
                       <ClockIcon className=" h-4 w-4 ml-2 text-brand"></ClockIcon>
                       <div className=" text-brand font-bold text-xs py-2 rounded-md">
-                        Started at:{' '}
+                        {t.User.viewMissionPage.startedAt}{' '}
                         {getReadableDateFromISO((mission as MissionEnrollment).startedAt)}
                       </div>
                     </div>
