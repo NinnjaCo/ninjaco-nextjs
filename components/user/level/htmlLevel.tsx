@@ -1,8 +1,8 @@
+import { ArrowDownIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { Course } from '@/models/crud/course.model'
 import { Level } from '@/models/crud/level.model'
 import { Mission } from '@/models/crud/mission.model'
 import { Switch } from '@headlessui/react'
-import { TrashIcon } from '@heroicons/react/24/outline'
 import { htmlBlocks } from '@/blockly/blocks/html'
 import { htmlGenerator } from '@/blockly/generetors/html'
 import { htmlToolBox } from '@/blockly/toolbox/html'
@@ -136,6 +136,21 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
     setHtmlCode('')
   }
 
+  const downloadCode = () => {
+    // prompt the user to download the code in a file named `index.html`
+
+    const cleanCode = DOMPurify.sanitize(htmlCode)
+    const blob = new Blob([cleanCode], { type: 'text/html' })
+
+    const link = document.createElement('a')
+    link.download = 'index.html'
+    link.href = window.URL.createObjectURL(blob)
+    link.click()
+
+    // delete the link to avoid memory leaks
+    link.remove()
+  }
+
   return (
     <div className="w-full h-full relative overflow-hidden hidden lg:flex">
       <BlocklyBoard
@@ -163,7 +178,7 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
             ></Image>
           </div>
         </div>
-        <div className="basis-1/2 w-full border-t-2 border-brand-400  overflow-y-scroll">
+        <div className="basis-1/2 w-full border-t-2 border-brand-400  overflow-y-scroll font-serif">
           {showWebsitePreview ? (
             <div>{getCleanReactHtml(htmlCode)}</div>
           ) : (
@@ -189,9 +204,18 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
           />
         </Switch>
       </div>
-      <div className="absolute top-[90%] left-4 z-20">
+      <div className="absolute top-[82%] left-4 z-20 flex flex-col gap-4">
         <button
           className="btn btn-brand rounded-md flex justify-between gap-4 pl-2 pr-4"
+          onClick={() => {
+            downloadCode()
+          }}
+        >
+          <ArrowDownIcon className="text-secondary z-20 w-5 h-5"></ArrowDownIcon>
+          <p className="whitespace-nowrap">{t.User.htmlLevel.downloadCode}</p>
+        </button>
+        <button
+          className="btn btn-brand rounded-md flex justify-start gap-4 pl-2 pr-4"
           onClick={() => {
             resetCode()
           }}

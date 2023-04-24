@@ -575,6 +575,7 @@ export interface WebsiteTranslations {
       showCode: translationElement
       showWebsite: translationElement
       resetAll: translationElement
+      downloadCode: translationElement
     }
   }
   Filter: {

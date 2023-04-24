@@ -747,7 +747,8 @@ const frenchTranslations: WebsiteTranslations = {
       thisHowYourWebsiteWillLook: 'Voici à quoi ressemblera votre site Web: ',
       showCode: 'Code',
       showWebsite: 'Site Web',
-      resetAll: 'Réinitialiser tout',
+      resetAll: 'Réinitialiser',
+      downloadCode: 'Télécharger',
     },
   },
 
