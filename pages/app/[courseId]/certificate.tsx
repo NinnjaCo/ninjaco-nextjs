@@ -60,6 +60,7 @@ export default function UserCourseView({ user, course }: { user: User; course: C
           </Link>
         </div>
         <button onClick={() => handleCapture()}>Capture Image</button>
+        <button onClick={() => exportAsImage(exportRef.current, 'test')}> export as image</button>
 
         <div
           id="content"

@@ -1,25 +1,31 @@
 import { Button } from 'react-bootstrap'
 // import { ComponentToPrint } from '../[courseId]/certificate'
 import { ComponentToPrint } from '@/components/componentToPrint'
+import { useEffect, useState } from 'react'
 import React, { useRef } from 'react'
 import ReactToPrint from 'react-to-print'
 
 export default function PrintComponent() {
-  let componentRef = useRef()
+  const [showButton, setShowButton] = useState(true)
+  const componentRef = useRef()
+
+  useEffect(() => {
+    setShowButton(false)
+  }, [])
+
+  useEffect(() => {
+    if (!showButton) {
+      window.print()
+    }
+  }, [showButton])
 
   return (
     <>
       <div>
-        {/* button to trigger printing of target component */}
-        <button onClick={() => window.print()}>
-          <ReactToPrint
-            trigger={() => <Button>Print your certificate!</Button>}
-            content={() => componentRef.current}
-          />
-        </button>
+        {!showButton && <ReactToPrint content={() => componentRef.current} />}
         {/* component to be printed */}
         <div>
-          <ComponentToPrint ref={(el) => (componentRef = el)} />
+          <ComponentToPrint ref={componentRef} />
         </div>
       </div>
     </>
