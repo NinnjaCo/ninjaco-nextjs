@@ -1,6 +1,7 @@
 import { Course } from '@/models/crud/course.model'
 import { Level } from '@/models/crud/level.model'
 import { Mission } from '@/models/crud/mission.model'
+import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid'
 import { Switch } from '@headlessui/react'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import { htmlBlocks } from '@/blockly/blocks/html'
@@ -145,10 +146,9 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
       ></BlocklyBoard>
       <div className="basis-2/3 border-l-2 border-l-brand-400 h-full flex flex-col">
         <div className="basis-1/2 w-full text-xs bg-brand-100">
-          <p className="pl-2 pt-1 text-brand font-semibold">
-            This is how your website should look like:
-          </p>
           <div className="w-full h-full relative">
+            <QuestionMarkCircleIcon className="absolute top-1 right-5 w-5 h-5 text-brand-400 hover:text-brand-500 cursor-pointer z-20" />
+
             <Image
               src={level.websitePreviewImage || targetwebsite}
               alt="Target Website Preview"
@@ -161,6 +161,7 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
           </div>
         </div>
         <div className="basis-1/2 w-full border-t-2 border-brand-400  overflow-y-scroll">
+          <QuestionMarkCircleIcon className="absolute bottom-1 right-5 w-5 h-5 text-brand-400 hover:text-brand-500 cursor-pointer z-20" />
           {showWebsitePreview ? (
             <div>{getCleanReactHtml(htmlCode)}</div>
           ) : (
