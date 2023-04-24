@@ -170,7 +170,9 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
           router.push('/')
         }}
       >
-        <Image src={logoToUse()} alt="Hero Image" fill priority></Image>
+        <Link href={'/'}>
+          <Image src={logoToUse()} alt="Hero Image" fill priority></Image>
+        </Link>
       </div>
 
       <div className="hidden md:flex justify-evenly md:gap-6 lg:gap-16 items-center">
