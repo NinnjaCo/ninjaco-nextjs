@@ -254,3 +254,16 @@ ol {
     linear-gradient(315deg, #a7bfdc55 25%, transparent 25%) 0px 0/ 80px 80px,
     linear-gradient(45deg, #a7bfdc 25%, #edf2f7 25%) 0px 0/ 80px 80px;
 }
+
+/* style sheet for "A4" printing */
+@media print and (width: 21cm) and (height: 29.7cm) {
+  @page {
+    margin: 3cm;
+  }
+}
+
+/* A4 Landscape*/
+@page {
+  size: A3 landscape;
+  margin: 0%;
+}
