@@ -117,7 +117,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
   const actionsQueue: Queue<() => void> = new Queue()
 
   // At max it is 1000 and at min it is 300, and linearly proportional to the size of the grid, the bigger the faster
-  const waitTimeBetweenActions = 1000 - (game.game.sizeOfGrid - 5) * 35
+  const waitTimeBetweenActions = 500 - (game.game.sizeOfGrid - 5) * 25
 
   // Changes the state of the currentPlayerDirection
   const turnLeft = (carryCheckFunction?: (gameState) => boolean) => {
@@ -125,6 +125,8 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
       if (carryCheckFunction && !carryCheckFunction(draft)) {
         return
       }
+      const { row, col } = draft.playerLocation
+      console.log('Turning left:', draft.currentPlayerDirection, row, col)
       switch (draft.currentPlayerDirection) {
         case Direction.UP:
           draft.currentPlayerDirection = Direction.LEFT
@@ -145,8 +147,12 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
   const turnRight = (carryCheckFunction?: (gameState) => boolean) => {
     setGameState((draft) => {
       if (carryCheckFunction && !carryCheckFunction(draft)) {
+        const { row, col } = draft.playerLocation
+        console.log('Not turning right', draft.currentPlayerDirection, row, col)
         return
       }
+      const { row, col } = draft.playerLocation
+      console.log('Turning right:', draft.currentPlayerDirection, row, col)
 
       switch (draft.currentPlayerDirection) {
         case Direction.UP:
@@ -218,7 +224,26 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
     switch (currentGameState.currentPlayerDirection) {
       case Direction.UP:
         if (row - 1 >= 0 && !currentGameState.gameGrid[row - 1][col].isWall) {
+          console.log(
+            'Player location:',
+            row,
+            col,
+            'isPathAhead:',
+            true,
+            'Direction:',
+            Direction.UP
+          )
           return true
+        } else {
+          console.log(
+            'Player location:',
+            row,
+            col,
+            'isPathAhead:',
+            false,
+            'Direction:',
+            Direction.UP
+          )
         }
         break
       case Direction.DOWN:
@@ -226,12 +251,50 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
           row + 1 < currentGameState.gameGrid.length &&
           !currentGameState.gameGrid[row + 1][col].isWall
         ) {
+          console.log(
+            'Player location:',
+            row,
+            col,
+            'isPathAhead:',
+            true,
+            'Direction:',
+            Direction.DOWN
+          )
           return true
+        } else {
+          console.log(
+            'Player location:',
+            row,
+            col,
+            'isPathAhead:',
+            false,
+            'Direction:',
+            Direction.DOWN
+          )
         }
         break
       case Direction.LEFT:
         if (col - 1 >= 0 && !currentGameState.gameGrid[row][col - 1].isWall) {
+          console.log(
+            'Player location:',
+            row,
+            col,
+            'isPathAhead:',
+            true,
+            'Direction:',
+            Direction.LEFT
+          )
           return true
+        } else {
+          console.log(
+            'Player location:',
+            row,
+            col,
+            'isPathAhead:',
+            false,
+            'Direction:',
+            Direction.LEFT
+          )
         }
         break
       case Direction.RIGHT:
@@ -239,19 +302,26 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
           col + 1 < currentGameState.gameGrid.length &&
           !currentGameState.gameGrid[row][col + 1].isWall
         ) {
+          console.log('Player location:', row, col, 'isPathAhead:', true, 'Direction.RIGHT')
           return true
+        } else {
+          console.log('Player location:', row, col, 'isPathAhead:', false, 'Direction.RIGHT')
         }
         break
     }
     return false
   }
+
   // Returns true if there is a path to the left of the player (i.e. the player can turn left)
   const isPathLeft = (currentGameState) => {
     const { row, col } = currentGameState.playerLocation
     switch (currentGameState.currentPlayerDirection) {
       case Direction.UP:
         if (col - 1 >= 0 && !currentGameState.gameGrid[row][col - 1].isWall) {
+          console.log('Player location:', row, col, 'isPathLeft:', true, 'Direction.UP')
           return true
+        } else {
+          console.log('Player location:', row, col, 'isPathLeft:', false, 'Direction.UP')
         }
         break
       case Direction.DOWN:
@@ -259,7 +329,10 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
           col + 1 < currentGameState.gameGrid.length &&
           !currentGameState.gameGrid[row][col + 1].isWall
         ) {
+          console.log('Player location:', row, col, 'isPathLeft:', true, 'Direction.DOWN')
           return true
+        } else {
+          console.log('Player location:', row, col, 'isPathLeft:', false, 'Direction.DOWN')
         }
         break
       case Direction.LEFT:
@@ -267,12 +340,18 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
           row + 1 < currentGameState.gameGrid.length &&
           !currentGameState.gameGrid[row + 1][col].isWall
         ) {
+          console.log('Player location:', row, col, 'isPathLeft:', true, 'Direction.LEFT')
           return true
+        } else {
+          console.log('Player location:', row, col, 'isPathLeft:', false, 'Direction.LEFT')
         }
         break
       case Direction.RIGHT:
         if (row - 1 >= 0 && !currentGameState.gameGrid[row - 1][col].isWall) {
+          console.log('Player location:', row, col, 'isPathLeft:', true, 'Direction.RIGHT')
           return true
+        } else {
+          console.log('Player location:', row, col, 'isPathLeft:', false, 'Direction.RIGHT')
         }
         break
     }
@@ -421,14 +500,14 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
   }
   const executeCode = (
     code: BlockCode[] | undefined,
+    executingIndex: number,
     carryCheckFunction?: (gameState) => boolean
   ) => {
-    if (!code || code.length === 0) {
+    if (!code || code.length === 0 || executingIndex >= code.length) {
       return
     }
 
-    const block = code[0]
-    const remainingCode = code.slice(1)
+    const block = code[executingIndex]
     // Execute block
     switch (block.type) {
       case BlockType.MOVE_FORWARD:
@@ -456,36 +535,75 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
         })
         switch (block.condition) {
           case ConditionType.IS_PATH_FORWARD:
+            // check if there is a next block and of type else
+            if (
+              executingIndex + 1 < code.length &&
+              code[executingIndex + 1].type === BlockType.ELSE
+            ) {
+              executeCode(
+                code[executingIndex + 1].body,
+                0,
+                carryCheckFunction
+                  ? (aGameState) => carryCheckFunction(aGameState) && !isPathAhead(aGameState)
+                  : (aGameState) => !isPathAhead(aGameState)
+              )
+            }
             executeCode(
               block.body,
+              0,
               carryCheckFunction
                 ? (aGameState) => carryCheckFunction(aGameState) && isPathAhead(aGameState)
-                : isPathAhead
+                : (aGameState) => isPathAhead(aGameState)
             )
             break
           case ConditionType.IS_PATH_LEFT:
+            // check if there is a next block and of type else
+            if (
+              executingIndex + 1 < code.length &&
+              code[executingIndex + 1].type === BlockType.ELSE
+            ) {
+              executeCode(
+                code[executingIndex + 1].body,
+                0,
+                carryCheckFunction
+                  ? (aGameState) => carryCheckFunction(aGameState) && !isPathLeft(aGameState)
+                  : (aGameState) => !isPathLeft(aGameState)
+              )
+            }
             executeCode(
               block.body,
+              0,
               carryCheckFunction
                 ? (aGameState) => carryCheckFunction(aGameState) && isPathLeft(aGameState)
-                : isPathLeft
+                : (aGameState) => isPathLeft(aGameState)
             )
             break
           case ConditionType.IS_PATH_RIGHT:
+            // check if there is a next block and of type else
+            if (
+              executingIndex + 1 < code.length &&
+              code[executingIndex + 1].type === BlockType.ELSE
+            ) {
+              executeCode(
+                code[executingIndex + 1].body,
+                0,
+                carryCheckFunction
+                  ? (aGameState) => carryCheckFunction(aGameState) && !isPathRight(aGameState)
+                  : (aGameState) => !isPathRight(aGameState)
+              )
+            }
             executeCode(
               block.body,
+              0,
               carryCheckFunction
                 ? (aGameState) => carryCheckFunction(aGameState) && isPathRight(aGameState)
-                : isPathRight
+                : (aGameState) => isPathRight(aGameState)
             )
             break
         }
         break
       case BlockType.ELSE:
-        actionsQueue.enqueue(() => {
-          highlightBlock(block.id)
-        })
-        executeCode(block.body, carryCheckFunction)
+        // the else block is already handled in the IF block automatically
         break
       case BlockType.FOR:
         if (!block.loopCount) {
@@ -503,18 +621,18 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
 
         // each iteration of the loop should wait for the previous iteration WAIT_TIME
         for (let i = 0; i < block.loopCount; i++) {
-          executeCode(block.body, carryCheckFunction)
+          executeCode(block.body, 0, carryCheckFunction)
         }
 
         break
       case BlockType.WHILE:
         // limit the number of iterations to 50, since the game is not designed to handle infinite loops
         for (let i = 0; i < 100; i++) {
-          executeCode(block.body, carryCheckFunction)
+          executeCode(block.body, 0, carryCheckFunction)
         }
         break
     }
-    executeCode(remainingCode, carryCheckFunction)
+    executeCode(code, executingIndex + 1, carryCheckFunction)
   }
   const runQueueActionsWithDelay = (delay: number) => {
     if (actionsQueue.isEmpty()) {
@@ -544,7 +662,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
     const parsedCode: BlockCode[] = parseCode(code)
 
     // traverse the code and execute the blocks in order (depth first)
-    executeCode(parsedCode)
+    executeCode(parsedCode, 0)
 
     // After the code is executed, if we reached the end of the queue then the goal was never reached by a moveForward
     // thus, setAlertData that you didnt reach the goal
@@ -567,7 +685,6 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
       resetGameState()
     }, waitTimeBetweenActions * (actionsQueue.size() + 1))
   }
-
   const resetGameState = () => {
     actionsQueue.clear()
     setGameState({
