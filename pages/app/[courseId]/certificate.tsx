@@ -61,6 +61,7 @@ export default function UserCourseView({ user, course }: { user: User; course: C
         </div>
         <button onClick={() => handleCapture()}>Capture Image</button>
         <button onClick={() => exportAsImage(exportRef.current, 'test')}> export as image</button>
+        <button onClick={generatePDF}>click to download</button>
 
         <div
           id="content"
@@ -92,7 +93,6 @@ export default function UserCourseView({ user, course }: { user: User; course: C
             <p>Issued on {new Date().toDateString()}</p>
             <p>Issued by NinjaCo</p>
           </div>
-          <button onClick={generatePDF}>click to download</button>
         </div>
       </main>
     </>
