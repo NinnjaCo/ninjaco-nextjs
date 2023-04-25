@@ -1,13 +1,8 @@
 import { ArrowDownIcon, CheckIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { Course } from '@/models/crud/course.model'
-import { CourseEnrollmentAPI } from '@/utils/api/courseEnrollment/course-enrollment.api'
 import { Level } from '@/models/crud/level.model'
-import { LevelEnrollmentApi } from '@/utils/api/levelEnrollment/level-enrollment.api'
 import { Mission } from '@/models/crud/mission.model'
-import { Session } from 'inspector'
 import { Switch } from '@headlessui/react'
-import { authOptions } from '@/pages/api/auth/[...nextauth]'
-import { getServerSession } from 'next-auth'
 import { htmlBlocks } from '@/blockly/blocks/html'
 import { htmlGenerator } from '@/blockly/generetors/html'
 import { htmlToolBox } from '@/blockly/toolbox/html'
@@ -41,9 +36,6 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
     }
   }, [])
 
-  //  useState to save the number of blocks
-  const [numBlocks, setNumBlocks] = React.useState()
-
   const onChangeListener = (
     e: Blockly.Events.Abstract,
     workspaceRefrence: Blockly.WorkspaceSvg
@@ -59,12 +51,6 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
       // Event is UI event or finished loading or workspace is dragging
       return
     }
-
-    const num = workspaceRefrence.getAllBlocks(false).length
-    // wait for 20 seconds before updating the number of blocks
-    setTimeout(() => {
-      setNumBlocks(num)
-    }, 20000)
 
     const code = getCodeFromBlockly()
     if (code) {
@@ -166,19 +152,6 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
     link.remove()
   }
 
-  // function to update the level status
-  const updateLevelStatus = () => {
-    co
-
-    const session = getServerSession()
-    new LevelEnrollmentApi(course._id, mission._id, session).updateProgress(
-      course._id,
-      mission._id,
-      level._id,
-      true
-    )
-  }
-
   return (
     <div className="w-full h-full relative overflow-hidden hidden lg:flex">
       <BlocklyBoard
@@ -251,25 +224,8 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
           }}
         >
           <TrashIcon className="text-secondary z-20 w-5 h-5"></TrashIcon>
-          <p className="whitespace-nowrap">
-            {t.User.htmlLevel.resetAll} {numBlocks}
-          </p>
+          <p className="whitespace-nowrap">{t.User.htmlLevel.resetAll}</p>
         </button>
-
-        {/* if numBlock greater then 2 */}
-
-        {numBlocks > 2 && (
-          <button
-            className="btn btn-brand rounded-md flex justify-start gap-4 pl-2 pr-4"
-            onClick={() => {
-              updateLevelStatus()
-            }}
-          >
-            {/* completed icon */}
-            <CheckIcon className="text-secondary z-20 w-5 h-5"></CheckIcon>
-            Complete Level
-          </button>
-        )}
       </div>
     </div>
   )
