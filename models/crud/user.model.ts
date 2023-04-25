@@ -19,6 +19,7 @@ export interface UserRequest {
   lastName: string
   email: string
   password: string
+  points?: number
   dateOfBirth: string
   role?: RoleEnum
   isVerified?: boolean
