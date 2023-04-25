@@ -65,6 +65,7 @@ export const FeedbackDialog: React.FC<FeedbackDialogProps> = ({
     setMessage(event.target.value)
   }
   const handleCancel = () => {
+    setSubmitButtonDisabled(true)
     close()
   }
   const handleSubmit = async () => {
