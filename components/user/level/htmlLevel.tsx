@@ -164,12 +164,12 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
   }
 
   // function to update the level status
-  const updateLevelStatus = (status: boolean) => {
+  const updateLevelStatus = () => {
     new LevelEnrollmentApi(course._id, mission._id).updateProgress(
       course._id,
       mission._id,
       level._id,
-      status
+      true
     )
   }
 
@@ -253,7 +253,12 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
         {/* if numBlock greater then 2 */}
 
         {numBlocks > 2 && (
-          <button className="btn btn-brand rounded-md flex justify-start gap-4 pl-2 pr-4">
+          <button
+            className="btn btn-brand rounded-md flex justify-start gap-4 pl-2 pr-4"
+            onClick={() => {
+              updateLevelStatus()
+            }}
+          >
             {/* completed icon */}
             <CheckIcon className="text-secondary z-20 w-5 h-5"></CheckIcon>
             Complete Level
