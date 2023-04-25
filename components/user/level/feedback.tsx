@@ -1,6 +1,7 @@
 import { ChatBubbleLeftRightIcon, StarIcon as StarIconOutline } from '@heroicons/react/24/outline'
 import { FeedbackApi } from '@/utils/api/feedback/feedback.api'
 import { StarIcon } from '@heroicons/react/24/solid'
+import { isAxiosError, unWrapAuthError } from '@/utils/errors'
 import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 import router from 'next/router'
@@ -87,9 +88,12 @@ export const FeedbackDialog: React.FC<FeedbackDialogProps> = ({
       })
       router.push(`/app/${courseId}/${missionId}`)
     } catch (e) {
-      setErrorMessage('Something went wrong. Please try again.')
       setSubmitButtonDisabled(false)
-      console.log(e)
+      if (isAxiosError(e)) {
+        setErrorMessage('You already submitted feedback for this level.')
+        return
+      }
+      setErrorMessage('Something went wrong. Please try again.')
     }
   }
 
