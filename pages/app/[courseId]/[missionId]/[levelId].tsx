@@ -1,17 +1,11 @@
 import { CourseEnrollment } from '@/models/crud/course-enrollment.model'
 import { CourseEnrollmentAPI } from '@/utils/api/courseEnrollment/course-enrollment.api'
 import { CourseType } from '@/models/crud/course.model'
-import { Feedback } from '@/models/crud/feedback.model'
-import { FeedbackApi } from '@/utils/api/feedback/feedback.api'
-import { FeedbackDialog } from '@/components/user/level/feedback'
 import { LevelEnrollment } from '@/models/crud/level-enrollment.model'
 import { MissionEnrollment } from '@/models/crud/mission-enrollment.model'
 import { User } from '@/models/crud'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
-import { title } from 'process'
-import { useRouter } from 'next/router'
-import { useSession } from 'next-auth/react'
 import ArduinoLevel from '@/components/user/level/arduinoLevel'
 import Head from 'next/head'
 import HtmlLevel from '@/components/user/level/htmlLevel'
@@ -25,17 +19,13 @@ const PlayLevel = ({
   level,
   mission,
   course,
-}: // feedback,
-{
+}: {
   user: User
   level: LevelEnrollment
   mission: MissionEnrollment
   course: CourseEnrollment
-  // feedback: Feedback
 }) => {
   const t = useTranslation()
-  const router = useRouter()
-  const session = useSession()
 
   return (
     <>

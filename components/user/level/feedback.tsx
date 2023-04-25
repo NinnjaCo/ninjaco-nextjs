@@ -1,7 +1,7 @@
 import { ChatBubbleLeftRightIcon, StarIcon as StarIconOutline } from '@heroicons/react/24/outline'
 import { FeedbackApi } from '@/utils/api/feedback/feedback.api'
 import { StarIcon } from '@heroicons/react/24/solid'
-import { isAxiosError, unWrapAuthError } from '@/utils/errors'
+import { isAxiosError } from '@/utils/errors'
 import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 import router from 'next/router'
