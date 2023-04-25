@@ -54,8 +54,13 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
       // Event is UI event or finished loading or workspace is dragging
       return
     }
+
     const num = workspaceRefrence.getAllBlocks(false).length
-    setNumBlocks(num)
+    // wait for 20 seconds before updating the number of blocks
+    setTimeout(() => {
+      setNumBlocks(num)
+    }, 20000)
+
     const code = getCodeFromBlockly()
     if (code) {
       setHtmlCode(code)
