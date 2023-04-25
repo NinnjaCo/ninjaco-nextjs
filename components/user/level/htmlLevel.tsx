@@ -1,12 +1,15 @@
+import { ArrowDownIcon, CheckCircleIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { Course } from '@/models/crud/course.model'
+import { FeedbackDialog } from './feedback'
 import { Level } from '@/models/crud/level.model'
 import { Mission } from '@/models/crud/mission.model'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid'
 import { Switch } from '@headlessui/react'
-import { TrashIcon } from '@heroicons/react/24/outline'
+import { User } from '@/models/crud'
 import { htmlBlocks } from '@/blockly/blocks/html'
 import { htmlGenerator } from '@/blockly/generetors/html'
 import { htmlToolBox } from '@/blockly/toolbox/html'
+import { useRouter } from 'next/router'
 import Blockly from 'blockly'
 import BlocklyBoard from '@/components/blockly/blockly'
 import DOMPurify from 'isomorphic-dompurify'
@@ -14,14 +17,24 @@ import Image from 'next/image'
 import React from 'react'
 import convertHtmlToReact from '@hedgedoc/html-to-react'
 import targetwebsite from '@/images/targetwebsite.png'
+import useTranslation from '@/hooks/useTranslation'
 
 interface Props {
   course: Course
   level: Level
   mission: Mission
+  user: User
 }
 
-const HtmlLevel = ({ course, level, mission }: Props) => {
+const HtmlLevel = ({ course, level, mission, user }: Props) => {
+  const [openDialogue, setOpenDialogue] = React.useState(false)
+  const t = useTranslation()
+  const router = useRouter()
+
+  const close = () => {
+    router.push(`/app/${course._id}/${mission._id}`)
+  }
+
   const [showWebsitePreview, setShowWebsitePreview] = React.useState(true)
   const [htmlCode, setHtmlCode] = React.useState('')
 
@@ -49,6 +62,7 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
       // Event is UI event or finished loading or workspace is dragging
       return
     }
+
     const code = getCodeFromBlockly()
     if (code) {
       setHtmlCode(code)
@@ -134,72 +148,121 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
     setHtmlCode('')
   }
 
-  return (
-    <div className="w-full h-full relative overflow-hidden hidden lg:flex">
-      <BlocklyBoard
-        ref={parentRef}
-        blocklyOptions={blocklyGameOptions}
-        codeGenerator={htmlGenerator}
-        blocksDefinitions={htmlBlocks}
-        onChangeListener={onChangeListener}
-        storageKey={`course-${course._id}-mission-${mission._id}-level-${level._id}`}
-      ></BlocklyBoard>
-      <div className="basis-2/3 border-l-2 border-l-brand-400 h-full flex flex-col">
-        <div className="basis-1/2 w-full text-xs bg-brand-100">
-          <div className="w-full h-full relative">
-            <QuestionMarkCircleIcon className="absolute top-1 right-5 w-5 h-5 text-brand-400 hover:text-brand-500 cursor-pointer z-20" />
+  const downloadCode = () => {
+    // prompt the user to download the code in a file named `index.html`
 
-            <Image
-              src={level.websitePreviewImage || targetwebsite}
-              alt="Target Website Preview"
-              className="w-full h-full max-w-full max-h-full"
-              fill
-              style={{
-                objectFit: 'contain',
-              }}
-            ></Image>
+    const cleanCode = DOMPurify.sanitize(htmlCode)
+    const blob = new Blob([cleanCode], { type: 'text/html' })
+
+    const link = document.createElement('a')
+    link.download = 'index.html'
+    link.href = window.URL.createObjectURL(blob)
+    link.click()
+
+    // delete the link to avoid memory leaks
+    link.remove()
+  }
+  return (
+    <>
+      <FeedbackDialog
+        userId={user._id}
+        courseId={course._id}
+        missionId={mission._id}
+        levelId={level._id}
+        open={openDialogue}
+        title="Feedback"
+        close={() => {
+          close()
+        }}
+      />
+      <div className="w-full h-full relative overflow-hidden hidden lg:flex">
+        <BlocklyBoard
+          ref={parentRef}
+          blocklyOptions={blocklyGameOptions}
+          codeGenerator={htmlGenerator}
+          blocksDefinitions={htmlBlocks}
+          onChangeListener={onChangeListener}
+          storageKey={`course-${course._id}-mission-${mission._id}-level-${level._id}`}
+        ></BlocklyBoard>
+        <div className="basis-2/3 border-l-2 border-l-brand-400 h-full flex flex-col">
+          <div className="basis-1/2 w-full text-xs bg-brand-100">
+            <p className="pl-2 pt-1 text-brand font-semibold">
+              {t.User.htmlLevel.thisHowYourWebsiteWillLook}
+            </p>
+            <div className="w-full h-full relative">
+              <QuestionMarkCircleIcon className="absolute top-1 right-5 w-5 h-5 text-brand-400 hover:text-brand-500 cursor-pointer z-20" />
+              <Image
+                src={level.websitePreviewImage || targetwebsite}
+                alt="Target Website Preview"
+                className="w-full h-full max-w-full max-h-full"
+                fill
+                style={{
+                  objectFit: 'contain',
+                }}
+              ></Image>
+            </div>
+          </div>
+          <div className="basis-1/2 w-full border-t-2 border-brand-400  overflow-y-scroll font-serif">
+            <QuestionMarkCircleIcon className="absolute bottom-1 right-5 w-5 h-5 text-brand-400 hover:text-brand-500 cursor-pointer z-20" />
+            {showWebsitePreview ? (
+              <div>{getCleanReactHtml(htmlCode)}</div>
+            ) : (
+              <pre className="text-xs">{htmlCode}</pre>
+            )}
           </div>
         </div>
-        <div className="basis-1/2 w-full border-t-2 border-brand-400  overflow-y-scroll">
-          <QuestionMarkCircleIcon className="absolute bottom-1 right-5 w-5 h-5 text-brand-400 hover:text-brand-500 cursor-pointer z-20" />
-          {showWebsitePreview ? (
-            <div>{getCleanReactHtml(htmlCode)}</div>
-          ) : (
-            <pre className="text-xs">{htmlCode}</pre>
-          )}
+
+        <div className="absolute top-[55%] left-4 z-20 flex flex-col gap-4">
+          <div className="flex gap-4 items-center">
+            <div>
+              {showWebsitePreview ? t.User.htmlLevel.showCode : t.User.htmlLevel.showWebsite}
+            </div>
+            <Switch
+              checked={showWebsitePreview}
+              onChange={(isChecked) => {
+                setShowWebsitePreview(isChecked)
+              }}
+              className={`${!showWebsitePreview ? 'bg-brand-700' : 'bg-brand-500'}
+            inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+            >
+              <span className="sr-only">{showWebsitePreview ? 'Show Code' : 'Show Website'}</span>
+              <span
+                aria-hidden="true"
+                className={`${!showWebsitePreview ? 'translate-x-7' : 'translate-x-0'}
+              pointer-events-none inline-block h-[34px] w-[34px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+              />
+            </Switch>
+          </div>
+          <button
+            className="btn btn-brand rounded-md flex justify-between gap-4 pl-2 pr-4"
+            onClick={() => {
+              setOpenDialogue(true)
+            }}
+          >
+            <CheckCircleIcon className="text-secondary z-20 w-5 h-5"></CheckCircleIcon>
+            <p className="whitespace-nowrap">Complete Level</p>
+          </button>
+          <button
+            className="btn btn-brand rounded-md flex justify-between gap-4 pl-2 pr-4"
+            onClick={() => {
+              downloadCode()
+            }}
+          >
+            <ArrowDownIcon className="text-secondary z-20 w-5 h-5"></ArrowDownIcon>
+            <p className="whitespace-nowrap">{t.User.htmlLevel.downloadCode}</p>
+          </button>
+          <button
+            className="btn btn-brand rounded-md flex justify-start gap-4 pl-2 pr-4"
+            onClick={() => {
+              resetCode()
+            }}
+          >
+            <TrashIcon className="text-secondary z-20 w-5 h-5"></TrashIcon>
+            <p className="whitespace-nowrap">{t.User.htmlLevel.resetAll}</p>
+          </button>
         </div>
       </div>
-      <div className="absolute top-3/4 left-4 flex gap-4 items-center">
-        <div>{showWebsitePreview ? 'Show Code' : 'Show Website'}</div>
-        <Switch
-          checked={showWebsitePreview}
-          onChange={(isChecked) => {
-            setShowWebsitePreview(isChecked)
-          }}
-          className={`${!showWebsitePreview ? 'bg-brand-700' : 'bg-brand-500'}
-                      inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
-        >
-          <span className="sr-only">{showWebsitePreview ? 'Show Code' : 'Show Website'}</span>
-          <span
-            aria-hidden="true"
-            className={`${!showWebsitePreview ? 'translate-x-7' : 'translate-x-0'}
-                        pointer-events-none inline-block h-[34px] w-[34px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
-          />
-        </Switch>
-      </div>
-      <div className="absolute top-[90%] left-4 z-20">
-        <button
-          className="btn btn-brand rounded-md flex justify-between gap-4 pl-2 pr-4"
-          onClick={() => {
-            resetCode()
-          }}
-        >
-          <TrashIcon className="text-secondary z-20 w-5 h-5"></TrashIcon>
-          <p className="whitespace-nowrap">Reset All</p>
-        </button>
-      </div>
-    </div>
+    </>
   )
 }
-
 export default HtmlLevel

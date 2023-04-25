@@ -1,4 +1,3 @@
-import 'blockly/blocks'
 import { BlocklyOptions } from 'blockly'
 import { load, save } from '@/blockly/serialization'
 import Blockly from 'blockly'

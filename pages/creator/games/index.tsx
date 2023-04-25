@@ -33,10 +33,7 @@ export default function Home({ user, games }: { user: User; games: Game[] }) {
                 {t.Creator.games.viewGames.title}
               </div>
               <div className="text-brand-700 font-semibold">
-                <Link
-                  className="btn btn-secondary bg-secondary rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 py-2 h-fit"
-                  href="/creator/games/create"
-                >
+                <Link className="btn btn-cta" href="/creator/games/create">
                   {t.Creator.games.viewGames.createGame}
                 </Link>
               </div>
@@ -119,7 +116,7 @@ export default function Home({ user, games }: { user: User; games: Game[] }) {
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center mt-7 px-10 place-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center mt-7 p-10 place-items-center">
           {filteredGames.map((game, index) => (
             <Link href={`/creator/games/${game._id}`} key={index}>
               <GameCard game={game} />

@@ -5,7 +5,6 @@ import { UserPlayGame } from '@/models/crud/game-enrollment.model'
 import { authOptions } from '../../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { useState } from 'react'
-import CreatorMenu from '@/components/creator/creatorMenu'
 import Filter from '@/components/creator/filter'
 import GameCard from '@/components/creator/gameCard'
 import GameEnrollmentCard from '@/components/user/game/enrollmentGameCard'
@@ -81,7 +80,7 @@ export default function Home({ user, games }: { user: User; games: (UserPlayGame
             </div>
             <div className="flex gap-10 justify-start items-center">
               <div className="text-base text-brand">
-                {games.length} {t.Creator.games.viewGames.entries}
+                {filteredGames.length} {t.Creator.games.viewGames.entries}
               </div>{' '}
               <Filter
                 filterFields={[
@@ -205,7 +204,7 @@ export default function Home({ user, games }: { user: User; games: (UserPlayGame
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center mt-7 px-10 place-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center mt-7 p-10 place-items-center">
           {filteredGames.map((game, index) => (
             <div key={index}>{renderGameCard(game)}</div>
           ))}

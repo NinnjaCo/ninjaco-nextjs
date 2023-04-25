@@ -8,6 +8,7 @@ import ArduinoBlockly from './arduinoBlockly'
 import ArduinoBuildingParts from './arduinoBuildingParts'
 import ArduinoStepByStepGuide from './arduinoStepByStepGuide'
 import React from 'react'
+import useTranslation from '@/hooks/useTranslation'
 
 interface Props {
   course: Course
@@ -20,9 +21,10 @@ function classNames(...classes) {
 }
 
 const ArduinoLevel = ({ course, level, mission }: Props) => {
+  const t = useTranslation()
   const [tabs] = useState([
     {
-      name: 'Building Parts',
+      name: t.User.arduinoLevel.buildingPart as string,
       component: () => (
         <ArduinoBuildingParts
           buildingPartsImages={level.buildingPartsImages ?? []}
@@ -30,7 +32,7 @@ const ArduinoLevel = ({ course, level, mission }: Props) => {
       ),
     },
     {
-      name: 'Step by Step Guide',
+      name: t.User.arduinoLevel.stepByStep as string,
       component: () => (
         <ArduinoStepByStepGuide
           stepByStepImages={level.stepGuideImages ?? []}

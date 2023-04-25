@@ -63,6 +63,7 @@ export default function UserCourseView({
   const [filteredMissions, setFilteredMissions] =
     useState<(Mission | MissionEnrollment)[]>(missions)
 
+  const t = useTranslation()
   const [alertData, setAlertData] = React.useState<{
     message: string
     variant: 'success' | 'info' | 'warning' | 'error'
@@ -80,7 +81,7 @@ export default function UserCourseView({
     // render the alert
 
     setAlertData({
-      message: 'Enroll in the course to unlock this mission',
+      message: t.User.viewCoursePage.enrollCourseToUnlock as string,
       variant: 'error',
       open: true,
     })
@@ -90,8 +91,6 @@ export default function UserCourseView({
       setAlertData({ ...alertData, open: false })
     }, 3000)
   }
-
-  const t = useTranslation()
 
   const session = useSession()
 
@@ -300,7 +299,7 @@ export default function UserCourseView({
             <Filter
               filterFields={[
                 {
-                  name: 'Newest',
+                  name: t.User.viewCoursePage.newest as string,
                   setter: setFilteredMissions,
                   previousStateModifier: () => {
                     return [
@@ -326,7 +325,7 @@ export default function UserCourseView({
                   },
                 },
                 {
-                  name: 'Oldest',
+                  name: t.User.viewCoursePage.oldest as string,
                   previousStateModifier: () => {
                     return [
                       ...missions.sort((a, b) => {
@@ -352,7 +351,7 @@ export default function UserCourseView({
                   setter: setFilteredMissions,
                 },
                 {
-                  name: 'Recently Updated',
+                  name: t.User.viewCoursePage.recentlyUpdated as string,
                   previousStateModifier: () => {
                     return [
                       ...missions.sort((a, b) => {
@@ -378,7 +377,7 @@ export default function UserCourseView({
                   setter: setFilteredMissions,
                 },
                 {
-                  name: 'Name (A-Z)',
+                  name: t.User.viewCoursePage.nameAZ as string,
                   previousStateModifier: () => {
                     return [
                       ...missions.sort((a, b) => {
@@ -404,7 +403,7 @@ export default function UserCourseView({
                   setter: setFilteredMissions,
                 },
                 {
-                  name: 'Name (Z-A)',
+                  name: t.User.viewCoursePage.nameZA as string,
                   previousStateModifier: () => {
                     return [
                       ...missions.sort((a, b) => {
@@ -430,7 +429,7 @@ export default function UserCourseView({
                   setter: setFilteredMissions,
                 },
                 {
-                  name: 'Number of Missions (Low-High)',
+                  name: t.User.viewCoursePage.numberOfmissions as string,
                   previousStateModifier: () => {
                     return [
                       ...missions.sort((a, b) => {
@@ -456,7 +455,7 @@ export default function UserCourseView({
                   setter: setFilteredMissions,
                 },
                 {
-                  name: 'Completed',
+                  name: t.User.viewCoursePage.completed as string,
                   previousStateModifier: () => {
                     return [
                       ...missions.filter((misison) => {
@@ -475,7 +474,7 @@ export default function UserCourseView({
                   setter: setFilteredMissions,
                 },
                 {
-                  name: 'Not Completed',
+                  name: t.User.viewCoursePage.notCompleted as string,
                   previousStateModifier: () => {
                     return [
                       ...missions.filter((misison) => {
