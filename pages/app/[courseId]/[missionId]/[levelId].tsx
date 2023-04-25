@@ -1,11 +1,15 @@
 import { CourseEnrollment } from '@/models/crud/course-enrollment.model'
 import { CourseEnrollmentAPI } from '@/utils/api/courseEnrollment/course-enrollment.api'
 import { CourseType } from '@/models/crud/course.model'
+import { Feedback } from '@/models/crud/feedback.model'
+import { FeedbackApi } from '@/utils/api/feedback/feedback.api'
+import { FeedbackDialog } from '@/components/user/level/feedback'
 import { LevelEnrollment } from '@/models/crud/level-enrollment.model'
 import { MissionEnrollment } from '@/models/crud/mission-enrollment.model'
 import { User } from '@/models/crud'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
+import { title } from 'process'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import ArduinoLevel from '@/components/user/level/arduinoLevel'
@@ -21,18 +25,39 @@ const PlayLevel = ({
   level,
   mission,
   course,
-}: {
+}: // feedback,
+{
   user: User
   level: LevelEnrollment
   mission: MissionEnrollment
   course: CourseEnrollment
+  // feedback: Feedback
 }) => {
   const t = useTranslation()
   const router = useRouter()
   const session = useSession()
 
+  const [openDialogue, setOpenDialogue] = React.useState(false)
+
+  // const onClose = () => {
+  //   router.push(`/app/${course.course._id}/${mission._id}`)
+  // }
+
+  const onSubmit = () => {}
+
   return (
     <>
+      {
+        <FeedbackDialog
+          open={openDialogue}
+          title="Feedback"
+          close={() => {
+            setOpenDialogue(false)
+          }}
+          submit={onSubmit}
+        />
+      }
+
       <Head>
         <title>NinjaCo | Play Level</title>
         <meta name="description" content="Create Level" />
@@ -55,6 +80,13 @@ const PlayLevel = ({
         ) : (
           <ArduinoLevel course={course.course} level={level.level} mission={mission.mission} />
         )}
+
+        <button
+          className=" absolute btn btn-brand mx-auto my-4 bottom-32 left-5 z-20"
+          onClick={() => setOpenDialogue(true)}
+        >
+          Complete Level
+        </button>
       </main>
     </>
   )
@@ -129,6 +161,8 @@ export const getServerSideProps = async (context) => {
     }
   }
 
+  // const feedback = new FeedbackApi(session)
+
   level.level = actualLevelInfo
   return {
     props: {
@@ -136,6 +170,7 @@ export const getServerSideProps = async (context) => {
       level: level,
       mission: mission,
       course: typedCourse,
+      // feedback: feedback,
     },
   }
 }
