@@ -36,6 +36,9 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
     }
   }, [])
 
+  //  useState to save the number of blocks
+  const [numBlocks, setNumBlocks] = React.useState()
+
   const onChangeListener = (
     e: Blockly.Events.Abstract,
     workspaceRefrence: Blockly.WorkspaceSvg
@@ -51,6 +54,8 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
       // Event is UI event or finished loading or workspace is dragging
       return
     }
+    const num = workspaceRefrence.getAllBlocks(false).length
+    setNumBlocks(num)
     const code = getCodeFromBlockly()
     if (code) {
       setHtmlCode(code)
@@ -204,7 +209,7 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
           />
         </Switch>
       </div>
-      <div className="absolute top-[82%] left-4 z-20 flex flex-col gap-4">
+      <div className="absolute top-[82%] left-4 z-20 flex flex-col gap-4 ">
         <button
           className="btn btn-brand rounded-md flex justify-between gap-4 pl-2 pr-4"
           onClick={() => {
@@ -212,8 +217,10 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
           }}
         >
           <ArrowDownIcon className="text-secondary z-20 w-5 h-5"></ArrowDownIcon>
+
           <p className="whitespace-nowrap">{t.User.htmlLevel.downloadCode}</p>
         </button>
+
         <button
           className="btn btn-brand rounded-md flex justify-start gap-4 pl-2 pr-4"
           onClick={() => {
@@ -221,8 +228,18 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
           }}
         >
           <TrashIcon className="text-secondary z-20 w-5 h-5"></TrashIcon>
-          <p className="whitespace-nowrap">{t.User.htmlLevel.resetAll}</p>
+          <p className="whitespace-nowrap">
+            {t.User.htmlLevel.resetAll} {numBlocks}
+          </p>
         </button>
+
+        {/* if numBlock greater then 2 */}
+
+        {numBlocks > 2 && (
+          <button className="btn btn-brand rounded-md flex justify-start gap-4 pl-2 pr-4">
+            hello
+          </button>
+        )}
       </div>
     </div>
   )
