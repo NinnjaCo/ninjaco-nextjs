@@ -162,8 +162,6 @@ export const getServerSideProps = async (context) => {
     }
   }
 
-  // const feedback = new FeedbackApi(session)
-
   level.level = actualLevelInfo
   return {
     props: {
@@ -171,7 +169,6 @@ export const getServerSideProps = async (context) => {
       level: level,
       mission: mission,
       course: typedCourse,
-      // feedback: feedback,
     },
   }
 }
