@@ -4,7 +4,10 @@ import { CourseEnrollmentAPI } from '@/utils/api/courseEnrollment/course-enrollm
 import { Level } from '@/models/crud/level.model'
 import { LevelEnrollmentApi } from '@/utils/api/levelEnrollment/level-enrollment.api'
 import { Mission } from '@/models/crud/mission.model'
+import { Session } from 'inspector'
 import { Switch } from '@headlessui/react'
+import { authOptions } from '@/pages/api/auth/[...nextauth]'
+import { getServerSession } from 'next-auth'
 import { htmlBlocks } from '@/blockly/blocks/html'
 import { htmlGenerator } from '@/blockly/generetors/html'
 import { htmlToolBox } from '@/blockly/toolbox/html'
@@ -165,7 +168,10 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
 
   // function to update the level status
   const updateLevelStatus = () => {
-    new LevelEnrollmentApi(course._id, mission._id).updateProgress(
+    co
+
+    const session = getServerSession()
+    new LevelEnrollmentApi(course._id, mission._id, session).updateProgress(
       course._id,
       mission._id,
       level._id,
@@ -268,5 +274,3 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
     </div>
   )
 }
-
-export default HtmlLevel

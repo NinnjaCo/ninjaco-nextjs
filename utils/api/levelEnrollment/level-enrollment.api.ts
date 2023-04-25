@@ -25,7 +25,10 @@ export class LevelEnrollmentApi extends CrudApi<LevelEnrollment, LevelEnrollment
     levelId: string,
     progress: boolean
   ): Promise<CrudResponse<LevelEnrollment>> {
-    const { data } = await this.client.put(`${this.path}/${levelId}`, { progress })
+    const { data } = await this.client.put(
+      `/course-enrollements/${courseId}/missions/${missionId}/levels/${levelId}`,
+      { progress }
+    )
     return data
   }
 }
