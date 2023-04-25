@@ -37,28 +37,8 @@ const PlayLevel = ({
   const router = useRouter()
   const session = useSession()
 
-  const [openDialogue, setOpenDialogue] = React.useState(false)
-
-  const Close = () => {
-    router.push(`/app/${course.course._id}`)
-  }
-
   return (
     <>
-      {
-        <FeedbackDialog
-          userId={user._id}
-          courseId={course.course._id}
-          missionId={mission.mission._id}
-          levelId={level.level._id}
-          open={openDialogue}
-          title="Feedback"
-          close={() => {
-            Close()
-          }}
-        />
-      }
-
       <Head>
         <title>NinjaCo | Play Level</title>
         <meta name="description" content="Create Level" />
@@ -77,17 +57,15 @@ const PlayLevel = ({
           </Link>
         </div>
         {course.course.type === CourseType.HTML ? (
-          <HtmlLevel course={course.course} level={level.level} mission={mission.mission} />
+          <HtmlLevel
+            course={course.course}
+            level={level.level}
+            mission={mission.mission}
+            user={user}
+          />
         ) : (
           <ArduinoLevel course={course.course} level={level.level} mission={mission.mission} />
         )}
-
-        <button
-          className=" absolute btn btn-brand mx-auto my-4 bottom-32 left-5 z-20"
-          onClick={() => setOpenDialogue(true)}
-        >
-          Complete Level
-        </button>
       </main>
     </>
   )
@@ -148,6 +126,21 @@ export const getServerSideProps = async (context) => {
       },
     }
   }
+
+  const actuallMissionInfo = typedCourse.course.missions.find(
+    (mission) => mission._id === missionId
+  )
+
+  if (!actuallMissionInfo) {
+    return {
+      redirect: {
+        destination: '/app/' + courseId,
+        permanent: false,
+      },
+    }
+  }
+
+  mission.mission = actuallMissionInfo
 
   const actualLevelInfo = typedCourse.course.missions
     .find((mission) => mission._id === missionId)

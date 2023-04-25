@@ -1,4 +1,6 @@
+import { ChatBubbleLeftRightIcon, StarIcon as StarIconOutline } from '@heroicons/react/24/outline'
 import { FeedbackApi } from '@/utils/api/feedback/feedback.api'
+import { StarIcon } from '@heroicons/react/24/solid'
 import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 import router from 'next/router'
@@ -20,21 +22,18 @@ const StarRating = ({ rating, handleRating }) => {
   const stars = [...Array(5)].map((_, i) => {
     // when the first start is clicked, set rating to 0
     const starValue = i + 1
-    const starClass = rating >= starValue ? 'text-yellow-400' : 'text-brand-400'
-    return (
-      <svg
+    return rating >= starValue ? (
+      <StarIcon
         key={i}
-        className={`w-6 h-6 ${starClass}`}
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        viewBox="0 0 24 24"
+        className={`w-8 h-8 text-secondary hover:text-secondary-800 cursor-pointer`}
         onClick={() => handleRating(starValue)}
-      >
-        <path d="M12 2L15.09 8.24L22 9.27L17 14.18L18.18 21L12 17.77L5.82 21L7 14.18L2 9.27L8.91 8.24L12 2Z" />
-      </svg>
+      />
+    ) : (
+      <StarIconOutline
+        key={i}
+        className={`w-8 h-8 text-brand-400 hover:text-brand-400 cursor-pointer`}
+        onClick={() => handleRating(starValue)}
+      />
     )
   })
 
@@ -49,12 +48,15 @@ export const FeedbackDialog: React.FC<FeedbackDialogProps> = ({
   missionId,
   levelId,
   userId,
-  backButtonText = 'Cancel',
+  backButtonText = 'Go Back to Mission',
   submitButtonText = 'Submit',
   className,
 }: FeedbackDialogProps) => {
-  const [rating, setRating] = useState(4)
+  const [rating, setRating] = useState<number | undefined>(undefined)
   const [message, setMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
+  const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false)
+
   const handleRating = (rating: number) => {
     setRating(rating)
   }
@@ -66,6 +68,13 @@ export const FeedbackDialog: React.FC<FeedbackDialogProps> = ({
     close()
   }
   const handleSubmit = async () => {
+    if (!rating) {
+      setErrorMessage('Please select a rating before submitting.')
+      return
+    }
+
+    setSubmitButtonDisabled(true)
+
     try {
       await new FeedbackApi(session.data).create({
         courseId,
@@ -73,10 +82,12 @@ export const FeedbackDialog: React.FC<FeedbackDialogProps> = ({
         missionId,
         levelId,
         rating,
-        message,
+        ...(message && { message }),
       })
-      router.push(`/app/${courseId}`)
+      router.push(`/app/${courseId}/${missionId}`)
     } catch (e) {
+      setErrorMessage('Something went wrong. Please try again.')
+      setSubmitButtonDisabled(false)
       console.log(e)
     }
   }
@@ -85,47 +96,56 @@ export const FeedbackDialog: React.FC<FeedbackDialogProps> = ({
     <div className="fixed z-50 inset-0 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen">
         <div
-          className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+          className="fixed inset-0 bg-brand bg-opacity-50 transition-opacity"
           aria-hidden="true"
         />
         <div
-          className={`bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full ${className}`}
+          className={`bg-white rounded-md overflow-hidden shadow-xl transform transition-all sm:max-w-xl sm:w-full ${className}`}
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-headline"
         >
-          <div className="bg-gray-300 px-4 py-3">
-            <h3 className="text-xl font-medium text-brand-700" id="modal-headline">
-              {title}
+          <div className="bg-brand px-4 py-3 border-b-2 border-b-secondary">
+            <h3
+              className="text-xl font-medium text-secondary flex gap-2 items-center"
+              id="modal-headline"
+            >
+              {title}{' '}
+              <ChatBubbleLeftRightIcon className="w-5 h-5 text-secondary"></ChatBubbleLeftRightIcon>
             </h3>
           </div>
-          <div className="bg-gray-100 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div className="bg-brand-50 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div className="flex flex-col">
               <div className="flex flex-col">
-                <label className="leading-loose text-brand-700 text-lg">Rating</label>
+                <label className="leading-loose text-brand text-lg font-semibold">
+                  How would you rate this level?
+                </label>
                 <StarRating rating={rating} handleRating={handleRating} />
+                <p className="text-error text-sm">{errorMessage}</p>
               </div>
               <div className="flex flex-col mt-4">
-                <label className="leading-loose text-brand-700 text-lg">Review (optional)</label>
+                <label className="leading-loose text-brand text-lg font-medium">
+                  Optional Review
+                </label>
                 <textarea
                   className="h-24 py-2 px-3 text-gray-700 border rounded-lg focus:outline-none focus:shadow-outline"
                   onChange={handleMessage}
                   value={message}
+                  placeholder="Your review will remain anonymous."
+                  style={{ resize: 'none' }}
                 />
               </div>
             </div>
           </div>
-          <div className="bg-gray-300 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-5">
+          <div className="bg-brand-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-5">
             <button
-              className="bg-blue-400 rounded-lg py-1 px-2 text-lg text-brand-900 font-medium hover:bg-blue-500 transition-colors"
+              className="btn btn-brand rounded-md disabled:bg-gray-500"
               onClick={handleSubmit}
+              disabled={submitButtonDisabled}
             >
               {submitButtonText}
             </button>
-            <button
-              className="border-2 border-brand-400 rounded-lg py-1 px-2 text-lg text-brand-900 font-medium hover:bg-brand-300 transition-colors"
-              onClick={handleCancel}
-            >
+            <button className="btn btn-secondary rounded-md" onClick={handleCancel}>
               {backButtonText}
             </button>
           </div>

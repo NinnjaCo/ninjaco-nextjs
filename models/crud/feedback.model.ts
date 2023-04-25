@@ -10,7 +10,7 @@ export interface Feedback {
   mission: Mission
   level: Level
   rating: number
-  message: string
+  message?: string
 }
 
 export interface FeedbackRequest {
@@ -19,5 +19,5 @@ export interface FeedbackRequest {
   missionId: string
   levelId: string
   rating: number
-  message: string
+  message?: string
 }
