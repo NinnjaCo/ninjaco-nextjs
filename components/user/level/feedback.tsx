@@ -94,12 +94,12 @@ export const FeedbackDialog: React.FC<FeedbackDialogProps> = ({
           aria-modal="true"
           aria-labelledby="modal-headline"
         >
-          <div className="bg-brand-300 px-4 py-3">
+          <div className="bg-gray-300 px-4 py-3">
             <h3 className="text-xl font-medium text-brand-700" id="modal-headline">
               {title}
             </h3>
           </div>
-          <div className="bg-brand-100 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div className="bg-gray-100 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div className="flex flex-col">
               <div className="flex flex-col">
                 <label className="leading-loose text-brand-700 text-lg">Rating</label>
@@ -115,15 +115,15 @@ export const FeedbackDialog: React.FC<FeedbackDialogProps> = ({
               </div>
             </div>
           </div>
-          <div className="bg-brand-300 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-5">
+          <div className="bg-gray-300 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-5">
             <button
-              className="bg-red-400 rounded-lg py-1 px-2 text-lg text-brand-900 font-medium hover:bg-red-500 transition-colors"
+              className="bg-blue-400 rounded-lg py-1 px-2 text-lg text-brand-900 font-medium hover:bg-blue-500 transition-colors"
               onClick={handleSubmit}
             >
               {submitButtonText}
             </button>
             <button
-              className="border-2 border-brand rounded-lg py-1 px-2 text-lg text-brand-900 font-medium hover:bg-brand-500 transition-colors"
+              className="border-2 border-brand-400 rounded-lg py-1 px-2 text-lg text-brand-900 font-medium hover:bg-brand-300 transition-colors"
               onClick={handleCancel}
             >
               {backButtonText}
