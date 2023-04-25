@@ -230,3 +230,4 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
     </div>
   )
 }
+export default HtmlLevel
