@@ -1,4 +1,4 @@
-import { ArrowDownIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { ArrowDownIcon, CheckIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { Course } from '@/models/crud/course.model'
 import { Level } from '@/models/crud/level.model'
 import { Mission } from '@/models/crud/mission.model'
@@ -237,6 +237,8 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
 
         {numBlocks > 2 && (
           <button className="btn btn-brand rounded-md flex justify-start gap-4 pl-2 pr-4">
+            {/* completed icon */}
+            <CheckIcon className="text-secondary z-20 w-5 h-5"></CheckIcon>
             Complete Level
           </button>
         )}
