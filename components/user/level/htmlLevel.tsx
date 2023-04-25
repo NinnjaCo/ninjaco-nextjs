@@ -3,6 +3,7 @@ import { Course } from '@/models/crud/course.model'
 import { FeedbackDialog } from './feedback'
 import { Level } from '@/models/crud/level.model'
 import { Mission } from '@/models/crud/mission.model'
+import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid'
 import { Switch } from '@headlessui/react'
 import { User } from '@/models/crud'
 import { htmlBlocks } from '@/blockly/blocks/html'
@@ -185,10 +186,13 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
         ></BlocklyBoard>
         <div className="basis-2/3 border-l-2 border-l-brand-400 h-full flex flex-col">
           <div className="basis-1/2 w-full text-xs bg-brand-100">
-            <p className="pl-2 pt-1 text-brand font-semibold">
-              {t.User.htmlLevel.thisHowYourWebsiteWillLook}
-            </p>
             <div className="w-full h-full relative">
+              <div className="group relative flex justify-center">
+                <QuestionMarkCircleIcon className="absolute top-1 right-3 w-4 h-4 text-brand-300 hover:text-brand-500 cursor-pointer z-20" />
+                <span className="absolute top-2 right-5 scale-0 rounded bg-brand p-2 text-xs text-white group-hover:scale-100 z-20">
+                  ✨ This is how your website should look like
+                </span>
+              </div>
               <Image
                 src={level.websitePreviewImage || targetwebsite}
                 alt="Target Website Preview"
@@ -200,7 +204,13 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
               ></Image>
             </div>
           </div>
-          <div className="basis-1/2 w-full border-t-2 border-brand-400  overflow-y-scroll font-serif">
+          <div className="basis-1/2 w-full border-t-2 border-brand-400  overflow-y-scroll font-serif relative">
+            <div className="group relative flex justify-center">
+              <QuestionMarkCircleIcon className="absolute top-1 right-3 w-4 h-4 text-brand-100 hover:text-brand-500 cursor-pointer z-20" />
+              <span className="absolute top-2 right-5 scale-0 rounded bg-brand p-2 text-xs text-white group-hover:scale-100 z-20 font-quicksand">
+                🚀 Preview your own HTML code in real-time
+              </span>
+            </div>
             {showWebsitePreview ? (
               <div>{getCleanReactHtml(htmlCode)}</div>
             ) : (
