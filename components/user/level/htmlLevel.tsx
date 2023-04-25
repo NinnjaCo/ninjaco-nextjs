@@ -62,6 +62,7 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
       // Event is UI event or finished loading or workspace is dragging
       return
     }
+
     const code = getCodeFromBlockly()
     if (code) {
       setHtmlCode(code)
@@ -259,8 +260,47 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
           </button>
         </div>
       </div>
+      <div className="absolute top-3/4 left-4 flex gap-4 items-center">
+        <div>{showWebsitePreview ? t.User.htmlLevel.showCode : t.User.htmlLevel.showWebsite}</div>
+        <Switch
+          checked={showWebsitePreview}
+          onChange={(isChecked) => {
+            setShowWebsitePreview(isChecked)
+          }}
+          className={`${!showWebsitePreview ? 'bg-brand-700' : 'bg-brand-500'}
+                      inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+        >
+          <span className="sr-only">{showWebsitePreview ? 'Show Code' : 'Show Website'}</span>
+          <span
+            aria-hidden="true"
+            className={`${!showWebsitePreview ? 'translate-x-7' : 'translate-x-0'}
+                        pointer-events-none inline-block h-[34px] w-[34px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+          />
+        </Switch>
+      </div>
+      <div className="absolute top-[82%] left-4 z-20 flex flex-col gap-4 ">
+        <button
+          className="btn btn-brand rounded-md flex justify-between gap-4 pl-2 pr-4"
+          onClick={() => {
+            downloadCode()
+          }}
+        >
+          <ArrowDownIcon className="text-secondary z-20 w-5 h-5"></ArrowDownIcon>
+
+          <p className="whitespace-nowrap">{t.User.htmlLevel.downloadCode}</p>
+        </button>
+
+        <button
+          className="btn btn-brand rounded-md flex justify-start gap-4 pl-2 pr-4"
+          onClick={() => {
+            resetCode()
+          }}
+        >
+          <TrashIcon className="text-secondary z-20 w-5 h-5"></TrashIcon>
+          <p className="whitespace-nowrap">{t.User.htmlLevel.resetAll}</p>
+        </button>
+      </div>
     </>
   )
 }
-
 export default HtmlLevel
