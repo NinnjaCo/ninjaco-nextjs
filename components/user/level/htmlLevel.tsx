@@ -237,7 +237,7 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
 
         {numBlocks > 2 && (
           <button className="btn btn-brand rounded-md flex justify-start gap-4 pl-2 pr-4">
-            hello
+            Complete Level
           </button>
         )}
       </div>
