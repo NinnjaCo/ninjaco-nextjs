@@ -39,22 +39,23 @@ const PlayLevel = ({
 
   const [openDialogue, setOpenDialogue] = React.useState(false)
 
-  // const onClose = () => {
-  //   router.push(`/app/${course.course._id}/${mission._id}`)
-  // }
-
-  const onSubmit = () => {}
+  const Close = () => {
+    router.push(`/app/${course.course._id}`)
+  }
 
   return (
     <>
       {
         <FeedbackDialog
+          userId={user._id}
+          courseId={course.course._id}
+          missionId={mission.mission._id}
+          levelId={level.level._id}
           open={openDialogue}
           title="Feedback"
           close={() => {
-            setOpenDialogue(false)
+            Close()
           }}
-          submit={onSubmit}
         />
       }
 

@@ -1,10 +1,16 @@
+import { FeedbackApi } from '@/utils/api/feedback/feedback.api'
+import { useSession } from 'next-auth/react'
 import { useState } from 'react'
+import router from 'next/router'
 
 type FeedbackDialogProps = React.ComponentPropsWithRef<'div'> & {
   title: string
   open: boolean
   close: () => void
-  submit: (rating: number, message: string) => void
+  courseId: string
+  missionId: string
+  levelId: string
+  userId: string
   backButtonText?: string
   submitButtonText?: string
   className?: string
@@ -39,25 +45,40 @@ export const FeedbackDialog: React.FC<FeedbackDialogProps> = ({
   title,
   open,
   close,
-  submit,
+  courseId,
+  missionId,
+  levelId,
+  userId,
   backButtonText = 'Cancel',
   submitButtonText = 'Submit',
   className,
 }: FeedbackDialogProps) => {
-  const [rating, setRating] = useState(0)
+  const [rating, setRating] = useState(4)
   const [message, setMessage] = useState('')
   const handleRating = (rating: number) => {
     setRating(rating)
   }
+  const session = useSession()
   const handleMessage = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(event.target.value)
   }
   const handleCancel = () => {
     close()
   }
-  const handleSubmit = () => {
-    close()
-    submit(rating, message)
+  const handleSubmit = async () => {
+    try {
+      await new FeedbackApi(session.data).create({
+        courseId,
+        userId,
+        missionId,
+        levelId,
+        rating,
+        message,
+      })
+      router.push(`/app/${courseId}`)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   return open ? (
@@ -85,7 +106,7 @@ export const FeedbackDialog: React.FC<FeedbackDialogProps> = ({
                 <StarRating rating={rating} handleRating={handleRating} />
               </div>
               <div className="flex flex-col mt-4">
-                <label className="leading-loose text-brand-700 text-lg">Message</label>
+                <label className="leading-loose text-brand-700 text-lg">Review (optional)</label>
                 <textarea
                   className="h-24 py-2 px-3 text-gray-700 border rounded-lg focus:outline-none focus:shadow-outline"
                   onChange={handleMessage}
