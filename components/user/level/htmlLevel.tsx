@@ -1,6 +1,8 @@
 import { ArrowDownIcon, CheckIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { Course } from '@/models/crud/course.model'
+import { CourseEnrollmentAPI } from '@/utils/api/courseEnrollment/course-enrollment.api'
 import { Level } from '@/models/crud/level.model'
+import { LevelEnrollmentApi } from '@/utils/api/levelEnrollment/level-enrollment.api'
 import { Mission } from '@/models/crud/mission.model'
 import { Switch } from '@headlessui/react'
 import { htmlBlocks } from '@/blockly/blocks/html'
@@ -159,6 +161,16 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
 
     // delete the link to avoid memory leaks
     link.remove()
+  }
+
+  // function to update the level status
+  const updateLevelStatus = (status: boolean) => {
+    new LevelEnrollmentApi(course._id, mission._id).updateProgress(
+      course._id,
+      mission._id,
+      level._id,
+      status
+    )
   }
 
   return (
