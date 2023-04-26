@@ -1,7 +1,8 @@
 import { ArrowDownIcon, CheckCircleIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { Course } from '@/models/crud/course.model'
 import { FeedbackDialog } from './feedback'
-import { Level } from '@/models/crud/level.model'
+import { LevelEnrollment } from '@/models/crud/level-enrollment.model'
+import { LevelEnrollmentApi } from '@/utils/api/levelEnrollment/level-enrollment.api'
 import { Mission } from '@/models/crud/mission.model'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid'
 import { Switch } from '@headlessui/react'
@@ -10,35 +11,38 @@ import { htmlBlocks } from '@/blockly/blocks/html'
 import { htmlGenerator } from '@/blockly/generetors/html'
 import { htmlToolBox } from '@/blockly/toolbox/html'
 import { useRouter } from 'next/router'
+import { useSession } from 'next-auth/react'
 import Blockly from 'blockly'
 import BlocklyBoard from '@/components/blockly/blockly'
 import DOMPurify from 'isomorphic-dompurify'
 import Image from 'next/image'
 import React from 'react'
+import clsx from 'clsx'
 import convertHtmlToReact from '@hedgedoc/html-to-react'
 import targetwebsite from '@/images/targetwebsite.png'
 import useTranslation from '@/hooks/useTranslation'
 
 interface Props {
   course: Course
-  level: Level
+  level: LevelEnrollment
   mission: Mission
   user: User
 }
 
 const HtmlLevel = ({ course, level, mission, user }: Props) => {
-  const [openDialogue, setOpenDialogue] = React.useState(false)
   const t = useTranslation()
   const router = useRouter()
+  const session = useSession()
+  const [openDialogue, setOpenDialogue] = React.useState(false)
+  const [showWebsitePreview, setShowWebsitePreview] = React.useState(true)
+  const [htmlCode, setHtmlCode] = React.useState('')
+  const [numBlocks, setNumBlocks] = React.useState<number>(0)
+
+  const parentRef = React.useRef<any>()
 
   const close = () => {
     router.push(`/app/${course._id}/${mission._id}`)
   }
-
-  const [showWebsitePreview, setShowWebsitePreview] = React.useState(true)
-  const [htmlCode, setHtmlCode] = React.useState('')
-
-  const parentRef = React.useRef<any>()
 
   React.useEffect(() => {
     const code = getCodeFromBlockly()
@@ -46,6 +50,8 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
       setHtmlCode(code)
     }
   }, [])
+
+  //  useState to save the number of blocks
 
   const onChangeListener = (
     e: Blockly.Events.Abstract,
@@ -62,6 +68,12 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
       // Event is UI event or finished loading or workspace is dragging
       return
     }
+
+    const num = workspaceRefrence.getAllBlocks(false).length
+    // wait for 20 seconds before updating the number of blocks
+    setTimeout(() => {
+      setNumBlocks(num)
+    }, 200)
 
     const code = getCodeFromBlockly()
     if (code) {
@@ -162,13 +174,45 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
     // delete the link to avoid memory leaks
     link.remove()
   }
+
+  const updateLevelStatus = async () => {
+    if (level.completed) {
+      router.push(`/app/${course._id}/${mission._id}`)
+    }
+
+    // update levelEnrollment to be complete
+    await new LevelEnrollmentApi(course._id, mission._id, session.data).update(level.level._id, {
+      completed: true,
+    })
+    //  get all levels of the mission
+    const levels = course.missions?.find((m) => m._id === mission._id)?.levels
+
+    if (levels) {
+      const currentLevelIndex = levels.findIndex((l) => l._id === level.level._id)
+      console.log(levels, currentLevelIndex)
+      if (currentLevelIndex < levels.length) {
+        //  get the next level
+        const nextLevel = levels[currentLevelIndex + 1]
+        console.log(nextLevel)
+        //  unlock the next level
+        await new LevelEnrollmentApi(course._id, mission._id, session.data).create({
+          levelId: nextLevel._id,
+          completed: false,
+        })
+      }
+    }
+
+    // Feedback dialogue
+    setOpenDialogue(true)
+  }
+
   return (
     <>
       <FeedbackDialog
         userId={user._id}
         courseId={course._id}
         missionId={mission._id}
-        levelId={level._id}
+        levelId={level.level._id}
         open={openDialogue}
         title="Feedback"
         close={() => {
@@ -194,7 +238,7 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
                 </span>
               </div>
               <Image
-                src={level.websitePreviewImage || targetwebsite}
+                src={level.level.websitePreviewImage || targetwebsite}
                 alt="Target Website Preview"
                 className="w-full h-full max-w-full max-h-full"
                 fill
@@ -220,6 +264,17 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
         </div>
 
         <div className="absolute top-[55%] left-4 z-20 flex flex-col gap-4">
+          {level.completed && (
+            <button
+              className="btn btn-brand hover:bg-success  border-success-dark rounded-md flex justify-start gap-4 pl-2 pr-4 transition-all bg-success-light text-success-dark"
+              onClick={() => {
+                router.push(`/app/${course._id}/${mission._id}`)
+              }}
+            >
+              <CheckCircleIcon className={clsx('text-success-dark z-20 w-5 h-5')}></CheckCircleIcon>
+              Completed
+            </button>
+          )}
           <div className="flex gap-4 items-center">
             <div>
               {showWebsitePreview ? t.User.htmlLevel.showCode : t.User.htmlLevel.showWebsite}
@@ -240,17 +295,25 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
               />
             </Switch>
           </div>
+          {numBlocks > 2 && !level.completed && (
+            <button
+              className="btn btn-brand hover:bg-brand-500 rounded-md flex justify-start gap-4 pl-2 pr-4 transition-all disabled:bg-success-light disabled:text-success-dark"
+              onClick={() => {
+                updateLevelStatus()
+              }}
+              disabled={level.completed}
+            >
+              <CheckCircleIcon
+                className={clsx('z-20 w-5 h-5', {
+                  'text-success-dark': level.completed,
+                  'text-secondary': !level.completed,
+                })}
+              ></CheckCircleIcon>
+              {level.completed ? 'Completed' : 'Complete Level'}
+            </button>
+          )}
           <button
-            className="btn btn-brand rounded-md flex justify-between gap-4 pl-2 pr-4"
-            onClick={() => {
-              setOpenDialogue(true)
-            }}
-          >
-            <CheckCircleIcon className="text-secondary z-20 w-5 h-5"></CheckCircleIcon>
-            <p className="whitespace-nowrap">Complete Level</p>
-          </button>
-          <button
-            className="btn btn-brand rounded-md flex justify-between gap-4 pl-2 pr-4"
+            className="btn btn-brand hover:bg-brand-500 rounded-md flex justify-between gap-4 pl-2 pr-4"
             onClick={() => {
               downloadCode()
             }}
@@ -259,7 +322,7 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
             <p className="whitespace-nowrap">{t.User.htmlLevel.downloadCode}</p>
           </button>
           <button
-            className="btn btn-brand rounded-md flex justify-start gap-4 pl-2 pr-4"
+            className="btn btn-brand hover:bg-brand-500 rounded-md flex justify-start gap-4 pl-2 pr-4"
             onClick={() => {
               resetCode()
             }}
