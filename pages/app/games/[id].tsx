@@ -7,11 +7,13 @@ import { GetServerSideProps } from 'next'
 import { GridCellComponent } from '@/components/user/game/gridCell'
 import { Queue } from 'datastructure/queue'
 import { User } from '@/models/crud'
+import { UserApi } from '@/utils/api/user/user.api'
 import { UserPlayGame } from '@/models/crud/game-enrollment.model'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { gameBlocks } from '@/blockly/blocks/game'
 import { gameGenerator } from '@/blockly/generetors/game'
 import { gameToolBox } from '@/blockly/toolbox/game'
+import { getLevelFromPoints } from '@/utils/shared'
 import { getServerSession } from 'next-auth'
 import { useImmer } from 'use-immer'
 import { useRouter } from 'next/router'
@@ -724,6 +726,13 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
       return
     }
 
+    //update user points
+    const points = getLevelFromPoints(100)
+    console.log('points', points)
+    console.log('user points before', user.points)
+    user.points += points
+    console.log('user points after', user.points)
+    await new UserApi(session).update(user._id, { points: user.points })
     //update userPlayGame to be completed
     await new GameEnrollmentAPI(session).update(game._id, { completed: true })
   }

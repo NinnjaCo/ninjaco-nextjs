@@ -1,18 +1,21 @@
-import { ArrowDownIcon, CheckIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { ArrowDownIcon, CheckCircleIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { Course } from '@/models/crud/course.model'
 import { CourseEnrollmentAPI } from '@/utils/api/courseEnrollment/course-enrollment.api'
+import { FeedbackDialog } from './feedback'
 import { Level } from '@/models/crud/level.model'
 import { LevelApi } from '@/utils/api/level/level.api'
 import { LevelEnrollmentApi } from '@/utils/api/levelEnrollment/level-enrollment.api'
 import { Mission } from '@/models/crud/mission.model'
+import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid'
 import { Router } from 'next/router'
-import { Session } from 'inspector'
 import { Switch } from '@headlessui/react'
+import { User } from '@/models/crud'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { htmlBlocks } from '@/blockly/blocks/html'
 import { htmlGenerator } from '@/blockly/generetors/html'
 import { htmlToolBox } from '@/blockly/toolbox/html'
+import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import Blockly from 'blockly'
 import BlocklyBoard from '@/components/blockly/blockly'
@@ -27,15 +30,22 @@ interface Props {
   course: Course
   level: Level
   mission: Mission
+  user: User
 }
 
-const HtmlLevel = ({ course, level, mission }: Props) => {
+const HtmlLevel = ({ course, level, mission, user }: Props) => {
+  const t = useTranslation()
+  const router = useRouter()
+  const [openDialogue, setOpenDialogue] = React.useState(false)
   const [showWebsitePreview, setShowWebsitePreview] = React.useState(true)
   const [htmlCode, setHtmlCode] = React.useState('')
+  const [numBlocks, setNumBlocks] = React.useState(
 
   const parentRef = React.useRef<any>()
 
-  const t = useTranslation()
+  const close = () => {
+    router.push(`/app/${course._id}/${mission._id}`)
+  }
 
   React.useEffect(() => {
     const code = getCodeFromBlockly()
@@ -45,7 +55,6 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
   }, [])
 
   //  useState to save the number of blocks
-  const [numBlocks, setNumBlocks] = React.useState()
 
   const onChangeListener = (
     e: Blockly.Events.Abstract,
@@ -193,101 +202,121 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
         }
       }
     }
-    // redirect to the  mission page
-    Router.push(`/courses/${course._id}/missions/${mission._id}`)
+
+    // Feedback dialogue
+    setOpenDialogue(true)
   }
 
   return (
-    <div className="w-full h-full relative overflow-hidden hidden lg:flex">
-      <BlocklyBoard
-        ref={parentRef}
-        blocklyOptions={blocklyGameOptions}
-        codeGenerator={htmlGenerator}
-        blocksDefinitions={htmlBlocks}
-        onChangeListener={onChangeListener}
-        storageKey={`course-${course._id}-mission-${mission._id}-level-${level._id}`}
-      ></BlocklyBoard>
-      <div className="basis-2/3 border-l-2 border-l-brand-400 h-full flex flex-col">
-        <div className="basis-1/2 w-full text-xs bg-brand-100">
-          <p className="pl-2 pt-1 text-brand font-semibold">
-            {t.User.htmlLevel.thisHowYourWebsiteWillLook}
-          </p>
-          <div className="w-full h-full relative">
-            <Image
-              src={level.websitePreviewImage || targetwebsite}
-              alt="Target Website Preview"
-              className="w-full h-full max-w-full max-h-full"
-              fill
-              style={{
-                objectFit: 'contain',
-              }}
-            ></Image>
+    <>
+      <FeedbackDialog
+        userId={user._id}
+        courseId={course._id}
+        missionId={mission._id}
+        levelId={level._id}
+        open={openDialogue}
+        title="Feedback"
+        close={() => {
+          close()
+        }}
+      />
+      <div className="w-full h-full relative overflow-hidden hidden lg:flex">
+        <BlocklyBoard
+          ref={parentRef}
+          blocklyOptions={blocklyGameOptions}
+          codeGenerator={htmlGenerator}
+          blocksDefinitions={htmlBlocks}
+          onChangeListener={onChangeListener}
+          storageKey={`course-${course._id}-mission-${mission._id}-level-${level._id}`}
+        ></BlocklyBoard>
+        <div className="basis-2/3 border-l-2 border-l-brand-400 h-full flex flex-col">
+          <div className="basis-1/2 w-full text-xs bg-brand-100">
+            <div className="w-full h-full relative">
+              <div className="group relative flex justify-center">
+                <QuestionMarkCircleIcon className="absolute top-1 right-3 w-4 h-4 text-brand-300 hover:text-brand-500 cursor-pointer z-20" />
+                <span className="absolute top-2 right-5 scale-0 rounded bg-brand p-2 text-xs text-white group-hover:scale-100 z-20">
+                  ✨ This is how your website should look like
+                </span>
+              </div>
+              <Image
+                src={level.websitePreviewImage || targetwebsite}
+                alt="Target Website Preview"
+                className="w-full h-full max-w-full max-h-full"
+                fill
+                style={{
+                  objectFit: 'contain',
+                }}
+              ></Image>
+            </div>
+          </div>
+          <div className="basis-1/2 w-full border-t-2 border-brand-400  overflow-y-scroll font-serif relative">
+            <div className="group relative flex justify-center">
+              <QuestionMarkCircleIcon className="absolute top-1 right-3 w-4 h-4 text-brand-100 hover:text-brand-500 cursor-pointer z-20" />
+              <span className="absolute top-2 right-5 scale-0 rounded bg-brand p-2 text-xs text-white group-hover:scale-100 z-20 font-quicksand">
+                🚀 Preview your own HTML code in real-time
+              </span>
+            </div>
+            {showWebsitePreview ? (
+              <div>{getCleanReactHtml(htmlCode)}</div>
+            ) : (
+              <pre className="text-xs">{htmlCode}</pre>
+            )}
           </div>
         </div>
-        <div className="basis-1/2 w-full border-t-2 border-brand-400  overflow-y-scroll font-serif">
-          {showWebsitePreview ? (
-            <div>{getCleanReactHtml(htmlCode)}</div>
-          ) : (
-            <pre className="text-xs">{htmlCode}</pre>
+
+        <div className="absolute top-[55%] left-4 z-20 flex flex-col gap-4">
+          <div className="flex gap-4 items-center">
+            <div>
+              {showWebsitePreview ? t.User.htmlLevel.showCode : t.User.htmlLevel.showWebsite}
+            </div>
+            <Switch
+              checked={showWebsitePreview}
+              onChange={(isChecked) => {
+                setShowWebsitePreview(isChecked)
+              }}
+              className={`${!showWebsitePreview ? 'bg-brand-700' : 'bg-brand-500'}
+            inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+            >
+              <span className="sr-only">{showWebsitePreview ? 'Show Code' : 'Show Website'}</span>
+              <span
+                aria-hidden="true"
+                className={`${!showWebsitePreview ? 'translate-x-7' : 'translate-x-0'}
+              pointer-events-none inline-block h-[34px] w-[34px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+              />
+            </Switch>
+          </div>
+          {numBlocks > 2 && (
+            <button
+              className="btn btn-brand rounded-md flex justify-start gap-4 pl-2 pr-4"
+              onClick={() => {
+                updateLevelStatus()
+              }}
+            >
+              <CheckCircleIcon className="text-secondary z-20 w-5 h-5"></CheckCircleIcon>
+              Complete Level
+            </button>
           )}
-        </div>
-      </div>
-      <div className="absolute top-3/4 left-4 flex gap-4 items-center">
-        <div>{showWebsitePreview ? t.User.htmlLevel.showCode : t.User.htmlLevel.showWebsite}</div>
-        <Switch
-          checked={showWebsitePreview}
-          onChange={(isChecked) => {
-            setShowWebsitePreview(isChecked)
-          }}
-          className={`${!showWebsitePreview ? 'bg-brand-700' : 'bg-brand-500'}
-                      inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
-        >
-          <span className="sr-only">{showWebsitePreview ? 'Show Code' : 'Show Website'}</span>
-          <span
-            aria-hidden="true"
-            className={`${!showWebsitePreview ? 'translate-x-7' : 'translate-x-0'}
-                        pointer-events-none inline-block h-[34px] w-[34px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
-          />
-        </Switch>
-      </div>
-      <div className="absolute top-[82%] left-4 z-20 flex flex-col gap-4 ">
-        <button
-          className="btn btn-brand rounded-md flex justify-between gap-4 pl-2 pr-4"
-          onClick={() => {
-            downloadCode()
-          }}
-        >
-          <ArrowDownIcon className="text-secondary z-20 w-5 h-5"></ArrowDownIcon>
-
-          <p className="whitespace-nowrap">{t.User.htmlLevel.downloadCode}</p>
-        </button>
-        {/* if numBlock greater then 2 */}
-
-        {numBlocks > 2 && (
+          <button
+            className="btn btn-brand rounded-md flex justify-between gap-4 pl-2 pr-4"
+            onClick={() => {
+              downloadCode()
+            }}
+          >
+            <ArrowDownIcon className="text-secondary z-20 w-5 h-5"></ArrowDownIcon>
+            <p className="whitespace-nowrap">{t.User.htmlLevel.downloadCode}</p>
+          </button>
           <button
             className="btn btn-brand rounded-md flex justify-start gap-4 pl-2 pr-4"
             onClick={() => {
-              updateLevelStatus()
+              resetCode()
             }}
           >
-            {/* completed icon */}
-            <CheckIcon className="text-secondary z-20 w-5 h-5"></CheckIcon>
-            Complete Level
+            <TrashIcon className="text-secondary z-20 w-5 h-5"></TrashIcon>
+            <p className="whitespace-nowrap">{t.User.htmlLevel.resetAll}</p>
           </button>
-        )}
-
-        <button
-          className="btn btn-brand rounded-md flex justify-start gap-4 pl-2 pr-4"
-          onClick={() => {
-            resetCode()
-          }}
-        >
-          <TrashIcon className="text-secondary z-20 w-5 h-5"></TrashIcon>
-          <p className="whitespace-nowrap">{t.User.htmlLevel.resetAll}</p>
-        </button>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
-
 export default HtmlLevel
