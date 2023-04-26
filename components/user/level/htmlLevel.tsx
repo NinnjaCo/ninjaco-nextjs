@@ -11,6 +11,7 @@ import { getServerSession } from 'next-auth'
 import { htmlBlocks } from '@/blockly/blocks/html'
 import { htmlGenerator } from '@/blockly/generetors/html'
 import { htmlToolBox } from '@/blockly/toolbox/html'
+import { useSession } from 'next-auth/react'
 import Blockly from 'blockly'
 import BlocklyBoard from '@/components/blockly/blockly'
 import DOMPurify from 'isomorphic-dompurify'
@@ -167,14 +168,12 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
   }
 
   // function to update the level status
-  const updateLevelStatus = () => {
-    const session = getServerSession()
-    new LevelEnrollmentApi(course._id, mission._id, session).updateProgress(
-      course._id,
-      mission._id,
-      level._id,
-      true
-    )
+  const session = useSession()
+  // function to update the level status
+  const updateLevelStatus = async () => {
+    await new LevelEnrollmentApi(course._id, mission._id, session.data).update(level._id, {
+      completed: true,
+    })
   }
 
   return (
@@ -241,19 +240,6 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
 
           <p className="whitespace-nowrap">{t.User.htmlLevel.downloadCode}</p>
         </button>
-
-        <button
-          className="btn btn-brand rounded-md flex justify-start gap-4 pl-2 pr-4"
-          onClick={() => {
-            resetCode()
-          }}
-        >
-          <TrashIcon className="text-secondary z-20 w-5 h-5"></TrashIcon>
-          <p className="whitespace-nowrap">
-            {t.User.htmlLevel.resetAll} {numBlocks}
-          </p>
-        </button>
-
         {/* if numBlock greater then 2 */}
 
         {numBlocks > 2 && (
@@ -268,6 +254,16 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
             Complete Level
           </button>
         )}
+
+        <button
+          className="btn btn-brand rounded-md flex justify-start gap-4 pl-2 pr-4"
+          onClick={() => {
+            resetCode()
+          }}
+        >
+          <TrashIcon className="text-secondary z-20 w-5 h-5"></TrashIcon>
+          <p className="whitespace-nowrap">{t.User.htmlLevel.resetAll}</p>
+        </button>
       </div>
     </div>
   )
