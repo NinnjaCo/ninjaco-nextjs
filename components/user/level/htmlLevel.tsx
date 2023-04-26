@@ -5,6 +5,7 @@ import { Level } from '@/models/crud/level.model'
 import { LevelApi } from '@/utils/api/level/level.api'
 import { LevelEnrollmentApi } from '@/utils/api/levelEnrollment/level-enrollment.api'
 import { Mission } from '@/models/crud/mission.model'
+import { Router } from 'next/router'
 import { Session } from 'inspector'
 import { Switch } from '@headlessui/react'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
@@ -192,6 +193,8 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
         }
       }
     }
+    // redirect to the  mission page
+    Router.push(`/courses/${course._id}/missions/${mission._id}`)
   }
 
   return (
