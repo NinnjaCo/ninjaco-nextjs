@@ -2,6 +2,7 @@ import { ArrowDownIcon, CheckIcon, TrashIcon } from '@heroicons/react/24/outline
 import { Course } from '@/models/crud/course.model'
 import { CourseEnrollmentAPI } from '@/utils/api/courseEnrollment/course-enrollment.api'
 import { Level } from '@/models/crud/level.model'
+import { LevelApi } from '@/utils/api/level/level.api'
 import { LevelEnrollmentApi } from '@/utils/api/levelEnrollment/level-enrollment.api'
 import { Mission } from '@/models/crud/mission.model'
 import { Session } from 'inspector'
@@ -169,11 +170,28 @@ const HtmlLevel = ({ course, level, mission }: Props) => {
 
   // function to update the level status
   const session = useSession()
-  // function to update the level status
+
   const updateLevelStatus = async () => {
+    // update levelEnrollment to be complete
     await new LevelEnrollmentApi(course._id, mission._id, session.data).update(level._id, {
       completed: true,
     })
+    //  get all levels of the mission
+    const levels = await new LevelApi(course._id, mission._id, session.data).find()
+    // check for the next level
+    for (let i = 0; i < levels.length; i++) {
+      // find the index of the current level
+      if (levels[i]._id === level._id) {
+        // if the current level is not the last level
+        if (i < levels.length - 1) {
+          // update the next level to be unlocked
+          await new LevelEnrollmentApi(course._id, mission._id, session.data).create({
+            levelId: levels[i + 1]._id,
+            completed: false,
+          })
+        }
+      }
+    }
   }
 
   return (
