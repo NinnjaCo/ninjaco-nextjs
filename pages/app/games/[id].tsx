@@ -726,13 +726,12 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
       return
     }
 
-    //update user points
-    const points = getLevelFromPoints(100)
-    console.log('points', points)
-    console.log('user points before', user.points)
-    user.points += points
-    console.log('user points after', user.points)
-    await new UserApi(session).update(user._id, { points: user.points })
+    const oldPoints = user.points ?? 0
+    // maximum 100 minimum 50 and depends on the game size
+    let newPoints = oldPoints + (100 - game.game.sizeOfGrid * 5)
+    newPoints = newPoints > 100 ? 100 : newPoints < 50 ? 50 : newPoints
+
+    await new UserApi(session).update(user._id, { points: newPoints })
     //update userPlayGame to be completed
     await new GameEnrollmentAPI(session).update(game._id, { completed: true })
   }
