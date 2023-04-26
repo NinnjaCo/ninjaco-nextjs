@@ -39,8 +39,13 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
   const [openDialogue, setOpenDialogue] = React.useState(false)
   const [showWebsitePreview, setShowWebsitePreview] = React.useState(true)
   const [htmlCode, setHtmlCode] = React.useState('')
-  const [numBlocks, setNumBlocks] = React.useState(
+  const [numBlocks, setNumBlocks] = React.useState<number>(0)
 
+  console.log({
+    course,
+    level,
+    mission,
+  })
   const parentRef = React.useRef<any>()
 
   const close = () => {
