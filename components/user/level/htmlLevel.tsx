@@ -194,6 +194,10 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
         //  get the next level
         const nextLevel = levels[currentLevelIndex + 1]
         console.log(nextLevel)
+        if (!nextLevel) {
+          setOpenDialogue(true)
+          return
+        }
         //  unlock the next level
         await new LevelEnrollmentApi(course._id, mission._id, session.data).create({
           levelId: nextLevel._id,
