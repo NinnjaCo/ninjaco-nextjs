@@ -22,6 +22,7 @@ import Blockly from 'blockly'
 import BlocklyBoard from '@/components/blockly/blockly'
 import DOMPurify from 'isomorphic-dompurify'
 import Image from 'next/image'
+import Prism from 'prismjs'
 import React from 'react'
 import clsx from 'clsx'
 import convertHtmlToReact from '@hedgedoc/html-to-react'
@@ -56,8 +57,15 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
     if (code) {
       setHtmlCode(code)
     }
+    Prism.highlightAll()
   }, [])
 
+  React.useEffect(() => {
+    const highlight = async () => {
+      await Prism.highlightAll()
+    }
+    highlight()
+  }, [htmlCode, showWebsitePreview])
   //  useState to save the number of blocks
 
   const onChangeListener = (
@@ -268,7 +276,9 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
             {showWebsitePreview ? (
               <div>{getCleanReactHtml(htmlCode)}</div>
             ) : (
-              <pre className="text-xs">{htmlCode}</pre>
+              <pre className="text-xs w-full no-margin-important h-full">
+                <code className="language-html">{htmlCode}</code>
+              </pre>
             )}
           </div>
         </div>
