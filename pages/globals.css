@@ -267,3 +267,7 @@ ol {
   size: A3 landscape;
   margin: 0%;
 }
+
+.no-margin-important {
+  margin: 0 !important;
+}
