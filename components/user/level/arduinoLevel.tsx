@@ -48,7 +48,7 @@ const ArduinoLevel = ({ course, level, mission }: Props) => {
   ])
 
   return (
-    <div className="w-full h-full relative hidden lg:block">
+    <div className="w-full h-full relative hidden lg:block overflow-hidden">
       <div className="w-full h-full flex flex-col items-center relative">
         <Tab.Group>
           <Tab.List className="flex space-x-1 rounded-lg bg-brand-50 p-1 gap-4 w-fit absolute top-2  z-40">
