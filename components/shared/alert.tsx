@@ -16,6 +16,7 @@ type AlertProps = React.ComponentPropsWithRef<'div'> & {
   className?: string
   open: boolean
   close?: () => void
+  includeBorder: boolean
 }
 
 export const Alert: FC<AlertProps> = ({
@@ -24,6 +25,7 @@ export const Alert: FC<AlertProps> = ({
   className,
   open,
   close,
+  includeBorder,
   ...others
 }) => {
   const [ref, { height }] = useMeasure<HTMLDivElement>()
@@ -50,10 +52,12 @@ export const Alert: FC<AlertProps> = ({
       {...others}
       className={clsx(
         'rounded-md h-0 scale-0 opacity-0',
-        variant === 'info' && 'bg-brand-50',
-        variant === 'success' && 'bg-success-light',
-        variant === 'warning' && 'bg-warning-light',
-        variant === 'error' && 'bg-error-light',
+        variant === 'info' && 'bg-brand-50' + (includeBorder ? ' border-2 border-brand-500' : ''),
+        variant === 'success' &&
+          'bg-success-light' + (includeBorder ? ' border-2 border-success' : ''),
+        variant === 'warning' &&
+          'bg-warning-light' + (includeBorder ? ' border-2 border-secondary' : ''),
+        variant === 'error' && 'bg-error-light' + (includeBorder ? ' border-2 border-error' : ''),
         className
       )}
       style={styles}
