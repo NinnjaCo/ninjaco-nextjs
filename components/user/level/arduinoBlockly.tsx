@@ -1,12 +1,19 @@
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  Bars3Icon,
+  ChevronLeftIcon,
+  TrashIcon,
+} from '@heroicons/react/24/outline'
+import { Blockly, arduinoGenerator } from '@/blockly/generetors/arduino'
 import { Course } from '@/models/crud/course.model'
 import { Level } from '@/models/crud/level.model'
 import { Mission } from '@/models/crud/mission.model'
-import { htmlBlocks } from '@/blockly/blocks/html'
-import { htmlGenerator } from '@/blockly/generetors/html'
-import { htmlToolBox } from '@/blockly/toolbox/html'
-import Blockly from 'blockly'
+import { arduinoToolbox } from '@/blockly/toolbox/arduino'
 import BlocklyBoard from '@/components/blockly/blockly'
 import React from 'react'
+import clsx from 'clsx'
+import useTranslation from '@/hooks/useTranslation'
 
 interface Props {
   course: Course
@@ -15,7 +22,17 @@ interface Props {
 }
 
 const ArduinoBlockly = ({ level, course, mission }: Props) => {
+  const t = useTranslation()
+  const [openSideMenu, setOpenSideMenu] = React.useState(false)
+
   const parentRef = React.useRef<any>()
+
+  const getCodeFromBlockly = () => {
+    if (parentRef.current) {
+      return parentRef.current.generateCode()
+    }
+    return null
+  }
 
   const onChangeListener = (
     e: Blockly.Events.Abstract,
@@ -67,7 +84,7 @@ const ArduinoBlockly = ({ level, course, mission }: Props) => {
   }
 
   const blocklyGameOptions: Blockly.BlocklyOptions = {
-    toolbox: htmlToolBox,
+    toolbox: arduinoToolbox,
     theme: Blockly.Themes.Zelos,
     grid: {
       spacing: 20,
@@ -94,16 +111,114 @@ const ArduinoBlockly = ({ level, course, mission }: Props) => {
       scaleSpeed: 1.2,
     },
   }
+
+  // upload the code to the arduino using the serial port
+  const uploadCode = () => {
+    const code = getCodeFromBlockly()
+    if (code) {
+      console.log(code)
+    }
+  }
+
+  const downloadCode = () => {
+    // download arduino code in .ino file
+    const code = getCodeFromBlockly()
+    const blob = new Blob([code], { type: 'text/plain' })
+
+    const link = document.createElement('a')
+    link.download = 'code.ino'
+    link.href = window.URL.createObjectURL(blob)
+    link.click()
+
+    // delete the link to avoid memory leaks
+    link.remove()
+  }
+
+  const resetCode = () => {
+    if (parentRef.current) {
+      parentRef.current.clearBlocks()
+    }
+  }
+
   return (
     <div className="w-full h-full relative overflow-hidden hidden lg:flex">
       <BlocklyBoard
         ref={parentRef}
         blocklyOptions={blocklyGameOptions}
-        codeGenerator={htmlGenerator}
-        blocksDefinitions={htmlBlocks}
+        codeGenerator={arduinoGenerator}
         onChangeListener={onChangeListener}
         storageKey={`course-${course._id}-mission-${mission._id}-level-${level._id}`}
       ></BlocklyBoard>
+      <div
+        className={clsx(
+          'absolute top-0 w-48 z-20 h-full flex self-stretch flex-1 flex-col justify-start gap-8 py-4 px-4',
+          openSideMenu && 'w-40 absolute min-h-full bg-brand/90',
+          !openSideMenu && 'bg-brand-50/0',
+          'duration-300 z-20'
+        )}
+      >
+        <div
+          className={clsx(
+            'flex w-full',
+            openSideMenu && 'items-center justify-end',
+            !openSideMenu && 'flex-col gap-4'
+          )}
+        >
+          {openSideMenu ? (
+            <ChevronLeftIcon
+              className={clsx(
+                'h-8 w-8 cursor-pointer text-secondary',
+                !openSideMenu && 'rotate-180'
+              )}
+              onClick={() => setOpenSideMenu(!openSideMenu)}
+            ></ChevronLeftIcon>
+          ) : (
+            <button
+              className="flex gap-2 items-center absolute bottom-[10%]"
+              onClick={() => setOpenSideMenu(!openSideMenu)}
+            >
+              <Bars3Icon className={clsx('w-8 h-8 cursor-pointer text-brand')} />
+              <p className="text-brand font-medium text-2xl">Menu</p>
+            </button>
+          )}
+        </div>
+        {openSideMenu && (
+          <>
+            <button
+              className="btn btn-brand bg-secondary hover:bg-secondary-200 rounded-md flex justify-start gap-4 pl-2 pr-4"
+              onClick={() => {
+                uploadCode()
+                setOpenSideMenu(false)
+              }}
+            >
+              <ArrowUpIcon className="text-brand z-20 w-4 h-4"></ArrowUpIcon>
+              <p className="whitespace-nowrap text-xs text-brand">Upload to Arduino</p>
+            </button>
+            <button
+              className="btn btn-brand bg-secondary hover:bg-secondary-200 rounded-md flex justify-start gap-4 pl-2 pr-4"
+              onClick={() => {
+                downloadCode()
+                setOpenSideMenu(false)
+              }}
+            >
+              <ArrowDownIcon className="text-brand z-20 w-4 h-4"></ArrowDownIcon>
+              <p className="whitespace-nowrap text-xs text-brand">
+                {t.User.htmlLevel.downloadCode}
+              </p>
+            </button>
+            <button
+              className="btn btn-brand bg-secondary hover:bg-secondary-200 rounded-md flex justify-start gap-4 pl-2 pr-4"
+              onClick={() => {
+                resetCode()
+                setOpenSideMenu(false)
+              }}
+            >
+              <TrashIcon className="text-brand z-20 w-5 h-5"></TrashIcon>
+              <p className="whitespace-nowrap text-xs text-brand">{t.User.htmlLevel.resetAll}</p>
+            </button>
+          </>
+        )}
+      </div>
     </div>
   )
 }
