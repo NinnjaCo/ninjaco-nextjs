@@ -9,7 +9,7 @@ export const arduinoToolbox: ToolboxDefinition = {
     {
       kind: 'category',
       name: 'Logic',
-      colour: '#5b80a5',
+      colour: '#4C97FF',
       contents: [
         {
           kind: 'block',
@@ -36,6 +36,7 @@ export const arduinoToolbox: ToolboxDefinition = {
     {
       kind: 'category',
       name: 'Control',
+      colour: '#0FBD8C',
       contents: [
         {
           kind: 'block',
@@ -54,6 +55,7 @@ export const arduinoToolbox: ToolboxDefinition = {
     {
       kind: 'category',
       name: 'Math',
+      colour: '#59C059',
       contents: [
         {
           kind: 'block',
@@ -72,6 +74,7 @@ export const arduinoToolbox: ToolboxDefinition = {
     {
       kind: 'category',
       name: 'Text',
+      colour: '#4BD8A9',
       contents: [
         {
           kind: 'block',
@@ -83,18 +86,22 @@ export const arduinoToolbox: ToolboxDefinition = {
       kind: 'category',
       name: 'Variables',
       custom: 'VARIABLE',
+      colour: '#FF8C1A',
     },
     {
       kind: 'category',
       name: 'Functions',
       custom: 'PROCEDURE',
+      colour: '#FF6680',
     },
     {
       kind: 'sep',
+      colour: '#FF6680',
     },
     {
       kind: 'category',
       name: 'Input/Output',
+      colour: '#4B63D8',
       contents: [
         {
           kind: 'block',
@@ -137,6 +144,7 @@ export const arduinoToolbox: ToolboxDefinition = {
     {
       kind: 'category',
       name: 'Servo',
+      colour: '#4BD84B',
       contents: [
         {
           kind: 'block',
