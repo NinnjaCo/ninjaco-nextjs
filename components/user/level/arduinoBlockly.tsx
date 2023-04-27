@@ -1,9 +1,13 @@
 import {
   ArrowDownIcon,
+  ArrowLeftIcon,
+  ArrowRightIcon,
   ArrowUpIcon,
   Bars3Icon,
   ChevronLeftIcon,
+  QuestionMarkCircleIcon,
   TrashIcon,
+  XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { Blockly, arduinoGenerator } from '@/blockly/generetors/arduino'
 import { Course } from '@/models/crud/course.model'
@@ -11,7 +15,7 @@ import { Level } from '@/models/crud/level.model'
 import { Mission } from '@/models/crud/mission.model'
 import { arduinoToolbox } from '@/blockly/toolbox/arduino'
 import BlocklyBoard from '@/components/blockly/blockly'
-import React from 'react'
+import React, { useEffect } from 'react'
 import clsx from 'clsx'
 import useTranslation from '@/hooks/useTranslation'
 
@@ -24,6 +28,8 @@ interface Props {
 const ArduinoBlockly = ({ level, course, mission }: Props) => {
   const t = useTranslation()
   const [openSideMenu, setOpenSideMenu] = React.useState(false)
+  const [arduinoCode, setArduinoCode] = React.useState('')
+  const [showCodePreview, setShowCodePreview] = React.useState(true)
 
   const parentRef = React.useRef<any>()
 
@@ -33,6 +39,13 @@ const ArduinoBlockly = ({ level, course, mission }: Props) => {
     }
     return null
   }
+
+  useEffect(() => {
+    const code = getCodeFromBlockly()
+    if (code) {
+      setArduinoCode(code)
+    }
+  }, [])
 
   const onChangeListener = (
     e: Blockly.Events.Abstract,
@@ -48,6 +61,11 @@ const ArduinoBlockly = ({ level, course, mission }: Props) => {
     ) {
       // Event is UI event or finished loading or workspace is dragging
       return
+    }
+
+    const code = getCodeFromBlockly()
+    if (code) {
+      setArduinoCode(code)
     }
 
     if (e.type == Blockly.Events.BLOCK_CREATE) {
@@ -149,6 +167,49 @@ const ArduinoBlockly = ({ level, course, mission }: Props) => {
         onChangeListener={onChangeListener}
         storageKey={`course-${course._id}-mission-${mission._id}-level-${level._id}`}
       ></BlocklyBoard>
+      <div
+        className={clsx(
+          'basis-1/2 border-l-2 border-l-brand-400 h-full flex flex-col transition-all',
+          {
+            'basis-0': !showCodePreview,
+          }
+        )}
+      >
+        <div className="flex w-full justify-between items-center relative">
+          <button
+            className="absolute top-12 -left-6 bg-brand w-6 h-6 rounded-l-lg flex items-center justify-center cursor-pointer hover:bg-brand-500"
+            onClick={() => {
+              setShowCodePreview(!showCodePreview)
+              if (parentRef.current) {
+                const workspace = parentRef.current.getWorkspace()
+
+                // the code preview tab takes ~200ms to hide
+                setTimeout(() => {
+                  Blockly.svgResize(workspace)
+                }, 200)
+              }
+            }}
+          >
+            {showCodePreview ? (
+              <ArrowRightIcon className="text-secondary w-3 h-3"></ArrowRightIcon>
+            ) : (
+              <ArrowLeftIcon className="text-secondary w-3 h-3"></ArrowLeftIcon>
+            )}
+          </button>
+          {showCodePreview ? (
+            <>
+              <div className="group flex justify-center absolute top-1 right-2 w-full">
+                <QuestionMarkCircleIcon className="absolute top-1 right-3 w-4 h-4 text-brand-100 hover:text-brand-500 cursor-pointer z-20" />
+                <span className="absolute top-2 right-5 scale-0 rounded bg-brand p-2 text-xs text-white group-hover:scale-100 z-20 font-quicksand">
+                  🚀 Preview your own Arduino code in real time
+                </span>
+              </div>
+              <pre className="text-xs w-full p-2">{arduinoCode}</pre>
+            </>
+          ) : null}
+        </div>
+      </div>
+
       <div
         className={clsx(
           'absolute  w-48  flex self-stretch flex-1 flex-col justify-start gap-8 py-4 px-4',
