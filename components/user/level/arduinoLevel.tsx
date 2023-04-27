@@ -53,21 +53,19 @@ const ArduinoLevel = ({ course, level, mission }: Props) => {
         <Tab.Group>
           <Tab.List className="flex space-x-1 rounded-lg bg-brand-50 p-1 gap-4 w-fit absolute top-2  z-40">
             {tabs.map((tab) => (
-              <>
-                <Tab
-                  key={tab.name}
-                  className={({ selected }) =>
-                    classNames(
-                      'w-full rounded-lg py-1 text-xs font-medium leading-5 whitespace-nowrap',
-                      selected
-                        ? 'bg-white shadow p-2'
-                        : 'bg-brand-50 hover:bg-brand-100 px-2 text-brand-500/50'
-                    )
-                  }
-                >
-                  {tab.name}
-                </Tab>
-              </>
+              <Tab
+                key={tab.name}
+                className={({ selected }) =>
+                  classNames(
+                    'w-full rounded-lg py-1 text-xs font-medium leading-5 whitespace-nowrap',
+                    selected
+                      ? 'bg-white shadow p-2'
+                      : 'bg-brand-50 hover:bg-brand-100 px-2 text-brand-500/50'
+                  )
+                }
+              >
+                {tab.name}
+              </Tab>
             ))}
           </Tab.List>
           <Tab.Panels className="w-full h-full">
