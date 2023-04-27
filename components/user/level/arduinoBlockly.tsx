@@ -7,7 +7,6 @@ import {
   ChevronLeftIcon,
   QuestionMarkCircleIcon,
   TrashIcon,
-  XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { Blockly, arduinoGenerator } from '@/blockly/generetors/arduino'
 import { Course } from '@/models/crud/course.model'
@@ -15,9 +14,12 @@ import { Level } from '@/models/crud/level.model'
 import { Mission } from '@/models/crud/mission.model'
 import { arduinoToolbox } from '@/blockly/toolbox/arduino'
 import BlocklyBoard from '@/components/blockly/blockly'
+import Prism from 'prismjs'
 import React, { useEffect } from 'react'
 import clsx from 'clsx'
 import useTranslation from '@/hooks/useTranslation'
+
+require('prismjs/components/prism-c')
 
 interface Props {
   course: Course
@@ -45,7 +47,15 @@ const ArduinoBlockly = ({ level, course, mission }: Props) => {
     if (code) {
       setArduinoCode(code)
     }
+    Prism.highlightAll()
   }, [])
+
+  useEffect(() => {
+    const highlight = async () => {
+      await Prism.highlightAll()
+    }
+    highlight()
+  }, [arduinoCode, showCodePreview])
 
   const onChangeListener = (
     e: Blockly.Events.Abstract,
@@ -168,14 +178,12 @@ const ArduinoBlockly = ({ level, course, mission }: Props) => {
         storageKey={`course-${course._id}-mission-${mission._id}-level-${level._id}`}
       ></BlocklyBoard>
       <div
-        className={clsx(
-          'basis-1/2 border-l-2 border-l-brand-400 h-full flex flex-col transition-all',
-          {
-            'basis-0': !showCodePreview,
-          }
-        )}
+        className={clsx('border-l-2 border-l-brand-400 h-full flex flex-col transition-all', {
+          'basis-0 w-0': !showCodePreview,
+          'basis-1/2': showCodePreview,
+        })}
       >
-        <div className="flex w-full justify-between items-center relative">
+        <div className="flex w-full justify-between items-start relative h-full">
           <button
             className="absolute top-12 -left-6 bg-brand w-6 h-6 rounded-l-lg flex items-center justify-center cursor-pointer hover:bg-brand-500"
             onClick={() => {
@@ -204,7 +212,9 @@ const ArduinoBlockly = ({ level, course, mission }: Props) => {
                   🚀 Preview your own Arduino code in real time
                 </span>
               </div>
-              <pre className="text-xs w-full p-2">{arduinoCode}</pre>
+              <pre className="text-xs w-full no-margin-important h-full">
+                <code className="language-c">{arduinoCode}</code>
+              </pre>
             </>
           ) : null}
         </div>
