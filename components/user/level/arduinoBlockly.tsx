@@ -151,9 +151,9 @@ const ArduinoBlockly = ({ level, course, mission }: Props) => {
       ></BlocklyBoard>
       <div
         className={clsx(
-          'absolute top-0 w-48 z-20 h-full flex self-stretch flex-1 flex-col justify-start gap-8 py-4 px-4',
-          openSideMenu && 'w-40 absolute min-h-full bg-brand/90',
-          !openSideMenu && 'bg-brand-50/0',
+          'absolute  w-48  flex self-stretch flex-1 flex-col justify-start gap-8 py-4 px-4',
+          openSideMenu && 'w-40 bg-brand/90 h-full top-0',
+          !openSideMenu && 'bg-brand-50/0 bottom-[10%]',
           'duration-300 z-20'
         )}
       >
