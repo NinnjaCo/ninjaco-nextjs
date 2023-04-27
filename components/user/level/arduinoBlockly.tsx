@@ -13,6 +13,7 @@ import { Course } from '@/models/crud/course.model'
 import { Level } from '@/models/crud/level.model'
 import { Mission } from '@/models/crud/mission.model'
 import { arduinoToolbox } from '@/blockly/toolbox/arduino'
+import Alert from '@/components/shared/alert'
 import BlocklyBoard from '@/components/blockly/blockly'
 import Prism from 'prismjs'
 import React, { useEffect } from 'react'
@@ -32,7 +33,17 @@ const ArduinoBlockly = ({ level, course, mission }: Props) => {
   const [openSideMenu, setOpenSideMenu] = React.useState(false)
   const [arduinoCode, setArduinoCode] = React.useState('')
   const [showCodePreview, setShowCodePreview] = React.useState(true)
-
+  const [alertData, setAlertData] = React.useState<{
+    message: string
+    variant: 'error' | 'success' | 'info' | 'warning'
+    open: boolean
+    close: () => void
+  }>({
+    message: '',
+    variant: 'info',
+    open: false,
+    close: () => setAlertData({ ...alertData, open: false }),
+  })
   const parentRef = React.useRef<any>()
 
   const getCodeFromBlockly = () => {
@@ -141,10 +152,79 @@ const ArduinoBlockly = ({ level, course, mission }: Props) => {
   }
 
   // upload the code to the arduino using the serial port
-  const uploadCode = () => {
+  const uploadCode = async () => {
     const code = getCodeFromBlockly()
     if (code) {
-      console.log(code)
+      setAlertData({
+        ...alertData,
+        open: true,
+        message: 'Uploading code to the arduino ... Beep Boop 🤖',
+        variant: 'info',
+      })
+
+      const url = 'http://127.0.0.1:8080/upload'
+      const method = 'POST'
+
+      try {
+        const response = await fetch(url, {
+          method,
+          body: JSON.stringify({ code }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+
+        if (response.status === 200) {
+          setAlertData({
+            ...alertData,
+            message: 'Code uploaded successfully 🎉',
+            variant: 'success',
+            open: true,
+          })
+
+          setTimeout(() => {
+            setAlertData({ ...alertData, open: false })
+          }, 2000)
+        } else {
+          let errorInfo = ''
+          const status = response.status
+          switch (status) {
+            case 200:
+              break
+            case 0:
+              errorInfo =
+                'Cannot find the agent. Make sure that you have downloaded and started the agent'
+              break
+            case 400:
+              errorInfo =
+                'Build failed. Make sure that there are no missing connections in the blocks.'
+              break
+            case 500:
+              errorInfo =
+                'Upload failed. Make sure that you have connected the Arduino to your computer'
+              break
+            case 501:
+              errorInfo = 'Upload failed. Make sure you have downloaded the Arduino IDE?'
+              break
+            default:
+              errorInfo = 'Unknown error, please try again'
+              break
+          }
+          setAlertData({
+            ...alertData,
+            message: errorInfo || 'Upload failed',
+            variant: 'error',
+            open: true,
+          })
+        }
+      } catch (e: any) {
+        setAlertData({
+          ...alertData,
+          message: e.message || 'Upload failed',
+          variant: 'error',
+          open: true,
+        })
+      }
     }
   }
 
@@ -170,6 +250,15 @@ const ArduinoBlockly = ({ level, course, mission }: Props) => {
 
   return (
     <div className="w-full h-full relative overflow-hidden hidden lg:flex">
+      <div className="absolute top-1 right-12 z-50">
+        <Alert
+          variant={alertData.variant}
+          message={alertData.message}
+          open={alertData.open}
+          close={alertData.close}
+          includeBorder={true}
+        />
+      </div>
       <BlocklyBoard
         ref={parentRef}
         blocklyOptions={blocklyGameOptions}
