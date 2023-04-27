@@ -19,6 +19,8 @@ import React, { useEffect } from 'react'
 import clsx from 'clsx'
 import useTranslation from '@/hooks/useTranslation'
 
+require('prismjs/components/prism-c')
+
 interface Props {
   course: Course
   mission: Mission

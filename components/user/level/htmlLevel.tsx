@@ -29,6 +29,8 @@ import convertHtmlToReact from '@hedgedoc/html-to-react'
 import targetwebsite from '@/images/targetwebsite.png'
 import useTranslation from '@/hooks/useTranslation'
 
+require('prismjs/components/prism-xml-doc')
+
 interface Props {
   course: Course
   level: LevelEnrollment
