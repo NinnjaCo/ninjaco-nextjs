@@ -380,6 +380,7 @@ const englishTranslations: WebsiteTranslations = {
       confirmPassword: 'Confirm Password',
       notify: 'Notify',
       users: 'Users',
+      goToApp: 'Go to App',
     },
     Creators: {
       somethingWentWrong: 'Something went wrong',
