@@ -677,19 +677,21 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
                 {(users ?? serverUsers).length} {t.Admin.Creators.entriesFound as string}
               </div>
             </div>
-            <Link href="/creator">
-              <button className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-500 hover:text-white py-2 px-4">
-                Go To Creator Panel
+            <div className="flex items-center gap-4">
+              <Link href="/creator">
+                <button className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-500 hover:text-white py-2 px-4">
+                  Go To Creator Panel
+                </button>
+              </Link>
+              <button
+                className="btn btn-brand gap-2 text-white rounded-lg hover:bg-brand-400 hover:text-white py-2 px-4"
+                onClick={() => {
+                  setOpenCreatorAddDialog(true)
+                }}
+              >
+                {t.Admin.Creators.addCreators as string}
               </button>
-            </Link>
-            <button
-              className="btn btn-brand gap-2 text-white rounded-lg hover:bg-brand-400 hover:text-white py-2 px-4"
-              onClick={() => {
-                setOpenCreatorAddDialog(true)
-              }}
-            >
-              {t.Admin.Creators.addCreators as string}
-            </button>
+            </div>
           </div>
           <Alert
             open={alertData.open}
