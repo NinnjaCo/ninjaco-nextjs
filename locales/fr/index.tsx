@@ -749,11 +749,17 @@ const frenchTranslations: WebsiteTranslations = {
       showWebsite: 'Site Web',
       resetAll: 'Réinitialiser',
       downloadCode: 'Télécharger',
+      completeLevel: 'Niveau terminé',
+      previewCode: 'Prévisualisez votre propre code HTML en temps réel',
+      desktop: 'Veuillez utiliser un ordinateur pour jouer',
+      nolevel: 'Aucun niveau trouvé',
     },
   },
 
   Filter: {
     filter: 'Filtre',
+    completed: 'complété',
+    notCompleted: 'pas achevé',
   },
   ServerError: {
     headTitle: 'NinjaCo | Erreur',
