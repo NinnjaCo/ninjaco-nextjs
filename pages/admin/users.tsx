@@ -765,7 +765,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
               go to app
             </button>
             <button
-              className="btn btn-brand gap-2 text-brand rounded-lg hover:bg-brand-400 hover:text-white py-2"
+              className="btn btn-brand gap-2 text-white rounded-lg hover:bg-brand-400 hover:text-white py-2"
               onClick={() => {
                 setOpenAddUserDialog(true)
               }}
