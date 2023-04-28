@@ -260,6 +260,10 @@ export default function Profile({ serverUser }: ServerProps) {
                 <div className="text-brand text-lg md:text-xl lg:text-2xl font-semibold">
                   {user?.firstName} {user?.lastName}
                 </div>
+                <button className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-400 hover:text-white py-2">
+                  Add Admin
+                </button>
+
                 <button
                   type="submit"
                   form="form"
