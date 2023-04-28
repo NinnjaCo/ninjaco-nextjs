@@ -763,7 +763,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
             </div>
             <div className="flex items-center gap-4">
               <button className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-500 hover:text-white py-2">
-                go to app
+                {t.Admin.Users.goToApp}
               </button>
               <button
                 className="btn btn-brand gap-2 text-white rounded-lg hover:bg-brand-400 hover:text-white py-2"
