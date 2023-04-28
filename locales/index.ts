@@ -167,6 +167,7 @@ export interface WebsiteTranslations {
     profile: translationElement
     save: translationElement
     changePassword: translationElement
+    addAdmin: translationElement
   }
 
   Admin: {
