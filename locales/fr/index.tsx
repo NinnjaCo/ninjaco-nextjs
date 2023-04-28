@@ -429,6 +429,7 @@ const frenchTranslations: WebsiteTranslations = {
       confirmPassword: 'Confirmez le mot de passe',
       submit: 'Soumettre',
       password: 'Mot de passe',
+      goToCreator: 'aller au panneau du créateur',
     },
     LogOutDialogue: {
       logout: 'déconnecter',
