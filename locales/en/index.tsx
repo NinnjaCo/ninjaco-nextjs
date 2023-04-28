@@ -739,6 +739,7 @@ const englishTranslations: WebsiteTranslations = {
       completeLevel: 'Completed',
       previewCode: 'Preview your own HTML code in real-time',
       desktop: 'Please use a desktop to play',
+      nolevel: 'No level yet',
     },
   },
   Filter: {

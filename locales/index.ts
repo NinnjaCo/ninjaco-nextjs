@@ -579,6 +579,7 @@ export interface WebsiteTranslations {
       completeLevel: translationElement
       previewCode: translationElement
       desktop: translationElement
+      nolevel: translationElement
     }
   }
   Filter: {
