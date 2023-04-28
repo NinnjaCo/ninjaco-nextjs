@@ -42,7 +42,7 @@ interface Props {
 const HtmlLevel = ({ course, level, mission, user }: Props) => {
   const t = useTranslation()
   const router = useRouter()
-  const session = useSession()
+  const { data: session, update: updateSession } = useSession()
   const [openDialogue, setOpenDialogue] = React.useState(false)
   const [showWebsitePreview, setShowWebsitePreview] = React.useState(true)
   const [htmlCode, setHtmlCode] = React.useState('')
@@ -199,19 +199,28 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
     }
 
     // update levelEnrollment to be complete
-    await new LevelEnrollmentApi(course._id, mission._id, session.data).update(level.level._id, {
+    await new LevelEnrollmentApi(course._id, mission._id, session).update(level.level._id, {
       completed: true,
     })
 
     //increase user points
-    const response = await new UserApi(session.data).findOne(user._id)
-    const oldPoints = response.payload.points
+    const oldPoints = session?.user?.points ?? 0
 
-    // maximum 100 minimum 50 and depends on the game size
-    let addedPoints = 100 - level.level.levelNumber * 5
+    // maximum 100 minimum 50 and depends on the level number
+    let addedPoints = 50 + level.level.levelNumber * 15
     addedPoints = addedPoints > 100 ? 100 : addedPoints < 50 ? 50 : addedPoints
     const newPoints = oldPoints + addedPoints
-    await new UserApi(session.data).update(user._id, { points: newPoints })
+    try {
+      const res = await new UserApi(session).update(user._id, { points: newPoints })
+      await updateSession({
+        ...session,
+        user: {
+          ...res.payload,
+        },
+      })
+    } catch (e) {
+      console.log(e)
+    }
 
     //  get all levels of the mission
     const levels = course.missions?.find((m) => m._id === mission._id)?.levels
@@ -227,7 +236,7 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
           return
         }
         //  unlock the next level
-        await new LevelEnrollmentApi(course._id, mission._id, session.data).create({
+        await new LevelEnrollmentApi(course._id, mission._id, session).create({
           levelId: nextLevel._id,
           completed: false,
         })
