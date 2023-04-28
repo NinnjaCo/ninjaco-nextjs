@@ -4,6 +4,7 @@ import {
   ArrowRightIcon,
   ArrowUpIcon,
   Bars3Icon,
+  BoltIcon,
   ChevronLeftIcon,
   QuestionMarkCircleIcon,
   TrashIcon,
@@ -248,6 +249,12 @@ const ArduinoBlockly = ({ level, course, mission }: Props) => {
     }
   }
 
+  const downloadAgentPrompt = () => {
+    const url =
+      'https://github.com/NinnjaCo/ArduinoServer/releases/download/v1.0.0/NinjacoAgent.exe'
+    window.open(url, '_blank')
+  }
+
   return (
     <div className="w-full h-full relative overflow-hidden hidden lg:flex">
       <div className="absolute top-1 right-12 z-50">
@@ -344,6 +351,15 @@ const ArduinoBlockly = ({ level, course, mission }: Props) => {
         </div>
         {openSideMenu && (
           <>
+            <button
+              className="btn btn-brand bg-secondary hover:bg-secondary-200 rounded-md flex justify-start gap-4 pl-2 pr-4"
+              onClick={() => {
+                downloadAgentPrompt()
+              }}
+            >
+              <BoltIcon className="text-brand z-20 w-4 h-4"></BoltIcon>
+              <p className="whitespace-nowrap text-xs text-brand">Download Agent</p>
+            </button>
             <button
               className="btn btn-brand bg-secondary hover:bg-secondary-200 rounded-md flex justify-start gap-4 pl-2 pr-4"
               onClick={() => {
