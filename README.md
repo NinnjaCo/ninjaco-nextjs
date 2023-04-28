@@ -19,7 +19,75 @@
 <a id="user-stories"></a>
 <br><br>
 <img src="./README_ASSETS/README_USERREQ.svg"/>
-TODO
+| User Story | Description |
+| --- | --- |
+| Navigate landing page | The user should be able to navigate a landing page with comprehensive info on the company.|
+| Register as user | The user shall be able to register into the system. |
+| Login as user | The user shall be able to log in to the system. |
+| Validate and verify email addresses | The system should validate and verify email addresses. |
+| Recovering the password | The user should be able to recover their password once forgotten by sending a recovery request. |
+| View profile | The user shall be able to view their profile |
+| Edit profile | The user should be able to edit their profile information. |
+| View leaderboard | The system shall have a leaderboard to rank users based on their performance. |
+|  See all courses | The user shall be able to see all the courses available. |
+|  Open a course | The user shall be able to open a course. |
+| Enroll in a course | The user shall be able to enroll in a course. |
+| Browse missions | The user shall be able to browse missions. |
+| Filter missions | The user shall be able to filter missions. |
+| Start a mission | The user shall be able to start a mission. |
+| View mission details | The user shall be able to view mission details. |
+| View building parts | The user shall be able to view building parts. |
+| View step by step instructions | The user shall be able to view step by step instructions. |
+| Code visually | The user shall be able to code visually. |
+| View code | The user shall be able to view code. |
+| Run code | The user shall be able to run code. |
+| Download code | The user shall be able to download code. |
+| Download agent | The user shall be able to download agent. |
+| Run game code | The user shall be able to run game code. |
+| Preview HTML | The user shall be able to preview HTML. |
+| See confirmation message | The user shall be able to see a confirmation message after completing a mission. |
+| See error message | The user shall be able to see an error message if an error occurs. |
+| Preserving progress | The system shall preserve the user's progress. |
+| Increase level | The system shall increase the user's level after completing a mission. |
+| Provide feedback | The system shall provide feedback to the user. |
+| Maintaing points | The system shall maintain the user's points. |
+| Completing a level | The user shall be able to complete a level. |
+| Completing a mission | The user shall be able to complete a mission. |
+| Completing a course | The user shall be able to complete a course. |
+| Present certificate | The system shall present a certificate to the user after completing a course. |
+| View testimonials | The user shall be able to view testimonials. |
+
+| Creator Story | Description |
+| --- | --- |
+| Login as creator | The creator shall be able to log in to the system. |
+| View courses | The creator shall be able to view courses. |
+| Add course | The creator shall be able to add a course. |
+| Edit course | The creator shall be able to edit a course. |
+| View missions | The creator shall be able to view missions. |
+| Add mission | The creator shall be able to add a mission. |
+| Edit mission | The creator shall be able to edit a mission. |
+| View levels | The creator shall be able to view levels. |
+| Add level | The creator shall be able to add a level. |
+| Edit level | The creator shall be able to edit a level. |
+| Create html level | The creator shall be able to create an html level. |
+| Create game level | The creator shall be able to create a game level. |
+| Assign categories | The creator shall be able to assign categories to a mission. |
+
+| Admin Story | Description |
+| --- | --- |
+| Login as admin | The admin shall be able to log in to the system. |
+| View dashboard | The admin shall be able to view the dashboard. |
+| View users | The admin shall be able to view users. |
+| View courses | The admin shall be able to view courses. |
+| View creators | The admin shall be able to view creators. |
+| Add user | The admin shall be able to add a user. |
+| Edit user | The admin shall be able to edit a user. |
+| Delete user | The admin shall be able to delete a user. |
+| Notify user | The admin shall be able to notify a user. |
+| Add creator | The admin shall be able to add a creator. |
+| Edit creator | The admin shall be able to edit a creator. |
+| Delete creator | The admin shall be able to delete a creator. |
+| Monitor users | The admin shall be able to monitor users. |
 
 <a id="wireframes"></a>
 <br><br>
