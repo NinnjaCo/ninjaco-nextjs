@@ -680,7 +680,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
             <div className="flex items-center gap-4">
               <Link href="/creator">
                 <button className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-500 hover:text-white py-2 px-4">
-                  Go To Creator Panel
+                  {t.Admin.Creators.goToCreator}
                 </button>
               </Link>
               <button
