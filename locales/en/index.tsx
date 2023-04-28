@@ -414,10 +414,10 @@ const englishTranslations: WebsiteTranslations = {
       notifyUser: 'Notify User',
       deleteUser: 'Delete User',
       editUser: 'Edit User',
-
       confirmPassword: 'Confirm Password',
       submit: 'Submit',
       password: 'Password',
+      goToCreator: 'Go to Creator Panel',
     },
     LogOutDialogue: {
       logout: 'Logout',
