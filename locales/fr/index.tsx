@@ -750,6 +750,7 @@ const frenchTranslations: WebsiteTranslations = {
       resetAll: 'Réinitialiser',
       downloadCode: 'Télécharger',
       completeLevel: 'Niveau terminé',
+      previewCode: 'Prévisualisez votre propre code HTML en temps réel',
     },
   },
 
