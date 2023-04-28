@@ -736,10 +736,16 @@ const englishTranslations: WebsiteTranslations = {
       showWebsite: 'Show Website',
       resetAll: 'Reset All',
       downloadCode: 'Download Code',
+      completeLevel: 'Completed',
+      previewCode: 'Preview your own HTML code in real-time',
+      desktop: 'Please use a desktop to play',
+      nolevel: 'No level yet',
     },
   },
   Filter: {
     filter: 'Filter',
+    completed: 'Completed',
+    notCompleted: 'Not Completed',
   },
   ServerError: {
     headTitle: 'NinjaCo | Server Error',
