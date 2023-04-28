@@ -187,14 +187,18 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
     })
 
     //increase user points
-    const oldPoints = user.points ?? 0
+    const response = await new UserApi(session.data).findOne(user._id)
+    const oldPoints = response.payload.
+
     // maximum 100 minimum 50 and depends on the game size
     let addedPoints = 100 - level.level.levelNumber * 5
     addedPoints = addedPoints > 100 ? 100 : addedPoints < 50 ? 50 : addedPoints
     const newPoints = oldPoints + addedPoints
-    console.log('user and user points', user, user.points)
+    console.log('old points', oldPoints)
+    console.log('added points', addedPoints)
+    console.log('new points', newPoints)
     await new UserApi(session.data).update(user._id, { points: newPoints })
-    console.log('user and user points', user, user.points)
+    console.log('user points', (await new UserApi(session.data).find(user)).payload.points)
 
     //  get all levels of the mission
     const levels = course.missions?.find((m) => m._id === mission._id)?.levels
