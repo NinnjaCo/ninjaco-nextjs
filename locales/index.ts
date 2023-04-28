@@ -258,6 +258,7 @@ export interface WebsiteTranslations {
       password: translationElement
       confirmPassword: translationElement
       submit: translationElement
+      goToCreator: translationElement
     }
     LogOutDialogue: {
       logout: translationElement
