@@ -1,4 +1,10 @@
-import { ArrowDownIcon, CheckCircleIcon, TrashIcon } from '@heroicons/react/24/outline'
+import {
+  ArrowDownIcon,
+  Bars3Icon,
+  CheckCircleIcon,
+  ChevronLeftIcon,
+  TrashIcon,
+} from '@heroicons/react/24/outline'
 import { Course } from '@/models/crud/course.model'
 import { FeedbackDialog } from './feedback'
 import { LevelEnrollment } from '@/models/crud/level-enrollment.model'
@@ -17,11 +23,14 @@ import Blockly from 'blockly'
 import BlocklyBoard from '@/components/blockly/blockly'
 import DOMPurify from 'isomorphic-dompurify'
 import Image from 'next/image'
+import Prism from 'prismjs'
 import React from 'react'
 import clsx from 'clsx'
 import convertHtmlToReact from '@hedgedoc/html-to-react'
 import targetwebsite from '@/images/targetwebsite.png'
 import useTranslation from '@/hooks/useTranslation'
+
+require('prismjs/components/prism-xml-doc')
 
 interface Props {
   course: Course
@@ -38,6 +47,7 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
   const [showWebsitePreview, setShowWebsitePreview] = React.useState(true)
   const [htmlCode, setHtmlCode] = React.useState('')
   const [numBlocks, setNumBlocks] = React.useState<number>(0)
+  const [openSideMenu, setOpenSideMenu] = React.useState(false)
 
   const parentRef = React.useRef<any>()
 
@@ -50,8 +60,15 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
     if (code) {
       setHtmlCode(code)
     }
+    Prism.highlightAll()
   }, [])
 
+  React.useEffect(() => {
+    const highlight = async () => {
+      await Prism.highlightAll()
+    }
+    highlight()
+  }, [htmlCode, showWebsitePreview])
   //  useState to save the number of blocks
 
   const onChangeListener = (
@@ -205,7 +222,10 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
       if (currentLevelIndex < levels.length) {
         //  get the next level
         const nextLevel = levels[currentLevelIndex + 1]
-        console.log(nextLevel)
+        if (!nextLevel) {
+          setOpenDialogue(true)
+          return
+        }
         //  unlock the next level
         await new LevelEnrollmentApi(course._id, mission._id, session.data).create({
           levelId: nextLevel._id,
@@ -270,78 +290,118 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
             {showWebsitePreview ? (
               <div>{getCleanReactHtml(htmlCode)}</div>
             ) : (
-              <pre className="text-xs">{htmlCode}</pre>
+              <pre className="text-xs w-full no-margin-important h-full">
+                <code className="language-html">{htmlCode}</code>
+              </pre>
             )}
           </div>
         </div>
 
-        <div className="absolute top-[55%] left-4 z-20 flex flex-col gap-4">
-          {level.completed && (
-            <button
-              className="btn btn-brand hover:bg-success  border-success-dark rounded-md flex justify-start gap-4 pl-2 pr-4 transition-all bg-success-light text-success-dark"
-              onClick={() => {
-                router.push(`/app/${course._id}/${mission._id}`)
-              }}
-            >
-              <CheckCircleIcon className={clsx('text-success-dark z-20 w-5 h-5')}></CheckCircleIcon>
-              Completed
-            </button>
+        <div
+          className={clsx(
+            'absolute  w-52  flex self-stretch flex-1 flex-col justify-start gap-8 py-4 px-4 transition-all',
+            openSideMenu && 'w-40 bg-brand/90 h-full top-0',
+            !openSideMenu && 'bg-brand-50/0 bottom-[10%]',
+            'duration-300 z-20'
           )}
-          <div className="flex gap-4 items-center">
-            <div>
-              {showWebsitePreview ? t.User.htmlLevel.showCode : t.User.htmlLevel.showWebsite}
-            </div>
-            <Switch
-              checked={showWebsitePreview}
-              onChange={(isChecked) => {
-                setShowWebsitePreview(isChecked)
-              }}
-              className={`${!showWebsitePreview ? 'bg-brand-700' : 'bg-brand-500'}
-            inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
-            >
-              <span className="sr-only">{showWebsitePreview ? 'Show Code' : 'Show Website'}</span>
-              <span
-                aria-hidden="true"
-                className={`${!showWebsitePreview ? 'translate-x-7' : 'translate-x-0'}
-              pointer-events-none inline-block h-[34px] w-[34px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
-              />
-            </Switch>
+        >
+          <div
+            className={clsx(
+              'flex w-full',
+              openSideMenu && 'items-center justify-end',
+              !openSideMenu && 'flex-col gap-4'
+            )}
+          >
+            {openSideMenu ? (
+              <ChevronLeftIcon
+                className={clsx(
+                  'h-8 w-8 cursor-pointer text-secondary',
+                  !openSideMenu && 'rotate-180'
+                )}
+                onClick={() => setOpenSideMenu(!openSideMenu)}
+              ></ChevronLeftIcon>
+            ) : (
+              <button
+                className="flex gap-2 items-center absolute bottom-[10%]"
+                onClick={() => setOpenSideMenu(!openSideMenu)}
+              >
+                <Bars3Icon className={clsx('w-8 h-8 cursor-pointer text-brand')} />
+                <p className="text-brand font-medium text-2xl">Menu</p>
+              </button>
+            )}
           </div>
-          {numBlocks > 2 && !level.completed && (
-            <button
-              className="btn btn-brand hover:bg-brand-500 rounded-md flex justify-start gap-4 pl-2 pr-4 transition-all disabled:bg-success-light disabled:text-success-dark"
-              onClick={() => {
-                updateLevelStatus()
-              }}
-              disabled={level.completed}
-            >
-              <CheckCircleIcon
-                className={clsx('z-20 w-5 h-5', {
-                  'text-success-dark': level.completed,
-                  'text-secondary': !level.completed,
-                })}
-              ></CheckCircleIcon>
-              {level.completed ? 'Completed' : 'Complete Level'}
-            </button>
+          {openSideMenu && (
+            <>
+              {level.completed && (
+                <button
+                  className="btn btn-brand hover:bg-success  border-success-dark rounded-md flex justify-start gap-4 pl-2 pr-4 transition-all bg-success-light text-success-dark"
+                  onClick={() => {
+                    router.push(`/app/${course._id}/${mission._id}`)
+                  }}
+                >
+                  <CheckCircleIcon
+                    className={clsx('text-success-dark z-20 w-5 h-5')}
+                  ></CheckCircleIcon>
+                  Completed
+                </button>
+              )}
+              <div className="flex gap-4 items-center">
+                <div className="text-secondary-800">
+                  {showWebsitePreview ? t.User.htmlLevel.showCode : t.User.htmlLevel.showWebsite}
+                </div>
+                <Switch
+                  checked={showWebsitePreview}
+                  onChange={(isChecked) => {
+                    setShowWebsitePreview(isChecked)
+                  }}
+                  className={`${!showWebsitePreview ? 'bg-secondary-800' : 'bg-secondary-700'}
+            inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+                >
+                  <span className="sr-only">
+                    {showWebsitePreview ? 'Show Code' : 'Show Website'}
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className={`${!showWebsitePreview ? 'translate-x-7' : 'translate-x-0'}
+              pointer-events-none inline-block h-[34px] w-[34px] transform rounded-full bg-brand shadow-lg ring-0 transition duration-200 ease-in-out`}
+                  />
+                </Switch>
+              </div>
+              {numBlocks > 2 && !level.completed && (
+                <button
+                  className="btn btn-brand bg-secondary hover:bg-secondary-200 rounded-md flex justify-start gap-4 pl-2 pr-4 transition-all text-brand"
+                  onClick={() => {
+                    updateLevelStatus()
+                  }}
+                >
+                  <CheckCircleIcon className="z-20 w-5 h-5 text-brand"></CheckCircleIcon>
+                  Complete Level
+                </button>
+              )}
+              <button
+                className="btn btn-brand bg-secondary hover:bg-secondary-200 rounded-md flex justify-start gap-4 pl-2 pr-4"
+                onClick={() => {
+                  downloadCode()
+                  setOpenSideMenu(false)
+                }}
+              >
+                <ArrowDownIcon className="text-brand z-20 w-5 h-5"></ArrowDownIcon>
+                <p className="whitespace-nowrap text-xs text-brand">
+                  {t.User.htmlLevel.downloadCode}
+                </p>
+              </button>
+              <button
+                className="btn btn-brand bg-secondary hover:bg-secondary-200 rounded-md flex justify-start gap-4 pl-2 pr-4"
+                onClick={() => {
+                  resetCode()
+                  setOpenSideMenu(false)
+                }}
+              >
+                <TrashIcon className="text-brand z-20 w-5 h-5"></TrashIcon>
+                <p className="whitespace-nowrap text-xs text-brand">{t.User.htmlLevel.resetAll}</p>
+              </button>
+            </>
           )}
-          <button
-            className="btn btn-brand hover:bg-brand-500 rounded-md flex justify-between gap-4 pl-2 pr-4"
-            onClick={() => {
-              downloadCode()
-            }}
-          >
-            <ArrowDownIcon className="text-secondary z-20 w-5 h-5"></ArrowDownIcon>
-            <p className="whitespace-nowrap">{t.User.htmlLevel.downloadCode}</p>
-          </button>
-          <button
-            className="btn btn-brand hover:bg-brand-500 rounded-md flex justify-start gap-4 pl-2 pr-4"
-            onClick={() => {
-              resetCode()
-            }}
-          >
-            <TrashIcon className="text-secondary z-20 w-5 h-5"></TrashIcon>
-            <p className="whitespace-nowrap">{t.User.htmlLevel.resetAll}</p>
-          </button>
         </div>
       </div>
     </>

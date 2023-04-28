@@ -1,5 +1,6 @@
 import '@/components/nextNProgress'
 import '@/pages/globals.css'
+import 'prismjs/themes/prism.css'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { Caveat, Quicksand } from 'next/font/google'
 import { Hydrate } from 'react-query/hydration'
