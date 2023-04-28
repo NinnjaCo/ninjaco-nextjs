@@ -325,6 +325,7 @@ const englishTranslations: WebsiteTranslations = {
     profile: 'Profile',
     save: 'SAVE',
     changePassword: 'Change Password',
+    addAdmin: 'Add Admin',
   },
   Admin: {
     Dashboard: {
