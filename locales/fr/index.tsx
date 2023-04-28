@@ -751,6 +751,7 @@ const frenchTranslations: WebsiteTranslations = {
       downloadCode: 'Télécharger',
       completeLevel: 'Niveau terminé',
       previewCode: 'Prévisualisez votre propre code HTML en temps réel',
+      desktop: 'Veuillez utiliser un ordinateur pour jouer',
     },
   },
 

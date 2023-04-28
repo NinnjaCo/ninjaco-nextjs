@@ -738,6 +738,7 @@ const englishTranslations: WebsiteTranslations = {
       downloadCode: 'Download Code',
       completeLevel: 'Completed',
       previewCode: 'Preview your own HTML code in real-time',
+      desktop: 'Please use a desktop to play',
     },
   },
   Filter: {
