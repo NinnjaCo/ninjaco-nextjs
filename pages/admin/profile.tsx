@@ -1,4 +1,5 @@
 import * as yup from 'yup'
+import { AdminAlertDialog } from '@/components/admin/dialog'
 import { AuthError } from '@/models/shared'
 import { AxiosError } from 'axios'
 import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/solid'
@@ -25,6 +26,15 @@ import useUserProfilePicture from '@/hooks/useUserProfilePicture'
 
 interface ServerProps {
   serverUser: User
+}
+
+type AddAdminFormDataType = {
+  firstName: string
+  lastName: string
+  dateOfBirth: Date
+  email: string
+  password: string
+  passwordConfirmation: string
 }
 
 type AdminProfileFormDataType = {
@@ -70,6 +80,7 @@ export default function Profile({ serverUser }: ServerProps) {
   const user = useNonNullUser(fetchedUser, serverUser)
 
   const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false)
+  const [openAddUserDialog, setOpenAddUserDialog] = React.useState(false)
 
   const [alertData, setAlertData] = React.useState<{
     message: string
@@ -82,6 +93,72 @@ export default function Profile({ serverUser }: ServerProps) {
   })
   const closeAlert = () => {
     setAlertData({ ...alertData, open: false })
+  }
+  const AddAdminFormSchema = yup
+    .object()
+    .shape({
+      firstName: yup.string().required('First Name is required'),
+      lastName: yup
+        .string()
+        .required('Last Name is required')
+        .matches(/^[a-zA-Z\s]*$/, 'Name can only contain letters and spaces'),
+      dateOfBirth: yup
+        .date()
+        .max(new Date(), 'Date of Birth cannot be in the future')
+        .required('Date of Birth is required'),
+      email: yup.string().email('Invalid email').required('Email is required'),
+      password: yup
+        .string()
+        .min(8, 'Password must be at least 8 characters')
+        .required('Password is required'),
+      passwordConfirmation: yup
+        .string()
+        .oneOf([yup.ref('password')], 'Passwords must match')
+        .required('Password Confirmation is required'),
+    })
+    .required()
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<AddAdminFormDataType>({
+    resolver: yupResolver(AddAdminFormSchema),
+  })
+
+  const onSubmitHandler = async (data: AddAdminFormDataType) => {
+    try {
+      closeAlert()
+
+      await new UserApi(session).create({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        dateOfBirth: data.dateOfBirth.toISOString(),
+        email: data.email,
+        password: data.password,
+        isVerified: true,
+        role: RoleEnum.ADMIN,
+      })
+
+      setOpenAddUserDialog(false)
+      queryClient.invalidateQueries('users')
+      setAlertData({
+        message: t.Admin.Users.createdSuccessfully as string,
+        variant: 'success',
+        open: true,
+      })
+    } catch (error) {
+      setOpenAddUserDialog(false)
+      if (isAxiosError<AuthError>(error)) {
+        const errors = unWrapAuthError(error)
+        setAlertData({
+          message: errors[0].message || (t.Admin.Users.somethingWentWrong as string),
+          variant: 'error',
+          open: true,
+        })
+      }
+    }
   }
 
   const AdminProfileFormSchema = yup
@@ -239,6 +316,84 @@ export default function Profile({ serverUser }: ServerProps) {
         <meta name="description" content="Leading online platform for visual programming" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
+
+      <AdminAlertDialog
+        title={t.Admin.Users.addUsers as string}
+        open={openAddUserDialog}
+        confirm={() => {}} // Confirmation is done inside the form body
+        close={() => setOpenAddUserDialog(false)}
+        backButtonText={t.Admin.Users.cancel as string}
+        backButtonClassName="bg-brand-200 text-brand-500 hover:bg-brand-300 hover:text-brand hidden"
+        confirmButtonText={t.Admin.Users.addUsers as string}
+        confirmButtonClassName="bg-brand-500 text-brand-50 hover:bg-brand-700 hidden"
+      >
+        <form onSubmit={handleSubmit(onSubmitHandler)} className="flex flex-col gap-4" id="form">
+          <Input
+            {...register('firstName')}
+            label={t.Admin.Users.firstName as string}
+            placeholder="John"
+            StartIcon={UserIcon}
+            error={errors.firstName?.message}
+            isRequired={true}
+          />
+          <Input
+            {...register('lastName')}
+            label={t.Admin.Users.lastName as string}
+            placeholder="Smith"
+            StartIcon={UserIcon}
+            error={errors.lastName?.message}
+            isRequired={true}
+          />
+          <DatePickerWithHookForm
+            control={control}
+            name={register('dateOfBirth').name} // we only need the "name" prop
+            label={t.Admin.Users.dateOfBirth as string}
+            error={errors.dateOfBirth?.message}
+            isRequired={true}
+          />
+          <Input
+            {...register('email')}
+            label={t.Admin.Users.email as string}
+            placeholder="Email"
+            StartIcon={EnvelopeIcon}
+            error={errors.email?.message}
+            isRequired={true}
+          />
+          <Input
+            {...register('password')}
+            type="password"
+            label={t.Admin.Users.password as string}
+            placeholder={t.Admin.Users.password as string}
+            StartIcon={LockClosedIcon}
+            error={errors.password?.message}
+            isRequired={true}
+          />
+          <Input
+            {...register('passwordConfirmation')}
+            type="password"
+            label={t.Admin.Users.password as string}
+            placeholder={t.Admin.Users.password as string}
+            StartIcon={LockClosedIcon}
+            error={errors.passwordConfirmation?.message}
+            isRequired={true}
+          />
+          <button
+            type="submit"
+            form="form"
+            value="Submit"
+            className="w-full btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+          >
+            {t.Admin.Users.addUsers}
+          </button>
+          <button
+            onClick={() => setOpenAddUserDialog(false)}
+            className="w-full btn bg-brand-50 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+          >
+            {t.Admin.Users.cancel}
+          </button>
+        </form>
+      </AdminAlertDialog>
+
       <div className="flex w-full h-screen ">
         <SideMenu higlightProfile={true} />
         <main className="flex w-full h-screen overflow-y-scroll ">
