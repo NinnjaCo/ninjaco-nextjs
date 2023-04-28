@@ -222,6 +222,7 @@ export interface WebsiteTranslations {
       confirmPassword: translationElement
       notify: translationElement
       users: translationElement
+      goToApp: translationElement
     }
     Creators: {
       somethingWentWrong: translationElement
