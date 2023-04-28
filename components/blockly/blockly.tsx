@@ -59,11 +59,16 @@ const BlocklyBoard = React.forwardRef(
       }
     }, [])
 
+    const getWorkspace = useCallback(() => {
+      return primaryWorkspace.current
+    }, [])
+
     useImperativeHandle(ref, () => ({
       generateCode,
       highlightBlockById,
       clearHighlightedBlock,
       clearBlocks,
+      getWorkspace,
     }))
 
     useEffect(() => {
