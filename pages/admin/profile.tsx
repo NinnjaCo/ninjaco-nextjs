@@ -261,7 +261,7 @@ export default function Profile({ serverUser }: ServerProps) {
                   {user?.firstName} {user?.lastName}
                 </div>
                 <div className="flex items-center gap-4">
-                  <button className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-400 hover:text-white py-2">
+                  <button className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-500 hover:text-white py-2">
                     Add Admin
                   </button>
 
@@ -269,7 +269,7 @@ export default function Profile({ serverUser }: ServerProps) {
                     type="submit"
                     form="form"
                     value="Submit"
-                    className="btn btn-secondary rounded-lg px-4 sm:pr-6 py-2 hover:bg-brand-500 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                    className="btn btn-brand rounded-lg px-4 sm:pr-6 py-2 hover:bg-brand-500 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center align-center"
                     disabled={saveButtonDisabled}
                   >
                     {t.Profile.save}
