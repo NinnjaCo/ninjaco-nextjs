@@ -336,6 +336,7 @@ const frenchTranslations: WebsiteTranslations = {
     profile: 'Profil',
     save: 'Sauvegarder',
     changePassword: 'Changer le mot de passe',
+    addAdmin: 'Ajouter un administrateur',
   },
   Admin: {
     Dashboard: {
