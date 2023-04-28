@@ -672,7 +672,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
               <p className="text-brand-700 text-xl md:text-2xl lg:text-3xl font-semibold">
                 {t.Admin.Creators.creators as string}
               </p>
-              <div className="text-sm text-brand  ">
+              <div className="text-sm text-brand ">
                 {(users ?? serverUsers).length} {t.Admin.Creators.entriesFound as string}
               </div>
             </div>
@@ -680,7 +680,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
               Go To Creator Panel
             </button>
             <button
-              className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-400 hover:text-white py-2 px-4"
+              className="btn btn-brand gap-2 text-white rounded-lg hover:bg-brand-400 hover:text-white py-2 px-4"
               onClick={() => {
                 setOpenCreatorAddDialog(true)
               }}
