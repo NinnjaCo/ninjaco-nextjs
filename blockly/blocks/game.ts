@@ -1,5 +1,5 @@
 import * as Blockly from 'blockly'
-import { BlockDefinition } from 'blockly/core/blocks'
+import { BlocksDefinition } from '@/components/blockly/blockly'
 import flag from '@/images/flag.svg'
 
 const MOVEMENT_HUE = 245
@@ -16,7 +16,7 @@ const PATH_DIRECTIONS = [
   ['to the right', 'isPathRight'],
 ]
 
-export const gameBlocks: BlockDefinition = Blockly.common.createBlockDefinitionsFromJsonArray([])
+export const gameBlocks: BlocksDefinition = Blockly.common.createBlockDefinitionsFromJsonArray([])
 
 // Ignore the below error, it works but blockly for some reason did not include the type for this, so typescript is complaining
 // source: https://developers.google.com/blockly/guides/create-custom-blocks/block-colour#defining_the_block_colour

@@ -1,4 +1,4 @@
-import { BlockDefinition } from 'blockly/core/blocks'
+import { BlocksDefinition } from '@/components/blockly/blockly'
 import Blockly from 'blockly'
 
 const BASE_FRAME_HUE = 0 // base frame I.E. html, head, body, document
@@ -15,7 +15,7 @@ Blockly.HSV_VALUE = 0.85
 /** @ts-expect-error HSV_SATURATION not decalred it types export*/
 Blockly.HSV_SATURATION = 0.65
 
-export const htmlBlocks: BlockDefinition = Blockly.common.createBlockDefinitionsFromJsonArray([])
+export const htmlBlocks: BlocksDefinition = Blockly.common.createBlockDefinitionsFromJsonArray([])
 
 Blockly.Blocks['baseframe'] = {
   init: function () {
