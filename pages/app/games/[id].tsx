@@ -659,6 +659,8 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
     if (!code) {
       return
     }
+
+    setRunButtonDisabled(true)
     setCurrentCode(code)
 
     const parsedCode: BlockCode[] = parseCode(code)
@@ -833,7 +835,6 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
           <button
             onClick={() => {
               runProgram()
-              setRunButtonDisabled(true)
             }}
             disabled={runButtonDisabled}
             className="btn w-fit bg-brand py-3 text-white hover:bg-brand-500 absolute bottom-14 left-4 z-10 disabled:bg-gray-600 disabled:cursor-not-allowed"
