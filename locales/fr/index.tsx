@@ -391,6 +391,7 @@ const frenchTranslations: WebsiteTranslations = {
       confirmPassword: 'Confirmez le mot de passe',
       notify: 'Notifier',
       users: 'Utilisateurs',
+      goToApp: 'Aller à l’application',
     },
     Creators: {
       somethingWentWrong: 'Quelque chose s’est mal passé',
