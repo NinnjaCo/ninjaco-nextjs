@@ -49,7 +49,12 @@ const PlayLevel = ({
         {course.course.type === CourseType.HTML ? (
           <HtmlLevel course={course.course} level={level} mission={mission.mission} user={user} />
         ) : (
-          <ArduinoLevel course={course.course} level={level.level} mission={mission.mission} />
+          <ArduinoLevel
+            course={course.course}
+            level={level}
+            mission={mission.mission}
+            user={user}
+          />
         )}
       </main>
     </>
