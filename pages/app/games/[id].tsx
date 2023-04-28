@@ -79,7 +79,7 @@ const ResultType = {
 const ViewGame = ({ user, game }: ServerSideProps) => {
   const t = useTranslation()
   const router = useRouter()
-  const { data: session } = useSession()
+  const { data: session, update: updateSession } = useSession()
 
   const parentRef = React.useRef<any>()
 
@@ -726,12 +726,24 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
       return
     }
 
-    const oldPoints = user.points ?? 0
-    // maximum 100 minimum 50 and depends on the game size
-    let newPoints = oldPoints + (100 - game.game.sizeOfGrid * 5)
-    newPoints = newPoints > 100 ? 100 : newPoints < 50 ? 50 : newPoints
+    //increase user points
+    const oldPoints = session?.user.points ?? 0
 
-    await new UserApi(session).update(user._id, { points: newPoints })
+    // maximum 100 minimum 50 and depends on the game size
+    let addedPoints = 100 - game.game.sizeOfGrid * 5
+    addedPoints = addedPoints > 100 ? 100 : addedPoints < 50 ? 50 : addedPoints
+    const newPoints = oldPoints + addedPoints
+    try {
+      const res = await new UserApi(session).update(user._id, { points: newPoints })
+      await updateSession({
+        ...session,
+        user: {
+          ...res.payload,
+        },
+      })
+    } catch (err) {
+      console.log(err)
+    }
     //update userPlayGame to be completed
     await new GameEnrollmentAPI(session).update(game._id, { completed: true })
   }
