@@ -31,6 +31,7 @@ import { useSession } from 'next-auth/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import DatePickerWithHookForm from '@/components/forms/datePickerWithHookForm'
 import Head from 'next/head'
+import Link from 'next/link'
 import SideMenu from '@/components/admin/sideMenu'
 import Table from '@/components/table'
 import clsx from 'clsx'
@@ -676,9 +677,11 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
                 {(users ?? serverUsers).length} {t.Admin.Creators.entriesFound as string}
               </div>
             </div>
-            <button className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-400 hover:text-white py-2 px-4">
-              Go To Creator Panel
-            </button>
+            <Link href="/creator">
+              <button className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-500 hover:text-white py-2 px-4">
+                Go To Creator Panel
+              </button>
+            </Link>
             <button
               className="btn btn-brand gap-2 text-white rounded-lg hover:bg-brand-400 hover:text-white py-2 px-4"
               onClick={() => {
