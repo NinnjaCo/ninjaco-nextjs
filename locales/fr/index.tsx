@@ -754,6 +754,8 @@ const frenchTranslations: WebsiteTranslations = {
 
   Filter: {
     filter: 'Filtre',
+    completed: 'complété',
+    notCompleted: 'pas achevé',
   },
   ServerError: {
     headTitle: 'NinjaCo | Erreur',

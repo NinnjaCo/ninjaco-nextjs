@@ -580,6 +580,8 @@ export interface WebsiteTranslations {
   }
   Filter: {
     filter: translationElement
+    completed: translationElement
+    notCompleted: translationElement
   }
   ServerError: {
     headTitle: translationElement

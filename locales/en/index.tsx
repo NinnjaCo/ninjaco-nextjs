@@ -740,6 +740,8 @@ const englishTranslations: WebsiteTranslations = {
   },
   Filter: {
     filter: 'Filter',
+    completed: 'Completed',
+    notCompleted: 'Not Completed',
   },
   ServerError: {
     headTitle: 'NinjaCo | Server Error',
