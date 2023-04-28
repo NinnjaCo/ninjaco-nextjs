@@ -749,6 +749,7 @@ const frenchTranslations: WebsiteTranslations = {
       showWebsite: 'Site Web',
       resetAll: 'Réinitialiser',
       downloadCode: 'Télécharger',
+      completeLevel: 'Niveau terminé',
     },
   },
 

@@ -351,7 +351,7 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
                   <CheckCircleIcon
                     className={clsx('text-success-dark z-20 w-5 h-5')}
                   ></CheckCircleIcon>
-                  Completed
+                  {t.User.htmlLevel.completeLevel}
                 </button>
               )}
               <div className="flex gap-4 items-center">

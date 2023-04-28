@@ -736,6 +736,7 @@ const englishTranslations: WebsiteTranslations = {
       showWebsite: 'Show Website',
       resetAll: 'Reset All',
       downloadCode: 'Download Code',
+      completeLevel: 'Completed',
     },
   },
   Filter: {
