@@ -676,6 +676,9 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
                 {(users ?? serverUsers).length} {t.Admin.Creators.entriesFound as string}
               </div>
             </div>
+            <button className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-400 hover:text-white py-2 px-4">
+              Go To Creator Panel
+            </button>
             <button
               className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-400 hover:text-white py-2 px-4"
               onClick={() => {
