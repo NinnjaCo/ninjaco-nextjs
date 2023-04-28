@@ -384,7 +384,7 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
                   }}
                 >
                   <CheckCircleIcon className="z-20 w-5 h-5 text-brand"></CheckCircleIcon>
-                  Complete Level
+                  {t.User.htmlLevel.completeLevel}
                 </button>
               )}
               <button
