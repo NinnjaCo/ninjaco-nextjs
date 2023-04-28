@@ -16,7 +16,7 @@ type AlertProps = React.ComponentPropsWithRef<'div'> & {
   className?: string
   open: boolean
   close?: () => void
-  includeBorder: boolean
+  includeBorder?: boolean
 }
 
 export const Alert: FC<AlertProps> = ({
