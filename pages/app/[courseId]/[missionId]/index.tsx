@@ -144,7 +144,6 @@ export default function UserMissionPage({
     if (getTypeOfMission(mission) === MissionType.mission) return
     const missionEnrollment = mission as MissionEnrollment
     if (level.locked) return
-    if (level.completed) return
     router.push(`/app/${course.course._id}/${missionEnrollment.mission._id}/${level.level._id}`)
   }
   return (
