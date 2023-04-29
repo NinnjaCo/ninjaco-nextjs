@@ -432,6 +432,17 @@ const englishTranslations: WebsiteTranslations = {
       users: 'Users',
       creators: 'Creators',
     },
+    Admin: {
+      createdSuccessfully: 'Admin created successfully',
+      somethingWentWrong: 'Something went wrong',
+      password: 'Password',
+      confirmPassword: 'Confirm Password',
+      dateOfBirth: 'Date of Birth',
+      firstName: 'First Name',
+      lastName: 'Last Name',
+      cancel: 'Cancel',
+      addAdmin: 'Add Admin',
+    },
   },
   MenuCreator: {
     courses: 'Courses',
