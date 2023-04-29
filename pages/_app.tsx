@@ -69,7 +69,6 @@ export default function App({ Component, pageProps }: AppProps) {
                 </main>
               </TranslationsProvider>
             </LocalizationProvider>
-            <ReactQueryDevtools initialIsOpen={false} />
           </Hydrate>
         </QueryClientProvider>
       </SessionManager>

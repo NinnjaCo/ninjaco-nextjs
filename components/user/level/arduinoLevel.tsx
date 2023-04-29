@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
 import { Course } from '@/models/crud/course.model'
-import { Level } from '@/models/crud/level.model'
+import { LevelEnrollment } from '@/models/crud/level-enrollment.model'
 import { Mission } from '@/models/crud/mission.model'
 import { Tab } from '@headlessui/react'
+import { User } from '@/models/crud'
 import { useState } from 'react'
 import ArduinoBlockly from './arduinoBlockly'
 import ArduinoBuildingParts from './arduinoBuildingParts'
@@ -12,22 +13,23 @@ import useTranslation from '@/hooks/useTranslation'
 
 interface Props {
   course: Course
-  level: Level
+  level: LevelEnrollment
   mission: Mission
+  user: User
 }
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-const ArduinoLevel = ({ course, level, mission }: Props) => {
+const ArduinoLevel = ({ course, level, mission, user }: Props) => {
   const t = useTranslation()
   const [tabs] = useState([
     {
       name: t.User.arduinoLevel.buildingPart as string,
       component: () => (
         <ArduinoBuildingParts
-          buildingPartsImages={level.buildingPartsImages ?? []}
+          buildingPartsImages={level.level.buildingPartsImages ?? []}
         ></ArduinoBuildingParts>
       ),
     },
@@ -35,14 +37,19 @@ const ArduinoLevel = ({ course, level, mission }: Props) => {
       name: t.User.arduinoLevel.stepByStep as string,
       component: () => (
         <ArduinoStepByStepGuide
-          stepByStepImages={level.stepGuideImages ?? []}
+          stepByStepImages={level.level.stepGuideImages ?? []}
         ></ArduinoStepByStepGuide>
       ),
     },
     {
       name: 'Code',
       component: () => (
-        <ArduinoBlockly level={level} course={course} mission={mission}></ArduinoBlockly>
+        <ArduinoBlockly
+          level={level}
+          course={course}
+          mission={mission}
+          user={user}
+        ></ArduinoBlockly>
       ),
     },
   ])

@@ -247,7 +247,7 @@ export default function UserMissionPage({
             </div>
           ) : (
             <div className="text-brand-500 font-medium text-xs md:text-base w-full">
-              No levels yet
+              {t.User.htmlLevel.nolevel}
             </div>
           )}
         </div>

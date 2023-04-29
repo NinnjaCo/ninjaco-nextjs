@@ -275,7 +275,7 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
               <div className="group relative flex justify-center">
                 <QuestionMarkCircleIcon className="absolute top-1 right-3 w-4 h-4 text-brand-300 hover:text-brand-500 cursor-pointer z-20" />
                 <span className="absolute top-2 right-5 scale-0 rounded bg-brand p-2 text-xs text-white group-hover:scale-100 z-20">
-                  ✨ This is how your website should look like
+                  ✨ {t.User.htmlLevel.thisHowYourWebsiteWillLook}
                 </span>
               </div>
               <Image
@@ -293,7 +293,7 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
             <div className="group relative flex justify-center">
               <QuestionMarkCircleIcon className="absolute top-1 right-3 w-4 h-4 text-brand-100 hover:text-brand-500 cursor-pointer z-20" />
               <span className="absolute top-2 right-5 scale-0 rounded bg-brand p-2 text-xs text-white group-hover:scale-100 z-20 font-quicksand">
-                🚀 Preview your own HTML code in real-time
+                🚀 {t.User.htmlLevel.previewCode}
               </span>
             </div>
             {showWebsitePreview ? (
@@ -351,7 +351,7 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
                   <CheckCircleIcon
                     className={clsx('text-success-dark z-20 w-5 h-5')}
                   ></CheckCircleIcon>
-                  Completed
+                  {t.User.htmlLevel.completeLevel}
                 </button>
               )}
               <div className="flex gap-4 items-center">
@@ -384,7 +384,7 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
                   }}
                 >
                   <CheckCircleIcon className="z-20 w-5 h-5 text-brand"></CheckCircleIcon>
-                  Complete Level
+                  {t.User.htmlLevel.completeLevel}
                 </button>
               )}
               <button
