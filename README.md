@@ -97,12 +97,51 @@
 >
 > We created our own Design System in figma to make the design process easier and faster.
 
-TODO
+| Design System |
+| :---: |
+| Colors |
+| <img src="./README_ASSETS/colors_design_system.png"/> |
+| Typography |
+| <img src="./README_ASSETS/typography_design_system.png"/> |
+| Spacing |
+| <img src="./README_ASSETS/spacing_design_system.png"/> |
+
+| Landing Page Wireframe|
+| :---: |
+| <img src="./README_ASSETS/wireframe_landingpage.png"/> |
 
 <a id="design"></a>
 <br><br>
 <img src="./README_ASSETS/README_DESIGN.svg"/>
-TODO
+
+| Admin |
+| :---: |
+| Admin Dashboard |
+| <img src="./README_ASSETS/design_admin_dashboard.png"/> |
+| Admin Users |
+| <img src="./README_ASSETS/design_admin_users.png"/> |
+| Admin Courses |
+| <img src="./README_ASSETS/design_admin_courses.png"/> |
+
+| Creator |
+| :---: |
+| Creator Dashboard |
+| <img src="./README_ASSETS/design_creator_dashboard.png"/> |
+| Creator Create Course |
+| <img src="./README_ASSETS/design_creator_create_course.png"/> |
+| Creator Create Game |
+| <img src="./README_ASSETS/design_creator_create_game.png"/> |
+
+| User |
+| :---: |
+| User Game |
+| <img src="./README_ASSETS/design_user_game.png"/> |
+| User HTML |
+| <img src="./README_ASSETS/design_user_html.png"/> |
+| User Arduino |
+| <img src="./README_ASSETS/design_user_arduino.png"/> |
+| User Profile |
+| <img src="./README_ASSETS/design_user_profile.png"/> |
 
 <a id="tech-stack"></a>
 <br><br>
