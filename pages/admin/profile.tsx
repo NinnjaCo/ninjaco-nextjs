@@ -293,7 +293,7 @@ export default function Profile({ serverUser }: ServerProps) {
       setOpenCreatorAddDialog(false)
       queryClient.invalidateQueries('users')
       setAlertData({
-        message: t.Admin.Creators.createdSuccessfully as string,
+        message: t.Admin.Admin.createdSuccessfully as string,
         variant: 'success',
         open: true,
       })
@@ -302,7 +302,7 @@ export default function Profile({ serverUser }: ServerProps) {
       if (isAxiosError<AuthError>(error)) {
         const errors = unWrapAuthError(error)
         setAlertData({
-          message: errors[0].message || (t.Admin.Creators.somethingWentWrong as string),
+          message: errors[0].message || (t.Admin.Admin.somethingWentWrong as string),
           variant: 'error',
           open: true,
         })
@@ -318,7 +318,7 @@ export default function Profile({ serverUser }: ServerProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <AdminAlertDialog
-        title={t.Admin.Creators.addCreators as string}
+        title={t.Admin.Admin.addAdmin as string}
         open={openCreatorAddDialog}
         confirm={() => {}} // Confirmation is done inside the form body
         close={() => setOpenCreatorAddDialog(false)}
@@ -334,7 +334,7 @@ export default function Profile({ serverUser }: ServerProps) {
         >
           <Input
             {...registerAdminAdd('firstName')}
-            label={t.Admin.Creators.firstName as string}
+            label={t.Admin.Admin.firstName as string}
             placeholder="John"
             StartIcon={UserIcon}
             error={errorsAdminAdd.firstName?.message}
@@ -342,7 +342,7 @@ export default function Profile({ serverUser }: ServerProps) {
           />
           <Input
             {...registerAdminAdd('lastName')}
-            label={t.Admin.Creators.lastName as string}
+            label={t.Admin.Admin.lastName as string}
             placeholder="Smith"
             StartIcon={UserIcon}
             error={errorsAdminAdd.lastName?.message}
@@ -351,7 +351,7 @@ export default function Profile({ serverUser }: ServerProps) {
           <DatePickerWithHookForm
             control={controlAdminAdd}
             name={registerAdminAdd('dateOfBirth').name} // we only need the "name" prop
-            label={t.Admin.Creators.dateOfBirth as string}
+            label={t.Admin.Admin.dateOfBirth as string}
             error={errorsAdminAdd.dateOfBirth?.message}
             isRequired={true}
           />
@@ -366,8 +366,8 @@ export default function Profile({ serverUser }: ServerProps) {
           <Input
             {...registerAdminAdd('password')}
             type="password"
-            label={t.Admin.Creators.password as string}
-            placeholder={t.Admin.Creators.password as string}
+            label={t.Admin.Admin.password as string}
+            placeholder={t.Admin.Admin.password as string}
             StartIcon={LockClosedIcon}
             error={errorsAdminAdd.password?.message}
             isRequired={true}
@@ -375,8 +375,8 @@ export default function Profile({ serverUser }: ServerProps) {
           <Input
             {...registerAdminAdd('passwordConfirmation')}
             type="password"
-            label={t.Admin.Creators.confirmPassword as string}
-            placeholder={t.Admin.Creators.confirmPassword as string}
+            label={t.Admin.Admin.confirmPassword as string}
+            placeholder={t.Admin.Admin.confirmPassword as string}
             StartIcon={LockClosedIcon}
             error={errorsAdminAdd.passwordConfirmation?.message}
             isRequired={true}
@@ -387,13 +387,13 @@ export default function Profile({ serverUser }: ServerProps) {
             value="Submit"
             className="w-full btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
           >
-            {t.Admin.Creators.addCreators as string}
+            {t.Admin.Admin.addAdmin as string}
           </button>
           <button
             onClick={() => setOpenCreatorAddDialog(false)}
             className="w-full btn bg-brand-50 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
           >
-            {t.Admin.Creators.cancel as string}
+            {t.Admin.Admin.cancel as string}
           </button>
         </form>
       </AdminAlertDialog>
