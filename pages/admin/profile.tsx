@@ -422,7 +422,8 @@ export default function Profile({ serverUser }: ServerProps) {
                 <div className="flex items-center gap-4">
                   <button
                     className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-500 hover:text-white py-2"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.preventDefault()
                       setOpenCreatorAddDialog(true)
                     }}
                   >
