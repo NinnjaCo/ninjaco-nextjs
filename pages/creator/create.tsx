@@ -47,6 +47,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
     })
   }
 
+  const [createButtonDisabled, setCreateButtonDisabled] = React.useState<boolean>(false)
   const [alertData, setAlertData] = React.useState<{
     message: string
     variant: 'success' | 'info' | 'warning' | 'error'
@@ -93,6 +94,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
   })
 
   const onSubmitHandler = async (data: CreateCourseFormDataType) => {
+    setCreateButtonDisabled(true)
     if (!data.courseImage.file) {
       setAlertData({
         message: `${t.Creator.createCourse.alerts.imageAlert}`,
@@ -100,8 +102,15 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
         open: true,
       })
       scrollToTop()
+      setCreateButtonDisabled(false)
       return
     }
+    setAlertData({
+      message: 'Creating Course...',
+      variant: 'info',
+      open: true,
+    })
+    scrollToTop()
     // Upload Image and get url
     const imageUploadRes = await new ImageApi(session.data).uploadImage({
       image: data.courseImage.file,
@@ -119,6 +128,7 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
       })
       router.push('/creator')
     } catch (error) {
+      setCreateButtonDisabled(false)
       if (isAxiosError<AuthError>(error)) {
         const errors = unWrapAuthError(error)
         setAlertData({
@@ -229,11 +239,12 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
             />
             <div className="flex w-full justify-between gap-4 md:gap-12 h-fit md:flex-row flex-col-reverse">
               <button
-                className="w-full md:w-40 h-fit btn bg-error text-brand hover:bg-error-dark hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+                className="w-full md:w-40 h-fit btn bg-error text-brand hover:bg-error-dark hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
                 onClick={(e) => {
                   e.preventDefault()
                   router.back()
                 }}
+                disabled={createButtonDisabled}
               >
                 {t.Creator.createCourse.cancel}
               </button>
@@ -241,7 +252,8 @@ const CreateCourseOrEdit = ({ user }: { user: User }) => {
                 type="submit"
                 form="form"
                 value="Submit"
-                className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+                className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                disabled={createButtonDisabled}
               >
                 {t.Creator.createCourse.createCourse}
               </button>
