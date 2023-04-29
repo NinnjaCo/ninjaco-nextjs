@@ -755,7 +755,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
       <main className="flex w-full h-screen overflow-hidden">
         <SideMenu higlightUsers={true} />
         <div className="flex flex-col flex-grow w-3/4 h-full gap-4 py-8 px-4">
-          <div className="flex items-center justify-between w-full">
+          <div className="flex items-start md:items-center justify-between w-full flex-col md:flex-row gap-4 md:gap-0">
             <div className="flex flex-col gap-2">
               <p className="text-brand-700 text-xl md:text-2xl lg:text-3xl font-semibold">
                 {t.Admin.Users.users}
@@ -764,7 +764,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
                 {(users ?? serverUsers).length} {t.Admin.Users.entriesFound}
               </div>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-start md:items-center flex-col md:flex-row gap-4">
               <Link href="/app">
                 <button className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-500 hover:text-white py-2">
                   {t.Admin.Users.goToApp}

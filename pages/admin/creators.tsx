@@ -668,7 +668,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
       <main className="flex w-full h-screen overflow-hidden">
         <SideMenu higlightCreators={true} />
         <div className="flex flex-col flex-grow w-3/4 h-full gap-4 py-8 px-4">
-          <div className="flex items-center justify-between w-full flex-wrap">
+          <div className="flex items-center justify-between w-full flex-wrap gap-4 md:gap-0">
             <div className="flex flex-col gap-2">
               <p className="text-brand-700 text-xl md:text-2xl lg:text-3xl font-semibold">
                 {t.Admin.Creators.creators as string}
@@ -677,7 +677,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
                 {(users ?? serverUsers).length} {t.Admin.Creators.entriesFound as string}
               </div>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-start md:items-center flex-col md:flex-row gap-4">
               <Link href="/creator">
                 <button className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-500 hover:text-white py-2 px-4">
                   {t.Admin.Creators.goToCreator}

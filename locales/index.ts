@@ -284,6 +284,7 @@ export interface WebsiteTranslations {
       cancel: translationElement
       addAdmin: translationElement
     }
+  }
   MenuCreator: {
     courses: translationElement
     games: translationElement
