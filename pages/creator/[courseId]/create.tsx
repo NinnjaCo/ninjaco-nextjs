@@ -45,6 +45,7 @@ const CreateMissionOrEdit = ({
   const router = useRouter()
   const session = useSession()
   const queryClient = useQueryClient()
+  const [createButtonDisabled, setCreateButtonDisabled] = React.useState(false)
   const scrollToTop = () => {
     window.scrollTo({
       top: 25,
@@ -126,6 +127,7 @@ const CreateMissionOrEdit = ({
   })
 
   const onSubmitHandler = async (data: CreateMissionFormDataType) => {
+    setCreateButtonDisabled(true)
     if (!data.missionImage.file) {
       setAlertData({
         message: t.Creator.createMissionPage.pleaseUploadImage as string,
@@ -133,8 +135,16 @@ const CreateMissionOrEdit = ({
         open: true,
       })
       scrollToTop()
+      setCreateButtonDisabled(false)
       return
     }
+
+    setAlertData({
+      message: 'Creating mission...',
+      variant: 'info',
+      open: true,
+    })
+    scrollToTop()
 
     try {
       const imageUploadRes = await new ImageApi(session.data).uploadImage({
@@ -156,6 +166,7 @@ const CreateMissionOrEdit = ({
           open: true,
         })
         scrollToTop()
+        setCreateButtonDisabled(false)
       } else {
         setAlertData({
           message: t.Creator.createMissionPage.errorCreatingGame as string,
@@ -163,6 +174,7 @@ const CreateMissionOrEdit = ({
           open: true,
         })
         scrollToTop()
+        setCreateButtonDisabled(false)
       }
     }
   }
@@ -305,11 +317,12 @@ const CreateMissionOrEdit = ({
 
             <div className="flex w-full justify-between gap-4 md:gap-12 h-fit md:flex-row flex-col-reverse">
               <button
-                className="w-full md:w-40 h-fit btn bg-error text-brand hover:bg-error-dark hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+                className="w-full md:w-40 h-fit btn bg-error text-brand hover:bg-error-dark hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
                 onClick={(e) => {
                   e.preventDefault()
                   router.back()
                 }}
+                disabled={createButtonDisabled}
               >
                 {t.Creator.createMissionPage.cancel as string}
               </button>
@@ -317,7 +330,8 @@ const CreateMissionOrEdit = ({
                 type="submit"
                 form="form"
                 value="Submit"
-                className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+                className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                disabled={createButtonDisabled}
               >
                 {t.Creator.createMissionPage.createMission as string}
               </button>

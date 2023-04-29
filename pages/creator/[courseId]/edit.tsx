@@ -40,6 +40,8 @@ const EditCourse = ({ user, course }: { user: User; course: Course }) => {
   const t = useTranslation()
   const router = useRouter()
   const session = useSession()
+  const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false)
+
   const scrollToTop = () => {
     window.scrollTo({
       top: 25,
@@ -102,6 +104,25 @@ const EditCourse = ({ user, course }: { user: User; course: Course }) => {
       dirtyData[key] = data[key]
     })
 
+    // if no changes
+    if (Object.keys(dirtyData).length === 0) {
+      setAlertData({
+        message: 'No changes made',
+        variant: 'info',
+        open: true,
+      })
+      scrollToTop()
+      return
+    }
+
+    setSaveButtonDisabled(true)
+    setAlertData({
+      message: 'Editing Course...',
+      variant: 'info',
+      open: true,
+    })
+    scrollToTop()
+
     try {
       if (dirtyData.image && dirtyData.image.file) {
         // Upload Image and get url
@@ -116,6 +137,7 @@ const EditCourse = ({ user, course }: { user: User; course: Course }) => {
       })
       router.push(`/creator/${course._id}`)
     } catch (error) {
+      setSaveButtonDisabled(false)
       if (isAxiosError<AuthError>(error)) {
         const errors = unWrapAuthError(error)
         setAlertData({
@@ -228,11 +250,12 @@ const EditCourse = ({ user, course }: { user: User; course: Course }) => {
             />
             <div className="flex w-full justify-between gap-4 md:gap-12 h-fit md:flex-row flex-col-reverse">
               <button
-                className="w-full md:w-40 h-fit btn bg-error text-brand hover:bg-error-dark hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+                className="w-full md:w-40 h-fit btn bg-error text-brand hover:bg-error-dark hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
                 onClick={(e) => {
                   e.preventDefault()
                   router.back()
                 }}
+                disabled={saveButtonDisabled}
               >
                 {t.Creator.editCourse.cancel}
               </button>
@@ -240,7 +263,8 @@ const EditCourse = ({ user, course }: { user: User; course: Course }) => {
                 type="submit"
                 form="form"
                 value="Submit"
-                className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+                className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                disabled={saveButtonDisabled}
               >
                 {t.Creator.editCourse.editCourse}
               </button>

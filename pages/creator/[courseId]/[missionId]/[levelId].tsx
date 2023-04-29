@@ -61,6 +61,7 @@ const EditLevel = ({
   const t = useTranslation()
   const router = useRouter()
   const session = useSession()
+  const [editButtonDisabled, setEditButtonDisabled] = React.useState<boolean>(false)
   const scrollToTop = () => {
     window.scrollTo({
       top: 25,
@@ -109,9 +110,17 @@ const EditLevel = ({
   })
 
   const onSubmitHandlerHTML = async (data: EditHTMLLevelFormDataType) => {
+    setEditButtonDisabled(true)
     if (!data.websitePreviewImage) {
       data.websitePreviewImage = { file: undefined, dataURL: undefined }
     }
+
+    setAlertData({
+      message: 'Editing level...',
+      variant: 'info',
+      open: true,
+    })
+    scrollToTop()
 
     //if there is no new image and the old image has been deleted
     if (data.websitePreviewImage.dataURL === undefined && defaultWebsitePreviewImage === '') {
@@ -121,6 +130,7 @@ const EditLevel = ({
         open: true,
       })
       scrollToTop()
+      setEditButtonDisabled(false)
       return
     }
     //if there is no new image and the old image has not been changed
@@ -134,6 +144,7 @@ const EditLevel = ({
         open: true,
       })
       scrollToTop()
+      setEditButtonDisabled(false)
       return
     }
 
@@ -144,6 +155,7 @@ const EditLevel = ({
         open: true,
       })
       scrollToTop()
+      setEditButtonDisabled(false)
       return
     }
 
@@ -154,6 +166,7 @@ const EditLevel = ({
         open: true,
       })
       scrollToTop()
+      setEditButtonDisabled(false)
       return
     }
 
@@ -168,6 +181,7 @@ const EditLevel = ({
         open: true,
       })
       scrollToTop()
+      setEditButtonDisabled(false)
       return
     }
     try {
@@ -183,15 +197,24 @@ const EditLevel = ({
         open: true,
       })
       scrollToTop()
+      setEditButtonDisabled(false)
     }
   }
   const onSubmitHandlerArduino = async (data: EditArduinoLevelFormDataType) => {
+    setEditButtonDisabled(true)
     if (!data.buildingPartsImages) {
       data.buildingPartsImages = []
     }
     if (!data.stepByStepGuideImages) {
       data.stepByStepGuideImages = []
     }
+
+    setAlertData({
+      message: 'Editing Level ...',
+      variant: 'info',
+      open: true,
+    })
+    scrollToTop()
 
     // No new images, and the old images have been deleted
     if (
@@ -205,6 +228,7 @@ const EditLevel = ({
         open: true,
       })
       scrollToTop()
+      setEditButtonDisabled(false)
       return
     }
 
@@ -221,6 +245,7 @@ const EditLevel = ({
         open: true,
       })
       scrollToTop()
+      setEditButtonDisabled(false)
       return
     }
 
@@ -231,6 +256,7 @@ const EditLevel = ({
         open: true,
       })
       scrollToTop()
+      setEditButtonDisabled(false)
       return
     }
 
@@ -241,6 +267,7 @@ const EditLevel = ({
         open: true,
       })
       scrollToTop()
+      setEditButtonDisabled(false)
       return
     }
 
@@ -258,6 +285,7 @@ const EditLevel = ({
             open: true,
           })
           scrollToTop()
+          setEditButtonDisabled(false)
           return
         }
 
@@ -268,6 +296,7 @@ const EditLevel = ({
             open: true,
           })
           scrollToTop()
+          setEditButtonDisabled(false)
           return
         }
 
@@ -283,6 +312,7 @@ const EditLevel = ({
             open: true,
           })
           scrollToTop()
+          setEditButtonDisabled(false)
           return
         }
       })
@@ -297,6 +327,7 @@ const EditLevel = ({
             open: true,
           })
           scrollToTop()
+          setEditButtonDisabled(false)
           return
         }
 
@@ -307,6 +338,7 @@ const EditLevel = ({
             open: true,
           })
           scrollToTop()
+          setEditButtonDisabled(false)
           return
         }
 
@@ -322,6 +354,7 @@ const EditLevel = ({
             open: true,
           })
           scrollToTop()
+          setEditButtonDisabled(false)
           return
         }
       })
@@ -340,6 +373,7 @@ const EditLevel = ({
         open: true,
       })
       scrollToTop()
+      setEditButtonDisabled(false)
     }
   }
 
@@ -424,11 +458,12 @@ const EditLevel = ({
 
               <div className="flex w-full justify-between gap-4 md:gap-12 h-fit md:flex-row flex-col-reverse">
                 <button
-                  className="w-full md:w-40 h-fit btn bg-error text-brand hover:bg-error-dark hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+                  className="w-full md:w-40 h-fit btn bg-error text-brand hover:bg-error-dark hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-400  disabled:cursor-not-allowed"
                   onClick={(e) => {
                     e.preventDefault()
                     router.back()
                   }}
+                  disabled={editButtonDisabled}
                 >
                   {t.Creator.editLevelPage.cancel}
                 </button>
@@ -436,7 +471,8 @@ const EditLevel = ({
                   type="submit"
                   form="form"
                   value="Submit"
-                  className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+                  className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-400  disabled:cursor-not-allowed"
+                  disabled={editButtonDisabled}
                 >
                   {t.Creator.editLevelPage.editLevel}
                 </button>
