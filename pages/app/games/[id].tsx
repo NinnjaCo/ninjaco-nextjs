@@ -127,8 +127,6 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
       if (carryCheckFunction && !carryCheckFunction(draft)) {
         return
       }
-      const { row, col } = draft.playerLocation
-      console.log('Turning left:', draft.currentPlayerDirection, row, col)
       switch (draft.currentPlayerDirection) {
         case Direction.UP:
           draft.currentPlayerDirection = Direction.LEFT
@@ -149,12 +147,8 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
   const turnRight = (carryCheckFunction?: (gameState) => boolean) => {
     setGameState((draft) => {
       if (carryCheckFunction && !carryCheckFunction(draft)) {
-        const { row, col } = draft.playerLocation
-        console.log('Not turning right', draft.currentPlayerDirection, row, col)
         return
       }
-      const { row, col } = draft.playerLocation
-      console.log('Turning right:', draft.currentPlayerDirection, row, col)
 
       switch (draft.currentPlayerDirection) {
         case Direction.UP:
@@ -226,26 +220,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
     switch (currentGameState.currentPlayerDirection) {
       case Direction.UP:
         if (row - 1 >= 0 && !currentGameState.gameGrid[row - 1][col].isWall) {
-          console.log(
-            'Player location:',
-            row,
-            col,
-            'isPathAhead:',
-            true,
-            'Direction:',
-            Direction.UP
-          )
           return true
-        } else {
-          console.log(
-            'Player location:',
-            row,
-            col,
-            'isPathAhead:',
-            false,
-            'Direction:',
-            Direction.UP
-          )
         }
         break
       case Direction.DOWN:
@@ -253,50 +228,12 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
           row + 1 < currentGameState.gameGrid.length &&
           !currentGameState.gameGrid[row + 1][col].isWall
         ) {
-          console.log(
-            'Player location:',
-            row,
-            col,
-            'isPathAhead:',
-            true,
-            'Direction:',
-            Direction.DOWN
-          )
           return true
-        } else {
-          console.log(
-            'Player location:',
-            row,
-            col,
-            'isPathAhead:',
-            false,
-            'Direction:',
-            Direction.DOWN
-          )
         }
         break
       case Direction.LEFT:
         if (col - 1 >= 0 && !currentGameState.gameGrid[row][col - 1].isWall) {
-          console.log(
-            'Player location:',
-            row,
-            col,
-            'isPathAhead:',
-            true,
-            'Direction:',
-            Direction.LEFT
-          )
           return true
-        } else {
-          console.log(
-            'Player location:',
-            row,
-            col,
-            'isPathAhead:',
-            false,
-            'Direction:',
-            Direction.LEFT
-          )
         }
         break
       case Direction.RIGHT:
@@ -304,10 +241,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
           col + 1 < currentGameState.gameGrid.length &&
           !currentGameState.gameGrid[row][col + 1].isWall
         ) {
-          console.log('Player location:', row, col, 'isPathAhead:', true, 'Direction.RIGHT')
           return true
-        } else {
-          console.log('Player location:', row, col, 'isPathAhead:', false, 'Direction.RIGHT')
         }
         break
     }
@@ -320,10 +254,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
     switch (currentGameState.currentPlayerDirection) {
       case Direction.UP:
         if (col - 1 >= 0 && !currentGameState.gameGrid[row][col - 1].isWall) {
-          console.log('Player location:', row, col, 'isPathLeft:', true, 'Direction.UP')
           return true
-        } else {
-          console.log('Player location:', row, col, 'isPathLeft:', false, 'Direction.UP')
         }
         break
       case Direction.DOWN:
@@ -331,10 +262,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
           col + 1 < currentGameState.gameGrid.length &&
           !currentGameState.gameGrid[row][col + 1].isWall
         ) {
-          console.log('Player location:', row, col, 'isPathLeft:', true, 'Direction.DOWN')
           return true
-        } else {
-          console.log('Player location:', row, col, 'isPathLeft:', false, 'Direction.DOWN')
         }
         break
       case Direction.LEFT:
@@ -342,18 +270,12 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
           row + 1 < currentGameState.gameGrid.length &&
           !currentGameState.gameGrid[row + 1][col].isWall
         ) {
-          console.log('Player location:', row, col, 'isPathLeft:', true, 'Direction.LEFT')
           return true
-        } else {
-          console.log('Player location:', row, col, 'isPathLeft:', false, 'Direction.LEFT')
         }
         break
       case Direction.RIGHT:
         if (row - 1 >= 0 && !currentGameState.gameGrid[row - 1][col].isWall) {
-          console.log('Player location:', row, col, 'isPathLeft:', true, 'Direction.RIGHT')
           return true
-        } else {
-          console.log('Player location:', row, col, 'isPathLeft:', false, 'Direction.RIGHT')
         }
         break
     }
@@ -743,11 +665,16 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
           ...res.payload,
         },
       })
+      await new GameEnrollmentAPI(session).update(game._id, { completed: true })
     } catch (err) {
       console.log(err)
+      setAlertData({
+        ...alertData,
+        message: 'Something went wrong, please try again later',
+        variant: 'error',
+        open: true,
+      })
     }
-    //update userPlayGame to be completed
-    await new GameEnrollmentAPI(session).update(game._id, { completed: true })
   }
 
   return (

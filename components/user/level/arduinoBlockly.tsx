@@ -313,6 +313,12 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
       })
     } catch (e) {
       console.log(e)
+      setAlertData({
+        ...alertData,
+        message: 'Something went wrong, please try again later',
+        variant: 'error',
+        open: true,
+      })
     }
 
     //  get all levels of the mission
@@ -320,7 +326,6 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
 
     if (levels) {
       const currentLevelIndex = levels.findIndex((l) => l._id === level.level._id)
-      console.log(levels, currentLevelIndex)
       if (currentLevelIndex < levels.length) {
         //  get the next level
         const nextLevel = levels[currentLevelIndex + 1]
