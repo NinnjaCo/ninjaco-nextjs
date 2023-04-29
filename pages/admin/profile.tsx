@@ -1,11 +1,12 @@
 import * as yup from 'yup'
+import { AdminAlertDialog } from '@/components/admin/dialog'
 import { AuthError } from '@/models/shared'
 import { AxiosError } from 'axios'
 import { EnvelopeIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/solid'
 import { ImageApi } from '@/utils/api/images/image-upload.api'
 import { ImageType } from 'react-images-uploading'
 import { Input } from '@/components/forms/input'
-import { User } from '@/models/crud'
+import { RoleEnum, User } from '@/models/crud'
 import { UserApi } from '@/utils/api/user'
 import { authOptions } from '../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
@@ -26,6 +27,39 @@ import useUserProfilePicture from '@/hooks/useUserProfilePicture'
 interface ServerProps {
   serverUser: User
 }
+
+type AddAdminFormDataType = {
+  firstName: string
+  lastName: string
+  dateOfBirth: Date
+  email: string
+  password: string
+  passwordConfirmation: string
+}
+
+const AddAdminFormSchema = yup
+  .object()
+  .shape({
+    firstName: yup.string().required('First Name is required'),
+    lastName: yup
+      .string()
+      .required('Last Name is required')
+      .matches(/^[a-zA-Z\s]*$/, 'Name can only contain letters and spaces'),
+    dateOfBirth: yup
+      .date()
+      .max(new Date(), 'Date of Birth cannot be in the future')
+      .required('Date of Birth is required'),
+    email: yup.string().email('Invalid email').required('Email is required'),
+    password: yup
+      .string()
+      .min(8, 'Password must be at least 8 characters')
+      .required('Password is required'),
+    passwordConfirmation: yup
+      .string()
+      .oneOf([yup.ref('password')], 'Passwords must match')
+      .required('Password Confirmation is required'),
+  })
+  .required()
 
 type AdminProfileFormDataType = {
   firstName: string
@@ -109,11 +143,11 @@ export default function Profile({ serverUser }: ServerProps) {
     .required()
 
   const {
-    register,
-    handleSubmit,
-    control,
+    register: registerAdminProfile,
+    handleSubmit: handleSubmitAdminProfile,
+    control: controlAdminProfile,
     reset,
-    formState: { errors, dirtyFields },
+    formState: { errors: errorsAdminProfile, dirtyFields },
   } = useForm<AdminProfileFormDataType>({
     resolver: yupResolver(AdminProfileFormSchema),
     defaultValues: {
@@ -232,6 +266,50 @@ export default function Profile({ serverUser }: ServerProps) {
     }
   }
 
+  const [openCreatorAddDialog, setOpenCreatorAddDialog] = React.useState(false)
+  const {
+    register: registerAdminAdd,
+    handleSubmit: handleSubmitAdminAdd,
+    control: controlAdminAdd,
+    formState: { errors: errorsAdminAdd },
+  } = useForm<AddAdminFormDataType>({
+    resolver: yupResolver(AddAdminFormSchema),
+  })
+
+  const onSubmitHandler = async (data: AddAdminFormDataType) => {
+    try {
+      closeAlert()
+
+      await new UserApi(session).create({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        dateOfBirth: data.dateOfBirth.toISOString(),
+        email: data.email,
+        password: data.password,
+        role: RoleEnum.ADMIN,
+        isVerified: true,
+      })
+
+      setOpenCreatorAddDialog(false)
+      queryClient.invalidateQueries('users')
+      setAlertData({
+        message: t.Admin.Creators.createdSuccessfully as string,
+        variant: 'success',
+        open: true,
+      })
+    } catch (error) {
+      setOpenCreatorAddDialog(false)
+      if (isAxiosError<AuthError>(error)) {
+        const errors = unWrapAuthError(error)
+        setAlertData({
+          message: errors[0].message || (t.Admin.Creators.somethingWentWrong as string),
+          variant: 'error',
+          open: true,
+        })
+      }
+    }
+  }
+
   return (
     <>
       <Head>
@@ -239,13 +317,94 @@ export default function Profile({ serverUser }: ServerProps) {
         <meta name="description" content="Leading online platform for visual programming" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
+      <AdminAlertDialog
+        title={t.Admin.Creators.addCreators as string}
+        open={openCreatorAddDialog}
+        confirm={() => {}} // Confirmation is done inside the form body
+        close={() => setOpenCreatorAddDialog(false)}
+        backButtonText="Cancel"
+        backButtonClassName="bg-brand-200 text-brand-500 hover:bg-brand-300 hover:text-brand hidden"
+        confirmButtonText="Add User"
+        confirmButtonClassName="bg-brand-500 text-brand-50 hover:bg-brand-700 hidden"
+      >
+        <form
+          onSubmit={handleSubmitAdminAdd(onSubmitHandler)}
+          className="flex flex-col gap-4"
+          id="form"
+        >
+          <Input
+            {...registerAdminAdd('firstName')}
+            label={t.Admin.Creators.firstName as string}
+            placeholder="John"
+            StartIcon={UserIcon}
+            error={errorsAdminAdd.firstName?.message}
+            isRequired={true}
+          />
+          <Input
+            {...registerAdminAdd('lastName')}
+            label={t.Admin.Creators.lastName as string}
+            placeholder="Smith"
+            StartIcon={UserIcon}
+            error={errorsAdminAdd.lastName?.message}
+            isRequired={true}
+          />
+          <DatePickerWithHookForm
+            control={controlAdminAdd}
+            name={registerAdminAdd('dateOfBirth').name} // we only need the "name" prop
+            label={t.Admin.Creators.dateOfBirth as string}
+            error={errorsAdminAdd.dateOfBirth?.message}
+            isRequired={true}
+          />
+          <Input
+            {...registerAdminAdd('email')}
+            label="Email"
+            placeholder="Email"
+            StartIcon={EnvelopeIcon}
+            error={errorsAdminAdd.email?.message}
+            isRequired={true}
+          />
+          <Input
+            {...registerAdminAdd('password')}
+            type="password"
+            label={t.Admin.Creators.password as string}
+            placeholder={t.Admin.Creators.password as string}
+            StartIcon={LockClosedIcon}
+            error={errorsAdminAdd.password?.message}
+            isRequired={true}
+          />
+          <Input
+            {...registerAdminAdd('passwordConfirmation')}
+            type="password"
+            label={t.Admin.Creators.confirmPassword as string}
+            placeholder={t.Admin.Creators.confirmPassword as string}
+            StartIcon={LockClosedIcon}
+            error={errorsAdminAdd.passwordConfirmation?.message}
+            isRequired={true}
+          />
+          <button
+            type="submit"
+            form="form"
+            value="Submit"
+            className="w-full btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+          >
+            {t.Admin.Creators.addCreators as string}
+          </button>
+          <button
+            onClick={() => setOpenCreatorAddDialog(false)}
+            className="w-full btn bg-brand-50 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+          >
+            {t.Admin.Creators.cancel as string}
+          </button>
+        </form>
+      </AdminAlertDialog>
+
       <div className="flex w-full h-screen ">
         <SideMenu higlightProfile={true} />
         <main className="flex w-full h-screen overflow-y-scroll ">
           <div className="flex items-start gap-4 w-full py-8 px-4 flex-col md:flex-row">
             <div className="px-8 w-full md:w-auto flex flex-col items-center justify-center md:justify-start">
               <ProfileImageUpload
-                control={control}
+                control={controlAdminProfile}
                 name="profilePictureState"
                 defaultStartImage={useUserProfilePicture(user)}
                 user={user}
@@ -253,7 +412,7 @@ export default function Profile({ serverUser }: ServerProps) {
             </div>
             <form
               id="form"
-              onSubmit={handleSubmit(submitHandler)}
+              onSubmit={handleSubmitAdminProfile(submitHandler)}
               className="flex flex-col w-full h-full gap-6 md:gap-12 py-8 px-4"
             >
               <div className="flex w-full justify-between items-center">
@@ -261,7 +420,12 @@ export default function Profile({ serverUser }: ServerProps) {
                   {user?.firstName} {user?.lastName}
                 </div>
                 <div className="flex items-center gap-4">
-                  <button className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-500 hover:text-white py-2">
+                  <button
+                    className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-500 hover:text-white py-2"
+                    onClick={() => {
+                      setOpenCreatorAddDialog(true)
+                    }}
+                  >
                     {t.Profile.addAdmin}
                   </button>
 
@@ -289,39 +453,39 @@ export default function Profile({ serverUser }: ServerProps) {
                 <div className="flex flex-col md:flex-row flex-wrap w-full gap-2 md:gap-4">
                   <div className="flex-1 flex-shrink">
                     <Input
-                      {...register('firstName')}
+                      {...registerAdminProfile('firstName')}
                       label={t.Profile.firstName}
                       placeholder="John"
                       StartIcon={UserIcon}
-                      error={errors.firstName?.message}
+                      error={errorsAdminProfile.firstName?.message}
                     />
                   </div>
                   <div className="flex-1 flex-shrink">
                     <Input
-                      {...register('lastName')}
+                      {...registerAdminProfile('lastName')}
                       label={t.Profile.lastName}
                       placeholder="Smith"
                       StartIcon={UserIcon}
-                      error={errors.lastName?.message}
+                      error={errorsAdminProfile.lastName?.message}
                     />
                   </div>
                 </div>
                 <div className="flex flex-col md:flex-row flex-wrap w-full gap-4">
                   <div className="flex-1 flex-shrink">
                     <DatePickerWithHookForm
-                      control={control}
-                      name={register('dateOfBirth').name} // we only need the "name" prop
+                      control={controlAdminProfile}
+                      name={registerAdminProfile('dateOfBirth').name} // we only need the "name" prop
                       label={t.Profile.dateOfBirth as string}
-                      error={errors.dateOfBirth?.message}
+                      error={errorsAdminProfile.dateOfBirth?.message}
                     />
                   </div>
                   <div className="flex-1 flex-shrink">
                     <Input
-                      {...register('email')}
+                      {...registerAdminProfile('email')}
                       label="Email"
                       placeholder={'Email'}
                       StartIcon={EnvelopeIcon}
-                      error={errors.email?.message}
+                      error={errorsAdminProfile.email?.message}
                     />
                   </div>
                 </div>
@@ -333,22 +497,22 @@ export default function Profile({ serverUser }: ServerProps) {
                 <div className="flex flex-col md:flex-row flex-wrap w-full gap-2 md:gap-4 ">
                   <div className="flex-1 flex-shrink ">
                     <Input
-                      {...register('password')}
+                      {...registerAdminProfile('password')}
                       label={t.Profile.password}
                       placeholder="Password"
                       type="password"
                       StartIcon={LockClosedIcon}
-                      error={errors.password?.message}
+                      error={errorsAdminProfile.password?.message}
                     />
                   </div>
                   <div className="flex-1 flex-shrink">
                     <Input
-                      {...register('passwordConfirmation')}
+                      {...registerAdminProfile('passwordConfirmation')}
                       label={t.Profile.confirmPassword}
                       type="password"
                       placeholder="Confirm Password"
                       StartIcon={LockClosedIcon}
-                      error={errors.passwordConfirmation?.message}
+                      error={errorsAdminProfile.passwordConfirmation?.message}
                     />
                   </div>
                 </div>
