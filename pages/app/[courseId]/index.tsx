@@ -153,6 +153,12 @@ export default function UserCourseView({
       router.reload()
     } catch (e) {
       console.log(e)
+      setAlertData({
+        ...alertData,
+        message: 'Something went wrong, please try again later',
+        variant: 'error',
+        open: true,
+      })
     }
   }
 

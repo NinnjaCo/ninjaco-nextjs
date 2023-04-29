@@ -590,10 +590,16 @@ export interface WebsiteTranslations {
       showWebsite: translationElement
       resetAll: translationElement
       downloadCode: translationElement
+      completeLevel: translationElement
+      previewCode: translationElement
+      desktop: translationElement
+      nolevel: translationElement
     }
   }
   Filter: {
     filter: translationElement
+    completed: translationElement
+    notCompleted: translationElement
   }
   ServerError: {
     headTitle: translationElement
