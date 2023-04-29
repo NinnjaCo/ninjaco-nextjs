@@ -336,6 +336,7 @@ const frenchTranslations: WebsiteTranslations = {
     profile: 'Profil',
     save: 'Sauvegarder',
     changePassword: 'Changer le mot de passe',
+    addAdmin: 'Ajouter un administrateur',
   },
   Admin: {
     Dashboard: {
@@ -391,6 +392,7 @@ const frenchTranslations: WebsiteTranslations = {
       confirmPassword: 'Confirmez le mot de passe',
       notify: 'Notifier',
       users: 'Utilisateurs',
+      goToApp: 'Aller à l’application',
     },
     Creators: {
       somethingWentWrong: 'Quelque chose s’est mal passé',
@@ -428,6 +430,7 @@ const frenchTranslations: WebsiteTranslations = {
       confirmPassword: 'Confirmez le mot de passe',
       submit: 'Soumettre',
       password: 'Mot de passe',
+      goToCreator: 'aller au panneau du créateur',
     },
     LogOutDialogue: {
       logout: 'déconnecter',
@@ -440,6 +443,17 @@ const frenchTranslations: WebsiteTranslations = {
       courses: 'Cours',
       users: 'Utilisateurs',
       creators: 'Créateurs',
+    },
+    Admin: {
+      createdSuccessfully: 'Créé avec succès',
+      somethingWentWrong: "Quelque chose s'est mal passé",
+      password: 'Mot de passe',
+      confirmPassword: 'Confirmez le mot de passe',
+      dateOfBirth: 'Date de naissance',
+      firstName: 'Prénom',
+      lastName: 'Nom de Famille',
+      cancel: 'Annuler',
+      addAdmin: 'Ajouter un administrateur',
     },
   },
   MenuCreator: {

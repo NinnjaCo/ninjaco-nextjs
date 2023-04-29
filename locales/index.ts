@@ -167,6 +167,7 @@ export interface WebsiteTranslations {
     profile: translationElement
     save: translationElement
     changePassword: translationElement
+    addAdmin: translationElement
   }
 
   Admin: {
@@ -222,6 +223,7 @@ export interface WebsiteTranslations {
       confirmPassword: translationElement
       notify: translationElement
       users: translationElement
+      goToApp: translationElement
     }
     Creators: {
       somethingWentWrong: translationElement
@@ -257,6 +259,7 @@ export interface WebsiteTranslations {
       password: translationElement
       confirmPassword: translationElement
       submit: translationElement
+      goToCreator: translationElement
     }
     LogOutDialogue: {
       logout: translationElement
@@ -269,6 +272,17 @@ export interface WebsiteTranslations {
       courses: translationElement
       users: translationElement
       creators: translationElement
+    }
+    Admin: {
+      createdSuccessfully: translationElement
+      somethingWentWrong: translationElement
+      password: translationElement
+      confirmPassword: translationElement
+      dateOfBirth: translationElement
+      firstName: translationElement
+      lastName: translationElement
+      cancel: translationElement
+      addAdmin: translationElement
     }
   }
   MenuCreator: {

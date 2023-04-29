@@ -325,6 +325,7 @@ const englishTranslations: WebsiteTranslations = {
     profile: 'Profile',
     save: 'SAVE',
     changePassword: 'Change Password',
+    addAdmin: 'Add Admin',
   },
   Admin: {
     Dashboard: {
@@ -380,6 +381,7 @@ const englishTranslations: WebsiteTranslations = {
       confirmPassword: 'Confirm Password',
       notify: 'Notify',
       users: 'Users',
+      goToApp: 'Go to App',
     },
     Creators: {
       somethingWentWrong: 'Something went wrong',
@@ -413,10 +415,10 @@ const englishTranslations: WebsiteTranslations = {
       notifyUser: 'Notify User',
       deleteUser: 'Delete User',
       editUser: 'Edit User',
-
       confirmPassword: 'Confirm Password',
       submit: 'Submit',
       password: 'Password',
+      goToCreator: 'Go to Creator Panel',
     },
     LogOutDialogue: {
       logout: 'Logout',
@@ -429,6 +431,17 @@ const englishTranslations: WebsiteTranslations = {
       courses: 'Courses',
       users: 'Users',
       creators: 'Creators',
+    },
+    Admin: {
+      createdSuccessfully: 'Admin created successfully',
+      somethingWentWrong: 'Something went wrong',
+      password: 'Password',
+      confirmPassword: 'Confirm Password',
+      dateOfBirth: 'Date of Birth',
+      firstName: 'First Name',
+      lastName: 'Last Name',
+      cancel: 'Cancel',
+      addAdmin: 'Add Admin',
     },
   },
   MenuCreator: {

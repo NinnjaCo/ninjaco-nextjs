@@ -27,10 +27,12 @@ import { useCallback, useMemo } from 'react'
 import { useEmailApi } from '@/utils/api/email/email.api'
 import { useForm } from 'react-hook-form'
 import { useQuery, useQueryClient } from 'react-query'
+import { useRouter } from 'next-router-mock'
 import { useSession } from 'next-auth/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import DatePickerWithHookForm from '@/components/forms/datePickerWithHookForm'
 import Head from 'next/head'
+import Link from 'next/link'
 import SideMenu from '@/components/admin/sideMenu'
 import Table from '@/components/table'
 import clsx from 'clsx'
@@ -73,6 +75,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
   const emailApi = useEmailApi(session)
   const queryClient = useQueryClient()
   const t = useTranslation()
+  const router = useRouter()
 
   const { data: users } = useQuery<User[], Error>(
     ['users', session],
@@ -752,7 +755,7 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
       <main className="flex w-full h-screen overflow-hidden">
         <SideMenu higlightUsers={true} />
         <div className="flex flex-col flex-grow w-3/4 h-full gap-4 py-8 px-4">
-          <div className="flex items-center justify-between w-full">
+          <div className="flex items-start md:items-center justify-between w-full flex-col md:flex-row gap-4 md:gap-0">
             <div className="flex flex-col gap-2">
               <p className="text-brand-700 text-xl md:text-2xl lg:text-3xl font-semibold">
                 {t.Admin.Users.users}
@@ -761,14 +764,21 @@ const AdminUserView: React.FC<{ serverUsers: User[] }> = ({ serverUsers }) => {
                 {(users ?? serverUsers).length} {t.Admin.Users.entriesFound}
               </div>
             </div>
-            <button
-              className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-400 hover:text-white py-2"
-              onClick={() => {
-                setOpenAddUserDialog(true)
-              }}
-            >
-              {t.Admin.Users.addUsers}
-            </button>
+            <div className="flex items-start md:items-center flex-col md:flex-row gap-4">
+              <Link href="/app">
+                <button className="btn btn-secondary gap-2 text-brand rounded-lg hover:bg-brand-500 hover:text-white py-2">
+                  {t.Admin.Users.goToApp}
+                </button>
+              </Link>
+              <button
+                className="btn btn-brand gap-2 text-white rounded-lg hover:bg-brand-400 hover:text-white py-2"
+                onClick={() => {
+                  setOpenAddUserDialog(true)
+                }}
+              >
+                {t.Admin.Users.addUsers}
+              </button>
+            </div>
           </div>
           <Alert
             open={alertData.open}
