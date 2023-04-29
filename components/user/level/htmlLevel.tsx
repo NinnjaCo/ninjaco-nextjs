@@ -227,7 +227,6 @@ const HtmlLevel = ({ course, level, mission, user }: Props) => {
 
     if (levels) {
       const currentLevelIndex = levels.findIndex((l) => l._id === level.level._id)
-      console.log(levels, currentLevelIndex)
       if (currentLevelIndex < levels.length) {
         //  get the next level
         const nextLevel = levels[currentLevelIndex + 1]
