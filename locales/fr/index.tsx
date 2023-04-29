@@ -444,6 +444,17 @@ const frenchTranslations: WebsiteTranslations = {
       users: 'Utilisateurs',
       creators: 'Créateurs',
     },
+    Admin: {
+      createdSuccessfully: 'Créé avec succès',
+      somethingWentWrong: "Quelque chose s'est mal passé",
+      password: 'Mot de passe',
+      confirmPassword: 'Confirmez le mot de passe',
+      dateOfBirth: 'Date de naissance',
+      firstName: 'Prénom',
+      lastName: 'Nom de Famille',
+      cancel: 'Annuler',
+      addAdmin: 'Ajouter un administrateur',
+    },
   },
   MenuCreator: {
     courses: 'Cours',
