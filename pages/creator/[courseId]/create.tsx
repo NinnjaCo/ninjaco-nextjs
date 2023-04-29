@@ -136,11 +136,10 @@ const CreateMissionOrEdit = ({
       return
     }
 
-    const imageUploadRes = await new ImageApi(session.data).uploadImage({
-      image: data.missionImage.file,
-    })
-
     try {
+      const imageUploadRes = await new ImageApi(session.data).uploadImage({
+        image: data.missionImage.file,
+      })
       await new MissionApi(course._id, session.data).create({
         title: data.missionTitle,
         image: imageUploadRes.payload.image_url,
@@ -351,11 +350,9 @@ export const getServerSideProps = async (context) => {
   const courseResponse = await new CourseApi(session).findOne(courseId as string)
   if (!courseResponse || !courseResponse.payload) {
     return {
-      props: {
-        redirect: {
-          destination: '/creator',
-          permanent: false,
-        },
+      redirect: {
+        destination: '/creator',
+        permanent: false,
       },
     }
   }
@@ -364,11 +361,9 @@ export const getServerSideProps = async (context) => {
 
   if (!categories || !categories.payload) {
     return {
-      props: {
-        redirect: {
-          destination: '/creator',
-          permanent: false,
-        },
+      redirect: {
+        destination: '/creator',
+        permanent: false,
       },
     }
   }

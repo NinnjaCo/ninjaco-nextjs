@@ -10,9 +10,9 @@ import { UserApi } from '@/utils/api/user'
 import { authOptions } from '../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { isAxiosError, unWrapAuthError } from '@/utils/errors'
+import { signOut, useSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 import { useQuery, useQueryClient } from 'react-query'
-import { useSession } from 'next-auth/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Alert from '@/components/shared/alert'
 import CreatorMenu from '@/components/creator/creatorMenu'
@@ -258,19 +258,30 @@ export default function Profile({ serverUser }: ServerProps) {
             onSubmit={handleSubmit(submitHandler)}
             className="flex flex-col w-full gap-6 md:gap-12"
           >
-            <div className="flex w-full justify-between items-center">
+            <div className="flex w-full  flex-col md:flex-row justify-start md:justify-between items-center gap-4 md:gap-0">
               <div className="text-brand text-lg md:text-xl lg:text-2xl font-semibold">
                 {user?.firstName} {user?.lastName}
               </div>
-              <button
-                type="submit"
-                form="form"
-                value="Submit"
-                className="btn btn-secondary rounded-lg px-4 sm:pr-6 py-2 hover:bg-brand-500 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-                disabled={saveButtonDisabled}
-              >
-                {t.Profile.save}
-              </button>
+              <div className="flex gap-4 justify-center">
+                <button
+                  className="btn btn-warning rounded-lg px-4 sm:pr-6 py-2 hover:bg-error hover:text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    signOut()
+                  }}
+                >
+                  Log Out
+                </button>
+                <button
+                  type="submit"
+                  form="form"
+                  value="Submit"
+                  className="btn btn-secondary rounded-lg px-4 sm:pr-6 py-2 hover:bg-brand-500 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                  disabled={saveButtonDisabled}
+                >
+                  {t.Profile.save}
+                </button>
+              </div>
             </div>
             <Alert
               open={alertData.open}

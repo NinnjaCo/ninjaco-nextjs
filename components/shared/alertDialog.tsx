@@ -23,7 +23,7 @@ export const AlertDialog: React.FC<AlertDialogProps> = ({
   className,
 }) => {
   return open ? (
-    <div className="relative z-20" aria-labelledby={title} role="dialog" aria-modal="true">
+    <div className="relative z-30" aria-labelledby={title} role="dialog" aria-modal="true">
       <div className="fixed inset-0 bg-brand-500 bg-opacity-75 transition-opacity"></div>
 
       <div className="fixed z-10 inset-0 overflow-y-auto">

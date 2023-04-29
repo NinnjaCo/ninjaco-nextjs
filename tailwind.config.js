@@ -17,6 +17,7 @@ module.exports = {
       animation: {
         float: 'float 2s ease infinite',
         floatDelay: 'float 2s ease infinite 1s',
+        floatSlow: 'float 5s ease infinite',
       },
       keyframes: {
         float: {
@@ -77,6 +78,7 @@ module.exports = {
       fontFamily: {
         sans: ['var(--font-quicksand)', ...fontFamily.sans],
         quicksand: ['var(--font-quicksand)', ...fontFamily.sans],
+        caveat: ['var(--font-caveat)', ...fontFamily.sans],
       },
     },
   },

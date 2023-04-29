@@ -32,12 +32,9 @@ export default function CourseView({ user, course }: { user: User; course: Cours
         <div className="flex gap-4 px-6 my-12 w-full md:flex-row flex-col">
           <ImageCard image={course.image} />
           <div className="flex flex-col gap-9 w-full">
-            <div className="flex justify-between gap-6 items-center">
+            <div className="flex justify-between gap-6 items-start md:items-center flex-col md:flex-row">
               <div className=" text-brand font-semibold text-xl md:text-3xl">{course.title}</div>
-              <Link
-                className="text-xs  md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit"
-                href={`/creator/${course._id}/edit`}
-              >
+              <Link className="btn btn-cta text-xs md:text-sm" href={`/creator/${course._id}/edit`}>
                 {t.Creator.coursePage.editCourse}
               </Link>
             </div>
@@ -92,10 +89,7 @@ export default function CourseView({ user, course }: { user: User; course: Cours
         <div className="flex flex-col px-6 pb-12 pt-6 gap-6">
           <div className="flex justify-between gap-10">
             <div className="font-semibold text-2xl">{t.Creator.coursePage.missions}</div>
-            <Link
-              className=" text-xs md:text-base font-semibold btn btn-secondary bg-secondary rounded-lg md:rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 h-fit"
-              href={`/creator/${course._id}/create`}
-            >
+            <Link className="btn btn-cta text-xs md:text-sm" href={`/creator/${course._id}/create`}>
               {t.Creator.coursePage.addMission}
             </Link>
           </div>
@@ -106,31 +100,59 @@ export default function CourseView({ user, course }: { user: User; course: Cours
                 {
                   name: 'Newest',
                   setter: setFilteredMissions,
-                  sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? -1 : 1),
+                  previousStateModifier: () => {
+                    return [
+                      ...course.missions.sort((a, b) =>
+                        dayjs(a.createdAt).isAfter(b.createdAt) ? -1 : 1
+                      ),
+                    ]
+                  },
                 },
                 {
                   name: 'Recently Updated',
-                  sortFunction: (a, b) => (dayjs(a.updatedAt).isAfter(b.updatedAt) ? -1 : 1),
+                  previousStateModifier: () => {
+                    return [
+                      ...course.missions.sort((a, b) =>
+                        dayjs(a.updatedAt).isAfter(b.updatedAt) ? -1 : 1
+                      ),
+                    ]
+                  },
                   setter: setFilteredMissions,
                 },
                 {
                   name: 'Oldest',
-                  sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? 1 : -1),
+                  previousStateModifier: () => {
+                    return [
+                      ...course.missions.sort((a, b) =>
+                        dayjs(a.createdAt).isAfter(b.createdAt) ? 1 : -1
+                      ),
+                    ]
+                  },
                   setter: setFilteredMissions,
                 },
                 {
                   name: 'Name (A-Z)',
-                  sortFunction: (a, b) => (a.title > b.title ? 1 : -1),
+                  previousStateModifier: () => {
+                    return [...course.missions.sort((a, b) => a.title.localeCompare(b.title))]
+                  },
                   setter: setFilteredMissions,
                 },
                 {
                   name: 'Name (Z-A)',
-                  sortFunction: (a, b) => (a.title > b.title ? -1 : 1),
+                  previousStateModifier: () => {
+                    return [...course.missions.sort((a, b) => b.title.localeCompare(a.title))]
+                  },
                   setter: setFilteredMissions,
                 },
                 {
                   name: 'Number of Levels (Low-High)',
-                  sortFunction: (a, b) => (a.levels.length > b.levels.length ? -1 : 1),
+                  previousStateModifier: () => {
+                    return [
+                      ...course.missions.sort((a, b) =>
+                        a.levels.length > b.levels.length ? -1 : 1
+                      ),
+                    ]
+                  },
                   setter: setFilteredMissions,
                 },
               ]}
@@ -172,11 +194,9 @@ export const getServerSideProps = async (context) => {
 
   if (!course || !course.payload) {
     return {
-      props: {
-        redirect: {
-          destination: '/creator',
-          permanent: false,
-        },
+      redirect: {
+        destination: '/creator',
+        permanent: false,
       },
     }
   }

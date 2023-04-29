@@ -39,7 +39,7 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
     {
       name: t.Menu.courses,
       description: t.Menu.coursesDescription,
-      href: '/courses',
+      href: '/app',
     },
   ]
 
@@ -170,7 +170,9 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
           router.push('/')
         }}
       >
-        <Image src={logoToUse()} alt="Hero Image" fill priority></Image>
+        <Link href={'/'}>
+          <Image src={logoToUse()} alt="Hero Image" fill priority></Image>
+        </Link>
       </div>
 
       <div className="hidden md:flex justify-evenly md:gap-6 lg:gap-16 items-center">
@@ -196,7 +198,7 @@ const Menu: React.FC<{ menuOption: MenuStyleOptions }> = ({ menuOption }) => {
           </Link>
         )}
         <Link
-          href={'/courses'}
+          href={'/app'}
           className={clsx(
             'md:text-base lg:text-xl hover-underline-animation',
             getTextColorClassName()

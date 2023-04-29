@@ -196,8 +196,8 @@ const MultipleImageUpload = ({
                               className="absolute top-1 left-1 p-1 rounded-full bg-error-dark text-white"
                               onClick={(e) => {
                                 e.preventDefault()
-                                // if this is the last image and the field isRequired then dont remove it
-                                if (initialsImage.length === 1 && isRequired) return
+                                // if this is the last image and it is required and the field is empty
+                                if (initialsImage.length === 1 && isRequired && !field.value) return
 
                                 const newImages = initialsImage?.filter(
                                   (image: string, i: number) => i !== index

@@ -1,8 +1,8 @@
 import * as yup from 'yup'
-import { Course } from '@/models/crud/course.model'
+import { Course, CourseType } from '@/models/crud/course.model'
 import { CourseApi } from '@/utils/api/course/course.api'
 import { ImageApi } from '@/utils/api/images/image-upload.api'
-import { ImageListType } from 'react-images-uploading'
+import { ImageListType, ImageType } from 'react-images-uploading'
 import { Level } from '@/models/crud/level.model'
 import { LevelApi } from '@/utils/api/level/level.api'
 import { Mission } from '@/models/crud/mission.model'
@@ -19,20 +19,31 @@ import CreatorMenu from '@/components/creator/creatorMenu'
 import Head from 'next/head'
 import MultipleImageUpload from '@/components/forms/multipleImageUpload'
 import React from 'react'
+import SingleImageUpload from '@/components/forms/singleImageUpload'
 import floatingLegos from '@/images/floatingLegos.svg'
 import underLineImage from '@/images/lightlyWavedLine.svg'
 import useTranslation from '@/hooks/useTranslation'
 
-type EditLevelFormDataType = {
+type EditArduinoLevelFormDataType = {
   buildingPartsImages: ImageListType
   stepByStepGuideImages: ImageListType
 }
 
-const EditLevelFormSchema = yup
+type EditHTMLLevelFormDataType = {
+  websitePreviewImage: ImageType
+}
+
+const EditArduinoLevelFormSchema = yup
   .object()
   .shape({
     buildingPartsImages: yup.array(),
     stepByStepGuideImages: yup.array(),
+  })
+  .required()
+const EditHTMLLevelFormSchema = yup
+  .object()
+  .shape({
+    websitePreviewImage: yup.object(),
   })
   .required()
 
@@ -57,12 +68,14 @@ const EditLevel = ({
     })
   }
   const [defaultBuildingPartsImages, setDefaultBuildingPartsImages] = React.useState<string[]>(
-    level.buildingPartsImages
+    level.buildingPartsImages || []
   )
   const [defaultStepByStepGuideImages, setDefaultStepByStepGuideImages] = React.useState<string[]>(
-    level.stepGuideImages
+    level.stepGuideImages || []
   )
-  console.log(defaultStepByStepGuideImages)
+  const [defaultWebsitePreviewImage, setDefaultWebsitePreviewImage] = React.useState<string>(
+    level.websitePreviewImage || ''
+  )
 
   const [alertData, setAlertData] = React.useState<{
     message: string
@@ -78,15 +91,101 @@ const EditLevel = ({
   }
 
   const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<EditLevelFormDataType>({
-    resolver: yupResolver(EditLevelFormSchema),
+    register: registerArduino,
+    handleSubmit: handleSubmitArduino,
+    control: controlArduino,
+    formState: { errors: errorsArduino },
+  } = useForm<EditArduinoLevelFormDataType>({
+    resolver: yupResolver(EditArduinoLevelFormSchema),
   })
 
-  const onSubmitHandler = async (data: EditLevelFormDataType) => {
+  const {
+    register: registerHTML,
+    handleSubmit: handleSubmitHTML,
+    control: controlHTML,
+    formState: { errors: errorsHTML },
+  } = useForm<EditHTMLLevelFormDataType>({
+    resolver: yupResolver(EditHTMLLevelFormSchema),
+  })
+
+  const onSubmitHandlerHTML = async (data: EditHTMLLevelFormDataType) => {
+    if (!data.websitePreviewImage) {
+      data.websitePreviewImage = { file: undefined, dataURL: undefined }
+    }
+
+    //if there is no new image and the old image has been deleted
+    if (data.websitePreviewImage.dataURL === undefined && defaultWebsitePreviewImage === '') {
+      setAlertData({
+        message: t.Creator.editLevelPage.atLeastOneImage as string,
+        variant: 'error',
+        open: true,
+      })
+      scrollToTop()
+      return
+    }
+    //if there is no new image and the old image has not been changed
+    if (
+      data.websitePreviewImage.dataURL === undefined &&
+      defaultWebsitePreviewImage === level.websitePreviewImage
+    ) {
+      setAlertData({
+        message: t.Creator.editLevelPage.noChangesMade as string,
+        variant: 'warning',
+        open: true,
+      })
+      scrollToTop()
+      return
+    }
+
+    if (!data.websitePreviewImage.file) {
+      setAlertData({
+        message: t.Creator.editLevelPage.oneImageIsNotValid as string,
+        variant: 'error',
+        open: true,
+      })
+      scrollToTop()
+      return
+    }
+
+    if (data.websitePreviewImage.file.size > 1000000) {
+      setAlertData({
+        message: t.Creator.editLevelPage.oneImageIsTooBig as string,
+        variant: 'error',
+        open: true,
+      })
+      scrollToTop()
+      return
+    }
+
+    try {
+      const url = await new ImageApi(session.data).uploadImage({
+        image: data.websitePreviewImage.file,
+      })
+    } catch (err) {
+      setAlertData({
+        message: t.Creator.editLevelPage.errorUploadingImage as string,
+        variant: 'error',
+        open: true,
+      })
+      scrollToTop()
+      return
+    }
+    try {
+      await new LevelApi(course._id, mission._id, session.data).update(level._id, {
+        websitePreviewImage: data.websitePreviewImage.dataURL,
+      })
+
+      router.push(`/creator/${course._id}/${mission._id}/`)
+    } catch (err) {
+      setAlertData({
+        message: t.Creator.editLevelPage.errorUpdatingLevel as string,
+        variant: 'error',
+        open: true,
+      })
+      scrollToTop()
+    }
+  }
+  const onSubmitHandlerArduino = async (data: EditArduinoLevelFormDataType) => {
     if (!data.buildingPartsImages) {
       data.buildingPartsImages = []
     }
@@ -113,8 +212,8 @@ const EditLevel = ({
     if (
       data.buildingPartsImages?.length === 0 &&
       data.stepByStepGuideImages?.length === 0 &&
-      defaultBuildingPartsImages.length === level.buildingPartsImages.length &&
-      defaultStepByStepGuideImages.length === level.stepGuideImages.length
+      defaultBuildingPartsImages.length === level.buildingPartsImages?.length &&
+      defaultStepByStepGuideImages.length === level.stepGuideImages?.length
     ) {
       setAlertData({
         message: t.Creator.editLevelPage.noChangesMade as string,
@@ -244,6 +343,54 @@ const EditLevel = ({
     }
   }
 
+  const displayLevelType = () => {
+    if (course.type === CourseType.ARDUINO) {
+      return (
+        <>
+          <MultipleImageUpload
+            control={controlArduino}
+            name={registerArduino('buildingPartsImages').name}
+            error={errorsArduino.buildingPartsImages?.message as unknown as string} // Convert to string since it returned a FieldError
+            isRequired={true}
+            label={t.Creator.editLevelPage.buildingPartImages as string}
+            initialData={{
+              initialImages: defaultBuildingPartsImages,
+              editInitialImages: (newImages) => {
+                setDefaultBuildingPartsImages(newImages)
+              },
+            }}
+          />
+          <MultipleImageUpload
+            control={controlArduino}
+            name={registerArduino('stepByStepGuideImages').name}
+            error={errorsArduino.stepByStepGuideImages?.message as unknown as string} // Convert to string since it returned a FieldError
+            isRequired={true}
+            label={t.Creator.editLevelPage.stepByStepImages as string}
+            initialData={{
+              initialImages: defaultStepByStepGuideImages,
+              editInitialImages: (newImages) => {
+                setDefaultStepByStepGuideImages(newImages)
+              },
+            }}
+          />
+        </>
+      )
+    } else {
+      return (
+        <>
+          <SingleImageUpload
+            control={controlHTML}
+            name={registerHTML('websitePreviewImage').name}
+            error={errorsHTML.websitePreviewImage?.message as unknown as string}
+            isRequired={true}
+            label={t.Creator.editLevelPage.websitePreviewImage as string}
+            defaultImage={defaultWebsitePreviewImage}
+          ></SingleImageUpload>
+        </>
+      )
+    }
+  }
+
   return (
     <>
       <Head>
@@ -264,57 +411,70 @@ const EditLevel = ({
             open={alertData.open}
             close={closeAlert}
           />
-          <form onSubmit={handleSubmit(onSubmitHandler)} className="flex flex-col gap-8" id="form">
-            <div className="text-2xl text-brand">
-              {t.Creator.editLevelPage.editLevelNumber} {level.levelNumber}
-            </div>
-            <MultipleImageUpload
-              control={control}
-              name={register('buildingPartsImages').name}
-              error={errors.buildingPartsImages?.message as unknown as string} // Convert to string since it returned a FieldError
-              isRequired={true}
-              label={t.Creator.editLevelPage.buildingPartImages as string}
-              initialData={{
-                initialImages: defaultBuildingPartsImages,
-                editInitialImages: (newImages) => {
-                  setDefaultBuildingPartsImages(newImages)
-                },
-              }}
-            />
-            <MultipleImageUpload
-              control={control}
-              name={register('stepByStepGuideImages').name}
-              error={errors.stepByStepGuideImages?.message as unknown as string} // Convert to string since it returned a FieldError
-              isRequired={true}
-              label={t.Creator.editLevelPage.stepByStepImages as string}
-              initialData={{
-                initialImages: defaultStepByStepGuideImages,
-                editInitialImages: (newImages) => {
-                  setDefaultStepByStepGuideImages(newImages)
-                },
-              }}
-            />
+          {course.type === CourseType.ARDUINO && (
+            <form
+              onSubmit={handleSubmitArduino(onSubmitHandlerArduino)}
+              className="flex flex-col gap-8"
+              id="form"
+            >
+              <div className="text-2xl text-brand">
+                {t.Creator.editLevelPage.editLevelNumber} {level.levelNumber}
+              </div>
+              {displayLevelType()}
 
-            <div className="flex w-full justify-between gap-4 md:gap-12 h-fit md:flex-row flex-col-reverse">
-              <button
-                className="w-full md:w-40 h-fit btn bg-error text-brand hover:bg-error-dark hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
-                onClick={(e) => {
-                  e.preventDefault()
-                  router.back()
-                }}
-              >
-                {t.Creator.editLevelPage.cancel}
-              </button>
-              <button
-                type="submit"
-                form="form"
-                value="Submit"
-                className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
-              >
-                {t.Creator.editLevelPage.editLevel}
-              </button>
-            </div>
-          </form>
+              <div className="flex w-full justify-between gap-4 md:gap-12 h-fit md:flex-row flex-col-reverse">
+                <button
+                  className="w-full md:w-40 h-fit btn bg-error text-brand hover:bg-error-dark hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    router.back()
+                  }}
+                >
+                  {t.Creator.editLevelPage.cancel}
+                </button>
+                <button
+                  type="submit"
+                  form="form"
+                  value="Submit"
+                  className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+                >
+                  {t.Creator.editLevelPage.editLevel}
+                </button>
+              </div>
+            </form>
+          )}
+          {course.type === CourseType.HTML && (
+            <form
+              onSubmit={handleSubmitHTML(onSubmitHandlerHTML)}
+              className="flex flex-col gap-8"
+              id="form"
+            >
+              <div className="text-2xl text-brand">
+                {t.Creator.editLevelPage.editLevelNumber} {level.levelNumber}
+              </div>
+              {displayLevelType()}
+
+              <div className="flex w-full justify-between gap-4 md:gap-12 h-fit md:flex-row flex-col-reverse">
+                <button
+                  className="w-full md:w-40 h-fit btn bg-error text-brand hover:bg-error-dark hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    router.back()
+                  }}
+                >
+                  {t.Creator.editLevelPage.cancel}
+                </button>
+                <button
+                  type="submit"
+                  form="form"
+                  value="Submit"
+                  className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+                >
+                  {t.Creator.editLevelPage.editLevel}
+                </button>
+              </div>
+            </form>
+          )}
         </CreateResourceCard>
       </main>
     </>
@@ -343,11 +503,9 @@ export const getServerSideProps = async (context) => {
 
   if (!course || !course.payload) {
     return {
-      props: {
-        redirect: {
-          destination: '/creator',
-          permanent: false,
-        },
+      redirect: {
+        destination: '/creator',
+        permanent: false,
       },
     }
   }
@@ -355,11 +513,9 @@ export const getServerSideProps = async (context) => {
 
   if (!mission) {
     return {
-      props: {
-        redirect: {
-          destination: '/creator/' + courseId,
-          permanent: false,
-        },
+      redirect: {
+        destination: '/creator/' + courseId,
+        permanent: false,
       },
     }
   }
@@ -368,11 +524,9 @@ export const getServerSideProps = async (context) => {
 
   if (!level) {
     return {
-      props: {
-        redirect: {
-          destination: '/creator/' + courseId + '/' + missionId,
-          permanent: false,
-        },
+      redirect: {
+        destination: '/creator/' + courseId + '/' + missionId,
+        permanent: false,
       },
     }
   }

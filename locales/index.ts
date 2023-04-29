@@ -150,10 +150,11 @@ export interface WebsiteTranslations {
       backToHome: translationElement
       signIn: translationElement
     }
-    unauhorized: {
+    unauthorized: {
       headTitle: translationElement
       title: translationElement
       goBack: translationElement
+      resendEmail: translationElement
     }
   }
   Profile: {
@@ -166,6 +167,7 @@ export interface WebsiteTranslations {
     profile: translationElement
     save: translationElement
     changePassword: translationElement
+    addAdmin: translationElement
   }
 
   Admin: {
@@ -221,6 +223,7 @@ export interface WebsiteTranslations {
       confirmPassword: translationElement
       notify: translationElement
       users: translationElement
+      goToApp: translationElement
     }
     Creators: {
       somethingWentWrong: translationElement
@@ -256,6 +259,7 @@ export interface WebsiteTranslations {
       password: translationElement
       confirmPassword: translationElement
       submit: translationElement
+      goToCreator: translationElement
     }
     LogOutDialogue: {
       logout: translationElement
@@ -268,6 +272,17 @@ export interface WebsiteTranslations {
       courses: translationElement
       users: translationElement
       creators: translationElement
+    }
+    Admin: {
+      createdSuccessfully: translationElement
+      somethingWentWrong: translationElement
+      password: translationElement
+      confirmPassword: translationElement
+      dateOfBirth: translationElement
+      firstName: translationElement
+      lastName: translationElement
+      cancel: translationElement
+      addAdmin: translationElement
     }
   }
   MenuCreator: {
@@ -407,6 +422,9 @@ export interface WebsiteTranslations {
       stepByStepImages: translationElement
       cancel: translationElement
       createLevel: translationElement
+      websitePreviewImage: translationElement
+      oneImageIsNotValid: translationElement
+      oneImageIsTooBig: translationElement
     }
     editLevelPage: {
       atLeastOneImage: translationElement
@@ -422,6 +440,9 @@ export interface WebsiteTranslations {
       buildingPartImages: translationElement
       stepByStepImages: translationElement
       cancel: translationElement
+      websitePreviewImage: translationElement
+      oneImageIsNotValid: translationElement
+      oneImageIsTooBig: translationElement
     }
     games: {
       viewGames: {
@@ -500,8 +521,85 @@ export interface WebsiteTranslations {
       }
     }
   }
+  User: {
+    viewCoursePage: {
+      enrollCourse: translationElement
+      dropCourse: translationElement
+      courseCompleted: translationElement
+      printCertificate: translationElement
+      courseType: translationElement
+      coursePrerequisites: translationElement
+      courseObjectives: translationElement
+      ageRange: translationElement
+      filter: translationElement
+      missions: translationElement
+      noMissions: translationElement
+      dropCourseTitle: translationElement
+      dropCourseMessage: translationElement
+      cancel: translationElement
+      drop: translationElement
+      enrollCourseToUnlock: translationElement
+      newest: translationElement
+      oldest: translationElement
+      recentlyUpdated: translationElement
+      nameAZ: translationElement
+      nameZA: translationElement
+      numberOfmissions: translationElement
+      completed: translationElement
+      notCompleted: translationElement
+    }
+    viewMissionPage: {
+      missionCategory: translationElement
+      startMission: translationElement
+      continue: translationElement
+      completed: translationElement
+      startedAt: translationElement
+    }
+    profile: {
+      somethingWentWrong: translationElement
+      firstNameIsRequired: translationElement
+      lastNameIsRequired: translationElement
+      dateOfBirthIsRequired: translationElement
+      dateOfBirthIsNotValid: translationElement
+      invalidEmail: translationElement
+      emailIsRequired: translationElement
+      passwordIsRequired: translationElement
+      passwordMustMatch: translationElement
+      noChangesMade: translationElement
+      profileUpdatedSuccessfully: translationElement
+      errorUpdatingProfile: translationElement
+      logout: translationElement
+    }
+    game: {
+      placeBlocks: translationElement
+      loop: translationElement
+      didNotReachGoal: translationElement
+      hitAWall: translationElement
+      congratulations: translationElement
+      hereIsTheCodeYouWrote: translationElement
+      runProgram: translationElement
+    }
+    arduinoLevel: {
+      buildingPart: translationElement
+      buildingPartMayNeed: translationElement
+      stepByStep: translationElement
+    }
+    htmlLevel: {
+      thisHowYourWebsiteWillLook: translationElement
+      showCode: translationElement
+      showWebsite: translationElement
+      resetAll: translationElement
+      downloadCode: translationElement
+      completeLevel: translationElement
+      previewCode: translationElement
+      desktop: translationElement
+      nolevel: translationElement
+    }
+  }
   Filter: {
     filter: translationElement
+    completed: translationElement
+    notCompleted: translationElement
   }
   ServerError: {
     headTitle: translationElement

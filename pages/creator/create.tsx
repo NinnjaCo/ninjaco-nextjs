@@ -1,6 +1,7 @@
 import * as yup from 'yup'
 import { AuthError } from '@/models/shared'
 import { CourseApi } from '@/utils/api/course/course.api'
+import { CourseType } from '@/models/crud/course.model'
 import { ImageApi } from '@/utils/api/images/image-upload.api'
 import { ImageType } from 'react-images-uploading'
 import { Input } from '@/components/forms/input'
@@ -25,10 +26,6 @@ import floatingLegos from '@/images/floatingLegos.svg'
 import underLineImage from '@/images/lightlyWavedLine.svg'
 import useTranslation from '@/hooks/useTranslation'
 
-enum CourseType {
-  ARDUINO = 'ARDUINO',
-  HTML = 'HTML',
-}
 type CreateCourseFormDataType = {
   courseType: CourseType
   courseTitle: string

@@ -33,10 +33,7 @@ export default function Home({ user, courses }: { user: User; courses: Course[] 
                 {t.Creator.viewCourses.courses}
               </div>
               <div className="text-brand-700 font-semibold">
-                <Link
-                  className="btn btn-secondary bg-secondary rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 py-2 h-fit"
-                  href="/creator/create"
-                >
+                <Link className="btn btn-cta" href="/creator/create">
                   {t.Creator.viewCourses.createCourse}
                 </Link>
               </div>
@@ -50,31 +47,57 @@ export default function Home({ user, courses }: { user: User; courses: Course[] 
                   {
                     name: 'Newest',
                     setter: setFilteredCourses,
-                    sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? -1 : 1),
+                    previousStateModifier: () => {
+                      return [
+                        ...courses.sort((a, b) =>
+                          dayjs(a.createdAt).isAfter(b.createdAt) ? -1 : 1
+                        ),
+                      ]
+                    },
                   },
                   {
                     name: 'Recently Updated',
-                    sortFunction: (a, b) => (dayjs(a.updatedAt).isAfter(b.updatedAt) ? -1 : 1),
+                    previousStateModifier: () => {
+                      return [
+                        ...courses.sort((a, b) =>
+                          dayjs(a.updatedAt).isAfter(b.updatedAt) ? -1 : 1
+                        ),
+                      ]
+                    },
                     setter: setFilteredCourses,
                   },
                   {
                     name: 'Oldest',
-                    sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? 1 : -1),
+                    previousStateModifier: () => {
+                      return [
+                        ...courses.sort((a, b) =>
+                          dayjs(a.createdAt).isAfter(b.createdAt) ? 1 : -1
+                        ),
+                      ]
+                    },
                     setter: setFilteredCourses,
                   },
                   {
                     name: 'Name (A-Z)',
-                    sortFunction: (a, b) => (a.title > b.title ? 1 : -1),
+                    previousStateModifier: () => {
+                      return [...courses.sort((a, b) => a.title.localeCompare(b.title))]
+                    },
                     setter: setFilteredCourses,
                   },
                   {
                     name: 'Name (Z-A)',
-                    sortFunction: (a, b) => (a.title > b.title ? -1 : 1),
+                    previousStateModifier: () => {
+                      return [...courses.sort((a, b) => b.title.localeCompare(a.title))]
+                    },
                     setter: setFilteredCourses,
                   },
                   {
                     name: 'Number of Missions',
-                    sortFunction: (a, b) => (a.missions.length > b.missions.length ? -1 : 1),
+                    previousStateModifier: () => {
+                      return [
+                        ...courses.sort((a, b) => (a.missions.length > b.missions.length ? -1 : 1)),
+                      ]
+                    },
                     setter: setFilteredCourses,
                   },
                 ]}
@@ -82,7 +105,7 @@ export default function Home({ user, courses }: { user: User; courses: Course[] 
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center mt-7 px-10 place-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center mt-7 p-10 place-items-center">
           {filteredCourses.map((course, index) => (
             <Link href={`/creator/${course._id}`} key={course._id}>
               <CourseCard course={course} />
@@ -111,11 +134,9 @@ export const getServerSideProps = async (context) => {
   const coursesResponse = await new CourseApi(session).find()
   if (!coursesResponse || !coursesResponse.payload) {
     return {
-      props: {
-        redirect: {
-          destination: '/auth/signin',
-          permanent: false,
-        },
+      redirect: {
+        destination: '/auth/signin',
+        permanent: false,
       },
     }
   }

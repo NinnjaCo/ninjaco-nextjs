@@ -1,4 +1,5 @@
 import { ChartBarIcon } from '@heroicons/react/20/solid'
+import { CourseApi } from '@/utils/api/course/course.api'
 import { GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import { RoleEnum } from '@/models/crud/role.model'
 import { User } from '@/models/crud'
@@ -8,6 +9,7 @@ import { getServerSession } from 'next-auth'
 import Head from 'next/head'
 import Image from 'next/image'
 import LevelIndicator from '@/components/shared/level'
+import Link from 'next/link'
 import React, { useMemo } from 'react'
 import SideMenu from '@/components/admin/sideMenu'
 import Table from '@/components/table'
@@ -21,11 +23,12 @@ import useTranslation from '@/hooks/useTranslation'
 
 // custom a hook to use the translation
 
-const AdminDashboard: React.FC<{ users: User[]; countUsers: number; countCreators: number }> = ({
-  users,
-  countUsers,
-  countCreators,
-}) => {
+const AdminDashboard: React.FC<{
+  users: User[]
+  countUsers: number
+  countCreators: number
+  countCourses: number
+}> = ({ users, countUsers, countCreators, countCourses }) => {
   const t = useTranslation()
   const columns: GridColDef[] = useMemo(
     () => [
@@ -141,32 +144,43 @@ const AdminDashboard: React.FC<{ users: User[]; countUsers: number; countCreator
 
             <div className=" bg-brand-50 p-4 rounded-2xl justify-between w-fit sm:w-full grid grid-cols-1 sm:grid-cols-3 gap-6 place-self-center sm:place-self-auto">
               <div className="h-24 md:h-auto relative">
-                <Image src={total_users} alt="image" className="w-full h-full relative " priority />
-                <div className="text-brand-100 font-semibold text-base md:text-lg lg:text-2xl xl:text-3xl absolute top-1 lg:top-3 xl:top-6 left-8 md:left-10 lg:left-14 xl:left-24">
-                  {countUsers}
-                </div>
+                <Link href={'admin/users'}>
+                  <Image
+                    src={total_users}
+                    alt="image"
+                    className="w-full h-full relative "
+                    priority
+                  />
+                  <div className="text-brand-100 font-semibold text-base md:text-lg lg:text-2xl xl:text-3xl absolute top-1 lg:top-3 xl:top-6 left-8 md:left-10 lg:left-14 xl:left-24">
+                    {countUsers}
+                  </div>
+                </Link>
               </div>
               <div className="h-24 md:h-auto relative">
-                <Image
-                  src={total_courses}
-                  alt="image"
-                  className="w-full h-full relative "
-                  priority
-                />
-                <div className="text-brand-100 font-semibold text-base md:text-lg lg:text-2xl xl:text-3xl absolute top-1 lg:top-3 xl:top-6 left-8 md:left-10 lg:left-14 xl:left-24">
-                  10
-                </div>
+                <Link href={'admin/courses'}>
+                  <Image
+                    src={total_courses}
+                    alt="image"
+                    className="w-full h-full relative "
+                    priority
+                  />
+                  <div className="text-brand-100 font-semibold text-base md:text-lg lg:text-2xl xl:text-3xl absolute top-1 lg:top-3 xl:top-6 left-8 md:left-10 lg:left-14 xl:left-24">
+                    {countCourses}
+                  </div>
+                </Link>
               </div>
               <div className="h-24 md:h-auto relative">
-                <Image
-                  src={total_creators}
-                  alt="image"
-                  className="w-full h-full relative "
-                  priority
-                />
-                <div className="text-brand-100 font-semibold text-base md:text-lg lg:text-2xl xl:text-3xl absolute top-1 lg:top-3 xl:top-6 left-8 md:left-10 lg:left-14 xl:left-24">
-                  {countCreators}
-                </div>
+                <Link href={'admin/creators'}>
+                  <Image
+                    src={total_creators}
+                    alt="image"
+                    className="w-full h-full relative "
+                    priority
+                  />
+                  <div className="text-brand-100 font-semibold text-base md:text-lg lg:text-2xl xl:text-3xl absolute top-1 lg:top-3 xl:top-6 left-8 md:left-10 lg:left-14 xl:left-24">
+                    {countCreators}
+                  </div>
+                </Link>
               </div>
             </div>
           </div>
@@ -209,6 +223,18 @@ export const getServerSideProps = async (context) => {
   const api = new UserApi(session)
   const users = await api.find()
 
+  const coursesResponse = await new CourseApi(session).find()
+  if (!coursesResponse || !coursesResponse.payload) {
+    return {
+      redirect: {
+        destination: '/auth/signin',
+        permanent: false,
+      },
+    }
+  }
+
+  const countCourses = coursesResponse.payload.length
+
   let countUsers = 0
   let countCreators = 0
   for (let i = 0; i < users.payload.length; i++) {
@@ -221,6 +247,6 @@ export const getServerSideProps = async (context) => {
   }
 
   return {
-    props: { users: users.payload, countUsers, countCreators },
+    props: { users: users.payload, countUsers, countCreators, countCourses: countCourses },
   }
 }

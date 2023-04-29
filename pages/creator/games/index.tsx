@@ -33,10 +33,7 @@ export default function Home({ user, games }: { user: User; games: Game[] }) {
                 {t.Creator.games.viewGames.title}
               </div>
               <div className="text-brand-700 font-semibold">
-                <Link
-                  className="btn btn-secondary bg-secondary rounded-xl text-brand-700 border-brand-700 hover:bg-secondary-800 py-2 h-fit"
-                  href="/creator/games/create"
-                >
+                <Link className="btn btn-cta" href="/creator/games/create">
                   {t.Creator.games.viewGames.createGame}
                 </Link>
               </div>
@@ -50,31 +47,68 @@ export default function Home({ user, games }: { user: User; games: Game[] }) {
                   {
                     name: t.Creator.games.viewGames.filter.newest as string,
                     setter: setFilteredGames,
-                    sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? -1 : 1),
+                    previousStateModifier: () => {
+                      return [
+                        ...games.sort((a, b) => {
+                          return dayjs(a.createdAt).isAfter(b.createdAt) ? -1 : 1
+                        }),
+                      ]
+                    },
                   },
                   {
                     name: t.Creator.games.viewGames.filter.recentlyUpdated as string,
-                    sortFunction: (a, b) => (dayjs(a.updatedAt).isAfter(b.updatedAt) ? -1 : 1),
+                    previousStateModifier: () => {
+                      return [
+                        ...games.sort((a, b) => {
+                          return dayjs(a.updatedAt).isAfter(b.updatedAt) ? -1 : 1
+                        }),
+                      ]
+                    },
+
                     setter: setFilteredGames,
                   },
                   {
                     name: t.Creator.games.viewGames.filter.oldest as string,
-                    sortFunction: (a, b) => (dayjs(a.createdAt).isAfter(b.createdAt) ? 1 : -1),
+                    previousStateModifier: () => {
+                      return [
+                        ...games.sort((a, b) => {
+                          return dayjs(a.createdAt).isAfter(b.createdAt) ? 1 : -1
+                        }),
+                      ]
+                    },
                     setter: setFilteredGames,
                   },
                   {
                     name: t.Creator.games.viewGames.filter.NameAZ as string,
-                    sortFunction: (a, b) => (a.title > b.title ? 1 : -1),
+                    previousStateModifier: () => {
+                      return [
+                        ...games.sort((a, b) => {
+                          return a.title.localeCompare(b.title)
+                        }),
+                      ]
+                    },
                     setter: setFilteredGames,
                   },
                   {
                     name: t.Creator.games.viewGames.filter.NameZA as string,
-                    sortFunction: (a, b) => (a.title > b.title ? -1 : 1),
+                    previousStateModifier: () => {
+                      return [
+                        ...games.sort((a, b) => {
+                          return b.title.localeCompare(a.title)
+                        }),
+                      ]
+                    },
                     setter: setFilteredGames,
                   },
                   {
                     name: t.Creator.games.viewGames.filter.SizeOfGame as string,
-                    sortFunction: (a, b) => (a.sizeOfGrid.length > b.sizeOfGrid.length ? -1 : 1),
+                    previousStateModifier: () => {
+                      return [
+                        ...games.sort((a, b) => {
+                          return a.sizeOfGrid > b.sizeOfGrid ? -1 : 1
+                        }),
+                      ]
+                    },
                     setter: setFilteredGames,
                   },
                 ]}
@@ -82,7 +116,7 @@ export default function Home({ user, games }: { user: User; games: Game[] }) {
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center mt-7 px-10 place-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-8 items-center mt-7 p-10 place-items-center">
           {filteredGames.map((game, index) => (
             <Link href={`/creator/games/${game._id}`} key={index}>
               <GameCard game={game} />
@@ -111,11 +145,9 @@ export const getServerSideProps = async (context) => {
   const gamesResponse = await new GameApi(session).find()
   if (!gamesResponse || !gamesResponse.payload) {
     return {
-      props: {
-        redirect: {
-          destination: '/auth/signin',
-          permanent: false,
-        },
+      redirect: {
+        destination: '/auth/signin',
+        permanent: false,
       },
     }
   }

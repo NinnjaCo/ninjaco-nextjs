@@ -90,6 +90,34 @@ const VerifyEmail = (props: ServerProps) => {
         variant: 'success',
         open: true,
       })
+
+      if (!session.data?.user._id) {
+        setAlertData({
+          message: 'Please re signin to continue',
+          variant: 'error',
+          open: true,
+        })
+        return
+      }
+
+      const userRes = await new UserApi(session.data).findOne(session.data?.user._id)
+
+      if (!userRes.payload) {
+        setAlertData({
+          message: 'Please re signin to continue',
+          variant: 'error',
+          open: true,
+        })
+        return
+      }
+
+      await session.update({
+        ...session,
+        user: {
+          ...userRes.payload,
+        },
+      })
+
       // redirect to home page after two seconds
       setTimeout(() => {
         router.push('/')

@@ -1,5 +1,6 @@
 import * as yup from 'yup'
 import { AuthError } from '@/models/shared'
+import { Direction } from '@/components/user/game/gridCell'
 import { GameApi } from '@/utils/api/game/game.api'
 import { GridCell, GridCellComponent } from '@/components/creator/game/gridCell'
 import { ImageApi } from '@/utils/api/images/image-upload.api'
@@ -23,6 +24,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Player from '@/components/creator/game/player'
 import React from 'react'
+import Select from '@/components/forms/select'
 import SingleImageUpload from '@/components/forms/singleImageUpload'
 import Wall from '@/components/creator/game/wall'
 import clsx from 'clsx'
@@ -101,16 +103,27 @@ const GameCreatePage = ({ user }: { user: User }) => {
   const {
     control,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<{
     gameImage: ImageType
+    playerDirection: Direction
   }>({
     resolver: yupResolver(
       yup.object().shape({
         gameImage: yup.mixed().required('Image is required'),
+        playerDirection: yup
+          .mixed()
+          .oneOf([Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT])
+          .required('Player direction is required'),
       })
     ),
+    defaultValues: {
+      playerDirection: Direction.RIGHT,
+    },
   })
+
+  const playerDirection = watch('playerDirection')
 
   const [alertData, setAlertData] = React.useState<{
     message: string
@@ -254,7 +267,7 @@ const GameCreatePage = ({ user }: { user: User }) => {
     setSelectedTool(tool)
   }
 
-  const saveGame = async (data: { gameImage: ImageType }) => {
+  const saveGame = async (data: { gameImage: ImageType; playerDirection: Direction }) => {
     closeAlert()
 
     if (!gameState.isPlayerSet || gameState.playerLocation === undefined) {
@@ -308,6 +321,7 @@ const GameCreatePage = ({ user }: { user: User }) => {
       await new GameApi(session.data).create({
         title: gameTitle,
         image: imageRes.payload.image_url,
+        playerDirection: data.playerDirection,
         numOfBlocks: numberOfBlocks,
         sizeOfGrid: numberOfColumns,
         playerLocation: playerLocation,
@@ -398,6 +412,7 @@ const GameCreatePage = ({ user }: { user: User }) => {
                         key={`${rowIndex}-${colIndex}`}
                         cell={cell}
                         size={cellSize}
+                        currentPlayerDirection={playerDirection}
                         onClick={clickOnSquare}
                       />
                     )
@@ -432,7 +447,7 @@ const GameCreatePage = ({ user }: { user: User }) => {
                       <span className="text-brand-500">{MAX_COLUMNS}</span>
                     </div>
                   </div>
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-4">
                     <div className="flex gap-2 items-center">
                       <Switch
                         checked={toogleLimitedBlocks}
@@ -470,15 +485,23 @@ const GameCreatePage = ({ user }: { user: User }) => {
                         'bg-brand-50 cursor-not-allowed': !toogleLimitedBlocks,
                       })}
                     />
+                    <Select
+                      name="playerDirection"
+                      label={'Player Direction'}
+                      control={control}
+                      error={errors.playerDirection?.message}
+                      isRequired={true}
+                      selectList={Object.values(Direction).map((direction) => direction.toString())}
+                    />
                   </div>
+                  <SingleImageUpload
+                    control={control}
+                    name="gameImage"
+                    error={errors.gameImage?.message as unknown as string}
+                    label="Game Image"
+                    isRequired={true}
+                  />
                 </div>
-                <SingleImageUpload
-                  control={control}
-                  name="gameImage"
-                  error={errors.gameImage?.message as unknown as string}
-                  label="Game Image"
-                  isRequired={true}
-                />
 
                 <div className="flex gap-4 pt-4">
                   <button

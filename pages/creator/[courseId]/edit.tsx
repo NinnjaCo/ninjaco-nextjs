@@ -1,6 +1,6 @@
 import * as yup from 'yup'
 import { AuthError } from '@/models/shared'
-import { Course } from '@/models/crud/course.model'
+import { Course, CourseType } from '@/models/crud/course.model'
 import { CourseApi } from '@/utils/api/course/course.api'
 import { ImageApi } from '@/utils/api/images/image-upload.api'
 import { ImageType } from 'react-images-uploading'
@@ -26,10 +26,6 @@ import floatingLegos from '@/images/floatingLegos.svg'
 import underLineImage from '@/images/lightlyWavedLine.svg'
 import useTranslation from '@/hooks/useTranslation'
 
-enum CourseType {
-  ARDUINO = 'ARDUINO',
-  HTML = 'HTML',
-}
 type EditCourseFormDataType = {
   type: CourseType
   title: string
@@ -167,6 +163,7 @@ const EditCourse = ({ user, course }: { user: User; course: Course }) => {
               selectList={Object.values(CourseType)}
               isRequired={true}
               rootClassName="w-48"
+              disabled={true}
             />
             <SingleImageUpload
               control={control}
@@ -276,11 +273,9 @@ export const getServerSideProps = async (context) => {
   const courseRes = await new CourseApi(session).findOne(courseId)
   if (!courseRes || !courseRes.payload) {
     return {
-      props: {
-        redirect: {
-          destination: '/auth/signin',
-          permanent: false,
-        },
+      redirect: {
+        destination: '/auth/signin',
+        permanent: false,
       },
     }
   }

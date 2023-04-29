@@ -19,11 +19,50 @@ html,
 body {
   height: 100%;
   cursor: url('/images/cursor.png'), auto !important;
+  scroll-behavior: smooth;
 }
 
 a {
   color: inherit;
   text-decoration: none;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+h4 {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+h5 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+h6 {
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+ul {
+  list-style: inside disc;
+}
+
+ol {
+  list-style: inside decimal;
 }
 
 @layer components {
@@ -34,6 +73,10 @@ a {
   .btn-brand {
     /* apply btn */
     @apply text-white rounded-xl bg-brand-700 border-2 border-brand-700 font-semibold;
+  }
+
+  .btn-cta {
+    @apply bg-secondary rounded-lg text-brand border-brand hover:bg-secondary-800 py-2 h-fit whitespace-nowrap;
   }
 
   .btn-secondary {
@@ -150,4 +193,81 @@ a {
   100% {
     stroke-dashoffset: -200;
   }
+}
+
+/* The category container in the toolbox. */
+.blocklyTreeRow {
+  background-color: #465b81;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-left: 5px solid #212c49;
+  padding: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  margin-bottom: 1rem;
+}
+
+/* The category label in the toolbox when it is selected. */
+.blocklyTreeSelected {
+  background-color: #212c49 !important;
+  border-left: 10px solid #ffc857 !important;
+  box-shadow: 0 0 0 2px #ffc857;
+}
+
+/* A category label in the toolbox. */
+.blocklyTreeLabel {
+  color: #f1f1f1;
+  font-weight: 500;
+  font-size: 1rem;
+  margin: 1rem;
+}
+
+/* On hover of a category in the toolbox */
+.blocklyTreeRow:hover {
+  background-color: #212c49;
+  border-left: 5px solid #465b81;
+  box-shadow: 0 0 0 2px #465b81;
+}
+
+/* The whole toolbox css */
+.blocklyToolboxDiv {
+  padding: 1rem;
+  background-color: #edf2f7;
+  border-right: 4px solid #6480a7;
+}
+
+.blocklyScrollbarHandle {
+  display: none !important;
+}
+
+.blocklyFlyoutBackground {
+  fill: #edf2f7;
+}
+
+.background-zigzag3d-pattern {
+  background-color: #edf2f7;
+  opacity: 0.15;
+  background: linear-gradient(135deg, #a7bfdc55 25%, transparent 25%) -40px 0/ 80px 80px,
+    linear-gradient(225deg, #a7bfdc 25%, transparent 25%) -40px 0/ 80px 80px,
+    linear-gradient(315deg, #a7bfdc55 25%, transparent 25%) 0px 0/ 80px 80px,
+    linear-gradient(45deg, #a7bfdc 25%, #edf2f7 25%) 0px 0/ 80px 80px;
+}
+
+/* style sheet for "A4" printing */
+@media print and (width: 21cm) and (height: 29.7cm) {
+  @page {
+    margin: 3cm;
+  }
+}
+
+/* A4 Landscape*/
+@page {
+  size: A3 landscape;
+  margin: 0%;
+}
+
+.no-margin-important {
+  margin: 0 !important;
 }

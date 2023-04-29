@@ -38,6 +38,12 @@
       "@/middleware/*": [
         "middleware/*"
       ],
+      "@/blockly/*": [
+        "blockly/*"
+      ],
+      "@/blockly": [
+        "blockly"
+      ],
     },
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -55,6 +61,6 @@
     "incremental": true,
     "noImplicitAny": false,
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "blockly/**/*.js"],
   "exclude": ["node_modules"]
 }

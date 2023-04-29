@@ -6,8 +6,8 @@ import useTranslation from '@/hooks/useTranslation'
 
 interface Field {
   name: string
-  sortFunction?: (a: any, b: any) => number
-  setter?: React.Dispatch<React.SetStateAction<any>>
+  previousStateModifier: (prev: any) => any
+  setter: React.Dispatch<React.SetStateAction<any>>
 }
 
 const Filter = ({ filterFields }: { filterFields: Field[] }) => {
@@ -45,9 +45,9 @@ const Filter = ({ filterFields }: { filterFields: Field[] }) => {
                         'bg-white text-brand block w-full text-left px-4 py-2 text-sm hover:bg-brand-300 rounded'
                       )}
                       onClick={() => {
-                        if (field.sortFunction && field.setter) {
+                        if (field.previousStateModifier && field.setter) {
                           field.setter((prev: any) => {
-                            return [...prev].sort(field.sortFunction)
+                            return field.previousStateModifier([...prev])
                           })
                         }
                       }}
@@ -55,9 +55,9 @@ const Filter = ({ filterFields }: { filterFields: Field[] }) => {
                       tabIndex={0}
                       aria-label="Sort by newest"
                       onKeyDown={() => {
-                        if (field.sortFunction && field.setter) {
+                        if (field.previousStateModifier && field.setter) {
                           field.setter((prev: any) => {
-                            return [...prev].sort(field.sortFunction)
+                            return field.previousStateModifier([...prev])
                           })
                         }
                       }}
