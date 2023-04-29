@@ -273,7 +273,17 @@ export interface WebsiteTranslations {
       users: translationElement
       creators: translationElement
     }
-  }
+    Admin: {
+      createdSuccessfully: translationElement
+      somethingWentWrong: translationElement
+      password: translationElement
+      confirmPassword: translationElement
+      dateOfBirth: translationElement
+      firstName: translationElement
+      lastName: translationElement
+      cancel: translationElement
+      addAdmin: translationElement
+    }
   MenuCreator: {
     courses: translationElement
     games: translationElement
