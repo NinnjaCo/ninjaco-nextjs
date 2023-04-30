@@ -13,7 +13,7 @@ export class GameEnrollmentAPI extends CrudApi<UserPlayGame, UserPlayGameRequest
 
   async findAll(
     userId: string,
-    options?: AxiosRequestConfig | undefined 
+    options?: AxiosRequestConfig | undefined
   ): Promise<CrudResponse<(UserPlayGame | Game)[]>> {
     return (
       await this.client.get<CrudResponse<(UserPlayGame | Game)[]>>(this.path, {
