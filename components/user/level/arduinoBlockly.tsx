@@ -285,7 +285,7 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
     }, 30000)
 
     const url =
-      'https://github.com/NinnjaCo/ArduinoServer/releases/download/v1.0.0/NinjacoAgent.exe'
+      'https://github.com/NinnjaCo/ArduinoServer/releases/download/v1.0.1/NinjacoAgent.exe'
     window.open(url, '_blank')
 
     setArduinoIdeAlert(true)
