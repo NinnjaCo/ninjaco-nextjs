@@ -609,21 +609,21 @@ export interface WebsiteTranslations {
   ArduinoBlockly: {
     uploadMessage: translationElement
     uploadsuccess: translationElement
-    error404 : translationElement
-    error400 : translationElement
-    error500 : translationElement
-    error501 : translationElement
-    unknownError : translationElement
-    failedToUpload : translationElement
-    arduinoIdeError : translationElement
-    somethingWentWrong : translationElement
-    arduinoIdeRequired : translationElement
-    downloadArduiunoIde : translationElement
-    previewCode : translationElement
-    completeLevel : translationElement
-    downloadAgent : translationElement
-    uploadToArduino : translationElement
- 
+    error404: translationElement
+    error400: translationElement
+    error500: translationElement
+    error501: translationElement
+    unknownError: translationElement
+    failedToUpload: translationElement
+    arduinoIdeError: translationElement
+    somethingWentWrong: translationElement
+    arduinoIdeRequired: translationElement
+    downloadArduiunoIde: translationElement
+    previewCode: translationElement
+    completeLevel: translationElement
+    downloadAgent: translationElement
+    uploadToArduino: translationElement
+  }
 }
 
 // Create locale type support en | fr
