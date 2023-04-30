@@ -49,7 +49,7 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
   const [arduinoCode, setArduinoCode] = React.useState('')
   const [numBlocks, setNumBlocks] = React.useState(0)
   const [showCodePreview, setShowCodePreview] = React.useState(true)
-  const [arduinoIdeAlert, setArduinoIdeAlert] = React.useState(true)
+  const [arduinoIdeAlert, setArduinoIdeAlert] = React.useState(false)
   const [alertData, setAlertData] = React.useState<{
     message: string
     variant: 'error' | 'success' | 'info' | 'warning'
