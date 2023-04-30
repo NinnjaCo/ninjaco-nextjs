@@ -177,25 +177,3 @@ export const arduinoToolbox: ToolboxDefinition = {
     },
   ],
 }
-
-//     <category name="Grove Analog">
-//       <block type="grove_rotary_angle"></block>
-//       <block type="grove_temporature_sensor"></block>
-//       <block type="grove_sound_sensor"></block>
-//       <block type="grove_thumb_joystick"></block>
-//     </category>
-//     <category name="Grove">
-//       <block type="grove_led"></block>
-//       <block type="grove_button"></block>
-//       <block type="grove_relay"></block>
-//       <block type="grove_tilt_switch"></block>
-//       <block type="grove_piezo_buzzer"></block>
-//       <block type="grove_pir_motion_sensor"></block>
-//       <block type="grove_line_finder"></block>
-//       <block type="grove_rgb_led"></block>
-//       <block type="grove_ultrasonic_ranger"></block>
-//     </category>
-//     <category name="Grove Motor">
-//       <block type="grove_motor_shield"></block>
-//     </category>
-//   </xml>

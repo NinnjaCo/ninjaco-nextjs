@@ -106,10 +106,13 @@ arduinoGenerator.init = function (workspace) {
   }
 
   const defvars = []
-  const variables = Blockly.Variables.allDeveloperVariables(workspace)
+  const variables = workspace.getAllVariables()
+
   for (let x = 0; x < variables.length; x++) {
     defvars[x] =
-      'int ' + arduinoGenerator.nameDB_.getName(variables[x], Blockly.Variables.NAME_TYPE) + ';\n'
+      'int ' +
+      arduinoGenerator.nameDB_.getName(variables[x].name, Blockly.Variables.NAME_TYPE) +
+      ';'
   }
   arduinoGenerator.definitions_['variables'] = defvars.join('\n')
 }
@@ -637,9 +640,9 @@ arduinoGenerator['math_arithmetic'].OPERATORS = {
 
 arduinoGenerator['math_change'] = function () {
   // Add to a variable in place.
-  var argument0 =
+  const argument0 =
     arduinoGenerator.valueToCode(this, 'DELTA', arduinoGenerator.ORDER_ADDITIVE) || '0'
-  var varName = arduinoGenerator.nameDB_.getName(
+  const varName = arduinoGenerator.nameDB_.getName(
     this.getFieldValue('VAR'),
     Blockly.Variables.NAME_TYPE
   )
@@ -650,35 +653,38 @@ arduinoGenerator['math_change'] = function () {
 
 arduinoGenerator['variables_get'] = function () {
   // Variable getter.
-  var code = arduinoGenerator.nameDB_.getName(
-    this.getFieldValue('VAR'),
-    Blockly.Variables.NAME_TYPE
-  )
+
+  const variables = Blockly.Workspace.getAll()[0].getAllVariables()
+  const varId = this.getFieldValue('VAR')
+
+  const code = variables.find((v) => v.id_ === varId).name
   return [code, arduinoGenerator.ORDER_ATOMIC]
 }
 
 arduinoGenerator['variables_declare'] = function () {
   // Variable setter.
-  var dropdown_type = this.getFieldValue('TYPE')
+  const dropdown_type = this.getFieldValue('TYPE')
   //TODO: settype to variable
-  var argument0 =
+  const argument0 =
     arduinoGenerator.valueToCode(this, 'VALUE', arduinoGenerator.ORDER_ASSIGNMENT) || '0'
-  var varName = arduinoGenerator.nameDB_.getName(
-    this.getFieldValue('VAR'),
-    Blockly.Variables.NAME_TYPE
-  )
+
+  const variables = Blockly.Workspace.getAll()[0].getAllVariables()
+  const varId = this.getFieldValue('VAR')
+
+  const varName = variables.find((v) => v.id_ === varId).name
   arduinoGenerator.setups_['setup_var' + varName] = varName + ' = ' + argument0 + ';\n'
   return ''
 }
 
 arduinoGenerator['variables_set'] = function () {
   // Variable setter.
-  var argument0 =
+  const argument0 =
     arduinoGenerator.valueToCode(this, 'VALUE', arduinoGenerator.ORDER_ASSIGNMENT) || '0'
-  var varName = arduinoGenerator.nameDB_.getName(
-    this.getFieldValue('VAR'),
-    Blockly.Variables.NAME_TYPE
-  )
+
+  const variables = Blockly.Workspace.getAll()[0].getAllVariables()
+  const varId = this.getFieldValue('VAR')
+
+  const varName = variables.find((v) => v.id_ === varId).name
   return varName + ' = ' + argument0 + ';\n'
 }
 
