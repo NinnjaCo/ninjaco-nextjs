@@ -182,7 +182,7 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
       setAlertData({
         ...alertData,
         open: true,
-        message: 'Uploading code to the arduino ... Beep Boop 🤖',
+        message: t.ArduinoBlockly.uploadMessage as string,
         variant: 'info',
       })
 
@@ -201,7 +201,7 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
         if (response.status === 200) {
           setAlertData({
             ...alertData,
-            message: 'Code uploaded successfully 🎉',
+            message: t.ArduinoBlockly.uploadsuccess as string,
             variant: 'success',
             open: true,
           })
@@ -216,22 +216,19 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
             case 200:
               break
             case 404:
-              errorInfo =
-                'Cannot find the agent. Make sure that you have downloaded and started the agent'
+              errorInfo = t.ArduinoBlockly.error404 as string
               break
             case 400:
-              errorInfo =
-                'Build failed. Make sure that there are no missing connections in the blocks.'
+              errorInfo = t.ArduinoBlockly.error400 as string
               break
             case 500:
-              errorInfo =
-                'Upload failed. Make sure that you have connected the Arduino to your computer'
+              errorInfo = t.ArduinoBlockly.error500 as string
               break
             case 501:
-              errorInfo = 'Upload failed. Make sure you have downloaded the Arduino IDE?'
+              errorInfo = t.ArduinoBlockly.error501 as string
               break
             default:
-              errorInfo = 'Unknown error, please try again'
+              errorInfo = t.ArduinoBlockly.unknownError as string
               break
           }
           setAlertData({
@@ -244,7 +241,7 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
       } catch (e: any) {
         setAlertData({
           ...alertData,
-          message: 'Failed, make sure that the agent is running',
+          message: t.ArduinoBlockly.failedToUpload as string,
           variant: 'error',
           open: true,
         })
@@ -275,7 +272,7 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
   const downloadAgentPrompt = () => {
     setAlertData({
       ...alertData,
-      message: 'Make sure to download ARDUINO IDE v1 before using the agent',
+      message: t.ArduinoBlockly.arduinoIdeError as string,
       variant: 'warning',
       open: true,
     })
@@ -320,7 +317,7 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
       console.log(e)
       setAlertData({
         ...alertData,
-        message: 'Something went wrong, please try again later',
+        message: t.ArduinoBlockly.somethingWentWrong as string,
         variant: 'error',
         open: true,
       })
@@ -364,7 +361,7 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
         }}
       />
       <AdminAlertDialog
-        title="Arduino IDE v1 is Required"
+        title={t.ArduinoBlockly.arduinoIdeRequired as string}
         open={arduinoIdeAlert}
         close={function (): void {
           setArduinoIdeAlert(false)
@@ -374,7 +371,7 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
         }}
         confirmButtonClassName="hidden"
       >
-        <div>If you do not already have Arduino IDE v1, download it here: </div>
+        <div>{t.ArduinoBlockly.downloadArduiunoIde} </div>
         <div className="flex w-full flex-wrap gap-4">
           <a
             className="text-brand font-bold underline"
@@ -451,7 +448,7 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
                 <div className="group flex justify-center absolute top-1 right-2 w-full">
                   <QuestionMarkCircleIcon className="absolute top-1 right-3 w-4 h-4 text-brand-100 hover:text-brand-500 cursor-pointer z-20" />
                   <span className="absolute top-2 right-5 scale-0 rounded bg-brand p-2 text-xs text-white group-hover:scale-100 z-20 font-quicksand">
-                    🚀 Preview your own Arduino code in real time
+                    🚀 {t.ArduinoBlockly.previewCode}
                   </span>
                 </div>
                 <pre className="text-xs w-full no-margin-important h-full">
@@ -505,7 +502,7 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
                   }}
                 >
                   <CheckCircleIcon className="z-20 w-5 h-5 text-brand"></CheckCircleIcon>
-                  Complete Level
+                  {t.ArduinoBlockly.completeLevel}
                 </button>
               )}
               <button
@@ -515,7 +512,9 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
                 }}
               >
                 <BoltIcon className="text-brand z-20 w-4 h-4"></BoltIcon>
-                <p className="whitespace-nowrap text-xs text-brand">Download Agent</p>
+                <p className="whitespace-nowrap text-xs text-brand">
+                  {t.ArduinoBlockly.downloadAgent}
+                </p>
               </button>
               <button
                 className="btn btn-brand bg-secondary hover:bg-secondary-200 rounded-md flex justify-start gap-4 pl-2 pr-4"
@@ -525,7 +524,9 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
                 }}
               >
                 <ArrowUpIcon className="text-brand z-20 w-4 h-4"></ArrowUpIcon>
-                <p className="whitespace-nowrap text-xs text-brand">Upload to Arduino</p>
+                <p className="whitespace-nowrap text-xs text-brand">
+                  {t.ArduinoBlockly.uploadToArduino}
+                </p>
               </button>
               <button
                 className="btn btn-brand bg-secondary hover:bg-secondary-200 rounded-md flex justify-start gap-4 pl-2 pr-4"
