@@ -182,7 +182,7 @@ export default function MainApp({
                     setter: setFilteredCourses,
                   },
                   {
-                    name: 'Completed',
+                    name: t.Filter.completed as string,
                     previousStateModifier: () => {
                       return [
                         ...courses.filter((course) => {
@@ -201,7 +201,7 @@ export default function MainApp({
                     setter: setFilteredCourses,
                   },
                   {
-                    name: 'Not Completed',
+                    name: t.Filter.notCompleted as string,
                     previousStateModifier: () => {
                       return [
                         ...courses.filter((course) => {

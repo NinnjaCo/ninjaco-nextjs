@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
+import clsx from 'clsx'
 
 interface Props {
   images: string[]
+  isLarge?: boolean
 }
 
-const MultiImageCarousel = ({ images }: Props) => {
+const MultiImageCarousel = ({ images, isLarge }: Props) => {
   const maxScrollWidth = useRef(0)
   const [currentIndex, setCurrentIndex] = useState(0)
   const carousel = useRef<HTMLDivElement>(null)
@@ -51,7 +53,7 @@ const MultiImageCarousel = ({ images }: Props) => {
 
   return (
     <div className="mx-auto">
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-x-hidden">
         <div className="flex justify-between absolute top left w-full h-full items-center">
           <button
             onClick={movePrev}
@@ -90,14 +92,19 @@ const MultiImageCarousel = ({ images }: Props) => {
         </div>
         <div
           ref={carousel}
-          className="relative flex gap-12 overflow-hidden scroll-smooth snap-x snap-mandatory touch-pan-x z-0"
+          className="relative flex gap-12 overflow-x-hidden scroll-smooth snap-x snap-mandatory touch-pan-x z-0 items-center"
         >
           {images.map((image, index) => {
             return (
-              <div key={index} className="text-center relative w-80 h-80 snap-start">
+              <div
+                key={index}
+                className={clsx('text-center relative w-80 h-80 snap-start', {
+                  'w-96 h-96': isLarge,
+                })}
+              >
                 <div
-                  className="h-full w-full aspect-square block bg-origin-padding bg-left-top bg-cover bg-no-repeat z-0"
-                  style={{ backgroundImage: `url(${image || ''})` }}
+                  className="h-full w-full aspect-square block bg-origin-padding bg-left-top bg-contain bg-no-repeat z-0"
+                  style={{ backgroundImage: `url(${image || ''})`, backgroundSize: 'contain' }}
                 >
                   <Image src={image} alt="image" className="w-full aspect-square hidden" fill />
                 </div>

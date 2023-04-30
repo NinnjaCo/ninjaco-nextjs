@@ -336,6 +336,7 @@ const frenchTranslations: WebsiteTranslations = {
     profile: 'Profil',
     save: 'Sauvegarder',
     changePassword: 'Changer le mot de passe',
+    addAdmin: 'Ajouter un administrateur',
   },
   Admin: {
     Dashboard: {
@@ -391,6 +392,7 @@ const frenchTranslations: WebsiteTranslations = {
       confirmPassword: 'Confirmez le mot de passe',
       notify: 'Notifier',
       users: 'Utilisateurs',
+      goToApp: 'Aller à l’application',
     },
     Creators: {
       somethingWentWrong: 'Quelque chose s’est mal passé',
@@ -428,6 +430,7 @@ const frenchTranslations: WebsiteTranslations = {
       confirmPassword: 'Confirmez le mot de passe',
       submit: 'Soumettre',
       password: 'Mot de passe',
+      goToCreator: 'aller au panneau du créateur',
     },
     LogOutDialogue: {
       logout: 'déconnecter',
@@ -440,6 +443,17 @@ const frenchTranslations: WebsiteTranslations = {
       courses: 'Cours',
       users: 'Utilisateurs',
       creators: 'Créateurs',
+    },
+    Admin: {
+      createdSuccessfully: 'Créé avec succès',
+      somethingWentWrong: "Quelque chose s'est mal passé",
+      password: 'Mot de passe',
+      confirmPassword: 'Confirmez le mot de passe',
+      dateOfBirth: 'Date de naissance',
+      firstName: 'Prénom',
+      lastName: 'Nom de Famille',
+      cancel: 'Annuler',
+      addAdmin: 'Ajouter un administrateur',
     },
   },
   MenuCreator: {
@@ -749,16 +763,42 @@ const frenchTranslations: WebsiteTranslations = {
       showWebsite: 'Site Web',
       resetAll: 'Réinitialiser',
       downloadCode: 'Télécharger',
+      completeLevel: 'Niveau terminé',
+      previewCode: 'Prévisualisez votre propre code HTML en temps réel',
+      desktop: 'Veuillez utiliser un ordinateur pour jouer',
+      nolevel: 'Aucun niveau trouvé',
     },
   },
 
   Filter: {
     filter: 'Filtre',
+    completed: 'complété',
+    notCompleted: 'pas achevé',
   },
   ServerError: {
     headTitle: 'NinjaCo | Erreur',
     title: 'Erreur dans le serveur, si le problème persiste, veuillez contacter l’administrateur',
     goBackHome: 'Retour à la page d’accueil',
+  },
+  ArduinoBlockly: {
+    uploadMessage: "Téléchargement du code sur l'arduino... Beep Boop 🤖",
+    uploadsuccess: 'Téléchargement du code réussi! 🥳',
+    error404: "Impossible de trouver l'agent. Assurez-vous d'avoir téléchargé et démarré l'agent",
+    error400:
+      "Échec de construction. Assurez-vous qu'il n'y a pas de connexions manquantes dans les blocs.",
+    error500:
+      "Le téléchargement a échoué. Assurez-vous que vous avez connecté l'Arduino à votre ordinateur",
+    error501: "Le téléchargement a échoué. Assurez-vous d'avoir téléchargé l'IDE Arduino ?",
+    unknownError: 'Erreur inconnue, veuillez réessayer',
+    failedToUpload: "Échec, assurez-vous que l'agent est en cours d'exécution",
+    arduinoIdeError: "Assurez-vous de télécharger ARDUINO IDE v1 avant d'utiliser l'agent",
+    somethingWentWrong: 'Quelque chose s’est mal passé , veuillez réessayer',
+    arduinoIdeRequired: 'Arduino IDE v1 est requis',
+    downloadArduiunoIde: "Si vous n'avez pas déjà Arduino IDE v1, téléchargez-le ici :",
+    previewCode: 'Prévisualisez votre propre code Arduino en temps réel',
+    completeLevel: 'Niveau terminé',
+    downloadAgent: 'Télécharger l’agent',
+    uploadToArduino: 'Télécharger sur Arduino',
   },
 }
 export default frenchTranslations

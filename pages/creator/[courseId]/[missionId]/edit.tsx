@@ -48,6 +48,7 @@ const EditMission = ({
   const router = useRouter()
   const session = useSession()
   const queryClient = useQueryClient()
+  const [editButtonDisabled, setEditButtonDisabled] = React.useState(false)
   const scrollToTop = () => {
     window.scrollTo({
       top: 25,
@@ -145,9 +146,16 @@ const EditMission = ({
         open: true,
       })
       scrollToTop()
-
       return
     }
+
+    setEditButtonDisabled(true)
+    setAlertData({
+      message: 'Editing Mission...',
+      variant: 'info',
+      open: true,
+    })
+    scrollToTop()
 
     try {
       if (dirtyData.image && dirtyData.image.file) {
@@ -180,6 +188,7 @@ const EditMission = ({
           open: true,
         })
         scrollToTop()
+        setEditButtonDisabled(false)
       } else {
         setAlertData({
           message: t.Creator.editMissionPage.errorEditingMission as string,
@@ -187,6 +196,7 @@ const EditMission = ({
           open: true,
         })
         scrollToTop()
+        setEditButtonDisabled(false)
       }
     }
   }
@@ -335,11 +345,12 @@ const EditMission = ({
 
             <div className="flex w-full justify-between gap-4 md:gap-12 h-fit md:flex-row flex-col-reverse">
               <button
-                className="w-full md:w-40 h-fit btn bg-error text-brand hover:bg-error-dark hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+                className="w-full md:w-40 h-fit btn bg-error text-brand hover:bg-error-dark hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
                 onClick={(e) => {
                   e.preventDefault()
                   router.back()
                 }}
+                disabled={editButtonDisabled}
               >
                 {t.Creator.editMissionPage.cancel}
               </button>
@@ -347,7 +358,8 @@ const EditMission = ({
                 type="submit"
                 form="form"
                 value="Submit"
-                className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+                className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                disabled={editButtonDisabled}
               >
                 {t.Creator.editMissionPage.editMission}
               </button>

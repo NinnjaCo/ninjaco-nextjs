@@ -156,6 +156,25 @@ export const arduinoToolbox: ToolboxDefinition = {
         },
       ],
     },
+    {
+      kind: 'category',
+      name: 'Grove LCD',
+      colour: '#4B63D8',
+      contents: [
+        {
+          kind: 'block',
+          type: 'grove_serial_lcd_print',
+        },
+        {
+          kind: 'block',
+          type: 'grove_serial_lcd_power',
+        },
+        {
+          kind: 'block',
+          type: 'grove_serial_lcd_effect',
+        },
+      ],
+    },
   ],
 }
 
@@ -175,27 +194,6 @@ export const arduinoToolbox: ToolboxDefinition = {
 //       <block type="grove_line_finder"></block>
 //       <block type="grove_rgb_led"></block>
 //       <block type="grove_ultrasonic_ranger"></block>
-//     </category>
-//     <category name="Grove LCD">
-//       <block type="grove_serial_lcd_print">
-//         <value name="TEXT">
-//           <block type="text">
-//             <field name="TEXT"></field>
-//           </block>
-//         </value>
-//         <value name="TEXT2">
-//           <block type="text">
-//             <field name="TEXT"></field>
-//           </block>
-//         </value>
-//         <value name="DELAY_TIME">
-//           <block type="math_number">
-//             <field name="NUM">1000</field>
-//           </block>
-//         </value>
-//       </block>
-//       <block type="grove_serial_lcd_power"></block>
-//       <block type="grove_serial_lcd_effect"></block>
 //     </category>
 //     <category name="Grove Motor">
 //       <block type="grove_motor_shield"></block>

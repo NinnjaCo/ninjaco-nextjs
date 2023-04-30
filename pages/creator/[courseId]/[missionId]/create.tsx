@@ -69,6 +69,7 @@ const CreateLevel = ({
   const t = useTranslation()
   const router = useRouter()
   const session = useSession()
+  const [createButtonDisabled, setCreateButtonDisabled] = React.useState(false)
   const scrollToTop = () => {
     window.scrollTo({
       top: 25,
@@ -168,6 +169,7 @@ const CreateLevel = ({
   }
 
   const onSubmitHandlerArduino = async (data: CreateArduinoLevelFormDataType) => {
+    setCreateButtonDisabled(true)
     setAlertData({
       message: t.Creator.createLevelPage.creatingLevel as string,
       variant: 'info',
@@ -182,6 +184,7 @@ const CreateLevel = ({
         open: true,
       })
       scrollToTop()
+      setCreateButtonDisabled(false)
       return
     }
 
@@ -192,6 +195,7 @@ const CreateLevel = ({
         open: true,
       })
       scrollToTop()
+      setCreateButtonDisabled(false)
       return
     }
     // go over the images and upload them using ImageApi
@@ -206,6 +210,7 @@ const CreateLevel = ({
             open: true,
           })
           scrollToTop()
+          setCreateButtonDisabled(false)
           return
         }
 
@@ -216,6 +221,7 @@ const CreateLevel = ({
             open: true,
           })
           scrollToTop()
+          setCreateButtonDisabled(false)
           return
         }
 
@@ -231,6 +237,7 @@ const CreateLevel = ({
             open: true,
           })
           scrollToTop()
+          setCreateButtonDisabled(false)
           return
         }
       })
@@ -245,6 +252,7 @@ const CreateLevel = ({
             open: true,
           })
           scrollToTop()
+          setCreateButtonDisabled(false)
           return
         }
 
@@ -255,6 +263,7 @@ const CreateLevel = ({
             open: true,
           })
           scrollToTop()
+          setCreateButtonDisabled(false)
           return
         }
 
@@ -270,6 +279,7 @@ const CreateLevel = ({
             open: true,
           })
           scrollToTop()
+          setCreateButtonDisabled(false)
           return
         }
       })
@@ -299,6 +309,7 @@ const CreateLevel = ({
         open: true,
       })
       scrollToTop()
+      setCreateButtonDisabled(false)
       return
     }
 
@@ -309,6 +320,7 @@ const CreateLevel = ({
         open: true,
       })
       scrollToTop()
+      setCreateButtonDisabled(false)
       return
     }
 
@@ -328,6 +340,7 @@ const CreateLevel = ({
         open: true,
       })
       scrollToTop()
+      setCreateButtonDisabled(false)
     }
   }
 
@@ -431,11 +444,12 @@ const CreateLevel = ({
 
               <div className="flex w-full justify-between gap-4 md:gap-12 h-fit md:flex-row flex-col-reverse">
                 <button
-                  className="w-full md:w-40 h-fit btn bg-error text-brand hover:bg-error-dark hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+                  className="w-full md:w-40 h-fit btn bg-error text-brand hover:bg-error-dark hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
                   onClick={(e) => {
                     e.preventDefault()
                     router.back()
                   }}
+                  disabled={createButtonDisabled}
                 >
                   {t.Creator.createLevelPage.cancel}
                 </button>
@@ -443,7 +457,8 @@ const CreateLevel = ({
                   type="submit"
                   form="form"
                   value="Submit"
-                  className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-300"
+                  className="w-full md:w-40 h-fit btn bg-brand-200 text-brand hover:bg-brand hover:text-brand-50 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-brand-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  disabled={createButtonDisabled}
                 >
                   {t.Creator.createLevelPage.createLevel}
                 </button>

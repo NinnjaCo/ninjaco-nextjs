@@ -62,7 +62,7 @@ export default function UserCourseView({
 }) {
   const [filteredMissions, setFilteredMissions] =
     useState<(Mission | MissionEnrollment)[]>(missions)
-
+  const [enrollDisabled, setEnrollDisabled] = useState(false)
   const t = useTranslation()
   const [alertData, setAlertData] = React.useState<{
     message: string
@@ -145,6 +145,7 @@ export default function UserCourseView({
   }
 
   const enrollInCourse = async () => {
+    setEnrollDisabled(true)
     try {
       await new CourseEnrollmentAPI(session.data).create({
         courseId: getAFieldInCourse(course, '_id'),
@@ -153,6 +154,13 @@ export default function UserCourseView({
       router.reload()
     } catch (e) {
       console.log(e)
+      setEnrollDisabled(false)
+      setAlertData({
+        ...alertData,
+        message: 'Something went wrong, please try again later',
+        variant: 'error',
+        open: true,
+      })
     }
   }
 
@@ -191,18 +199,20 @@ export default function UserCourseView({
               <div>
                 {getTypeOfCourse(course) === CourseType.course ? (
                   <button
-                    className="btn btn-cta text-xs md:text-sm"
+                    className="btn btn-cta text-xs md:text-sm disabled:bg-gray-400 disabled:cursor-not-allowed"
                     onClick={() => {
                       enrollInCourse()
                     }}
+                    disabled={enrollDisabled}
                   >
                     {t.User.viewCoursePage.enrollCourse}
                   </button>
                 ) : getTypeOfCourse(course) === CourseType.enrollment &&
                   (course as CourseEnrollment).completed === false ? (
                   <button
-                    className="btn btn-cta bg-error hover:bg-error-dark"
+                    className="btn btn-cta bg-error hover:bg-error-dark disabled:bg-gray-400 disabled:cursor-not-allowed"
                     onClick={() => setOpenCourse(true)}
+                    disabled={enrollDisabled}
                   >
                     {t.User.viewCoursePage.dropCourse}
                   </button>

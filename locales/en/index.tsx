@@ -325,6 +325,7 @@ const englishTranslations: WebsiteTranslations = {
     profile: 'Profile',
     save: 'SAVE',
     changePassword: 'Change Password',
+    addAdmin: 'Add Admin',
   },
   Admin: {
     Dashboard: {
@@ -380,6 +381,7 @@ const englishTranslations: WebsiteTranslations = {
       confirmPassword: 'Confirm Password',
       notify: 'Notify',
       users: 'Users',
+      goToApp: 'Go to App',
     },
     Creators: {
       somethingWentWrong: 'Something went wrong',
@@ -413,10 +415,10 @@ const englishTranslations: WebsiteTranslations = {
       notifyUser: 'Notify User',
       deleteUser: 'Delete User',
       editUser: 'Edit User',
-
       confirmPassword: 'Confirm Password',
       submit: 'Submit',
       password: 'Password',
+      goToCreator: 'Go to Creator Panel',
     },
     LogOutDialogue: {
       logout: 'Logout',
@@ -429,6 +431,17 @@ const englishTranslations: WebsiteTranslations = {
       courses: 'Courses',
       users: 'Users',
       creators: 'Creators',
+    },
+    Admin: {
+      createdSuccessfully: 'Admin created successfully',
+      somethingWentWrong: 'Something went wrong',
+      password: 'Password',
+      confirmPassword: 'Confirm Password',
+      dateOfBirth: 'Date of Birth',
+      firstName: 'First Name',
+      lastName: 'Last Name',
+      cancel: 'Cancel',
+      addAdmin: 'Add Admin',
     },
   },
   MenuCreator: {
@@ -736,15 +749,39 @@ const englishTranslations: WebsiteTranslations = {
       showWebsite: 'Show Website',
       resetAll: 'Reset All',
       downloadCode: 'Download Code',
+      completeLevel: 'Completed',
+      previewCode: 'Preview your own HTML code in real-time',
+      desktop: 'Please use a desktop to play',
+      nolevel: 'No level yet',
     },
   },
   Filter: {
     filter: 'Filter',
+    completed: 'Completed',
+    notCompleted: 'Not Completed',
   },
   ServerError: {
     headTitle: 'NinjaCo | Server Error',
     title: 'Something went wrong, please try again later',
     goBackHome: 'Go Back Home',
+  },
+  ArduinoBlockly: {
+    uploadMessage: 'Uploading code to the arduino ... Beep Boop 🤖',
+    uploadsuccess: 'Code uploaded successfully 🎉',
+    error404: 'Cannot find the agent. Make sure that you have downloaded and started the agent',
+    error400: 'Build failed. Make sure that there are no missing connections in the blocks.',
+    error500: 'Upload failed. Make sure that you have connected the Arduino to your computer',
+    error501: 'Upload failed. Make sure you have downloaded the Arduino IDE?',
+    unknownError: 'Unknown error, please try again',
+    failedToUpload: 'Failed, make sure that the agent is running',
+    arduinoIdeError: 'Make sure to download ARDUINO IDE v1 before using the agent',
+    somethingWentWrong: 'Something went wrong, please try again later',
+    arduinoIdeRequired: 'Arduino IDE v1 is Required',
+    downloadArduiunoIde: 'If you do not already have Arduino IDE v1, download it here:',
+    previewCode: 'Preview your own Arduino code in real time',
+    completeLevel: 'Complete Level',
+    downloadAgent: 'Download Agent',
+    uploadToArduino: 'Upload to Arduino',
   },
 }
 

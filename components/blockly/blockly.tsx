@@ -3,13 +3,14 @@ import { load, save } from '@/blockly/serialization'
 import Blockly from 'blockly'
 import React, { useCallback, useEffect, useImperativeHandle, useRef } from 'react'
 
-interface blocksDefinition {
+export interface BlocksDefinition {
   [key: string]: any
 }
+
 interface BlocklyBoardProps {
   onChangeListener: (e: Blockly.Events.Abstract, workspaceRefrence: Blockly.WorkspaceSvg) => void
   blocklyOptions: BlocklyOptions
-  blocksDefinitions?: blocksDefinition
+  blocksDefinitions?: BlocksDefinition
   codeGenerator: Blockly.CodeGenerator
   storageKey?: string
   children?: React.ReactNode

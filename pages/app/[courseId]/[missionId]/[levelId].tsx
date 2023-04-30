@@ -37,7 +37,7 @@ const PlayLevel = ({
         <UserMenu user={user} isOnCoursePage={true} isOnGamesPage={false} />
         <div className="grid lg:hidden items-center h-screen grid-cols-1 justify-items-center py-24 px-8 relative flex-auto">
           <h1 className="self-end divide-x-2 divide-brand text-sm ">
-            <span className="px-2 font-bold">Please use a desktop to play</span>
+            <span className="px-2 font-bold">{t.User.htmlLevel.desktop}</span>
           </h1>
           <Link
             href={`/app/${course.course._id}/${mission._id}`}
@@ -49,7 +49,12 @@ const PlayLevel = ({
         {course.course.type === CourseType.HTML ? (
           <HtmlLevel course={course.course} level={level} mission={mission.mission} user={user} />
         ) : (
-          <ArduinoLevel course={course.course} level={level.level} mission={mission.mission} />
+          <ArduinoLevel
+            course={course.course}
+            level={level}
+            mission={mission.mission}
+            user={user}
+          />
         )}
       </main>
     </>

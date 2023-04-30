@@ -10,10 +10,12 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 import { TranslationsProvider } from '@/contexts/TranslationContext'
 import { useMemo, useRef } from 'react'
 import Blockly from 'blockly/core'
+import Head from 'next/head'
 import NextNProgress from '@/components/nextNProgress'
 import PageLayout from '@/components/layout/pageLayout'
 import SessionManager from '@/components/auth/sessionManager'
 import locale from 'blockly/msg/en'
+import socialGraphImage from '@/images/socialGraphCardImage.png'
 import type { AppProps } from 'next/app'
 
 // TODO: add cookies script
@@ -49,6 +51,24 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <Head>
+        {/* Open Graph */}
+        <meta property="og:title" content="NinjaCo" />
+        <meta property="og:description" content="Empoer your child's education" />
+        <meta property="og:image" content={socialGraphImage.src} />
+        <meta property="og:url" content="https://ninja-co.live" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="NinjaCo" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@ninjaco" />
+        <meta name="twitter:creator" content="@ninjaco" />
+        <meta name="twitter:title" content="NinjaCo" />
+        <meta name="twitter:description" content="Empoer your child's education" />
+        <meta name="twitter:image" content={socialGraphImage.src} />
+        <meta name="twitter:image:alt" content="NinjaCo" />
+      </Head>
       <NextNProgress
         color="#29375B"
         startPosition={0}
@@ -69,7 +89,6 @@ export default function App({ Component, pageProps }: AppProps) {
                 </main>
               </TranslationsProvider>
             </LocalizationProvider>
-            <ReactQueryDevtools initialIsOpen={false} />
           </Hydrate>
         </QueryClientProvider>
       </SessionManager>
