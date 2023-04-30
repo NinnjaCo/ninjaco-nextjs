@@ -29,8 +29,8 @@
 | View profile | The user shall be able to view their profile |
 | Edit profile | The user should be able to edit their profile information. |
 | View leaderboard | The system shall have a leaderboard to rank users based on their performance. |
-|  See all courses | The user shall be able to see all the courses available. |
-|  Open a course | The user shall be able to open a course. |
+| See all courses | The user shall be able to see all the courses available. |
+| Open a course | The user shall be able to open a course. |
 | Enroll in a course | The user shall be able to enroll in a course. |
 | Browse missions | The user shall be able to browse missions. |
 | Filter missions | The user shall be able to filter missions. |
@@ -57,37 +57,37 @@
 | Present certificate | The system shall present a certificate to the user after completing a course. |
 | View testimonials | The user shall be able to view testimonials. |
 
-| Creator Story | Description |
-| --- | --- |
-| Login as creator | The creator shall be able to log in to the system. |
-| View courses | The creator shall be able to view courses. |
-| Add course | The creator shall be able to add a course. |
-| Edit course | The creator shall be able to edit a course. |
-| View missions | The creator shall be able to view missions. |
-| Add mission | The creator shall be able to add a mission. |
-| Edit mission | The creator shall be able to edit a mission. |
-| View levels | The creator shall be able to view levels. |
-| Add level | The creator shall be able to add a level. |
-| Edit level | The creator shall be able to edit a level. |
-| Create html level | The creator shall be able to create an html level. |
-| Create game level | The creator shall be able to create a game level. |
+| Creator Story     | Description                                                  |
+| ----------------- | ------------------------------------------------------------ |
+| Login as creator  | The creator shall be able to log in to the system.           |
+| View courses      | The creator shall be able to view courses.                   |
+| Add course        | The creator shall be able to add a course.                   |
+| Edit course       | The creator shall be able to edit a course.                  |
+| View missions     | The creator shall be able to view missions.                  |
+| Add mission       | The creator shall be able to add a mission.                  |
+| Edit mission      | The creator shall be able to edit a mission.                 |
+| View levels       | The creator shall be able to view levels.                    |
+| Add level         | The creator shall be able to add a level.                    |
+| Edit level        | The creator shall be able to edit a level.                   |
+| Create html level | The creator shall be able to create an html level.           |
+| Create game level | The creator shall be able to create a game level.            |
 | Assign categories | The creator shall be able to assign categories to a mission. |
 
-| Admin Story | Description |
-| --- | --- |
+| Admin Story    | Description                                      |
+| -------------- | ------------------------------------------------ |
 | Login as admin | The admin shall be able to log in to the system. |
-| View dashboard | The admin shall be able to view the dashboard. |
-| View users | The admin shall be able to view users. |
-| View courses | The admin shall be able to view courses. |
-| View creators | The admin shall be able to view creators. |
-| Add user | The admin shall be able to add a user. |
-| Edit user | The admin shall be able to edit a user. |
-| Delete user | The admin shall be able to delete a user. |
-| Notify user | The admin shall be able to notify a user. |
-| Add creator | The admin shall be able to add a creator. |
-| Edit creator | The admin shall be able to edit a creator. |
-| Delete creator | The admin shall be able to delete a creator. |
-| Monitor users | The admin shall be able to monitor users. |
+| View dashboard | The admin shall be able to view the dashboard.   |
+| View users     | The admin shall be able to view users.           |
+| View courses   | The admin shall be able to view courses.         |
+| View creators  | The admin shall be able to view creators.        |
+| Add user       | The admin shall be able to add a user.           |
+| Edit user      | The admin shall be able to edit a user.          |
+| Delete user    | The admin shall be able to delete a user.        |
+| Notify user    | The admin shall be able to notify a user.        |
+| Add creator    | The admin shall be able to add a creator.        |
+| Edit creator   | The admin shall be able to edit a creator.       |
+| Delete creator | The admin shall be able to delete a creator.     |
+| Monitor users  | The admin shall be able to monitor users.        |
 
 <a id="wireframes"></a>
 <br><br>
@@ -97,51 +97,57 @@
 >
 > We created our own Design System in figma to make the design process easier and faster.
 
-| Design System |
-| :---: |
-| Colors |
-| <img src="./README_ASSETS/colors_design_system.png"/> |
-| Typography |
+|                       Design System                       |
+| :-------------------------------------------------------: |
+|                          Colors                           |
+|   <img src="./README_ASSETS/colors_design_system.png"/>   |
+|                        Typography                         |
 | <img src="./README_ASSETS/typography_design_system.png"/> |
-| Spacing |
-| <img src="./README_ASSETS/spacing_design_system.png"/> |
+|                          Spacing                          |
+|  <img src="./README_ASSETS/spacing_design_system.png"/>   |
 
-| Landing Page Wireframe|
-| :---: |
+|                 Landing Page Wireframe                 |
+| :----------------------------------------------------: |
 | <img src="./README_ASSETS/wireframe_landingpage.png"/> |
 
 <a id="design"></a>
 <br><br>
 <img src="./README_ASSETS/README_DESIGN.svg"/>
 
-| Admin |
-| :---: |
-| Admin Dashboard |
+|                          Admin                          |
+| :-----------------------------------------------------: |
+|                     Admin Dashboard                     |
 | <img src="./README_ASSETS/design_admin_dashboard.png"/> |
-| Admin Users |
-| <img src="./README_ASSETS/design_admin_users.png"/> |
-| Admin Courses |
-| <img src="./README_ASSETS/design_admin_courses.png"/> |
+|                       Admin Users                       |
+|   <img src="./README_ASSETS/design_admin_users.png"/>   |
+|                      Admin Courses                      |
+|  <img src="./README_ASSETS/design_admin_courses.png"/>  |
 
-| Creator |
-| :---: |
-| Creator Dashboard |
-| <img src="./README_ASSETS/design_creator_dashboard.png"/> |
-| Creator Create Course |
+|                            Creator                            |
+| :-----------------------------------------------------------: |
+|                       Creator Dashboard                       |
+|   <img src="./README_ASSETS/design_creator_dashboard.png"/>   |
+|                     Creator Create Course                     |
 | <img src="./README_ASSETS/design_creator_create_course.png"/> |
-| Creator Create Game |
-| <img src="./README_ASSETS/design_creator_create_game.png"/> |
+|                      Creator Create Game                      |
+|  <img src="./README_ASSETS/design_creator_create_game.png"/>  |
 
-| User |
-| :---: |
-| User Game |
-| <img src="./README_ASSETS/design_user_game.png"/> |
-| User HTML |
-| <img src="./README_ASSETS/design_user_html.png"/> |
-| User Arduino |
+|                         User                         |
+| :--------------------------------------------------: |
+|                      User Game                       |
+|  <img src="./README_ASSETS/design_user_game.png"/>   |
+|                      User HTML                       |
+|  <img src="./README_ASSETS/design_user_html.png"/>   |
+|                     User Arduino                     |
 | <img src="./README_ASSETS/design_user_arduino.png"/> |
-| User Profile |
+|                     User Profile                     |
 | <img src="./README_ASSETS/design_user_profile.png"/> |
+|               User play arduino Level                |
+|       <img src="./README_ASSETS/Arduino.gif"/>       |
+|                 User play HTML Level                 |
+|        <img src="./README_ASSETS/HTML.gif"/>         |
+|                    User play Game                    |
+|        <img src="./README_ASSETS/game.gif"/>         |
 
 <a id="tech-stack"></a>
 <br><br>
@@ -203,6 +209,7 @@ Here's a brief high-level overview of the tech stack the NinjaCo app uses:
 - [Docker](https://www.docker.com/)
 
 <!-- add icons to  below text -->
+
 ### Setup 🚀
 
 1. Clone the repository 🎉
