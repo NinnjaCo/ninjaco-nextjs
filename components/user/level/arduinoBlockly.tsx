@@ -1,3 +1,5 @@
+import { AdminAlertDialog } from '@/components/admin/dialog'
+import { AlertDialog } from '@/components/shared/alertDialog'
 import {
   ArrowDownIcon,
   ArrowLeftIcon,
@@ -25,6 +27,7 @@ import Alert from '@/components/shared/alert'
 import BlocklyBoard from '@/components/blockly/blockly'
 import Prism from 'prismjs'
 import React, { useEffect } from 'react'
+import axios from 'axios'
 import clsx from 'clsx'
 import useTranslation from '@/hooks/useTranslation'
 
@@ -47,6 +50,7 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
   const [arduinoCode, setArduinoCode] = React.useState('')
   const [numBlocks, setNumBlocks] = React.useState(0)
   const [showCodePreview, setShowCodePreview] = React.useState(true)
+  const [arduinoIdeAlert, setArduinoIdeAlert] = React.useState(false)
   const [alertData, setAlertData] = React.useState<{
     message: string
     variant: 'error' | 'success' | 'info' | 'warning'
@@ -179,69 +183,57 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
       setAlertData({
         ...alertData,
         open: true,
-        message: 'Uploading code to the arduino ... Beep Boop 🤖',
+        message: t.ArduinoBlockly.uploadMessage as string,
         variant: 'info',
       })
 
       const url = 'http://127.0.0.1:8080/upload'
-      const method = 'POST'
-
       try {
-        const response = await fetch(url, {
-          method,
-          body: JSON.stringify({ code }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-
-        if (response.status === 200) {
-          setAlertData({
-            ...alertData,
-            message: 'Code uploaded successfully 🎉',
-            variant: 'success',
-            open: true,
-          })
-
-          setTimeout(() => {
-            setAlertData({ ...alertData, open: false })
-          }, 2000)
-        } else {
-          let errorInfo = ''
-          const status = response.status
-          switch (status) {
-            case 200:
-              break
-            case 0:
-              errorInfo =
-                'Cannot find the agent. Make sure that you have downloaded and started the agent'
-              break
-            case 400:
-              errorInfo =
-                'Build failed. Make sure that there are no missing connections in the blocks.'
-              break
-            case 500:
-              errorInfo =
-                'Upload failed. Make sure that you have connected the Arduino to your computer'
-              break
-            case 501:
-              errorInfo = 'Upload failed. Make sure you have downloaded the Arduino IDE?'
-              break
-            default:
-              errorInfo = 'Unknown error, please try again'
-              break
+        await axios.post(
+          url,
+          { code },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
           }
-          setAlertData({
-            ...alertData,
-            message: errorInfo || 'Upload failed',
-            variant: 'error',
-            open: true,
-          })
-        }
-      } catch (e: any) {
+        )
         setAlertData({
           ...alertData,
-          message: e.message || 'Upload failed',
+          message: t.ArduinoBlockly.uploadsuccess as string,
+          variant: 'success',
+          open: true,
+        })
+
+        setTimeout(() => {
+          setAlertData({ ...alertData, open: false })
+        }, 2000)
+      } catch (error: any) {
+        const status = error?.response?.status
+        let errorInfo = ''
+
+        switch (status) {
+          case 200:
+            break
+          case 404:
+            errorInfo = t.ArduinoBlockly.error404 as string
+            break
+          case 400:
+            errorInfo = t.ArduinoBlockly.error400 as string
+            break
+          case 500:
+            errorInfo = t.ArduinoBlockly.error500 as string
+            break
+          case 501:
+            errorInfo = t.ArduinoBlockly.error501 as string
+            break
+          default:
+            errorInfo = t.ArduinoBlockly.error400 as string
+            break
+        }
+        setAlertData({
+          ...alertData,
+          message: errorInfo || 'Upload failed',
           variant: 'error',
           open: true,
         })
@@ -272,7 +264,7 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
   const downloadAgentPrompt = () => {
     setAlertData({
       ...alertData,
-      message: 'Make sure to download ARDUINO IDE before using the agent',
+      message: t.ArduinoBlockly.arduinoIdeError as string,
       variant: 'warning',
       open: true,
     })
@@ -282,8 +274,10 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
     }, 30000)
 
     const url =
-      'https://github.com/NinnjaCo/ArduinoServer/releases/download/v1.0.0/NinjacoAgent.exe'
+      'https://github.com/NinnjaCo/ArduinoServer/releases/download/v1.0.1/NinjacoAgent.exe'
     window.open(url, '_blank')
+
+    setArduinoIdeAlert(true)
   }
 
   const updateLevelStatus = async () => {
@@ -315,7 +309,7 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
       console.log(e)
       setAlertData({
         ...alertData,
-        message: 'Something went wrong, please try again later',
+        message: t.ArduinoBlockly.somethingWentWrong as string,
         variant: 'error',
         open: true,
       })
@@ -358,6 +352,45 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
           close()
         }}
       />
+      <AdminAlertDialog
+        title={t.ArduinoBlockly.arduinoIdeRequired as string}
+        open={arduinoIdeAlert}
+        close={function (): void {
+          setArduinoIdeAlert(false)
+        }}
+        confirm={function (): void {
+          throw new Error('Function not implemented.')
+        }}
+        confirmButtonClassName="hidden"
+      >
+        <div>{t.ArduinoBlockly.downloadArduiunoIde} </div>
+        <div className="flex w-full flex-wrap gap-4">
+          <a
+            className="text-brand font-bold underline"
+            href="https://downloads.arduino.cc/arduino-1.8.19-windows.exe"
+          >
+            Windows
+          </a>
+          <a
+            className="text-brand font-bold underline"
+            href="https://downloads.arduino.cc/arduino-1.8.19-linux64.tar.xz"
+          >
+            Linux (64bit)
+          </a>
+          <a
+            className="text-brand font-bold underline"
+            href="https://downloads.arduino.cc/arduino-1.8.19-linux32.tar.xz"
+          >
+            Linux (32bit)
+          </a>
+          <a
+            className="text-brand font-bold underline"
+            href="https://downloads.arduino.cc/arduino-1.8.19-macosx.zip"
+          >
+            Mac OS X
+          </a>
+        </div>
+      </AdminAlertDialog>
       <div className="w-full h-full relative overflow-hidden hidden lg:flex">
         <div className="absolute top-1 right-12 z-50">
           <Alert
@@ -407,7 +440,7 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
                 <div className="group flex justify-center absolute top-1 right-2 w-full">
                   <QuestionMarkCircleIcon className="absolute top-1 right-3 w-4 h-4 text-brand-100 hover:text-brand-500 cursor-pointer z-20" />
                   <span className="absolute top-2 right-5 scale-0 rounded bg-brand p-2 text-xs text-white group-hover:scale-100 z-20 font-quicksand">
-                    🚀 Preview your own Arduino code in real time
+                    🚀 {t.ArduinoBlockly.previewCode}
                   </span>
                 </div>
                 <pre className="text-xs w-full no-margin-important h-full">
@@ -461,7 +494,7 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
                   }}
                 >
                   <CheckCircleIcon className="z-20 w-5 h-5 text-brand"></CheckCircleIcon>
-                  Complete Level
+                  {t.ArduinoBlockly.completeLevel}
                 </button>
               )}
               <button
@@ -471,7 +504,9 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
                 }}
               >
                 <BoltIcon className="text-brand z-20 w-4 h-4"></BoltIcon>
-                <p className="whitespace-nowrap text-xs text-brand">Download Agent</p>
+                <p className="whitespace-nowrap text-xs text-brand">
+                  {t.ArduinoBlockly.downloadAgent}
+                </p>
               </button>
               <button
                 className="btn btn-brand bg-secondary hover:bg-secondary-200 rounded-md flex justify-start gap-4 pl-2 pr-4"
@@ -481,7 +516,9 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
                 }}
               >
                 <ArrowUpIcon className="text-brand z-20 w-4 h-4"></ArrowUpIcon>
-                <p className="whitespace-nowrap text-xs text-brand">Upload to Arduino</p>
+                <p className="whitespace-nowrap text-xs text-brand">
+                  {t.ArduinoBlockly.uploadToArduino}
+                </p>
               </button>
               <button
                 className="btn btn-brand bg-secondary hover:bg-secondary-200 rounded-md flex justify-start gap-4 pl-2 pr-4"

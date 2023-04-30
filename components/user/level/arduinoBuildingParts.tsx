@@ -6,7 +6,7 @@ const ArduinoBuildingParts = ({ buildingPartsImages }: { buildingPartsImages: st
   const t = useTranslation()
   return (
     <div className="m-24">
-      <div className="w-full text-start text-brand text-2xl font-bold my-12">
+      <div className="w-full text-start text-brand text-2xl font-bold my-4">
         {t.User.arduinoLevel.buildingPartMayNeed}{' '}
       </div>
       <MultiImageCarousel images={buildingPartsImages} />

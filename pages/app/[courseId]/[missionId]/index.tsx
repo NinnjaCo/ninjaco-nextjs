@@ -15,7 +15,7 @@ import { User } from '@/models/crud'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getReadableDateFromISO } from '@/utils/shared'
 import { getServerSession } from 'next-auth'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import Chip from '@/components/shared/chip'
 import Head from 'next/head'
@@ -68,13 +68,14 @@ export default function UserMissionPage({
 }) {
   const session = useSession()
   const t = useTranslation()
-
+  const [startMissionButttonDisabled, setStartMissionButttonDisabled] = useState(false)
   const startMission = async () => {
     const missionType = getTypeOfMission(mission)
     if (missionType === MissionType.enrollment) {
       return
     }
 
+    setStartMissionButttonDisabled(true)
     const typedMission = mission as Mission
     try {
       // start the mission
@@ -89,6 +90,7 @@ export default function UserMissionPage({
 
       router.push(`/app/${course.course._id}/${typedMission._id}/${typedMission.levels[0]._id}`)
     } catch (e) {
+      setStartMissionButttonDisabled(false)
       console.log(e)
     }
   }
@@ -167,10 +169,11 @@ export default function UserMissionPage({
               <div>
                 {getTypeOfMission(mission) === MissionType.mission ? (
                   <button
-                    className="btn btn-cta text-xs md:text-sm"
+                    className="btn btn-cta text-xs md:text-sm disabled:bg-gray-400 disabled:cursor-not-allowed"
                     onClick={() => {
                       startMission()
                     }}
+                    disabled={startMissionButttonDisabled}
                   >
                     {t.User.viewMissionPage.startMission}
                   </button>

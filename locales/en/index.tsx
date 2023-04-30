@@ -765,6 +765,24 @@ const englishTranslations: WebsiteTranslations = {
     title: 'Something went wrong, please try again later',
     goBackHome: 'Go Back Home',
   },
+  ArduinoBlockly: {
+    uploadMessage: 'Uploading code to the arduino ... Beep Boop 🤖',
+    uploadsuccess: 'Code uploaded successfully 🎉',
+    error404: 'Cannot find the agent. Make sure that you have downloaded and started the agent',
+    error400: 'Build failed. Make sure that there are no missing connections in the blocks.',
+    error500: 'Upload failed. Make sure that you have connected the Arduino to your computer',
+    error501: 'Upload failed. Make sure you have downloaded the Arduino IDE?',
+    unknownError: 'Unknown error, please try again',
+    failedToUpload: 'Failed, make sure that the agent is running',
+    arduinoIdeError: 'Make sure to download ARDUINO IDE v1 before using the agent',
+    somethingWentWrong: 'Something went wrong, please try again later',
+    arduinoIdeRequired: 'Arduino IDE v1 is Required',
+    downloadArduiunoIde: 'If you do not already have Arduino IDE v1, download it here:',
+    previewCode: 'Preview your own Arduino code in real time',
+    completeLevel: 'Complete Level',
+    downloadAgent: 'Download Agent',
+    uploadToArduino: 'Upload to Arduino',
+  },
 }
 
 export default englishTranslations
