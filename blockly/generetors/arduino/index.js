@@ -35,6 +35,7 @@ arduinoGenerator.ORDER_EQUALITY = 7 // == != === !==
 arduinoGenerator.ORDER_BITWISE_AND = 8 // &
 arduinoGenerator.ORDER_BITWISE_XOR = 9 // ^
 arduinoGenerator.ORDER_BITWISE_OR = 10 // |
+arduinoGenerator.ORDER_LOGICAL_NOT = 10 // !
 arduinoGenerator.ORDER_LOGICAL_AND = 11 // &&
 arduinoGenerator.ORDER_LOGICAL_OR = 12 // ||
 arduinoGenerator.ORDER_CONDITIONAL = 13 // expr ? expr : expr
