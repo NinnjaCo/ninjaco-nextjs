@@ -212,7 +212,7 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
           switch (status) {
             case 200:
               break
-            case 0:
+            case 404:
               errorInfo =
                 'Cannot find the agent. Make sure that you have downloaded and started the agent'
               break
@@ -241,7 +241,7 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
       } catch (e: any) {
         setAlertData({
           ...alertData,
-          message: e.message || 'Upload failed',
+          message: 'Failed, make sure that the agent is running',
           variant: 'error',
           open: true,
         })
