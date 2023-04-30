@@ -275,7 +275,7 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
   const downloadAgentPrompt = () => {
     setAlertData({
       ...alertData,
-      message: 'Make sure to download ARDUINO IDE before using the agent',
+      message: 'Make sure to download ARDUINO IDE v1 before using the agent',
       variant: 'warning',
       open: true,
     })
@@ -364,7 +364,7 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
         }}
       />
       <AdminAlertDialog
-        title="Arduino IDE is Required"
+        title="Arduino IDE v1 is Required"
         open={arduinoIdeAlert}
         close={function (): void {
           setArduinoIdeAlert(false)
@@ -374,7 +374,7 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
         }}
         confirmButtonClassName="hidden"
       >
-        <div>If you do not already have Arduino IDE, download it here: </div>
+        <div>If you do not already have Arduino IDE v1, download it here: </div>
         <div className="flex w-full flex-wrap gap-4">
           <a
             className="text-brand font-bold underline"
