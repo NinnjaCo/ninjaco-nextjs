@@ -29,7 +29,7 @@ export const AdminAlertDialog: React.FC<AdminAlertDialog> = ({
   children,
 }) => {
   return open ? (
-    <div className="relative z-20" aria-labelledby={title} role="dialog" aria-modal="true">
+    <div className="relative z-40" aria-labelledby={title} role="dialog" aria-modal="true">
       <div className="fixed inset-0 bg-brand-700 bg-opacity-75 transition-opacity"></div>
 
       <div className="fixed z-10 inset-0 overflow-y-auto">

@@ -1,3 +1,5 @@
+import { AdminAlertDialog } from '@/components/admin/dialog'
+import { AlertDialog } from '@/components/shared/alertDialog'
 import {
   ArrowDownIcon,
   ArrowLeftIcon,
@@ -47,6 +49,7 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
   const [arduinoCode, setArduinoCode] = React.useState('')
   const [numBlocks, setNumBlocks] = React.useState(0)
   const [showCodePreview, setShowCodePreview] = React.useState(true)
+  const [arduinoIdeAlert, setArduinoIdeAlert] = React.useState(true)
   const [alertData, setAlertData] = React.useState<{
     message: string
     variant: 'error' | 'success' | 'info' | 'warning'
@@ -284,6 +287,8 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
     const url =
       'https://github.com/NinnjaCo/ArduinoServer/releases/download/v1.0.0/NinjacoAgent.exe'
     window.open(url, '_blank')
+
+    setArduinoIdeAlert(true)
   }
 
   const updateLevelStatus = async () => {
@@ -358,6 +363,45 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
           close()
         }}
       />
+      <AdminAlertDialog
+        title="Arduino IDE is Required"
+        open={arduinoIdeAlert}
+        close={function (): void {
+          setArduinoIdeAlert(false)
+        }}
+        confirm={function (): void {
+          throw new Error('Function not implemented.')
+        }}
+        confirmButtonClassName="hidden"
+      >
+        <div>If you do not already have Arduino IDE, download it here: </div>
+        <div className="flex w-full flex-wrap gap-4">
+          <a
+            className="text-brand font-bold underline"
+            href="https://downloads.arduino.cc/arduino-1.8.19-windows.exe"
+          >
+            Windows
+          </a>
+          <a
+            className="text-brand font-bold underline"
+            href="https://downloads.arduino.cc/arduino-1.8.19-linux64.tar.xz"
+          >
+            Linux (64bit)
+          </a>
+          <a
+            className="text-brand font-bold underline"
+            href="https://downloads.arduino.cc/arduino-1.8.19-linux32.tar.xz"
+          >
+            Linux (32bit)
+          </a>
+          <a
+            className="text-brand font-bold underline"
+            href="https://downloads.arduino.cc/arduino-1.8.19-macosx.zip"
+          >
+            Mac OS X
+          </a>
+        </div>
+      </AdminAlertDialog>
       <div className="w-full h-full relative overflow-hidden hidden lg:flex">
         <div className="absolute top-1 right-12 z-50">
           <Alert
