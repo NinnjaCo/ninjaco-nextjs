@@ -27,6 +27,7 @@ import Alert from '@/components/shared/alert'
 import BlocklyBoard from '@/components/blockly/blockly'
 import Prism from 'prismjs'
 import React, { useEffect } from 'react'
+import axios from 'axios'
 import clsx from 'clsx'
 import useTranslation from '@/hooks/useTranslation'
 
@@ -187,61 +188,52 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
       })
 
       const url = 'http://127.0.0.1:8080/upload'
-      const method = 'POST'
-
       try {
-        const response = await fetch(url, {
-          method,
-          body: JSON.stringify({ code }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-
-        if (response.status === 200) {
-          setAlertData({
-            ...alertData,
-            message: t.ArduinoBlockly.uploadsuccess as string,
-            variant: 'success',
-            open: true,
-          })
-
-          setTimeout(() => {
-            setAlertData({ ...alertData, open: false })
-          }, 2000)
-        } else {
-          let errorInfo = ''
-          const status = response.status
-          switch (status) {
-            case 200:
-              break
-            case 404:
-              errorInfo = t.ArduinoBlockly.error404 as string
-              break
-            case 400:
-              errorInfo = t.ArduinoBlockly.error400 as string
-              break
-            case 500:
-              errorInfo = t.ArduinoBlockly.error500 as string
-              break
-            case 501:
-              errorInfo = t.ArduinoBlockly.error501 as string
-              break
-            default:
-              errorInfo = t.ArduinoBlockly.unknownError as string
-              break
+        await axios.post(
+          url,
+          { code },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
           }
-          setAlertData({
-            ...alertData,
-            message: errorInfo || 'Upload failed',
-            variant: 'error',
-            open: true,
-          })
-        }
-      } catch (e: any) {
+        )
         setAlertData({
           ...alertData,
-          message: t.ArduinoBlockly.failedToUpload as string,
+          message: t.ArduinoBlockly.uploadsuccess as string,
+          variant: 'success',
+          open: true,
+        })
+
+        setTimeout(() => {
+          setAlertData({ ...alertData, open: false })
+        }, 2000)
+      } catch (error: any) {
+        const status = error?.response?.status
+        let errorInfo = ''
+
+        switch (status) {
+          case 200:
+            break
+          case 404:
+            errorInfo = t.ArduinoBlockly.error404 as string
+            break
+          case 400:
+            errorInfo = t.ArduinoBlockly.error400 as string
+            break
+          case 500:
+            errorInfo = t.ArduinoBlockly.error500 as string
+            break
+          case 501:
+            errorInfo = t.ArduinoBlockly.error501 as string
+            break
+          default:
+            errorInfo = t.ArduinoBlockly.error400 as string
+            break
+        }
+        setAlertData({
+          ...alertData,
+          message: errorInfo || 'Upload failed',
           variant: 'error',
           open: true,
         })
