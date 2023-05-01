@@ -54,7 +54,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <Head>
         {/* Open Graph */}
         <meta property="og:title" content="NinjaCo" />
-        <meta property="og:description" content="Empoer your child's education" />
+        <meta property="og:description" content="Empower your child's education" />
         <meta property="og:image" content={socialGraphImage.src} />
         <meta property="og:url" content="https://ninja-co.live" />
         <meta property="og:type" content="website" />
@@ -65,7 +65,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="twitter:site" content="@ninjaco" />
         <meta name="twitter:creator" content="@ninjaco" />
         <meta name="twitter:title" content="NinjaCo" />
-        <meta name="twitter:description" content="Empoer your child's education" />
+        <meta name="twitter:description" content="Empower your child's education" />
         <meta name="twitter:image" content={socialGraphImage.src} />
         <meta name="twitter:image:alt" content="NinjaCo" />
       </Head>
