@@ -708,7 +708,7 @@ const ViewGame = ({ user, game }: ServerSideProps) => {
 
         <div className="grid md:hidden items-center h-screen grid-cols-1 justify-items-center py-24 px-8 relative flex-auto">
           <h1 className="self-end divide-x-2 divide-brand text-sm ">
-            <span className="px-2 font-bold">{t.Creator.games.createGame.mobileError}</span>
+            <span className="px-2 font-bold">{t.User.game.mobileError}</span>
           </h1>
           <Link href="/app/games" className="self-start my-4 text-sm btn btn-brand">
             {t.Creator.games.createGame.goBack}

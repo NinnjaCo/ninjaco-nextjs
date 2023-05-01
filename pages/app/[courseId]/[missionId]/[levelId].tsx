@@ -37,7 +37,7 @@ const PlayLevel = ({
         <UserMenu user={user} isOnCoursePage={true} isOnGamesPage={false} />
         <div className="grid lg:hidden items-center h-screen grid-cols-1 justify-items-center py-24 px-8 relative flex-auto">
           <h1 className="self-end divide-x-2 divide-brand text-sm ">
-            <span className="px-2 font-bold">{t.User.htmlLevel.desktop}</span>
+            <span className="px-2 font-bold">{t.User.htmlLevel.mobileError}</span>
           </h1>
           <Link
             href={`/app/${course.course._id}/${mission._id}`}
