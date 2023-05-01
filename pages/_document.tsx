@@ -18,7 +18,7 @@ class MyDocument extends Document {
           <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"></link>
           <meta name="msapplication-TileColor" content="#29375b"></meta>
           <meta name="theme-color" content="#29375b"></meta>
-          <meta name="description" content="Empoer your child's education" />
+          <meta name="description" content="Empower your child's education" />
         </Head>
         <body>
           <Main />
