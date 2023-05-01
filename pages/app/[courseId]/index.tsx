@@ -228,6 +228,7 @@ export default function UserCourseView({
                       <PrinterIcon className=" h-5 w-5 ml-2 text-brand" />
                       <Link
                         href={`/app/${getAFieldInCourse(course, '_id')}/certificate`}
+                        target="_blank"
                         className=" text-brand font-semibold text-xs md:text-base py-2 rounded-md underline"
                       >
                         {t.User.viewCoursePage.printCertificate}
