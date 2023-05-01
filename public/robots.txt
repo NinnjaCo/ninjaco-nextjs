@@ -1,0 +1,12 @@
+User-agent: *
+
+Disallow: /*.json$
+Disallow: /*_buildManifest.js$
+Disallow: /*_middlewareManifest.js$
+Disallow: /*_ssgManifest.js$
+Disallow: /*.js$
+Disallow: /*.map$
+Disallow: /admin/
+Disallow: /creator/
+Disallow: /api/
+Disallow: /_next/
