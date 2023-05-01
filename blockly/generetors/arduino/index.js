@@ -425,10 +425,10 @@ arduinoGenerator['logic_null'] = function () {
 
 arduinoGenerator['controls_for'] = function () {
   // For loop.
-  let variable0 = arduinoGenerator.nameDB_.getName(
-    this.getFieldValue('VAR'),
-    Blockly.Variables.NAME_TYPE
-  )
+  const variables = Blockly.Workspace.getAll()[0].getAllVariables()
+  const varId = this.getFieldValue('VAR')
+
+  const variable0 = variables.find((v) => v.id_ === varId).name
   let argument0 =
     arduinoGenerator.valueToCode(this, 'FROM', arduinoGenerator.ORDER_ASSIGNMENT) || '0'
   let argument1 = arduinoGenerator.valueToCode(this, 'TO', arduinoGenerator.ORDER_ASSIGNMENT) || '0'
