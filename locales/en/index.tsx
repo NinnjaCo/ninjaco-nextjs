@@ -769,7 +769,8 @@ const englishTranslations: WebsiteTranslations = {
     uploadMessage: 'Uploading code to the arduino ... Beep Boop 🤖',
     uploadsuccess: 'Code uploaded successfully 🎉',
     error404: 'Cannot find the agent. Make sure that you have downloaded and started the agent',
-    error400: 'Build failed. Make sure that there are no missing connections in the blocks.',
+    error400:
+      'Build failed. Make sure agent is running and there are no missing connections in the blocks.',
     error500: 'Upload failed. Make sure that you have connected the Arduino to your computer',
     error501: 'Upload failed. Make sure you have downloaded the Arduino IDE?',
     unknownError: 'Unknown error, please try again',
