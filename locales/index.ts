@@ -578,11 +578,13 @@ export interface WebsiteTranslations {
       congratulations: translationElement
       hereIsTheCodeYouWrote: translationElement
       runProgram: translationElement
+      mobileError: translationElement
     }
     arduinoLevel: {
       buildingPart: translationElement
       buildingPartMayNeed: translationElement
       stepByStep: translationElement
+      mobileError: translationElement
     }
     htmlLevel: {
       thisHowYourWebsiteWillLook: translationElement
@@ -594,6 +596,7 @@ export interface WebsiteTranslations {
       previewCode: translationElement
       desktop: translationElement
       nolevel: translationElement
+      mobileError: translationElement
     }
   }
   Filter: {

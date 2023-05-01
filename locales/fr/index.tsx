@@ -37,7 +37,7 @@ const frenchTranslations: WebsiteTranslations = {
     },
 
     Testimonials: {
-      title: "l'opinion des autres",
+      title: "L'opinion des autres",
       reviews: {
         review1:
           "Mon fils a toujours été intéressé par les robots, mais nous ne vivons à proximité d'aucune des succursales de NinjaCo. Grâce à leur nouvelle plateforme en ligne, il peut enfin suivre des cours et s'initier à la robotique dans le confort de sa maison.",
@@ -351,7 +351,7 @@ const frenchTranslations: WebsiteTranslations = {
     },
     Courses: {
       headerTitle: 'Cours',
-      title: 'titre',
+      title: 'Titre',
       id: 'ID',
       usersEnrolled: 'Utilisateurs inscrits',
       numberOfMissions: 'Nombre de missions',
@@ -361,7 +361,7 @@ const frenchTranslations: WebsiteTranslations = {
       entriesFound: 'Entrées trouvées',
     },
     Users: {
-      title: 'réinitialiser le mot de passe',
+      title: 'Réinitialiser le mot de passe',
       somethingWentWrong: 'Quelque chose s’est mal passé',
       createdSuccessfully: 'Créé avec succès',
       resetPassword: 'Le mot de passe doit comporter au moins 8 caractères',
@@ -430,10 +430,10 @@ const frenchTranslations: WebsiteTranslations = {
       confirmPassword: 'Confirmez le mot de passe',
       submit: 'Soumettre',
       password: 'Mot de passe',
-      goToCreator: 'aller au panneau du créateur',
+      goToCreator: 'Aller au  créateur',
     },
     LogOutDialogue: {
-      logout: 'déconnecter',
+      logout: 'Déconnecter',
       logoutconfimarion: 'Êtes-vous sûr de vouloir vous déconnecter?',
       logoutMessage: 'Vous êtes sur le point de vous déconnecter',
       cancel: 'Annuler',
@@ -490,7 +490,7 @@ const frenchTranslations: WebsiteTranslations = {
     },
     createCourse: {
       alerts: {
-        imageAlert: 'veuillez télécharger une image de cours',
+        imageAlert: 'Veuillez télécharger une image de cours',
       },
       schema: {
         courseTypeRequired: 'Le type de cours est requis',
@@ -514,7 +514,7 @@ const frenchTranslations: WebsiteTranslations = {
     editCourse: {
       alerts: {
         wentWrong: "quelque chose s'est mal passé",
-        error: 'erreur lors de la modification du cours',
+        error: 'Erreur lors de la modification du cours',
       },
       schema: {
         courseTypeRequired: 'Le type de cours est requis',
@@ -639,7 +639,7 @@ const frenchTranslations: WebsiteTranslations = {
         title: 'Créer un Jeu',
         gameTitle: 'Titre du Jeu',
         sizeOfTheGrid: 'Taille de la grid',
-        toggleLimitedBlocks: 'toggle limited blocks',
+        toggleLimitedBlocks: 'Toggle limited blocks',
         limitedNumberOfBlocks: 'Nombre limité de blocs',
         saveGame: 'Sauvegarder le Jeu',
         resetGrid: 'Réinitialiser la Grid',
@@ -669,7 +669,7 @@ const frenchTranslations: WebsiteTranslations = {
         title: 'Modifier un Jeu',
         gameTitle: 'Titre du Jeu',
         sizeOfTheGrid: 'Taille de la grid',
-        toggleLimitedBlocks: 'toggle limited blocks',
+        toggleLimitedBlocks: 'Toggle limited blocks',
         limitedNumberOfBlocks: 'Nombre limité de blocs',
         saveGame: 'Sauvegarder le Jeu',
         resetGrid: 'Réinitialiser la Grid',
@@ -750,12 +750,14 @@ const frenchTranslations: WebsiteTranslations = {
       hitAWall: 'Vous avez heurté un mur',
       congratulations: 'Félicitations, vous avez gagné ! 🥳',
       hereIsTheCodeYouWrote: 'Voici le code que vous avez écrit',
-      runProgram: 'exécuter ',
+      runProgram: 'Exécuter ',
+      mobileError: 'Veuillez tourner votre appareil pour une meilleure expérience',
     },
     arduinoLevel: {
-      buildingPart: 'pièces de construction',
+      buildingPart: 'Pièces de construction',
       buildingPartMayNeed: 'Pièces de construction dont vous avez besoin: ',
       stepByStep: 'Guide étape par étape',
+      mobileError: 'Veuillez tourner votre appareil pour une meilleure expérience',
     },
     htmlLevel: {
       thisHowYourWebsiteWillLook: 'Voici à quoi ressemblera votre site Web: ',
@@ -767,13 +769,14 @@ const frenchTranslations: WebsiteTranslations = {
       previewCode: 'Prévisualisez votre propre code HTML en temps réel',
       desktop: 'Veuillez utiliser un ordinateur pour jouer',
       nolevel: 'Aucun niveau trouvé',
+      mobileError: 'Veuillez tourner votre appareil pour une meilleure expérience',
     },
   },
 
   Filter: {
     filter: 'Filtre',
-    completed: 'complété',
-    notCompleted: 'pas achevé',
+    completed: 'Complété',
+    notCompleted: 'Pas achevé',
   },
   ServerError: {
     headTitle: 'NinjaCo | Erreur',

@@ -737,11 +737,13 @@ const englishTranslations: WebsiteTranslations = {
       congratulations: 'Congratulations, You won! 🥳',
       hereIsTheCodeYouWrote: 'Here is the code you wrote:',
       runProgram: 'Run Program',
+      mobileError: 'Please use your Computer to play',
     },
     arduinoLevel: {
       buildingPart: 'Building Parts',
       buildingPartMayNeed: 'Building Parts that You May Need :',
       stepByStep: 'Step by Step Guide',
+      mobileError: 'Please use your Computer to play',
     },
     htmlLevel: {
       thisHowYourWebsiteWillLook: 'This is how your website should look like:',
@@ -753,6 +755,7 @@ const englishTranslations: WebsiteTranslations = {
       previewCode: 'Preview your own HTML code in real-time',
       desktop: 'Please use a desktop to play',
       nolevel: 'No level yet',
+      mobileError: 'Please use your Computer to play',
     },
   },
   Filter: {
