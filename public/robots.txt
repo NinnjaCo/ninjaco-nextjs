@@ -9,4 +9,3 @@ Disallow: /*.map$
 Disallow: /admin/
 Disallow: /creator/
 Disallow: /api/
-Disallow: /_next/

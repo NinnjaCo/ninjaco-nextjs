@@ -273,8 +273,19 @@ const ArduinoBlockly = ({ level, course, mission, user }: Props) => {
       setAlertData({ ...alertData, open: false })
     }, 30000)
 
-    const url =
-      'https://github.com/NinnjaCo/ArduinoServer/releases/download/v1.0.1/NinjacoAgent.exe'
+    const supportedOs = ['Windows', 'Linux', 'Mac']
+    const userAgent = window.navigator.userAgent
+    const os = supportedOs.find((os) => userAgent.indexOf(os) >= 0)
+
+    const links = {
+      Windows:
+        'https://github.com/NinnjaCo/ArduinoServer/releases/download/v1.0.1/NinjacoAgent.exe',
+      Linux: 'https://github.com/NinnjaCo/ArduinoServer/releases/download/v1.0.1/NinjacoAgentLinux',
+      Mac: 'https://github.com/NinnjaCo/ArduinoServer/releases/download/v1.0.1/NinjacoAgent.exe',
+    }
+
+    const url = links[os as keyof typeof links]
+
     window.open(url, '_blank')
 
     setArduinoIdeAlert(true)
